@@ -282,11 +282,7 @@ def consciousness_number(day: int) -> dict:
     """Число сознания: сумма цифр дня рождения, сведённая до 1–9 (29 → 11 → 2; 22 → 4)."""
     if not 1 <= day <= 31:
         raise ValueError("День месяца должен быть 1–31")
-    digits = [int(c) for c in str(day)]
-    chain = reduce_chain(day) if day <= 9 else [day] + reduce_chain(sum(digits))[0:]
-    # для двузначного дня первая сумма — сумма его цифр
-    if day > 9:
-        chain = [day] + reduce_chain(sum(digits))
+    chain = reduce_chain(day)  # 29 → [29, 11, 2]; 22 → [22, 4]; 7 → [7]
     n = chain[-1]
     return {"number": n, "day": day, "chain": chain, "planet": PLANETS[n],
             "days_with_same_number": CONSCIOUSNESS_DAYS[n]}
@@ -356,8 +352,7 @@ def build_matrix(year: int, month: int, day: int) -> dict:
 
 def universal_year(year: int) -> dict:
     """Число общего года: сумма цифр года до 1–9 (2024 → 8, zhanatglobal.com)."""
-    chain = reduce_chain(digit_sum(year))
-    chain = [year] + chain
+    chain = reduce_chain(year)  # 2024 → [2024, 8]
     return {"year": year, "number": chain[-1], "chain": chain, "planet": PLANETS[chain[-1]]}
 
 

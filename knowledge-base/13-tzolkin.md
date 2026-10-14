@@ -260,17 +260,17 @@ function classic(y, m, d, C = 584283):
 
 ### 4.5. Замки (по 52 кина)
 
-Русские названия — news.law-of-time.ru.
+Русские названия замков и дворов — news.law-of-time.ru («Ноосферное письмо» № 22, 24, 26, 27, 2024 г.: «Красный Восточный Замок Поворота: Двор Рождения (Кины 1-52)» и т.д.).
 
-| № | Кины | Замок (RU) | Castle (EN) |
-|---|---|---|---|
-| 1 | 1–52 | Красный Восточный Замок Поворота | Red Eastern Castle of Turning |
-| 2 | 53–104 | Белый Северный Замок Перехода | White Northern Castle of Crossing |
-| 3 | 105–156 | Синий Западный Замок Горения («Двор Магии») | Blue Western Castle of Burning |
-| 4 | 157–208 | Жёлтый Южный Замок Даяния | Yellow Southern Castle of Giving |
-| 5 | 209–260 | Зелёный Центральный Замок Чарования | Green Central Castle of Enchantment |
+| № | Кины | Замок (RU) | Двор (RU) | Castle (EN) |
+|---|---|---|---|---|
+| 1 | 1–52 | Красный Восточный Замок Поворота | Двор Рождения | Red Eastern Castle of Turning |
+| 2 | 53–104 | Белый Северный Замок Перехода | Двор Смерти | White Northern Castle of Crossing |
+| 3 | 105–156 | Синий Западный Замок Горения | Двор Магии | Blue Western Castle of Burning |
+| 4 | 157–208 | Жёлтый Южный Замок Даяния | Двор Интеллекта | Yellow Southern Castle of Giving |
+| 5 | 209–260 | Зелёный Центральный Замок Чарования | Двор Синхронизации (в одном выпуске — «Двор Матрицы») | Green Central Castle of Enchantment |
 
-⚠ Названия «дворов» остальных замков не подтверждены и поэтому не приводятся.
+⚠ Английские названия дворов в официальном источнике не сверены и поэтому не приводятся.
 
 ### 4.6. Земные семьи (печать mod 5)
 
@@ -473,7 +473,8 @@ function classic(y, m, d, C = 584283):
   "variant": "dreamspell: Dreamspell (Foundation for the Law of Time) + классический счёт (корреляция 584283)",
   "default_system": "dreamspell | classic",
   "inputs_used": {"date": "YYYY-MM-DD", "input_calendar": "gregorian|julian", "gregorian_date": "YYYY-MM-DD",
-                  "jdn": 0, "time_used": false, "place_used": false, "correlation": 584283},
+                  "jdn": 0, "time_used": false, "place_used": false, "correlation": 584283,
+                  "feb29_rule": "noon|feb28|mar1|null (null, если дата не 29.02)"},
   "warnings": ["..."],
   "summary": {"primary": "str", "dreamspell": "Кин N — Цвет Тон Печать (EN)", "classic": "N Имя (кʼиче…), Хааб…, ДС…"},
   "dreamspell": {
@@ -485,15 +486,18 @@ function classic(y, m, d, C = 584283):
     "oracle": {"guide|analog|antipode|occult": {"kin": 0, "tone": 0, "seal": 0, "color": "", "name_ru": "", "name_en": "",
                                                 "role_ru": "", "role_en": "", "rule": "", "self_guided": false}},
     "wavespell": {"number": 1, "first_kin": 1, "last_kin": 13, "position": 1, "seal": 1, "color": "", "name_ru": "", "name_en": ""},
-    "castle": {"number": 1, "ru": "", "en": "", "kins": [1, 52]},
+    "castle": {"number": 1, "ru": "", "en": "", "court_ru": "Двор …", "kins": [1, 52]},
     "earth_family": {"key": "polar|cardinal|core|signal|gateway", "ru": "", "en": "", "seals": [], "seals_ru": []},
     "is_gap": false, "is_polar_kin": false,
     "thirteen_moon": {"year_start": 1989, "year_span": "", "year_bearer": {"kin": 0, "name_ru": ""}, "ns": "NS1.x | null",
                       "is_day_out_of_time": false, "is_hunab_ku": false, "moon": 1, "day": 1,
                       "moon_name_ru": "", "plasma": {"ru": "", "en": "", "index": 1}, "label_ru": ""},
     "affirmation_en": ["I … in order to …", "..."],
-    "year_code": 0, "month_code": 0
+    "year_code": 0, "month_code": 0,
+    "feb29": {"rule": "noon", "used": "feb28|mar1", "time_known": true, "after_noon": false,
+              "kin_if_before_noon": 0, "kin_if_after_noon": 0, "source": "…"}
   },
+  // ключ "feb29" есть только для даты 29.02
   "classic": {
     "correlation": 584283, "jdn": 0, "days_since_era": 0,
     "tzolkin": {"number": 1, "day_index": 1, "day_name": "Imix", "day_name_landa": "", "day_name_kiche": "", "day_name_ru": "",
@@ -516,9 +520,11 @@ function classic(y, m, d, C = 584283):
 4. У Ведущего, Аналога и Антипода тон кина. Цвет Ведущего = цвет кина. При тонах 1, 6, 11 Ведущий = сам кин.
 5. Носитель года всегда из Портальной семьи (Семя, Луна, Волшебник, Буря).
 6. Через 52 года на ту же дату приходится тот же кин (18 980 дней = 73 · 260).
-7. Кин(29.02) = Кин(28.02). Кин(01.03) = Кин(28.02) + 1.
+7. Кин(01.03) = Кин(28.02) + 1. Кин(29.02) равен одному из них: до полудня (или время неизвестно) — Кин(28.02), после полудня — Кин(01.03).
 8. Кин(26.07) = Кин(25.07) + 1. У Дня вне времени свой кин.
 9. ПГА симметричны: k ∈ ПГА ⇔ 261 − k ∈ ПГА.
+10. Печать 26.07 — всегда Портальная семья, 25.07 (День вне времени) — всегда Сигнальная, 24.07 (28-й день 13-й луны) — всегда Центральная («28 Meditations», Meditation 5: «four-dot … two-dot … three-dot day»).
+11. Классика − Dreamspell (mod 260) меняется только на 29 февраля: +1 за каждый пройденный 29.02 (для самого 29.02 после полудня по правилу Фонда сдвиг такой же, как у 01.03).
 
 **Инварианты классического счёта:**
 * 21.12.2012 → JDN 2456283 → 13.0.0.0.0, 4 Ajaw 3 Kʼankʼin;
