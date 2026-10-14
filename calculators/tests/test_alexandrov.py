@@ -98,6 +98,36 @@ def test_t1_t3_t4_same_numbers_as_generic():
         assert calculate(BirthInput(y, m, d))["vs_generic"]["same_numbers"] is True
 
 
+def test_numbers_and_cells_equal_doc08_default():
+    """Проверка 2-й волны: числа и ячейки 1–9 Александрова совпадают с вариантом документа 08
+    по умолчанию (first_nonzero + модуль) для любых дат 1000–2999; расходятся только с вариантом
+    «буквальный 0» (day_digit='literal')."""
+    from calculators.pythagoras import calculate as pyth
+
+    d = date(1000, 1, 1)
+    while d <= date(2999, 12, 31):
+        a = psychomatrix_from_groups([d.day, d.month, d.year])
+        p = pyth(BirthInput(d.year, d.month, d.day), interpret=False)
+        w = p["working_numbers"]
+        assert a["working_numbers_list"] == [w["first"], w["second"], w["third"], w["fourth"]], d
+        assert a["counts"] == p["counts"], d
+        d += timedelta(days=37)
+    for y, m, d_ in [(1984, 2, 4), (2000, 1, 7), (1973, 9, 6)]:
+        vs = calculate(BirthInput(y, m, d_))["vs_generic"]
+        assert vs["same_as_doc08_default"] is True
+        assert vs["doc08_default_numbers"] == calculate(BirthInput(y, m, d_))["working_numbers_list"]
+    assert calculate(BirthInput(2000, 1, 7))["vs_generic"]["generic_numbers"] == [10, 1, 10, 1]
+
+
+def test_full_date_before_year_1000():
+    # Ручной расчёт: 15 6 988 → 1+5+6+9+8+8 = 37; 10; 37 − 2 = 35; 8; 5-й период (800–999).
+    r = calculate(BirthInput(988, 6, 15))
+    assert r["date_record"] == "15 6 988"
+    assert r["working_numbers_list"] == [37, 10, 35, 8]
+    assert r["zeros"] == 1
+    assert r["time_intervals"]["period"] == 5
+
+
 def test_t3_post_2000_period_one_potential():
     """29.02.2004: 1-й период → все 8 линий сильные; потенциал ячеек = числу проходящих линий."""
     ti = calculate(BirthInput(2004, 2, 29))["time_intervals"]
@@ -319,6 +349,16 @@ def test_julian_after_1918_warns_and_bad_option_raises():
         calculate(BirthInput(1990, 5, 15), calendar="mayan")
     with pytest.raises(ValueError):
         calculate(BirthInput(2001, 2, 29))
+
+
+def test_transition_5_9_is_two_way():
+    # [DR], «Цифра 5…»: «55 дают 9 и 99 дают 5»; «Переходы цифр»: «55 — дополнительно 9»,
+    # «если 99, то можно дополнить одной цифрой 5».
+    # T1 15.05.1990: 55 и 99 → оба перехода; 15.04.1972: 5, 999 → только 99 → +5.
+    t1 = {x["transition"] for x in calculate(BirthInput(1990, 5, 15))["possible_transitions"]}
+    assert {"55 → +9", "99 → +5"} <= t1
+    ex = {x["transition"] for x in calculate(BirthInput(1972, 4, 15))["possible_transitions"]}
+    assert "99 → +5" in ex and "55 → +9" not in ex
 
 
 def test_calm_character_examples():

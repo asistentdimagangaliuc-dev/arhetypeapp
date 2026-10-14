@@ -799,10 +799,17 @@ def score_socionics(answers: dict[str, Any]) -> dict[str, Any]:
         n_q = sum(1 for s, _ in all_answers if s is None)
         if n_q / len(all_answers) > 0.25:
             flags.append(f"Много ответов «?» ({n_q} из {len(all_answers)}) — пользователь не может выбирать, нужен разговор.")
-        sides = {s for s, _ in all_answers}
-        if len(all_answers) >= 12 and len(sides) == 1 and None not in sides:
+        # «?» нейтрален: 23 ответа «A» и один «?» — такой же механический протокол, как 24 «A».
+        decided = [s for s, _ in all_answers if s is not None]
+        n_a = sum(1 for s in decided if s == "a")
+        if len(decided) >= 12 and n_a in (0, len(decided)):
             invalid_protocol = True
-            flags.append("Все ответы на одной стороне (A или B) — признак механического ответа; полюса в пунктах чередуются. Протокол недействителен.")
+            flags.append("Все ответы (кроме «?») на одной стороне (A или B) — признак механического ответа; "
+                         "полюса в пунктах чередуются. Протокол недействителен.")
+        elif len(decided) >= 12 and max(n_a, len(decided) - n_a) / len(decided) >= 0.8:
+            # У последовательного респондента сторон A и B поровну (в каждой шкале 3 + 3), см. раздел 3.2.
+            flags.append(f"Перекос ответов в одну сторону ({max(n_a, len(decided) - n_a)} из {len(decided)} на стороне "
+                         f"{'A' if n_a * 2 > len(decided) else 'B'}) — возможна склонность соглашаться с первым/вторым вариантом.")
 
     if invalid_protocol:
         for d in dich.values():
@@ -832,9 +839,11 @@ def score_socionics(answers: dict[str, Any]) -> dict[str, Any]:
     interview: list[str] = []
     for s, d in dich.items():
         if d["clarity"] < 0.5:
-            for x in (f"SO-{s}-X1", f"SO-{s}-X2"):
-                if x not in answers:
-                    followup_items.append(x)
+            # при недействительном протоколе уточняющие пункты бессмысленны: нужен повтор опроса или интервью
+            if not invalid_protocol:
+                for x in (f"SO-{s}-X1", f"SO-{s}-X2"):
+                    if x not in answers:
+                        followup_items.append(x)
             interview += SOCIONICS_INTERVIEW[s]
 
     if invalid_protocol:

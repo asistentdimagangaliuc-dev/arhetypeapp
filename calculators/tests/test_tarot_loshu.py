@@ -77,6 +77,7 @@ def test_t1_full():
     # Имя: IVANOVA (27) + ANNA (12) + SERGEEVNA (35) = 74 → 2
     assert v["name_number"]["latin"] == "IVANOVA ANNA SERGEEVNA"
     assert v["name_number"]["compound"] == 74 and v["name_number"]["number"] == 2
+    assert v["name_number"]["compound_cheiro"] == 20                 # 9 + 3 + 8 (правило Хейро)
     json.dumps(r, ensure_ascii=False)  # JSON-сериализуемость
 
 
@@ -106,6 +107,7 @@ def test_t2_full_19_triple_and_lichun_day():
     assert lo["kua"]["year_used"] == 1984 and lo["kua"]["number"] == 7
     assert v["name_number"]["latin"] == "PETROV DMITRII OLEGOVICH"
     assert v["name_number"]["compound"] == 89 and v["name_number"]["number"] == 8
+    assert v["name_number"]["compound_cheiro"] == 17                 # 5 + 8 + 4
 
 
 def test_t2_before_lichun_changes_kua_only():
@@ -116,9 +118,31 @@ def test_t2_before_lichun_changes_kua_only():
     # граница 1 января (как в большинстве индийских калькуляторов) — 1984 → 7
     r2 = calculate(b, year=2026, kua_boundary="jan1")
     assert r2["loshu"]["kua"]["number"] == 7
-    # без времени — предупреждение
+    # без времени — сравнение по ДАТЕ, день Личуня относится к новому году (как в модуле 03,
+    # calculators/ninestar.py, boundary_precision='auto'): 1984 → 7, плюс предупреждение
     r3 = calculate(BirthInput(1984, 2, 4, gender="male"), year=2026)
     assert any("Личунь" in w for w in r3["warnings"])
+    assert r3["loshu"]["kua"]["year_used"] == 1984 and r3["loshu"]["kua"]["number"] == 7
+    r4 = calculate(BirthInput(1984, 2, 4, place="Москва", gender="male"), year=2026)
+    assert r4["loshu"]["kua"]["year_used"] == 1984
+    # накануне Личуня без времени — ещё 1983 г.
+    r5 = calculate(BirthInput(1984, 2, 3, gender="male"), year=2026)
+    assert r5["loshu"]["kua"]["year_used"] == 1983 and r5["loshu"]["kua"]["number"] == 8
+
+
+def test_kua_agrees_with_ninestar_module():
+    """Куа (модуль 12) = Гуа (модуль 03) при одинаковой границе Личунь — с временем и без."""
+    from calculators import ninestar
+    cases = [T1, T2, T3, T4,
+             BirthInput(1984, 2, 4, 10, 0, place="Москва", gender="male"),
+             BirthInput(1984, 2, 4, gender="female"),
+             BirthInput(1984, 2, 4, place="Москва", gender="male"),
+             BirthInput(2004, 2, 4, 20, 0, place="Москва", gender="female"),
+             BirthInput(1990, 2, 3, gender="male")]
+    for b in cases:
+        g = ninestar.calculate(b)["gua"]
+        k = calculate(b, year=2026)["loshu"]["kua"]
+        assert (k["year_used"], k["number"]) == (g["year_used"], g["number"]), (b, k, g)
 
 
 def test_t3_full_feb29():
@@ -141,6 +165,7 @@ def test_t3_full_feb29():
     assert v["driver_conductor"]["driver_to_conductor"] == "friend"   # Луна ↔ Солнце
     assert lo["kua"]["number"] == 1                                   # ж, 2004: 6 + 4 = 10 → 1
     assert v["name_number"]["compound"] == 84 and v["name_number"]["number"] == 3
+    assert v["name_number"]["compound_cheiro"] == 12                 # 2 + 1 + 9
     # Карта года в режиме «от дня рождения»: 28.02.2026 — день рождения ещё не наступил → 2025
     r2 = calculate(T3, year_card_mode="birthday", on_date="2026-02-28")
     assert r2["tarot"]["year_card"]["year"] == 2025
@@ -166,8 +191,9 @@ def test_t4_full_einstein():
     v = r["vedic"]
     assert v["moolank"]["number"] == 5 and v["bhagyank"]["number"] == 6
     assert lo["kua"]["number"] == 4 and lo["kua"]["year_used"] == 1879
-    # ALBERT (17) + EINSTEIN (29) = 46 → 1 (халдейская таблица)
+    # ALBERT (17) + EINSTEIN (29) = 46 → 1 (халдейская таблица); по Хейро 8 + 2 = 10 → 1
     assert v["name_number"]["compound"] == 46 and v["name_number"]["number"] == 1
+    assert v["name_number"]["compound_cheiro"] == 10
     assert any("1900" in w for w in r["warnings"])
 
 
@@ -248,8 +274,15 @@ def test_year_card_external_vectors():
     yc = year_card(12, 29, 2006, method="tarot_school")
     assert yc["reduction"] == [49, 13] and yc["card"]["number"] == 13
     assert year_card(12, 29, 2006)["card"]["number"] == 13       # по Грир: 2047 → 13
-    # Грир (marykgreer.com, см. выше): 24.10, 2011 → 11
+    # Грир (marykgreer.com, ответ от 16.09.2011, т.е. ДО дня рождения 24.10 → календарный год):
+    # 24.10, 2011 → 2045 → 11; «год от дня рождения» дал бы 2010 → 2044 → 10
     assert year_card(10, 24, 2011)["card"]["number"] == 11
+    r = calculate(BirthInput(1966, 10, 24), year=2011)
+    assert r["tarot"]["year_card"]["matches_birth_cards"] == ["hidden_factor (год Учителя/Тени)"]  # «Shadow/Teacher Year»
+    # Tarot School: совпадения ищутся с картами Tarot School (T1: 21/3), а не Грир
+    r = calculate(T1, tarot_method="tarot_school", year=2026)   # 5 + 15 + (2+0+2+6) = 30 → 3
+    assert r["tarot"]["year_card"]["card"]["number"] == 3
+    assert r["tarot"]["year_card"]["matches_birth_cards"] == ["soul"]
 
 
 def test_ru_arcana_external_vectors():
@@ -418,3 +451,26 @@ def test_chaldean():
     assert [w["compound"] for w in r["words"]] == [17, 29] and r["number"] == 1
     r = chaldean_name_number("Щука Юля")
     assert r["latin"] == "SHCHUKA IULIA"
+
+
+def test_chaldean_cheiro_primary_examples():
+    """Первоисточник: Cheiro's Book of Numbers (Herbert Jenkins, London), гл. XIII–XIV, с. 70–72, 86–87.
+    Скан: https://archive.org/details/in.ernet.dli.2015.70770 ;
+    https://archive.org/details/cheirosbookofnumbers (OCR-текст _djvu.txt)."""
+    # «JOHN … 18 = 1 plus 8 = 9; SMITH … 17 = 1 plus 7 = 8 … the 8 and 9 added together make 17,
+    #  and 1 plus 7 makes 8»
+    r = chaldean_name_number("John Smith")
+    assert [(w["compound"], w["single"]) for w in r["words"]] == [(18, 9), (17, 8)]
+    assert r["compound_cheiro"] == 17 and r["number"] == 8
+    # LLOYD = 18 → 9, GEORGE → 7: «7 plus 9 and you get the compound number of 16»
+    r = chaldean_name_number("Lloyd George")
+    assert [w["single"] for w in r["words"]] == [9, 7] and r["compound_cheiro"] == 16 and r["number"] == 7
+    # «David Lloyd George … would make the total of the three names the number 23»
+    assert chaldean_name_number("David Lloyd George")["compound_cheiro"] == 23
+    # BALDWIN: B2 A1 L3 D4 W6 I1 N5 = 22 → 4
+    r = chaldean_name_number("Baldwin")
+    assert r["compound"] == 22 and r["number"] == 4
+    # Буквы вне A–Z (укр. І, Ґ) не имеют значения — помечаются и дают предупреждение
+    assert chaldean_name_number("Ґудзь")["unmapped"] == ["Ґ"]
+    r = calculate(BirthInput(1990, 5, 15, name="Олексій"), year=2026)
+    assert any("без значения" in w for w in r["warnings"])
