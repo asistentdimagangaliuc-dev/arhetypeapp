@@ -57,6 +57,9 @@ const DEFAULT_CASES = [
   { id: 'MAO', date: '1893-12-26', timeIndex: 4, gender: 'male' },
   // X7: поздний Цзы в последний день лунного месяца — здесь iztro и ziwei.py РАСХОДЯТСЯ (см. базу знаний)
   { id: 'X7_latezi_month_end', date: '2006-11-20', timeIndex: 12, gender: 'male' },
+  // X8: поздний Цзы 15-го дня високосного месяца (2004-04-04 = 闰二月十五) — тоже РАСХОДЯТСЯ:
+  // iztro при timeIndex=12 не применяет правило 闰月 (fixLunarMonthIndex), ziwei.py берёт 闰二月十六 -> месяц 3
+  { id: 'X8_latezi_leap15', date: '2004-4-4', timeIndex: 12, gender: 'male' },
 ];
 
 function summarize(c) {

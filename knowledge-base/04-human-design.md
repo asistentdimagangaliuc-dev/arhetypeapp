@@ -192,7 +192,7 @@ def human_design(utc_moment, node="true"):
 | Тон (tone) | 6 на цвет | 0,0260417° = 1′33,75″ | 38 мин |
 | База (base) | 5 на тон | 0,0052083° = 18,75″ | 7,6 мин |
 
-> ⚠ SharpAstrology.HumanDesign пишет «a base spans 15.625 arcseconds», то есть 6 баз. Официальный движок Jovian выдаёт базы только 1…5, и все проверенные базы совпали с делением на 5. Принято 5.
+> ⚠ В описании SharpAstrology.HumanDesign встречается «a base spans 15.625 arcseconds», то есть 6 баз, но в текущем коде библиотеки (`Utility/HumanDesignUtility.cs`, проверено 2026-10-14) `DegreePerBase = DegreePerTone / 5`. Официальный движок Jovian выдаёт базы только 1…5, и все проверенные базы совпали с делением на 5. Принято 5.
 
 ### Таблица 1. Колесо Рейв-мандалы: 64 ворот по порядку
 
@@ -579,7 +579,7 @@ def human_design(utc_moment, node="true"):
 * Давать Эго-авторитет при определённой Селезёнке: Селезёнка выше Сердца.
 
 **Граничные случаи:**
-* Тело у границы ворот или линии. Пример: у T1 Луна Личности вошла в ворота 60 лишь на 0,0153° ≈ 1,8 мин лунного хода (12,34°/сут). При рождении на 2 минуты раньше было бы **61.6** (предыдущие ворота по колесу — 61, см. табл. 1), а не 60.1. Сообщайте пользователю о чувствительности, если r < 0,01° или r > 5,615°.
+* Тело у границы ворот или линии. Пример: у T1 Луна Личности вошла в ворота 60 лишь на 0,0153° ≈ 1,8 мин лунного хода (12,34°/сут). При рождении на 2 минуты раньше было бы **61.6** (предыдущие ворота по колесу — 61, см. табл. 1), а не 60.1. Сообщайте пользователю о чувствительности, если тело ближе 0,01° к границе ворот (r < 0,01° или r > 5,615°) или линии (r mod 0,9375 < 0,01° или > 0,9275°). 0,01° — это ≈ 1,2 мин времени для Луны и ≈ 15 мин для Солнца (для Солнца Дизайна — столько же: момент Дизайна сдвигается почти синхронно с рождением).
 * Узел у границы ворот (Эйнштейн, см. раздел 7).
 * Даты до 1800 или после 2399 — Swiss Ephemeris переходит на аналитическую теорию Moshier. По SharpAstrology, разница ~10–15″ для узла может сменить тон или базу.
 * Неизвестное время — блок `time_sensitivity`.
@@ -948,7 +948,7 @@ def human_design(utc_moment, node="true"):
 | https://thehumandesignsystem.com/gates , https://thehumandesignsystem.com/channels , https://www.augurine.com/learn/human-design/gates | имена ворот и центры, каналы | вторичный |
 | http://humandesign.wikidot.com/chart-003-071 | группировка каналов по контурам, пример карты | вторичный |
 | https://satyori.com/human-design/human-design-gates-vs-i-ching-hexagrams/ | ворота 41 с 2° Водолея; 5,625°/0,9375° | вторичный |
-| https://github.com/CReizner/SharpAstrology.HumanDesign | размеры цвета, тона и базы; влияние Moshier на тон | калькулятор (open source) |
+| https://github.com/CReizner/SharpAstrology.HumanDesign (исходники через https://cdn.jsdelivr.net/gh/CReizner/SharpAstrology.HumanDesign@master/…) | размеры цвета, тона и базы (в текущем коде база = тон/5); влияние Moshier на тон; при проверке: порядок колеса (`Enums/Gates.cs`, 64/64), центры ворот (64/64), 36 каналов (`Enums/Channels.cs`), 192 креста (`Enums/IncarnationCross.cs`, 192/192 с точностью до написания Endeavour/Endeavor), логика типа и авторитета (`DataModels/HumanDesignChart.cs`) | калькулятор (open source) |
 | https://github.com/jessicaakombi-bot/free-human-design | «true node, matching mainstream HD calculators» | калькулятор (open source) |
 | https://roxyapi.com/docs/guides/human-design | истинный узел по умолчанию, средний — опция | калькулятор |
 | https://www.geneticmatrix.com/learn-hub/calculations/draconic.html (по выдаче поиска) | разница истинного и среднего узла ≤ ~2°, у Genetic Matrix есть варианты зодиака | калькулятор; ⚠ сама страница вернула 403, настройка узла по умолчанию у GM не проверена |

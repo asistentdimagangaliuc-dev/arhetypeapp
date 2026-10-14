@@ -618,6 +618,59 @@ def test_partial_without_time():
     assert r["year_month_stars"]["禄存"] == "申"
 
 
+def test_partial_respects_lichun_and_warns():
+    # 2021-02-08: между Личунем (03.02) и Новым годом (12.02). Без времени опция year_boundary
+    # должна работать так же, как в полной карте (проверка wave 2: раньше игнорировалась).
+    r = calculate(BirthInput(2021, 2, 8), year_boundary="lichun")
+    assert r["year"]["stem_branch"] == "辛丑" and r["year_month_stars"]["天马"] == "亥"
+    r0 = calculate(BirthInput(2021, 2, 8))
+    assert r0["year"]["stem_branch"] == "庚子" and r0["year_month_stars"]["天马"] == "寅"
+    assert any("Личунем" in w for w in r0["warnings"])
+    # сам день Личуня без времени неоднозначен
+    assert any("день Личуня" in w for w in calculate(BirthInput(2021, 2, 3), year_boundary="lichun")["warnings"])
+    # високосный месяц без времени — предупреждение и месяц по правилу
+    rl = calculate(BirthInput(2004, 4, 10))
+    assert rl["lunar_date"]["month_used"] == 3 and any("високосном" in w for w in rl["warnings"])
+
+
+def test_lichun_without_tz_compares_time_not_date():
+    # Личунь 2021 — 03.02 22:58:39 по Пекину. Без часового пояса время считается пекинским;
+    # до проверки wave 2 весь день 03.02 относился к 辛丑.
+    assert calculate(BirthInput(2021, 2, 3, 10, 0, gender="male"), year_boundary="lichun")["year"]["stem_branch"] == "庚子"
+    assert calculate(BirthInput(2021, 2, 3, 23, 30, gender="male"), year_boundary="lichun")["year"]["stem_branch"] == "辛丑"
+
+
+def test_explicit_hour_branch_basis_label():
+    r = calculate(BirthInput(1893, 12, 26, gender="male"), hour_branch="辰")
+    assert r["variant"]["time_basis"] == "explicit_hour_branch"
+    assert r["inputs_used"]["basis_time"] == "1893-12-26 辰时 (час задан ветвью)"   # а не условное «12:00»
+    r2 = calculate(BirthInput(1893, 12, 26, gender="male"), hour_branch="晚子")
+    assert r2["inputs_used"]["chart_date"] == "1893-12-27" and "晚子" in r2["inputs_used"]["basis_time"]
+
+
+def test_structural_checkpoints_all_ziwei_positions():
+    """Контрольные точки §6 базы знаний для всех 12 положений 紫微."""
+    from collections import Counter
+    from calculators.ziwei import MAJOR_STARS, major_star_positions
+    for zw in range(12):
+        pos = major_star_positions(zw)
+        assert sorted(pos) == sorted(MAJOR_STARS) and len(pos) == 14          # 14 звёзд, каждая один раз
+        cnt = Counter(pos.values())
+        assert max(cnt.values()) <= 2                                           # не больше двух в дворце
+        empty = 12 - len(cnt)
+        assert empty == (0 if BRANCHES[zw] in "寅申" else 4 if BRANCHES[zw] in "巳亥" else 2)
+    # оси симметрии пар: 左辅/右弼 и 文昌/文曲 совпадают только в 丑/未 (ось 丑—未),
+    # 地空/地劫 — только в 巳/亥, 紫微/天府 — только в 寅/申
+    same_zy = {BRANCHES[aux_star_positions(0, 0, m, 0)["左辅"]] for m in range(1, 13)
+               if aux_star_positions(0, 0, m, 0)["左辅"] == aux_star_positions(0, 0, m, 0)["右弼"]}
+    same_cq = {BRANCHES[aux_star_positions(0, 0, 1, h)["文昌"]] for h in range(12)
+               if aux_star_positions(0, 0, 1, h)["文昌"] == aux_star_positions(0, 0, 1, h)["文曲"]}
+    same_kj = {BRANCHES[aux_star_positions(0, 0, 1, h)["地空"]] for h in range(12)
+               if aux_star_positions(0, 0, 1, h)["地空"] == aux_star_positions(0, 0, 1, h)["地劫"]}
+    same_zf = {BRANCHES[z] for z in range(12) if tianfu_branch(z) == z}
+    assert same_zy == same_cq == {"丑", "未"} and same_kj == {"巳", "亥"} and same_zf == {"寅", "申"}
+
+
 def test_flow_year_t1_2026():
     r = calculate(T1, flow_year=2026)
     fy = r["flow_year"]
