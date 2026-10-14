@@ -153,7 +153,7 @@ def test_dreamspell_13moon_decoder(ymd, expected):
 OFFICIAL_LOT = [
     # Planetary Kin Report 2021–2022: https://lawoftime.org/wp-content/uploads/Planetary-Kin-Report.pdf
     ((1987, 8, 16), 55),     # «Harmonic Convergence … August 16, 1987 (Kin 55)»
-    ((2001, 9, 11), 11),     # «9-11 … lands on Kin 11: Blue Spectral Monkey»
+    ((2021, 9, 11), 11),     # «20th anniversary of 9-11 … This day lands on Kin 11: Blue Spectral Monkey»
     ((2021, 12, 21), 112),   # «This December 21 solstice, Kin 112»
     # «Find Who Shares Your Galactic Signature»: http://www.lawoftime.org/thirteenmoon/kin/kin017.html,
     # kin067.html, kin111.html (даты рождения — общеизвестные)
@@ -272,8 +272,10 @@ def test_tables_consistency():
             k = kin_from_tone_seal(t, s)
             assert tone_of(k) == t and seal_of(k) == s
     assert wavespell(1)["name_ru"] == "Красный Волновой Модуль Дракона"
-    assert wavespell(118)["name_ru"] == "Синий Волновой Модуль Обезьяны"
-    assert wavespell(260)["first_kin"] == 248 and wavespell(260)["seal"] == 6       # Соединитель Миров
+    # news.law-of-time.ru: «Волшебный Перелёт в Синий (11) Волновой Модуль Обезьяны»
+    assert wavespell(131)["name_ru"] == "Синий Волновой Модуль Обезьяны" and wavespell(131)["number"] == 11
+    assert wavespell(118)["name_ru"] == "Белый Волновой Модуль Зеркала"
+    assert wavespell(260)["first_kin"] == 248 and wavespell(260)["seal"] == 8       # Жёлтая Звезда
     # 28 Meditations on the Law of Time (Meditation 5): Gateway = Seed, Moon, Wizard, Storm
     assert earth_family(4)["seals"] == (4, 9, 14, 19)
     assert all(earth_family(seal_of(dreamspell_year_bearer(y)))["key"] == "gateway" for y in range(1900, 2100))

@@ -491,11 +491,14 @@ def thirteen_moon_date(y: int, m: int, d: int) -> dict[str, Any]:
     _validate_gregorian(y, m, d)
     y0 = dreamspell_year_start(y, m, d)
     bearer = dreamspell_year_bearer(y0)
-    ns_cycle = 1 + (y0 - DS_ANCHOR_YEAR) // 52
-    ns_year = (y0 - DS_ANCHOR_YEAR) % 52
+    # Нумерация «Нового Сириуса»: NS1.0 = 1987–1988 (Planetary Kin Report: «NS1.34 / 2021-2022»).
+    # Для лет до 1987 принятая запись не подтверждена — не выдаём.
+    ns = None
+    if y0 >= DS_ANCHOR_YEAR:
+        ns = f"NS{1 + (y0 - DS_ANCHOR_YEAR) // 52}.{(y0 - DS_ANCHOR_YEAR) % 52}"
     out: dict[str, Any] = {
         "year_start": y0, "year_span": f"26.07.{y0} — 25.07.{y0 + 1}",
-        "year_bearer": kin_info(bearer), "ns": f"NS{ns_cycle}.{ns_year}",
+        "year_bearer": kin_info(bearer), "ns": ns,
         "is_day_out_of_time": False, "is_hunab_ku": False,
     }
     if m == 2 and d == 29:
@@ -726,7 +729,8 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
     steps.append(f"Волновой модуль № {w['number']} (кины {w['first_kin']}–{w['last_kin']}): {w['name_ru']}, "
                  f"позиция {w['position']}; замок № {ds['castle']['number']}: {ds['castle']['ru']}; "
                  f"земная семья: {ds['earth_family']['ru']}; ПГА: {'да' if ds['is_gap'] else 'нет'}.")
-    steps.append(f"Дата 13 Лун: {tm['label_ru']}; год {tm['ns']}.")
+    steps.append(f"Дата 13 Лун: {tm['label_ru']}; год {tm['year_span']}"
+                 + (f" ({tm['ns']})." if tm["ns"] else "."))
 
     # --- Классический счёт ---
     cl = classic_from_jdn(jdn, correlation)

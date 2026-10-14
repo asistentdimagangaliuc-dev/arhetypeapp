@@ -358,3 +358,32 @@ def test_interactions_and_stars_examples():
 def test_annual_pillars():
     r = calculate(T2, annual_from=2024, annual_to=2026)
     assert [a["ganzhi"] for a in r["annual_pillars"]] == ["甲辰", "乙巳", "丙午"]
+
+
+def test_season_table_all_rows():
+    # таблица 4.11 базы знаний
+    rows = {2: "旺相死囚休", 5: "休旺相死囚", 8: "死囚休旺相", 11: "相死囚休旺", 4: "囚休旺相死"}
+    for mb, exp in rows.items():
+        assert "".join(bazi.season_state(e, mb)["cn"] for e in bazi.ELEMENTS) == exp
+
+
+def test_einstein_strength_strong():
+    # synthesisastrology.com называет ДМ 丙 Эйнштейна сильным («strong in the technical sense»)
+    # https://synthesisastrology.com/chart/albert-einstein/example/bazi
+    assert calculate(T4)["strength_hint"]["label"] == "скорее сильный"
+
+
+def test_luck_start_bound_and_void_and_nobleman_variant():
+    rnd = random.Random(7)
+    for _ in range(60):
+        dt = datetime(1950, 1, 1) + timedelta(minutes=rnd.randrange(0, 70 * 365 * 1440))
+        r = calculate(BirthInput(dt.year, dt.month, dt.day, dt.hour, dt.minute, tz="UTC", gender="male"),
+                      solar_time="clock")
+        assert 0 <= r["luck_pillars"]["start"]["decimal_years"] <= 10.5
+    r = calculate(T4)
+    void = [s for s in r["symbolic_stars"] if s["star"] == "空亡"]
+    assert void[0]["branches"] == "辰巳"          # 丙申 → 甲午旬 → 辰巳
+    # 庚: основной вариант 丑未, альтернативный 寅午 (T1: ДМ 庚)
+    main = calculate(T1)["symbolic_stars"][0]["branches"]
+    alt = calculate(T1, nobleman_variant="alt")["symbolic_stars"][0]["branches"]
+    assert (main, alt) == ("丑未", "寅午")

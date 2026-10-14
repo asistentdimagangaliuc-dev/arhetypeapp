@@ -411,7 +411,7 @@ def _day_and_hour(chart_t: datetime | None, civil: date, zi_hour: str) -> tuple[
     return di, ganzhi_index(hs, hb), is23
 
 
-def _pillar(key: str, idx: int, dm: int, month_branch: int) -> dict:
+def _pillar(key: str, idx: int, dm: int) -> dict:
     s, b = idx % 10, idx % 12
     hidden = []
     for hs, role, w in HIDDEN_STEMS[b]:
@@ -690,7 +690,7 @@ def calculate(b: BirthInput, **options) -> dict:
 
     pillars_idx = {"year": yi, "month": mi, "day": di, "hour": hi}
     dm = di % 10
-    pillars = {k: (_pillar(k, v, dm, m_branch) if v is not None else None) for k, v in pillars_idx.items()}
+    pillars = {k: (_pillar(k, v, dm) if v is not None else None) for k, v in pillars_idx.items()}
 
     # альтернативы (для пограничных случаев)
     alternatives = []

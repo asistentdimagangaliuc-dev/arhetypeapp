@@ -172,6 +172,7 @@ def test_supervision_and_benefit_rings_have_length_4():
                 cur = T.resolve_tim(T.partners(cur)[rel])
                 ring.append(cur)
             assert ring[4] == start and len(set(ring[:4])) == 4
+            assert len({T.TIMS[x]["quadra"] for x in ring[:4]}) == 4   # по одному ТИМу из каждой квадры
     # кольцо ревизии ИЛЭ → ЛСИ → СЭЭ → ЭИИ → ИЛЭ
     ring, cur = [], "ILE"
     for _ in range(4):

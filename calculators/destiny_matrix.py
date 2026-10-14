@@ -285,11 +285,13 @@ def compute_age_ring(points: dict[str, int], rule: str = "digits",
             "e4": (r(q3, p10), f"q({base + 7.5:g})+{key10}"),
         }
         if steps is not None:
+            lb = {s["slot"]: _decade_label(base, s["slot"]) for s in DECADE_SLOTS}
             steps.append(
                 f"Кольцо {base}–{base + 10} лет ({key0}={p0} → {key10}={p10}): "
-                f"5 лет={p0}+{p10}→{mid}; 2,5={p0}+{mid}→{q1}; 7,5={mid}+{p10}→{q3}; "
-                f"1–2,5={p0}+{q1}→{vals['e1'][0]}; 3,5–4={q1}+{mid}→{vals['e2'][0]}; "
-                f"6–7,5={mid}+{q3}→{vals['e3'][0]}; 8,5–9={q3}+{p10}→{vals['e4'][0]}"
+                f"[{lb['mid']}] {p0}+{p10}→{mid}; [{lb['q1']}] {p0}+{mid}→{q1}; "
+                f"[{lb['q3']}] {mid}+{p10}→{q3}; [{lb['e1']}] {p0}+{q1}→{vals['e1'][0]}; "
+                f"[{lb['e2']}] {q1}+{mid}→{vals['e2'][0]}; [{lb['e3']}] {mid}+{q3}→{vals['e3'][0]}; "
+                f"[{lb['e4']}] {q3}+{p10}→{vals['e4'][0]}"
             )
         for slot in DECADE_SLOTS:
             value, formula = vals[slot["slot"]]
