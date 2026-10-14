@@ -376,7 +376,7 @@ def test_jupiter_and_rahu_2026_vs_astropatri():
     assert [s for _, s in jup] == [3, 4]
     for (jd, _), (dt, _) in zip(jup, exp):
         got = jd_to_utc(jd).replace(tzinfo=None) + IST
-        assert abs((got - dt).total_seconds()) < 3600           # расхождение 35–48 мин: вариант аянамши
+        assert abs((got - dt).total_seconds()) < 3600           # расхождение 35–47 мин: вариант аянамши
     rahu = [(s["start_jd"], s["sign"]) for s in sign_segments("rahu", a, z, step=0.5) if s["start_jd"]]
     assert [s for _, s in rahu] == [9]
     got = jd_to_utc(rahu[0][0]).replace(tzinfo=None) + IST
