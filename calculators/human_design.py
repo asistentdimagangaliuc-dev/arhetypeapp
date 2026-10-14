@@ -51,6 +51,8 @@ GATE_ORDER: list[int] = [
 GATE_INDEX: dict[int, int] = {g: i for i, g in enumerate(GATE_ORDER)}
 
 # Четверти мандалы (по 16 ворот). Номер четверти = номер варианта правоуглового креста.
+# Темы: Jovian Archive, описания лекций QxQ 10, 11, 20, 21 («Purpose fulfilled through
+# Mind / Form / Bonding / Transformation»), проверено 14.10.2026.
 QUARTERS: list[dict] = [
     {"id": "initiation", "name_en": "Quarter of Initiation", "name_ru": "Четверть Инициации",
      "theme_ru": "цель реализуется через разум (Mind)", "first_gate": 13},

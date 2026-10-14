@@ -327,19 +327,19 @@ def human_design(utc_moment, node="true"):
 | 42-53 | Maturation | Созревание | Сакральный центр — Корневой центр | Абстрактный контур (Ощущения) | Коллективная группа |
 | 47-64 | Abstraction | Абстрагирование | Аджна — Теменной | Абстрактный контур (Ощущения) | Коллективная группа |
 
-Распределение по контурам (как в коде приложения MyBodyGraph): Знание — 9 каналов, Центрирование — 2, Интеграция — 4, Логика — 7, Абстрактный — 7, Эго — 5, Защита — 2 (итого 36). ⚠ Во вторичных источниках 20-57 и 10-34 иногда относят к «Интеграции». У Jovian 20-57 входит в контур Знания, а 10-34 — в контур Центрирования.
+Распределение по контурам (как в коде приложения MyBodyGraph): Знание — 9 каналов, Центрирование — 2, Интеграция — 4, Логика — 7, Абстрактный — 7, Эго — 5, Защита — 2 (итого 36). Во вторичных источниках 20-57 и 10-34 иногда относят к «Интеграции»: Jovian Archive пишет, что Интеграцию образуют четверо ворот («formed by four Gates (34, 57, 10, and 20)», https://jovianarchive.com/pages/what-is-circuitry-in-human-design), а между ними возможны 6 каналов. Принадлежность подтверждена двумя источниками: код MyBodyGraph и http://humandesign.wikidot.com/channels (Knowing — 20/57; Integration — 10/57, 20/10, 20/34, 34/57; Centering — 10/34, 25/51). Итак, 20-57 — контур Знания, 10-34 — контур Центрирования.
 
 ### Таблица 4. Типы
 
-| Тип | Механика | Стратегия (Jovian) | Подпись (signature) | Тема «не-себя» (not-self) | Аура ⚠ | Доля ⚠ |
+| Тип | Механика | Стратегия (Jovian) | Подпись (signature) | Тема «не-себя» (not-self) | Аура (Jovian) | Доля (Jovian) |
 |---|---|---|---|---|---|---|
-| Генератор (Generator) | Сакрал определён, ни один мотор не связан с Горлом | To Respond — откликаться | Satisfaction — удовлетворение | Frustration — фрустрация | открытая, обволакивающая | ~37 % |
-| Манифестирующий Генератор (MG) | Сакрал определён и мотор связан с Горлом | To Respond — откликаться (затем информировать) | Satisfaction | Frustration (и гнев) | открытая, обволакивающая | ~33 % |
-| Манифестор (Manifestor) | Сакрал не определён, мотор (Сердце, Сол. сплетение или Корень) связан с Горлом | To Inform — информировать | Peace — покой | Anger — гнев | закрытая, отталкивающая | ~9 % |
-| Проектор (Projector) | Сакрал не определён, нет связи мотор→Горло, есть хотя бы один канал | Wait for the Invitation — ждать приглашения | Success — успех | Bitterness — горечь | сфокусированная, поглощающая | ~20 % |
-| Рефлектор (Reflector) | нет ни одного определённого канала (все 9 центров не определены) | Wait a Lunar Cycle — ждать лунный цикл (~29,5 сут) | Surprise — удивление | Disappointment — разочарование | резистентная, пробующая | ~1 % |
+| Генератор (Generator) | Сакрал определён, ни один мотор не связан с Горлом | To Respond — откликаться | Satisfaction — удовлетворение | Frustration — фрустрация | open and enveloping — открытая, обволакивающая | ~35 % (Г + МГ ≈ 70 %, «half of which are pure Generators») |
+| Манифестирующий Генератор (MG) | Сакрал определён и мотор связан с Горлом | To Respond — откликаться (затем информировать) | Satisfaction | Frustration (и гнев) | та же, что у Генератора | ~35 % (вторая половина от ≈ 70 %) |
+| Манифестор (Manifestor) | Сакрал не определён, мотор (Сердце, Сол. сплетение или Корень) связан с Горлом | To Inform — информировать | Peace — покой | Anger — гнев | closed and repelling — закрытая, отталкивающая | ~9 % |
+| Проектор (Projector) | Сакрал не определён, нет связи мотор→Горло, есть хотя бы один канал | Wait for the Invitation — ждать приглашения | Success — успех | Bitterness — горечь | focused and absorbing / focused and penetrating — сфокусированная, поглощающая (проникающая) | ~20 % («just over 20%») |
+| Рефлектор (Reflector) | нет ни одного определённого канала (все 9 центров не определены) | Wait a Lunar Cycle — ждать лунный цикл (~29,5 сут) | Surprise — удивление | Disappointment — разочарование | resistant and sampling — резистентная, пробующая | ~1 % («just over 1%») |
 
-Стратегия, подпись и тема «не-себя» взяты из словаря приложения MyBodyGraph (первоисточник). Описание ауры и доли — из вторичных источников, ⚠ не сверены с первоисточником.
+Стратегия, подпись и тема «не-себя» взяты из словаря приложения MyBodyGraph (первоисточник). Ауры и доли сверены с Jovian Archive (первоисточник школы, 14.10.2026): https://jovianarchive.com/pages/type-and-strategy-in-human-design («about 70%», «about 20%», «about 9%», «just over 1%»; ауры всех типов; у Проектора здесь «focused and absorbing»), страницы типов …/generator-human-design, …/manifesting-generator-human-design («same aura, same strategy, same signature»), …/manifestor-human-design, …/projector-human-design («focused and penetrating»), …/reflector-human-design; деление 70 % пополам — описание лекции «Generator and Manifesting Generator» на той же странице. Прежние доли Г ~37 % / МГ ~33 % (вторичные источники) заменены на ≈35 % / ≈35 % по Jovian. Доли — оценки школы, а не статистика.
 
 ### Таблица 5. Авторитеты (по убыванию приоритета)
 
@@ -385,14 +385,14 @@ def human_design(utc_moment, node="true"):
 
 ### Таблица 8. Четверти
 
-| Четверть | Начало | Ворота (16, по колесу) | Тема ⚠ |
+| Четверть | Начало | Ворота (16, по колесу) | Тема (Jovian: «Purpose fulfilled through …») |
 |---|---|---|---|
 | Инициации (Initiation) | ворота 13, 313°15′ | 13, 49, 30, 55, 37, 63, 22, 36, 25, 17, 21, 51, 42, 3, 27, 24 | цель через разум (Mind) |
 | Цивилизации (Civilization) | ворота 2, 43°15′ | 2, 23, 8, 20, 16, 35, 45, 12, 15, 52, 39, 53, 62, 56, 31, 33 | цель через форму (Form) |
 | Дуальности (Duality) | ворота 7, 133°15′ | 7, 4, 29, 59, 40, 64, 47, 6, 46, 18, 48, 57, 32, 50, 28, 44 | цель через связь (Bonding) |
 | Мутации (Mutation) | ворота 1, 223°15′ | 1, 43, 14, 34, 9, 5, 26, 11, 10, 58, 38, 54, 61, 60, 41, 19 | цель через трансформацию (Transformation) |
 
-Состав четвертей подтверждён порядком вариантов правоугловых крестов в словаре MyBodyGraph. Темы четвертей взяты из вторичных источников, ⚠.
+Состав четвертей подтверждён порядком вариантов правоугловых крестов в словаре MyBodyGraph. Темы и границы четвертей подтверждены описаниями лекций Ра Уру Ху «QxQ — The 16 Faces of the Godhead» на Jovian Archive: «Quarter of Initiation (Gates 13-24 …) … Purpose fulfilled through Mind» (Lesson 10), «Quarter of Civilization (Gates 2-33 …) … Purpose fulfilled through Form» (Lesson 11), «Quarter of Duality (Gates 7-44 …) … Purpose fulfilled through Bonding» (Lesson 20), «Quarter of Mutation (Gates 1-19 …) … Purpose fulfilled through Transformation» (Lesson 21); https://jovianarchive.com/products/lesson-10-the-faces-of-initiation-qxq-the-16-faces-of-the-godhead (и lesson-11-the-faces-of-civilization-…, lesson-20-the-quarter-of-duality-…, lesson-21-the-quarter-of-mutation-…). В русскоязычных материалах четверть Мутации иногда называют «Трансформацией» (human-design.space, см. табл. 10).
 
 ### Таблица 9. Переменные: значения цвета и тона
 
@@ -409,7 +409,7 @@ def human_design(utc_moment, node="true"):
 
 ### Таблица 10. Инкарнационные кресты (192)
 
-Формат: P☉/P⊕ | D☉/D⊕. Имя ищется по воротам Солнца Личности и углу. Английское имя = «Right Angle Cross of …», «Juxtaposition Cross of …» или «Left Angle Cross of …». Русские переводы ⚠ не стандартизованы.
+Формат: P☉/P⊕ | D☉/D⊕. Имя ищется по воротам Солнца Личности и углу. Английское имя = «Right Angle Cross of …», «Juxtaposition Cross of …» или «Left Angle Cross of …». Русские переводы не стандартизованы, поэтому агент всегда даёт рядом английское имя. Пример расхождений: на https://human-design.space/inkarnatsionnye-kresty/ (14.10.2026) — «Правоугольный Крест Неожиданности» (у нас «Неожиданного»), для JXP на одной странице и «Крест Джакстапозиции», и «Крест Сопоставления», четвёртая четверть — и «Мутация», и «Трансформация». Русские имена в таблицах ниже — переводы этой базы, а не официальный словарь.
 
 **10а. Правоугловые (Right Angle Cross, RAX): 16 семейств × 4 четверти** (номер варианта = номер четверти)
 
@@ -949,7 +949,10 @@ def human_design(utc_moment, node="true"):
 | Официальный движок Jovian Archive / MyBodyGraph: `POST https://charts.maiamechanics.com/api/charts/free-chart` (вызывается со страницы https://app.mybodygraph.com/free-chart, ссылка с https://jovianarchive.com/pages/get-your-human-design-chart). Запросы 2026-10-14, 18 карт (17 — при составлении, 1 — при проверке, см. «Протокол проверки») | долготы, ворота, линии, цвета, тоны и базы 26 активаций; тип, авторитет, определённость, профиль, крест, переменные; истинный узел; правило 88° | **первоисточник** (калькулятор школы); недокументированный API, использован только для сверки |
 | Код приложения MyBodyGraph (https://app.mybodygraph.com/js/app.*.js) | словарь 192 крестов; каналы и контуры; имена ворот (И-цзин + «The Gate of …»); стратегии, подписи, темы «не-себя»; названия авторитетов и переменных; правило L/R (тон < 4); порядок четвертей | **первоисточник** (школа) |
 | https://jovianarchive.com/pages/incarnation-crosses-in-human-design , https://www.jovianarchive.com/Human_Design/Incarnation_Cross | 192 креста, четыре четверти, крест по Солнцу/Земле Личности и Дизайна | первоисточник (школа), общий уровень |
-| Ra Uru Hu, «The Definitive Book of Human Design» (цитируется по вторичным источникам) | 88° солнечной дуги, общая механика | первоисточник, ⚠ текст не открывался в этой сессии |
+| Ra Uru Hu, «The Definitive Book of Human Design» (цитируется по вторичным источникам) | 88° солнечной дуги, общая механика | первоисточник, ⚠ текст не открывался: в открытом доступе нет (поиск archive.org 14.10.2026 — только видео лекций). Правило 88° подтверждено без книги: блог Jovian Archive «birth and 88° of solar movement before it» (https://jovianarchive.com/blogs/chart-interpretations-components/planetary-accents-in-human-design) и официальный движок |
+| Jovian Archive, тексты школы (открыты 14.10.2026): https://jovianarchive.com/pages/type-and-strategy-in-human-design , страницы типов (…/generator-human-design и др.), https://jovianarchive.com/pages/what-is-circuitry-in-human-design , описания лекций QxQ (https://jovianarchive.com/products/lesson-10-the-faces-of-initiation-qxq-the-16-faces-of-the-godhead и др.) | ауры и доли типов, темы и границы четвертей, состав Интеграции | первоисточник (школа) |
+| http://humandesign.wikidot.com/channels | принадлежность каналов к контурам (20/57 — Знание, 10/34 — Центрирование) | вторичный |
+| https://human-design.space/inkarnatsionnye-kresty/ | пример русских вариантов названий крестов и четвертей | вторичный (рус.) |
 | https://totalhumandesign.com/design/albert-einstein , …/barack-obama , …/steve-jobs , …/donald-trump | опубликованные карты, 26 ворот.линий, тип, профиль, крест, каналы | калькулятор (независимый), совпал 104/104 |
 | https://www.barneyandflow.com/gate-zodiac-degrees , https://bonniesorsby.com/human-design-gates-by-degree/ | градусы всех 64 ворот | вторичный, совпал 64/64 |
 | https://thehumandesignsystem.com/crosses , https://humandesign4all.com/incarnation-cross-in-human-design/ | 192 креста (кросс-проверка; нумерация RAX по четвертям) | вторичный |
@@ -1037,3 +1040,18 @@ def human_design(utc_moment, node="true"):
 | Умолчание узла у Genetic Matrix | **Не решено**, ⚠ оставлен: сайт отдаёт 403 (curl и WebFetch). На расчёт не влияет | — |
 | Аура/доля типов, темы четвертей, русские имена крестов, книга Ра Уру Ху | текстовые оговорки (приоритет 2), не пересматривались | — |
 
+### Повторная проверка (приоритет 2), 14.10.2026
+
+Цель — текстовые «⚠» (описания, доли, темы, переводы, атрибуции). Код расчёта не менялся; в `human_design.py` добавлен только комментарий с источником тем четвертей. Тесты: `test_human_design.py` и `test_cross_hd_gk.py` зелёные.
+
+| Пункт | Статус | Источник |
+|---|---|---|
+| Ауры типов (табл. 4) | **Подтверждено**: open and enveloping / closed and repelling / focused and absorbing (на странице типа Проектора — focused and penetrating) / resistant and sampling; у МГ аура Генератора | https://jovianarchive.com/pages/type-and-strategy-in-human-design и страницы пяти типов |
+| Доли типов (табл. 4) | **Исправлено**: Г ~37 % / МГ ~33 % → ≈35 % / ≈35 % (Jovian: Генераторы «about 70%», «half of which are pure Generators»); Манифестор ~9 %, Проектор ~20 %, Рефлектор ~1 % — **подтверждено** | там же |
+| Темы четвертей (табл. 8) | **Подтверждено** дословно, вместе с границами (13–24, 2–33, 7–44, 1–19) | описания лекций QxQ 10, 11, 20, 21 на jovianarchive.com/products/… |
+| 20-57 и 10-34 в контурах (табл. 3) | **Подтверждено** вторым источником: 20/57 — Знание, 10/34 — Центрирование; причина путаницы — Интеграцию образуют ворота 10, 20, 34, 57 | http://humandesign.wikidot.com/channels ; https://jovianarchive.com/pages/what-is-circuitry-in-human-design |
+| «Русские переводы крестов не стандартизованы» (табл. 10) | **Подтверждено** примером расхождений: «Неожиданности»/«Неожиданного», «Джакстапозиции»/«Сопоставления», «Мутация»/«Трансформация» | https://human-design.space/inkarnatsionnye-kresty/ |
+| Книга Ра Уру Ху (§9) | **Не найдено**, ⚠ оставлен: в открытом доступе нет (archive.org — только видео). Правило 88° подтверждено текстом Jovian Archive | https://jovianarchive.com/blogs/chart-interpretations-components/planetary-accents-in-human-design |
+| Умолчание узла Genetic Matrix | не текстовый пункт, не пересматривался (⚠ остаётся) | — |
+
+WebSearch в этой части не использовался; страницы получены curl/WebFetch.
