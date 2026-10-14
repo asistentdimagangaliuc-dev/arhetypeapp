@@ -34,6 +34,9 @@ from .common.time import BirthInput, fmt_offset, jd_to_utc, normalize
 
 SIGNS_RU = eph.SIGNS_RU
 SIGNS_EN = eph.SIGNS_EN
+# предложный падеж: «в Овне», «в Тельце» …
+SIGNS_RU_PREP = ["Овне", "Тельце", "Близнецах", "Раке", "Льве", "Деве",
+                 "Весах", "Скорпионе", "Стрельце", "Козероге", "Водолее", "Рыбах"]
 ELEMENTS = ["fire", "earth", "air", "water"] * 3          # по индексу знака
 MODALITIES = ["cardinal", "fixed", "mutable"] * 4
 POLARITY = ["masculine", "feminine"] * 6
@@ -738,9 +741,9 @@ def calculate(b: BirthInput, hsys: str = "P", node: str = "true", lilith: str = 
                 entry["co_ruler_in_house"] = bodies[other]["house"]
             house_rulers.append(entry)
         steps.append({"step": "8. Управитель карты",
-                      "detail": f"ASC в {SIGNS_RU[asc_sign]} → управитель {BODY_RU[cr]} "
+                      "detail": f"ASC в {SIGNS_RU_PREP[asc_sign]} → управитель {BODY_RU[cr]} "
                                 f"(трад. {BODY_RU[RULER_TRADITIONAL[asc_sign]]}), стоит в "
-                                f"{bodies[cr]['sign_ru']}, дом {bodies[cr]['house']}"})
+                                f"{SIGNS_RU_PREP[bodies[cr]['sign_index']]}, дом {bodies[cr]['house']}"})
     elif time_known and not b.has_place:
         warnings.append("Нет координат места: дома и углы не вычислены.")
 
