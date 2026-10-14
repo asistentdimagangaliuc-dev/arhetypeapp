@@ -265,6 +265,51 @@ def test_tarot_school_external_vectors():
     assert r["reduction"] == [128, 20] and nums(r["birth_cards"]) == [20, 2]
 
 
+def test_tarot_school_primary_tarot_tips():
+    # Первоисточник: R. A. & W. Amberstone, «Tarot Tips» (Llewellyn, 2003), Tip #69, с. 128–130, и Tip #60
+    # (ответ Georgia), https://archive.org/details/tarot_202304 (файл «… - Tarot Tips_djvu.txt»).
+    r = tarot_school_birth_cards(1941, 12, 2)      # «12 + 02 + 19 + 41 = 74 … 7 + 4 = 11 … Justice … 2»
+    assert r["reduction"] == [74, 11] and nums(r["birth_cards"]) == [11, 2]
+    r = tarot_school_birth_cards(1969, 8, 20)      # «08 + 20 + 19 + 69 = 116 … 11 + 6 = 17 … Star … 8»
+    assert r["reduction"] == [116, 17] and nums(r["birth_cards"]) == [17, 8]
+    r = tarot_school_birth_cards(1931, 1, 19)      # «1+19+19+31=70=7 … 7 is a direct reduction of 16»
+    assert r["reduction"] == [70, 7] and nums(r["birth_cards"]) == [7, 16]
+    # Однозначная сумма → только вторая карта n + 9 («the higher octave is implied»); для 2 и 3 — 11 и 12
+    # («the first of these numbers is the one that works»); третьей карты n + 18 нет.
+    r = tarot_school_birth_cards(1912, 1, 8)       # 1 + 8 + 19 + 12 = 40 → 4 → Император / Смерть
+    assert r["reduction"] == [40, 4] and nums(r["birth_cards"]) == [4, 13]
+    r = tarot_school_birth_cards(1910, 1, 19)      # 1 + 19 + 19 + 10 = 49 → 13 → 13 / 4 (двузначная)
+    assert nums(r["birth_cards"]) == [13, 4]
+    assert not any("⚠" in n for n in tarot_school_birth_cards(1912, 1, 8)["notes"])
+
+
+def test_arrien_primary_tarot_handbook():
+    # A. Arrien, «The Tarot Handbook» (1987), полнотекстовый поиск archive.org по
+    # https://archive.org/details/tarothandbookpra00arri :
+    # «month 12 day +24 36 year 1940 1976 = 23» → однозначная (5) — Personality и Soul;
+    # «September 9, 1956 … 18 … 1956 1974 = 21» → 21 / 3; «If your final total equals 28, it will reduce
+    # to 10»; «If your final total equals 22, it reduces to 4 and also become 0»;
+    # Growth Symbol: «month 12 day +24 36 year 1982 2018 = 11 Number 11, Strength/Lust»;
+    # «The growth year is from birthday to birthday, not the calendar year»;
+    # «Emperor years (where your birthday and the current year add up to the number 22 or 4)».
+    r = calculate(BirthInput(1940, 12, 24), tarot_method="arrien", year=1982)
+    bc = r["tarot"]["birth_cards"]
+    assert bc["method"] == "arrien" and bc["reduction"] == [1976, 23, 5] and bc["pattern"] == "5-5"
+    yc = r["tarot"]["year_card"]
+    assert yc["reduction"] == [2018, 11] and yc["card"]["name_en"] == "Lust" and yc["mode"] == "birthday"
+    r = calculate(BirthInput(1956, 9, 9), tarot_method="arrien", year=2026)
+    assert nums(r["tarot"]["birth_cards"]["birth_cards"]) == [21, 3]
+    assert r["tarot"]["birth_cards"]["personality"]["name_en"] == "The Universe"
+    # Сумма карты года 22: у Арриен — Император (4), у Грир — Шут (22)
+    r = calculate(BirthInput(1940, 12, 24), tarot_method="arrien", year=1957)     # 36 + 1957 = 1993 → 22
+    assert r["tarot"]["year_card"]["reduction"] == [1993, 22, 4] and r["tarot"]["year_card"]["card"]["number"] == 4
+    r = calculate(BirthInput(1940, 12, 24), tarot_method="arrien", year=1957, year_card_22="fool")
+    assert r["tarot"]["year_card"]["card"]["number"] == 22                         # старое поведение
+    assert year_card(12, 24, 1957)["card"]["name_en"] == "The Fool"                # Грир: «between 1 and 22»
+    with pytest.raises(ValueError):
+        year_card(12, 24, 1957, sum22="zero")
+
+
 def test_year_card_external_vectors():
     # https://xtarot.com/tarot-reading/tarot-yearly-card.php — 7.09.1979, год 2014: 2030 → 5 (Иерофант)
     yc = year_card(9, 7, 2014)
@@ -470,6 +515,14 @@ def test_chaldean_cheiro_primary_examples():
     # BALDWIN: B2 A1 L3 D4 W6 I1 N5 = 22 → 4
     r = chaldean_name_number("Baldwin")
     assert r["compound"] == 22 and r["number"] == 4
+    # с. 75–76: «RAMSAY … 12 = 3», «MACDONALD … 32 = 5», «5 plus 3, produces an 8»
+    r = chaldean_name_number("Ramsay MacDonald")
+    assert [(w["compound"], w["single"]) for w in r["words"]] == [(12, 3), (32, 5)]
+    assert r["compound_cheiro"] == 8 and r["number"] == 8
+    # F = 8 и K = 2 читаются в OCR второго скана, с. 70 («F = 8», «K = 2»):
+    # https://archive.org/details/cheirosbookofnum00chei (полнотекстовый поиск archive.org)
+    from calculators.tarot_loshu import CHALDEAN
+    assert CHALDEAN["F"] == 8 and CHALDEAN["K"] == 2
     # Буквы вне A–Z (укр. І, Ґ) не имеют значения — помечаются и дают предупреждение
     assert chaldean_name_number("Ґудзь")["unmapped"] == ["Ґ"]
     r = calculate(BirthInput(1990, 5, 15, name="Олексій"), year=2026)

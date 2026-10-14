@@ -6,8 +6,9 @@
     «Patterns of Personal Destiny», с. 32) — карта Личности (Personality), карта Души (Soul),
     Скрытый фактор / Учитель (Hidden Factor / Teacher), созвездие (constellation);
   - по Tarot School (Р. Э. и У. Амберстоун): ММ + ДД + первые 2 цифры года + последние 2;
-  - вариант Анджелес Арриен (Arrien, «The Tarot Handbook», 1987): та же арифметика,
-    колода Тота (8 = Adjustment, 11 = Lust), термины Personality/Soul/Growth Symbol.
+  - вариант Анджелес Арриен (Arrien, «The Tarot Handbook», 1987): та же арифметика карт рождения
+    (22 = Шут, 28 → 10), колода Тота (8 = Adjustment, 11 = Lust), термины Personality/Soul/Growth
+    Symbol; Growth Symbol — от дня рождения до дня рождения, сумма 22 даёт Императора (4).
 * **Карта года** (Year Card / Growth Symbol): ММ + ДД + год (Грир) или ММ + ДД + сумма цифр года
   (Tarot School); календарный год или «от дня рождения до дня рождения».
 * **Русскоязычные «арканы по дате рождения»**: аркан дня, аркан суммы цифр даты (−22 или
@@ -181,13 +182,19 @@ NATURAL_FRIENDS: dict[str, tuple[list[str], list[str], list[str]]] = {
     "saturn": (["mercury", "venus"], ["jupiter"], ["sun", "moon", "mars"]),
 }
 
-# Халдейская таблица (Хейро / Cheiro): 9 буквам не присваивается.
+# Халдейская таблица (Хейро / Cheiro): 9 буквам не присваивается. Вся таблица, включая F = 8 и K = 2,
+# читается в OCR скана Cheiro's Book of Numbers, с. 70 («F = 8», «K = 2», «I or J = 1» …):
+# https://archive.org/details/cheirosbookofnum00chei (полнотекстовый поиск archive.org).
 CHALDEAN: dict[str, int] = {}
 for _v, _letters in {1: "AIJQY", 2: "BKR", 3: "CGLS", 4: "DMT", 5: "EHNX", 6: "UVW", 7: "OZ", 8: "FP"}.items():
     for _ch in _letters:
         CHALDEAN[_ch] = _v
 
-# Транслитерация кириллицы для заграничного паспорта РФ (ICAO Doc 9303, с 2014 г.)
+# Транслитерация кириллицы для заграничного паспорта РФ: ICAO Doc 9303, ч. 3, разд. 6 (приказ ФМС
+# от 15.10.2012 № 320, затем приказы МВД № 889 от 27.11.2017 и № 996 от 31.12.2019). Ё → E, Ъ → IE,
+# Ь опускается: колонка «Стандарт ИКАО» в ru.wikipedia «Транслитерация русского алфавита латиницей»
+# и таблица МВД https://pddmaster.ru/documents/prikaz-267/pr4-d97/pr4-1-d97. Та же таблица — в
+# calculators/numerology.py (ICAO_9303).
 TRANSLIT_ICAO: dict[str, str] = {
     "А": "A", "Б": "B", "В": "V", "Г": "G", "Д": "D", "Е": "E", "Ё": "E", "Ж": "ZH", "З": "Z",
     "И": "I", "Й": "I", "К": "K", "Л": "L", "М": "M", "Н": "N", "О": "O", "П": "P", "Р": "R",
@@ -338,6 +345,12 @@ def tarot_school_birth_cards(y: int, m: int, d: int, deck: str = "rws") -> dict:
 
     Трёхзначная сумма: первые две цифры как число + третья (135 → 13 + 5 = 18).
     Двузначная > 22: сумма цифр. Однозначный итог n: вторая карта n + 9 (8 → 17).
+    Первоисточник: R. A. & W. Amberstone, «Tarot Tips» (Llewellyn, 2003), Tip #69, с. 128–130:
+    «MM + DD + 19* + YY» (* 20 для 2000–2099); «If the three numbers are 103 … add 10 + 3 = 13 = 4»;
+    «If your birth date sum reduces to a single digit (e.g. 90 = 9 + 0 = 9) the higher octave is
+    implied (in this case, 18)»; для 2 и 3 пара — 11 и 12, а не 20 и 21 («the first of these numbers
+    is the one that works»). Третьей карты n + 18 нет: три карты только у 19/10/1.
+    https://archive.org/details/tarot_202304 (файл «Ruth Ann & Wald Amberstone - Tarot Tips»).
     """
     cc, yy = divmod(y, 100)
     total = m + d + cc + yy
@@ -352,8 +365,8 @@ def tarot_school_birth_cards(y: int, m: int, d: int, deck: str = "rws") -> dict:
     else:
         soul = s
         cards = [s, s + 9]
-        notes.append("Однозначный итог: вторая карта = n + 9 (Biddy Tarot, Labyrinthos). "
-                     "Для n ≤ 4 возможна и третья (n + 18) — ⚠ не подтверждено.")
+        notes.append("Однозначный итог: вторая карта = n + 9, «the higher octave is implied» "
+                     "(Amberstone, Tarot Tips, 2003, Tip #69). Третьей карты n + 18 нет, в том числе для n ≤ 4.")
     if s == 19:
         notes.append("Сумма 19 даёт три карты: Солнце, Колесо Фортуны, Маг.")
     return {
@@ -367,8 +380,17 @@ def tarot_school_birth_cards(y: int, m: int, d: int, deck: str = "rws") -> dict:
     }
 
 
-def year_card(m: int, d: int, year: int, method: str = "greer", deck: str = "rws") -> dict:
-    """Карта года: Грир — ММ + ДД + год; Tarot School — ММ + ДД + сумма цифр года."""
+def year_card(m: int, d: int, year: int, method: str = "greer", deck: str = "rws",
+              sum22: str = "fool") -> dict:
+    """Карта года: Грир и Арриен — ММ + ДД + год; Tarot School — ММ + ДД + сумма цифр года.
+
+    ``sum22`` — что делать, если приведённая сумма равна 22: 'fool' (Шут, 22/0; Грир — «reduce
+    to number between 1 and 22») или 'emperor' (Император, 4; Арриен, «The Tarot Handbook», 1987:
+    «Emperor years (where your birthday and the current year add up to the number 22 or 4)»;
+    https://archive.org/details/tarothandbookpra00arri, полнотекстовый поиск).
+    """
+    if sum22 not in ("fool", "emperor"):
+        raise ValueError(f"Неизвестный year_card_22: {sum22}")
     if method == "tarot_school":
         total = m + d + digit_sum(year)
         formula = f"{m} + {d} + ({'+'.join(str(year))}) = {total}"
@@ -376,8 +398,11 @@ def year_card(m: int, d: int, year: int, method: str = "greer", deck: str = "rws
         total = m + d + year
         formula = f"{m} + {d} + {year} = {total}"
     n, chain = reduce_to_22_digits(total)
+    if n == 22 and sum22 == "emperor":
+        n = 4
+        chain = chain + [4]
     return {"year": year, "method": method, "formula": formula, "reduction": chain,
-            "card": card(n, deck)}
+            "card": card(n, deck), "sum22": sum22}
 
 
 def ru_arcana(y: int, m: int, d: int, over22: str = "subtract", deck: str = "rws") -> dict:
@@ -628,7 +653,9 @@ def calculate(b: BirthInput, **options) -> dict:
       tarot_method: 'greer' (по умолчанию) | 'tarot_school' | 'arrien'
       deck: 'rws' (по умолчанию; для arrien — 'thoth') | 'marseille' | 'thoth'
       year: год для карты года (по умолчанию — текущий)
-      year_card_mode: 'calendar' (по умолчанию) | 'birthday' (год последнего дня рождения на on_date)
+      year_card_mode: 'calendar' (по умолчанию; для arrien — 'birthday') | 'birthday' (год последнего
+        дня рождения на on_date)
+      year_card_22: 'fool' (по умолчанию; для arrien — 'emperor') — карта года при сумме 22
       on_date: 'YYYY-MM-DD' — дата, на которую ищется карта года в режиме birthday (по умолчанию сегодня)
       ru_day_over22: 'subtract' (по умолчанию; 23 → 1) | 'digits' (23 → 5)
       loshu_include: 'date' (по умолчанию) | 'date+driver+conductor' | 'date+driver+conductor+kua'
@@ -644,6 +671,7 @@ def calculate(b: BirthInput, **options) -> dict:
         raise ValueError(f"Неизвестный tarot_method: {tarot_method}")
     deck = options.get("deck", "thoth" if tarot_method == "arrien" else "rws")
     year_mode = options.get("year_card_mode", "birthday" if tarot_method == "arrien" else "calendar")
+    year22 = options.get("year_card_22", "emperor" if tarot_method == "arrien" else "fool")
     on_date = _parse_date(options.get("on_date")) or date.today()
     year = options.get("year")
     if year is None:
@@ -673,10 +701,11 @@ def calculate(b: BirthInput, **options) -> dict:
             main_cards["method"] = "arrien"
             main_cards["terms"] = {"personality": "Personality Symbol", "soul": "Soul Symbol",
                                    "year": "Growth Symbol"}
-            warnings.append("Вариант Арриен: арифметика как у Грир, колода Тота; детали книги "
-                            "(диапазон 1–21/22, «Lifetime Lesson») ⚠ не подтверждены первоисточником.")
+            warnings.append("Вариант Арриен (The Tarot Handbook, 1987): карты рождения считаются как у Грир "
+                            "(22 = Шут и 4; 28 → 10), колода Тота; Growth Symbol — от дня рождения до дня "
+                            "рождения, сумма 22 даёт Императора (4).")
     yc_method = "tarot_school" if tarot_method == "tarot_school" else "greer"
-    yc = year_card(m, d, year, yc_method, deck)
+    yc = year_card(m, d, year, yc_method, deck, year22)
     yc["mode"] = year_mode
     if year_mode == "birthday":
         yc["valid"] = f"с дня рождения {year} г. до дня рождения {year + 1} г."
@@ -787,7 +816,7 @@ def calculate(b: BirthInput, **options) -> dict:
                     "ru_day_over22": ru_over22, "loshu_include": loshu_include,
                     "kua_boundary": kua_boundary, "vedic_master_numbers": master},
         "inputs_used": {"date": f"{y:04d}-{m:02d}-{d:02d}", "gender": b.gender, "name": b.name,
-                        "year_for_year_card": year,
+                        "year_for_year_card": year, "year_card_mode": year_mode, "year_card_22": year22,
                         "time_used_for_kua": bool(kua is not None and kua_boundary == "lichun"
                                                   and b.has_time and b.tz)},
         "warnings": warnings,

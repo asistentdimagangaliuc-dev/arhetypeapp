@@ -40,6 +40,15 @@ RU_ALPHABET = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮ�
 #: 1: А И С Ъ | 2: Б Й Т Ы | 3: В К У Ь | 4: Г Л Ф Э | 5: Д М Х Ю | 6: Е Н Ц Я |
 #: 7: Ё О Ч | 8: Ж П Ш | 9: З Р Щ
 RU_PYTHAGOREAN: dict[str, int] = {ch: (i % 9) + 1 for i, ch in enumerate(RU_ALPHABET)}
+#: «Старая» таблица (опция ru_table='old31'): Е/Ё и И/Й занимают по одной клетке, поэтому
+#: все следующие буквы сдвигаются: Ж=7, З=8, И=Й=9, К=1 … Я=4. Правило описано словами на
+#: https://sovet.mygadanie.ru/oboznachenie-bukv-tsiframi-v-numerologii.html («старый вариант,
+#: где E с Ё и И с Й занимают одну клетку … Ж получает соответствие не восьмёрке, а семёрке,
+#: З — не девятке, а восьмёрке и так далее»); напечатанной полной таблицы не найдено (⚠),
+#: значения ниже — однозначная реконструкция по этому правилу.
+RU_OLD31_CELLS = ["А", "Б", "В", "Г", "Д", "ЕЁ", "Ж", "З", "ИЙ", "К", "Л", "М", "Н", "О", "П", "Р",
+                  "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ы", "Ь", "Э", "Ю", "Я"]
+RU_OLD31: dict[str, int] = {ch: (i % 9) + 1 for i, cell in enumerate(RU_OLD31_CELLS) for ch in cell}
 
 LATIN_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 #: Пифагорейская таблица для латиницы: A=1 … I=9, J=1 … R=9, S=1 … Z=8.
@@ -54,9 +63,16 @@ LATIN_CHALDEAN: dict[str, int] = {
 
 #: Гласные. Для русского — 10 гласных букв; Й, Ъ, Ь гласными не считаются.
 RU_VOWELS = frozenset("АЕЁИОУЫЭЮЯ")
-LATIN_VOWELS = frozenset("AEIOU")  # Y — по правилу (см. _latin_y_is_vowel), W — всегда согласная
+LATIN_VOWELS = frozenset("AEIOU")  # Y — по правилу (см. _latin_y_is_vowel); W — согласная (Декоз)
+#                                    или гласная после A/E/I/O/U (w_rule='goodwin')
 
-#: Транслитерация ICAO Doc 9303 (загранпаспорт РФ, приказ ФМС № 320, 2013).
+#: Транслитерация ICAO Doc 9303, ч. 3, разд. 6 (загранпаспорт РФ: приказ ФМС от 15.10.2012 № 320,
+#: затем приказ МВД от 27.11.2017 № 889 и действующий приказ МВД от 31.12.2019 № 996).
+#: Ё → E, Й → I, Х → KH, Ц → TS, Щ → SHCH, Ъ → IE, Ы → Y, Ь опускается — сверено с колонкой
+#: «Стандарт ИКАО» в https://ru.wikipedia.org/wiki/Транслитерация_русского_алфавита_латиницей
+#: (ссылка на Doc 9303, 7-е изд., ч. 3, с. 32–33), с таблицей МВД «Транслитерация кириллических
+#: знаков» (https://pddmaster.ru/documents/prikaz-267/pr4-d97/pr4-1-d97) и со словарём ICAO
+#: в библиотеке mrz (https://github.com/Arg0s1080/mrz, mrz/generator/dictionaries/cyrillic.py).
 ICAO_9303: dict[str, str] = {
     "А": "A", "Б": "B", "В": "V", "Г": "G", "Д": "D", "Е": "E", "Ё": "E", "Ж": "ZH",
     "З": "Z", "И": "I", "Й": "I", "К": "K", "Л": "L", "М": "M", "Н": "N", "О": "O",
@@ -103,6 +119,8 @@ ALPHABETS = ("auto", "ru", "latin")
 NAME_METHODS = ("parts", "all_letters")
 Y_RULES = ("decoz", "vowel", "consonant")
 RU_SIGNS = ("consonant", "ignore")
+RU_TABLES = ("modern33", "old31")
+W_RULES = ("decoz", "goodwin")
 NAME_ORDERS = ("auto", "surname_first", "given_first")
 PY_BOUNDARIES = ("calendar", "birthday")
 
@@ -445,8 +463,18 @@ def _latin_y_is_vowel(word: str, i: int) -> tuple[bool, str]:
     return False, "8"
 
 
-def classify_letters(word: str, alphabet: str, y_rule: str = "decoz") -> tuple[list[bool], list[str]]:
-    """Для каждой буквы слова: гласная ли она. Плюс заметки о спорных Y."""
+def classify_letters(word: str, alphabet: str, y_rule: str = "decoz",
+                     w_rule: str = "decoz") -> tuple[list[bool], list[str]]:
+    """Для каждой буквы слова: гласная ли она. Плюс заметки о спорных Y и W.
+
+    W: по Декозу всегда согласная («we don't assign it a vowel status»,
+    https://www.worldnumerology.com/numerology-articles/numerology-Y-vowel-consonant.html).
+    ``w_rule='goodwin'``: W после A/E/I/O/U — гласная (M. O. Goodwin, «Numerology: The Complete
+    Guide», vol. 1, 1988, с. 38: «W is a vowel when it is preceded by A, E, I, O, U and sounded
+    as one sound. Example: Bradshaw, Matthew, Lowell»;
+    https://archive.org/details/GoodwinMatthewOliverNumerologyTheCompleteGuideVolume1ThePersonalityReading1988).
+    «Один звук» по написанию не определить, поэтому выдаётся заметка для проверки.
+    """
     notes: list[str] = []
     flags: list[bool] = []
     for i, ch in enumerate(word):
@@ -465,15 +493,22 @@ def classify_letters(word: str, alphabet: str, y_rule: str = "decoz") -> tuple[l
                     notes.append(f"Y в «{word}» (позиция {i + 1}) по умолчанию согласная (правило {rule} Декоза), "
                                  f"но если Y — единственный гласный звук слога (Bryan, Wyatt), считайте её гласной: "
                                  f"опция y_rule='vowel'.")
+        elif ch == "W" and w_rule == "goodwin" and i > 0 and word[i - 1] in LATIN_VOWELS:
+            flags.append(True)
+            notes.append(f"W в «{word}» (позиция {i + 1}) после гласной считается гласной (=5) по Гудвину "
+                         f"(Bradshaw, Matthew, Lowell). Если W читается отдельным звуком, правило не "
+                         f"применяется: опция w_rule='decoz'.")
         else:
             flags.append(ch in LATIN_VOWELS)
     return flags, notes
 
 
-def letter_table(alphabet: str, system: str) -> dict[str, int]:
+def letter_table(alphabet: str, system: str, ru_table: str = "modern33") -> dict[str, int]:
     if system == "chaldean":
         return LATIN_CHALDEAN
-    return RU_PYTHAGOREAN if alphabet == "ru" else LATIN_PYTHAGOREAN
+    if alphabet == "ru":
+        return RU_OLD31 if ru_table == "old31" else RU_PYTHAGOREAN
+    return LATIN_PYTHAGOREAN
 
 
 def _detect_given_index(parts: list[str], alphabet: str, order: str) -> tuple[int, str, list[str]]:
@@ -533,7 +568,8 @@ def analyze_name(name: str, *, alphabet: str = "auto", system: str = "pythagorea
                  name_method: str = "parts", masters: Iterable[int] = MASTER_NUMBERS,
                  part_masters: Iterable[int] = MASTER_NUMBERS, y_rule: str = "decoz",
                  ru_signs: str = "consonant", yo_as_e: bool = False,
-                 name_order: str = "auto", first_name: str | None = None) -> dict[str, Any]:
+                 name_order: str = "auto", first_name: str | None = None,
+                 w_rule: str = "decoz", ru_table: str = "modern33") -> dict[str, Any]:
     """Числа имени: Экспрессия, Душа, Личность, уроки, страсть, баланс и т. д.
 
     Для системы 'chaldean' кириллица транслитерируется (ICAO 9303), мастер-числа не
@@ -550,6 +586,10 @@ def analyze_name(name: str, *, alphabet: str = "auto", system: str = "pythagorea
         raise ValueError(f"y_rule должен быть одним из {Y_RULES}")
     if ru_signs not in RU_SIGNS:
         raise ValueError(f"ru_signs должен быть одним из {RU_SIGNS}")
+    if w_rule not in W_RULES:
+        raise ValueError(f"w_rule должен быть одним из {W_RULES}")
+    if ru_table not in RU_TABLES:
+        raise ValueError(f"ru_table должен быть одним из {RU_TABLES}")
 
     chosen, variants = pick_name_variant(name, alphabet)
     alpha = detect_alphabet(chosen) if alphabet == "auto" else alphabet
@@ -571,7 +611,10 @@ def analyze_name(name: str, *, alphabet: str = "auto", system: str = "pythagorea
     elif system == "chaldean":
         masters = part_masters = ()
 
-    if alpha == "ru" and "Ё" in original.upper() and not yo_as_e:
+    if alpha == "ru" and ru_table == "old31":
+        warnings.append("Таблица old31 («старая»: Е=Ё=6, И=Й=9, Ж=7, З=8 … Я=4) восстановлена по словесному "
+                        "описанию (sovet.mygadanie.ru); полной напечатанной таблицы не найдено (⚠).")
+    if alpha == "ru" and "Ё" in original.upper() and not yo_as_e and ru_table != "old31":
         warnings.append("В имени есть Ё (=7). Если в документе написано Е (=6), результат другой: "
                         "опция yo_as_e=True.")
 
@@ -584,7 +627,7 @@ def analyze_name(name: str, *, alphabet: str = "auto", system: str = "pythagorea
             f"Буквы {sorted(set(dropped))} не входят в таблицу алфавита «{alpha}» и НЕ учтены. "
             "Для украинских/белорусских букв (І, Ї, Є, Ґ, Ў) единой таблицы нет (⚠): передайте имя "
             "так, как оно записано в русском документе, или латиницей, как в загранпаспорте.")
-    table = letter_table(alpha, system)
+    table = letter_table(alpha, system, ru_table)
 
     given_idx, order_used, w = _detect_given_index(parts, alpha, name_order)
     warnings += w
@@ -599,7 +642,7 @@ def analyze_name(name: str, *, alphabet: str = "auto", system: str = "pythagorea
     all_values: list[int] = []
     y_notes: list[str] = []
     for idx, word in enumerate(parts):
-        flags, notes = classify_letters(word, alpha, y_rule)
+        flags, notes = classify_letters(word, alpha, y_rule, w_rule)
         y_notes += notes
         vals = [table[c] for c in word]
         all_values += vals
@@ -622,7 +665,7 @@ def analyze_name(name: str, *, alphabet: str = "auto", system: str = "pythagorea
     personality = _name_number([p["consonant_sum"] for p in part_info], name_method, part_masters, masters)
 
     given = parts[given_idx]
-    gflags, _ = classify_letters(given, alpha, y_rule)
+    gflags, _ = classify_letters(given, alpha, y_rule, w_rule)
     first_vowel = next(((c, table[c]) for c, f in zip(given, gflags) if f), None)
 
     res: dict[str, Any] = {
@@ -697,6 +740,8 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
         в программе Декоза (22+11=33→6, 7+22=29→2);
       name_method: 'parts'|'all_letters'; y_rule: 'decoz'|'vowel'|'consonant';
       ru_signs: 'consonant'|'ignore' (Ъ и Ь); yo_as_e: False;
+      ru_table: 'modern33'|'old31' («старая» таблица Е=Ё, И=Й — реконструкция, ⚠);
+      w_rule: 'decoz' (W всегда согласная) | 'goodwin' (W после гласной — гласная);
       name_order: 'auto'|'surname_first'|'given_first'; first_name: str;
       on_date: 'YYYY-MM-DD' (для личного года; по умолчанию сегодня);
       personal_year_boundary: 'calendar'|'birthday'.
@@ -734,6 +779,15 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
     distinct = {meth: r["value"] for meth, r in lp_all.items()}
     if len(set(distinct.values())) > 1:
         warnings.append(f"Способы расчёта ЧЖП дают разные результаты: {distinct}. Принят «{lp_method}».")
+    # Декоз: 33 «can be found in the Life Path only when there is at least one other Master number
+    # present» (https://www.worldnumerology.com/numerology-master-numbers.htm). При сведении
+    # компонентов это выполняется само собой (9 + 9 + 9 = 27 < 33); при сложении всех цифр — нет.
+    comp_masters = [c[-1] for c in lp_all["reduce_components"]["components"].values() if c[-1] in (11, 22, 33)]
+    for meth, r in lp_all.items():
+        if r["value"] == 33 and not comp_masters:
+            warnings.append(f"ЧЖП 33 получено способом «{meth}», но среди компонентов даты (месяц/день/год) нет "
+                            "мастер-чисел. По Декозу 33 в ЖП бывает «only when there is at least one other "
+                            "Master number present», то есть для него это 6.")
     steps.append(f"ЧЖП ({lp_method}): {lp['step']}")
     for meth, r in lp_all.items():
         if meth != lp_method:
@@ -779,6 +833,7 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
                 "pinnacle_masters": list(pinnacle_masters), "maturity_masters": list(maturity_masters),
                 "name_method": o.get("name_method", "parts"), "y_rule": o.get("y_rule", "decoz"),
                 "ru_signs": o.get("ru_signs", "consonant"), "yo_as_e": bool(yo_as_e),
+                "w_rule": o.get("w_rule", "decoz"), "ru_table": o.get("ru_table", "modern33"),
                 "name_order": o.get("name_order", "auto"),
                 "on_date": on.isoformat(), "personal_year_boundary": boundary,
             },
@@ -813,7 +868,8 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
         common = dict(alphabet=alphabet, system=system, name_method=o.get("name_method", "parts"),
                       masters=masters, part_masters=part_masters, y_rule=o.get("y_rule", "decoz"),
                       ru_signs=o.get("ru_signs", "consonant"), yo_as_e=bool(yo_as_e),
-                      name_order=o.get("name_order", "auto"))
+                      name_order=o.get("name_order", "auto"), w_rule=o.get("w_rule", "decoz"),
+                      ru_table=o.get("ru_table", "modern33"))
         nn = analyze_name(name, first_name=o.get("first_name"), **common)
         warnings += nn.pop("warnings")
         result["inputs_used"]["name"] = nn["name_used"]

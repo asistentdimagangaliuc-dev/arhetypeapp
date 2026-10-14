@@ -75,9 +75,14 @@ def test_reduce_chain():
 
 
 def test_icao_transliteration():
-    # ICAO Doc 9303 (приказ ФМС № 320): https://en.wikipedia.org/wiki/Romanization_of_Russian
+    # ICAO Doc 9303, ч. 3, разд. 6 (приказ ФМС № 320; приказы МВД № 889/2017 и № 996/2019).
+    # Колонка «Стандарт ИКАО» в https://ru.wikipedia.org/wiki/Транслитерация_русского_алфавита_латиницей :
+    # Ё e, Й i, Х kh, Ц ts, Щ shch, Ъ ie, Ы y, Ь —, Э e, Ю iu, Я ia; та же таблица МВД
+    # (https://pddmaster.ru/documents/prikaz-267/pr4-d97/pr4-1-d97: «Ё E», «Ъ IE», Ь в таблице нет).
     assert transliterate_icao("Щукина Юлия") == "SHCHUKINA IULIIA"
     assert transliterate_icao("Хрущёв") == "KHRUSHCHEV"
+    assert transliterate_icao("Семён") == "SEMEN"             # петиция change.org против «Semen»: Ё → E
+    assert transliterate_icao("ЁЙХЦЩЪЫЬЭЮЯ") == "EIKHTSSHCHIEYEIUIA"
 
 
 # ---------------------------------------------------------------------------
@@ -123,6 +128,19 @@ def test_life_path_master_33_lenin_galactica():
 def test_life_path_all_digits_calculator():
     # https://calcforlife.com/?p=2372 : 24.07.1990 → 1+9+9+0+0+7+2+4 = 32 → 5
     assert life_path(24, 7, 1990, "all_digits")["chain"] == [32, 5]
+
+
+def test_decoz_33_needs_another_master():
+    # https://www.worldnumerology.com/numerology-master-numbers.htm : 33 «can be found in the Life Path
+    # only when there is at least one other Master number present».
+    # T4 (14.03.1879): сумма всех цифр 33, но компоненты 3 / 5 / 7 без мастер-чисел → предупреждение.
+    r = calc(None, 1879, 3, 14)
+    assert r["date_numbers"]["life_path_by_method"]["all_digits"]["value"] == 33
+    assert any("only when there is at least one other" in w for w in r["warnings"])
+    # Ленин 22.04.1870: 4 + 22 + 7 = 33, мастер-22 в компонентах есть → предупреждения нет
+    r = calc(None, 1870, 4, 22)
+    assert r["date_numbers"]["life_path"]["value"] == 33
+    assert not any("only when there is at least one other" in w for w in r["warnings"])
 
 
 # ---------------------------------------------------------------------------
@@ -331,6 +349,28 @@ def test_y_rule_decoz():
     assert y_flags("Kay") == ["C"]
 
 
+def test_w_rule_decoz_and_goodwin():
+    # Декоз: W «we don't assign it a vowel status» —
+    # https://www.worldnumerology.com/numerology-articles/numerology-Y-vowel-consonant.html
+    # Goodwin, «Numerology: The Complete Guide», vol. 1 (1988), с. 38: «W is a vowel when it is preceded by
+    # A, E, I, O, U and sounded as one sound. Example: Bradshaw, Matthew, Lowell»; пример с. 38–39:
+    # ARTHUR 4 + TRENT 5 + WILSON 6 = 15 → 6 (W в начале слова — согласная).
+    # https://archive.org/details/GoodwinMatthewOliverNumerologyTheCompleteGuideVolume1ThePersonalityReading1988
+    def w_flags(word, rule):
+        nn = analyze_name(word, w_rule=rule)
+        return [l[2] for l in nn["parts"][0]["letters"] if l[0] == "W"]
+    for word in ("Bradshaw", "Matthew", "Lowell"):
+        assert w_flags(word, "decoz") == ["C"]
+        assert w_flags(word, "goodwin") == ["V"]
+    assert w_flags("Wilson", "goodwin") == ["C"]
+    nn = analyze_name("Arthur Trent Wilson", w_rule="goodwin")
+    assert [p["vowel_reduced"] for p in nn["parts"]] == [4, 5, 6] and nn["soul_urge"]["chain"] == [15, 6]
+    nn = analyze_name("Matthew", w_rule="goodwin")                   # A1 + E5 + W5 = 11
+    assert nn["soul_urge"]["value"] == 11 and analyze_name("Matthew")["soul_urge"]["value"] == 6
+    with pytest.raises(ValueError):
+        analyze_name("Matthew", w_rule="always")
+
+
 # ---------------------------------------------------------------------------
 # Числа имени: внешние векторы (кириллица)
 # ---------------------------------------------------------------------------
@@ -437,12 +477,36 @@ def test_chaldean_cheiro(name, words, total):
     assert cn["chain"] == total
 
 
+def test_chaldean_cheiro_ramsay_macdonald():
+    # Cheiro's Book of Numbers, с. 75–76: «RAMSAY … 12 = 3», «MACDONALD … 32 = 5», «5 plus 3, produces an 8».
+    # https://archive.org/details/cheirosbookofnumbers (OCR _djvu.txt)
+    cn = analyze_name("Ramsay MacDonald", system="chaldean")["chaldean_name_number"]
+    assert [(w["compound"], w["single"]) for w in cn["words"]] == [(12, 3), (32, 5)]
+    assert cn["value"] == 8
+
+
 def test_chaldean_table_matches_tarot_loshu():
     # Одна и та же таблица Кейро используется в модуле 12 (calculators/tarot_loshu.py)
     tl = pytest.importorskip("calculators.tarot_loshu")
     assert tl.CHALDEAN == LATIN_CHALDEAN
+    # Вся таблица (включая F = 8 и K = 2) читается в OCR второго скана Cheiro's Book of Numbers, с. 70:
+    # «A = 1 N = 5 B = 2 O = 7 C = 3 P = 8 D = 4 Q = 1 E = 5 R … F = 8 S G = 3 T H = 5 U = 6 I or J = 1
+    # V = 6 K = 2 W = 6 L = 3 X = 5 M = 4 Y = 1 Z = 7» — https://archive.org/details/cheirosbookofnum00chei
+    # (полнотекстовый поиск archive.org по этому item).
     assert LATIN_CHALDEAN == dict(A=1, B=2, C=3, D=4, E=5, F=8, G=3, H=5, I=1, J=1, K=2, L=3, M=4, N=5, O=7,
                                   P=8, Q=1, R=2, S=3, T=4, U=6, V=6, W=6, X=5, Y=1, Z=7)
+
+
+def test_ru_table_old31_reconstruction():
+    # «Старая» таблица: «E с Ё и И с Й занимают одну клетку … Ж получает соответствие не восьмёрке,
+    # а семёрке, З — не девятке, а восьмёрке и так далее» —
+    # https://sovet.mygadanie.ru/oboznachenie-bukv-tsiframi-v-numerologii.html (полной таблицы нет, ⚠)
+    from calculators.numerology import RU_OLD31
+    assert [RU_OLD31[c] for c in "ЕЁЖЗИЙК"] == [6, 6, 7, 8, 9, 9, 1]
+    assert [RU_OLD31[c] for c in "ЬЭЮЯ"] == [1, 2, 3, 4] and len(RU_OLD31) == 33
+    nn = analyze_name("Пугачёва", ru_table="old31")                  # П6 У1 Г4 А1 Ч5 Ё6 В3 А1 = 27 → 9
+    assert nn["parts"][0]["sum"] == 27 and any("old31" in w for w in nn["warnings"])
+    assert analyze_name("Пугачёва")["parts"][0]["sum"] == 34          # современная таблица: П8 У3 Г4 А1 Ч7 Ё7 В3 А1
 
 
 def test_chaldean_cyrillic_is_transliterated():

@@ -19,15 +19,15 @@ CLI: `python -m calculators tarot_loshu --date 1990-05-15 --gender female --name
 
 ### 1A. Карты рождения Таро (Tarot Birth Cards)
 
-**Происхождение.** Метод создала Анджелес Арриен (Angeles Arrien), первой его опубликовала Мэри К. Грир (Mary K. Greer) в книге «Tarot for Your Self» (1984; 2-е изд. 2002, с. 29–41). Грир в интервью говорила, что узнала технику от Арриен в 1977 году. Это вторичное сведение: его приводят комментаторы на angelorum.co. Позже Грир развила тему в книгах «Tarot Constellations» (1987), «Who Are You in the Tarot?» (2011) и «Archetypal Tarot» (2021). Своя версия есть у Арриен в «The Tarot Handbook» (1987): Personality / Soul / Growth Symbols.
+**Происхождение.** Метод создала Анджелес Арриен (Angeles Arrien), первой его опубликовала Мэри К. Грир (Mary K. Greer) в книге «Tarot for Your Self» (1984; 2-е изд. 2002, с. 29–41). Грир узнала технику от Арриен в 1977 году; это подтверждает сама Грир в предисловии к «Archetypal Tarot» (2021, с. xiii): «I first learned about Birth Cards from Angeles Arrien in a tarot class in San Francisco in 1977». Позже Грир развила тему в книгах «Tarot Constellations» (1987), «Who Are You in the Tarot?» (2011) и «Archetypal Tarot» (2021). Своя версия есть у Арриен в «The Tarot Handbook» (1987): Personality / Soul / Growth Symbols.
 
 **Варианты расчёта**
 
 | Вариант | Сумма | Приведение | Колода (8 / 11) | Год | Статус |
 |---|---|---|---|---|---|
 | **Грир** (по умолчанию) | ММ + ДД + ГГГГ | складывать цифры, пока > 22; Душа — сумма цифр Личности до 1–9 | RWS: 8 Сила, 11 Справедливость (в таблице Грир созвездие 8 = «Strength (Star, Strength)») | ММ + ДД + год | первоисточник: таблица Грир, с. 32 |
-| **Tarot School** (Рут Энн и Уолд Амберстоун) | ММ + ДД + первые две цифры года + последние две | трёхзначная сумма: «первые две цифры как число + третья» (135 → 13 + 5 = 18); двузначная > 22: сумма цифр | RWS | ММ + ДД + сумма цифр года | школа: Biddy Tarot, Labyrinthos, Aeclectic |
-| **Арриен** | как у Грир (раздатка Joy Vernon, «адаптировано из Greer и Arrien», даёт одну формулу) | как у Грир | колода Тота: 8 Adjustment (≈ Справедливость), 11 Lust (≈ Сила) | Growth Symbol: от дня рождения до дня рождения (по пересказу tarokki.fi ⚠) | ⚠ детали книги Арриен (диапазон 1–21 или 1–22) не подтверждены |
+| **Tarot School** (Рут Энн и Уолд Амберстоун) | ММ + ДД + первые две цифры года + последние две | трёхзначная сумма: «первые две цифры как число + третья» (135 → 13 + 5 = 18); двузначная > 22: сумма цифр; однозначная n → пара n и n + 9 | RWS | ММ + ДД + сумма цифр года | **первоисточник** по картам рождения: Amberstone, «Tarot Tips» (2003), Tip #69; карта года — Aeclectic (пересказ) |
+| **Арриен** | ММ + ДД + ГГГГ, как у Грир | как у Грир: сумма цифр; > 22 → до однозначного, но 28 → 10; 22 = Шут (0) и 4 | колода Тота: 8 Adjustment (≈ Справедливость), 11 Lust (≈ Сила) | Growth Symbol: ММ + ДД + текущий год, «from birthday to birthday, not the calendar year»; сумма 22 → Император (4) | **первоисточник**: Arrien, «The Tarot Handbook» (1987), полнотекстовый поиск archive.org |
 | **Русскоязычные** | см. ниже | −22 или сложение цифр | на сайтах встречаются обе нумерации | — | вторичные источники |
 
 **Почему по умолчанию Грир:** это единственный вариант, у которого доступна первоисточниковая таблица (Patterns of Personal Destiny, с. 32, скан в раздатке Joy Vernon). Он же самый распространённый в англоязычной литературе.
@@ -45,7 +45,8 @@ CLI: `python -m calculators tarot_loshu --date 1990-05-15 --gender female --name
 
 **Карта года (Year Card / Growth Symbol).** По Грир: ММ + ДД + год, приведённое так же, как карта Личности (раздатка Joy Vernon: «Add birthdate month + birthdate day + current year, reduce to number between 1 and 22»). Какой год брать, источники расходятся:
 * **календарный** (по умолчанию). Грир на marykgreer.com (пост от 17.08.2011) **16.09.2011** ответила читательнице, родившейся 24.10.1966: «Yes you are a Single 2 (2000), and you are in an 11 Year». Это 10 + 24 + 2011 = 2045 → 11. Ответ дан до дня рождения (24.10), значит, год взят календарный: «от дня рождения до дня рождения» дал бы 2010 → 2044 → 10 ✓ (проверено повторно). В раздатке Joy Vernon по Грир карта года тоже считается «for 2020» от «current year». Рецензия Aeclectic на «Who Are You in the Tarot?» говорит, что выбор режима остаётся за читателем;
-* **от дня рождения до дня рождения** (`year_card_mode=birthday`): Арриен (Growth Symbol), mytarotlife.com, xtarot.com («the growth year must be taken from birthday to birthday»; у xtarot сведение «до однозначного числа или ≤ 21», на практике результат тот же).
+* **от дня рождения до дня рождения** (`year_card_mode=birthday`): Арриен (Growth Symbol; «The Tarot Handbook»: «(The growth year is from birthday to birthday, not the calendar year.)»), mytarotlife.com, xtarot.com («the growth year must be taken from birthday to birthday»; у xtarot сведение «до однозначного числа или ≤ 21», на практике результат тот же).
+* Сама Грир в «Archetypal Tarot» (2021, с. 172–173, глава «The Commencement of Tarot Year») отвечает «both!»: цикл «January-to-January» описывает внешние события, цикл «Birthday-to-Birthday» — внутренний отклик. Поэтому для Грир по умолчанию календарный год, а режим `birthday` — законная вторая линия того же автора.
 
 ### 1B. Сетка Ло Шу (Lo Shu Grid)
 
@@ -60,7 +61,7 @@ CLI: `python -m calculators tarot_loshu --date 1990-05-15 --gender female --name
 | `date+driver+conductor+kua` | + число Куа | упоминают numerologynamcalc.com и ganak.app («источники расходятся даже в том, нужен ли Куа») |
 
 Почему по умолчанию `date`: это общий знаменатель всех источников. Вторую по популярности схему калькулятор всегда отдаёт в `loshu.alternative`.
-Правило «не добавлять Драйвер, если день однозначный», о котором говорят в индийских курсах, ⚠ не подтверждено, поэтому не реализовано.
+Правило «не добавлять Драйвер, если день однозначный», о котором говорят в индийских курсах, ⚠ не подтверждено, поэтому не реализовано. При повторной проверке (2026-10-14) правила нет ни на bivs.com (16.05.1990: Драйвер 7 и Кондуктор 4 просто добавляются), ни на panchangbodh.com (hi), ни в пересказах видеокурсов; поиск по-английски и на хинди тоже ничего не дал.
 
 **Число Куа (Kua, 命卦, Ming Gua)** берётся из школы Восьми дворцов (Ba Zhai) фэншуй. Год считается по китайскому солнечному году, который начинается с Личунь (立春, Солнце на 315°, около 4 февраля): `kua_boundary=lichun`, по умолчанию. Индийские Ло Шу-калькуляторы границу года обычно не обсуждают (ganak.app говорит только о «years 2000+»), то есть фактически берут григорианский год (`jan1`). Это ⚠ расхождение; правило Личунь — стандарт китайского календаря (см. модуль BaZi / CONVENTIONS, T2). Граница Личуня считается **так же, как в модуле 03** (`calculators/ninestar.py`, Гуа): с временем и поясом — по точному моменту, без них — по дате (см. §3F). Куа модуля 12 и Гуа модуля 03 совпадают (проверено на T1–T4 и на 3930 датах 3–5 февраля 1900–2030 гг.).
 
@@ -116,10 +117,11 @@ def greer(y, m, d):
 1. T = ММ + ДД + (первые две цифры года) + (последние две): 7.04.1969 → 4 + 7 + 19 + 69 = 99.
 2. Пока T > 22: если T ≥ 100, то T = (первые две цифры как число) + последняя цифра (135 → 13 + 5); иначе T = сумма цифр (99 → 18).
 3. Если T ≥ 10, карты = цепочка до 1–9 (18 → 9; 19 → 10 → 1). Если T ≤ 9, карты = T и T + 9 (53 → 8 → 8 и 17).
-   ⚠ Для T ≤ 4 возможна третья карта T + 18; это не подтверждено.
+   Третьей карты T + 18 **нет** (прежнее «⚠ возможна для T ≤ 4» опровергнуто). Amberstone, «Tarot Tips» (Llewellyn, 2003), Tip #69, с. 129–130: «Almost everyone should have two birth cards. If your birth date sum reduces to a single digit (e.g. 90 = 9 + 0 = 9) the higher octave is implied (in this case, 18 — the Moon). The one exception is if your birth date sum equals 19». Для 2 и 3, у которых возможны две пары (11 или 20, 12 или 21): «we have found that the first of these numbers is the one that works», то есть 2 → 11, 3 → 12. Примеры оттуда же: 02.12.1941 → 74 → 11/2; 20.08.1969 → 116 → 11 + 6 = 17/8; 19.01.1931 → 70 → 7, пара 16 (Tip #60). Константа века — «19*», где «* For people born from January 1, 2000—December 31, 2099, the constant will be 20»; для XIX века калькулятор берёт 18 по той же логике (экстраполяция).
 
 ### 3C. Карта года
 * Грир: Y = ММ + ДД + год; складывать цифры, пока > 22. Пример: 24.10, 2011 → 2045 → 11.
+* Арриен (Growth Symbol): та же сумма, но приведённое 22 даёт **Императора (4)**, а не Шута: «During Emperor years (where your birthday and the current year add up to the number 22 or 4)». Пример из книги: 24.12, 1982 → 36 + 1982 = 2018 → 11 (Strength/Lust). Опция `year_card_22`: `emperor` (по умолчанию для `tarot_method=arrien`) | `fool` (по умолчанию для Грир и Tarot School; прежнее поведение для Арриен). В XXI веке сумма 22 невозможна, поэтому разница касается только прошлых лет (24.12 + 1957 = 1993 → 22).
 * Tarot School: Y = ММ + ДД + сумма цифр года; складывать цифры, пока > 22. Пример: 29.12, 2006 → 12 + 29 + 8 = 49 → 13.
 * Режим `birthday`: год = год последнего дня рождения на дату `on_date`.
 * Флаги совпадений `matches_birth_cards`. Раздатка Joy Vernon (по Грир): «Put a star next to any Year Card which is the same as your Personality, Soul, Hidden Factor, or Zodiac Card». Зодиакальную карту (Zodiac Card) модуль не считает, её агент может добавить сам по таблице Vernon (Овен → Император … Рыбы → Луна). Совпадение со Скрытым фактором Грир называет «Shadow/Teacher Year» (ответ на marykgreer.com от 16.09.2011: Single 2 в 11-м году). Значения флага: `personality`, `soul`, `birth_card` (средняя карта тройки 19-10-1), `hidden_factor (год Учителя/Тени)`. При `tarot_method=tarot_school` сравнение идёт с картами Tarot School (Скрытого фактора у этого метода нет).
@@ -309,8 +311,8 @@ year = год рождения
 | 8 | F P |
 | 9 | (не присваивается) |
 
-Проверка по первоисточнику: Cheiro's Book of Numbers (London: Herbert Jenkins), гл. XIII, с. 70 (таблица «Chaldean and Hebrew alphabet»: «there is no number 9 given in the above alphabet»), OCR-сканы archive.org. Столбец N–Z (N 5, O 7, P 8, Q 1, R 2, S 3, T 4, U 6, V 6, W 6, X 5, Y 1, Z 7) читается в скане напрямую. Значения A, B, C, D, E, G, H, I, J, L, M подтверждаются разобранными примерами Хейро (LLOYD, BALDWIN, CHAMBERLAIN, JOHN SMITH, «C, G, L or S … number 3»). F = 8 и K = 2 в OCR не читаются и подтверждены вторичным источником (anktriveni) ⚠. Сама таблица совпадает с anktriveni полностью.
-Опубликованные примеры Хейро (векторы в тестах): JOHN 18 → 9 + SMITH 17 → 8 = 17 → 8; LLOYD 18 → 9 + GEORGE 25 → 7 = 16 → 7; DAVID 16 → 7, с ним «the total of the three names the number 23»; BALDWIN 22 → 4.
+Проверка по первоисточнику: Cheiro's Book of Numbers (London: Herbert Jenkins), гл. XIII, с. 70 (таблица «Chaldean and Hebrew alphabet»: «there is no number 9 given in the above alphabet»), OCR-сканы archive.org. Столбец N–Z (N 5, O 7, P 8, Q 1, R 2, S 3, T 4, U 6, V 6, W 6, X 5, Y 1, Z 7) читается в скане напрямую. Значения A, B, C, D, E, G, H, I, J, L, M подтверждаются разобранными примерами Хейро (LLOYD, BALDWIN, CHAMBERLAIN, JOHN SMITH, «C, G, L or S … number 3»). F = 8 и K = 2 в OCR этого скана не читаются, но читаются во втором скане той же книги ([archive.org/details/cheirosbookofnum00chei](https://archive.org/details/cheirosbookofnum00chei), доступен через полнотекстовый поиск archive.org): «A = 1 N = 5 B = 2 O = 7 C = 3 P = 8 D = 4 Q = 1 E = 5 R F = 8 S G = 3 T H = 5 U = 6 I or J = 1 V = 6 K = 2 W = 6 L = 3 X = 5 M = 4 Y = 1 Z = 7. It will be seen that there is no number 9…». Таблица подтверждена первоисточником целиком и совпадает с anktriveni.
+Опубликованные примеры Хейро (векторы в тестах): JOHN 18 → 9 + SMITH 17 → 8 = 17 → 8; LLOYD 18 → 9 + GEORGE 25 → 7 = 16 → 7; DAVID 16 → 7, с ним «the total of the three names the number 23»; BALDWIN 22 → 4; RAMSAY 12 → 3 + MACDONALD 32 → 5 = 8 (с. 75–76: «the name Ramsay produces 3 as its simple number and 12 for its compound number», «5 plus 3, produces an 8»).
 
 ICAO 9303 (загранпаспорт РФ): А A, Б B, В V, Г G, Д D, Е E, Ё E, Ж ZH, З Z, И I, Й I, К K, Л L, М M, Н N, О O, П P, Р R, С S, Т T, У U, Ф F, Х KH, Ц TS, Ч CH, Ш SH, Щ SHCH, Ъ IE, Ы Y, Ь —, Э E, Ю IU, Я IA.
 ⚠ Другая латинская запись имени (например, MARIYA вместо MARIIA) даёт другое число. Если у человека есть привычное латинское написание, агент должен брать его.
@@ -369,11 +371,12 @@ ICAO 9303 (загранпаспорт РФ): А A, Б B, В V, Г G, Д D, Е E,
 {
   "method": "tarot_loshu",
   "variant": {"tarot_method": "greer|tarot_school|arrien", "deck": "rws|marseille|thoth",
-              "year_card_mode": "calendar|birthday", "ru_day_over22": "subtract|digits",
+              "year_card_mode": "calendar|birthday", "year_card_22": "fool|emperor",
+              "ru_day_over22": "subtract|digits",
               "loshu_include": "date|date+driver+conductor|date+driver+conductor+kua",
               "kua_boundary": "lichun|jan1", "vedic_master_numbers": false},
   "inputs_used": {"date": "YYYY-MM-DD", "gender": "...", "name": "...", "year_for_year_card": 2026,
-                  "time_used_for_kua": true},
+                  "year_card_mode": "calendar", "year_card_22": "fool", "time_used_for_kua": true},
   "warnings": ["..."],
   "tarot": {
     "birth_cards": { "...вариант по tarot_method..." },
@@ -546,6 +549,8 @@ ICAO 9303 (загранпаспорт РФ): А A, Б B, В V, Г G, Д D, Е E,
 | Tarot School | 20.07.1989 → 135 → 18/9; 22.11.2000 → 53 → 8 и 17 | labyrinthos.co | ✓ |
 | Tarot School | 9.12.1948 → 88 → 16/7; 29.12.1948 → 108 → 9 (+18) | aeclectic.net | ✓ (у Б. Цеховет 108 → 1+0+8 = 9 вопреки её же правилу «10 + 8 = 18»; пара 18/9 та же) |
 | Tarot School | 11.06.1992 → 128 → 20/2 | tools.devcomma.com | ✓ |
+| Tarot School | 02.12.1941 → 74 → 11/2; 20.08.1969 → 116 → 17/8; 19.01.1931 → 70 → 7 (+16) | Amberstone, Tarot Tips (2003), Tip #69 и #60 | ✓ первоисточник |
+| Арриен | 24.12.1940 → 1976 → 23 → 5 (одна карта); 09.09.1956 → 1974 → 21/3; год 1982 для 24.12 → 2018 → 11 (Lust) | Arrien, The Tarot Handbook (1987), archive.org (полнотекстовый поиск) | ✓ первоисточник |
 | Русские арканы | 23.05.1992 → 31 → 9 | lenta.ru | ✓ |
 | Русские арканы | 08.08.1974 → 37 → 15; день 3 → 3 | nur.kz | ✓ |
 | Русские арканы | 15.03.1990 → 28 → 6; 27.07.1990 → 35 → 8 | vikna.tv | ✓ |
@@ -555,7 +560,7 @@ ICAO 9303 (загранпаспорт РФ): А A, Б B, В V, Г G, Д D, Е E,
 | Веда | 23.08.1990 → 5/5; 29.06.1990 → 2/9; 15.03.1990 → 6/1; 25.12.1990 → 7/2; 15.10.1997 → 6/6 | panchangbodh.com; anktriveni; astrosight.ai; ganak.app; instaastro.com | ✓ |
 | Куа | формула м/ж до и после 2000 | ganak.app | ✓ формула (перепроверено: «subtract from 10 (or 9 for years 2000+)», «add 5 (or 6 for years 2000+)», 5 → 2/8); ⚠ готовых примеров «год → Куа» не найдено. На namenumerologycalculator.com пример «м 1985» по их же арифметике даёт 6, а напечатано «3» — опечатка (не перепроверялось) |
 | Куа | T1–T4 и 3930 дат 3–5 февраля 1900–2030 (с временем и без) | модуль 03 `ninestar.py` (Гуа) | ✓ совпадает |
-| Халдейское имя | таблица букв; JOHN SMITH 18/17 → 9 + 8 = 17 → 8; LLOYD GEORGE 9 + 7 = 16; DAVID LLOYD GEORGE = 23; BALDWIN 22 → 4 | Cheiro's Book of Numbers (скан archive.org); anktriveni | ✓ первоисточник |
+| Халдейское имя | таблица букв (вкл. F = 8, K = 2); JOHN SMITH 18/17 → 9 + 8 = 17 → 8; LLOYD GEORGE 9 + 7 = 16; DAVID LLOYD GEORGE = 23; BALDWIN 22 → 4; RAMSAY MACDONALD 3 + 5 = 8 | Cheiro's Book of Numbers (два скана archive.org); anktriveni | ✓ первоисточник |
 | T1–T4 | все величины | ручной расчёт по алгоритму §3 | ✓ (вычислено; T1–T4 в источниках не публиковались) |
 
 ---
@@ -647,6 +652,9 @@ ICAO 9303 (загранпаспорт РФ): А A, Б B, В V, Г G, Д D, Е E,
 | https://musingmystical.com/tag/birth-card | 21/3, Скрытый фактор 12 | вторичный |
 | https://www.findyourfate.com/tarot/birth-personality-card.php | 14.06.1977 → 8 | калькулятор |
 | https://www.aeclectic.net/tarot/books/who-are-you-in-the-tarot/ | выбор режима года | вторичный (рецензия) |
+| R. A. & W. Amberstone, *Tarot Tips* (Llewellyn, 2003), Tip #60, #69, с. 108–110, 128–130 — https://archive.org/details/tarot_202304 (файл «Ruth Ann & Wald Amberstone - Tarot Tips_djvu.txt») | метод Tarot School: «MM + DD + 19* + YY», трёхзначная сумма, «higher octave is implied», пары 1–10 … 9–18, примеры 1941/1969/1931 | **первоисточник** (авторы метода) |
+| A. Arrien, *The Tarot Handbook* (Arcus, 1987) — https://archive.org/details/tarothandbookpra00arri (книга в режиме выдачи; цитаты получены полнотекстовым поиском archive.org) | правила Personality/Soul (22 → 0 и 4; > 22 → однозначное, но 28 → 10), Growth Symbol «from birthday to birthday», «Emperor years … 22 or 4», примеры 1940/1956/1982 | **первоисточник** (фрагменты) |
+| M. K. Greer, *Archetypal Tarot* (2021), с. xiii, 10, 37–38, 172–173 — https://archive.org/details/tarot-empress | «I first learned about Birth Cards from Angeles Arrien … in 1977»; Мик Джаггер 1976 → 23 → 5; начало года карты: «on January 1 or on my birthday? The answer is both!» | **первоисточник** (Грир лично) |
 | https://biddytarot.com/podcast/btp86-birth-cards-part-1/ | метод Tarot School, примеры | школа (пересказ) |
 | https://labyrinthos.co/blogs/learn-tarot-with-labyrinthos-academy/how-to-calculate-your-tarot-birth-card-plus-short-birth-card-meanings-infographic | Tarot School, примеры | школа (пересказ) |
 | https://www.aeclectic.net/tarot/blog/numerology-tarot-birth-cards.shtml | Tarot School: карты, личный год/месяц | школа (Б. Цеховет со слов Амберстоунов) |
@@ -661,21 +669,18 @@ ICAO 9303 (загранпаспорт РФ): А A, Б B, В V, Г G, Д D, Е E,
 | https://bivs.com/tools/lo-shu-grid-calculator/ ; https://pathnumbers.com/chinese-numerology-calculator/ ; https://sheelaa.com/blog/what-is-lo-shu-grid-the-ancient-magic-square-that-reveals-your-lifes-blueprint/ | сетка с Драйвером и Кондуктором, примеры | калькулятор / практик |
 | https://www.vastucart.in/tools/lo-shu-grid ; https://instaastro.com/numerology/lo-shu-grid/ ; https://astroarunpandit.org/lo-shu-grid-planes-numerology/ ; https://www.lovetoknow.com/life/astrology/chinese-numerology | примеры, названия планов | калькулятор / вторичный |
 | D. A. Phillips, *The Complete Book of Numerology* (гл. 6, «Arrows of Individuality») | происхождение «стрел» | первоисточник для западной сетки (текст не просматривался ⚠) |
-| Cheiro (L. Hamon), *Cheiro's Book of Numbers*, London: Herbert Jenkins, гл. XIII–XIV, с. 70–72, 86–88. Сканы: https://archive.org/details/in.ernet.dli.2015.70770 ; https://archive.org/details/cheirosbookofnumbers | халдейская таблица, «9 не присваивается», правило составного числа имени (сумма чисел слов), «most used Christian and Surname», примеры имён | **первоисточник** (OCR-скан; F и K в OCR не читаются) |
+| Cheiro (L. Hamon), *Cheiro's Book of Numbers*, London: Herbert Jenkins, гл. XIII–XIV, с. 70–76, 86–88. Сканы: https://archive.org/details/in.ernet.dli.2015.70770 ; https://archive.org/details/cheirosbookofnumbers ; https://archive.org/details/cheirosbookofnum00chei (F = 8 и K = 2 читаются здесь) | халдейская таблица, «9 не присваивается», правило составного числа имени (сумма чисел слов), «most used Christian and Surname», примеры имён (вкл. Ramsay MacDonald) | **первоисточник** (OCR-сканы; таблица читается полностью) |
 | https://panchangbodh.com/vedic-numerology ; https://anktriveni.onrender.com/ ; https://astrosight.ai/kundli/psychic-and-destiny-number-compatibility | Мулянк/Бхагьянк, планеты (astrosight: 1 Солнце … 9 Марс), халдейская таблица (anktriveni), примеры | калькулятор/вторичный. На astrosight нет названий линий Ло Шу «Determination/Compassion line» ⚠ |
 | Brihat Parashara Hora Shastra, гл. 3, шл. 55 (натуральная дружба) — та же таблица в `calculators/jyotish.py` | дружба чисел по умолчанию | первоисточник (классический текст; URL в этой сессии не сверялся ⚠) |
 | https://www.dnaindia.com/hindi/spiritual/report-numerology-astrology-prediction-who-is-friend-and-enemy-which-numbers-will-lucky-give-benefit-or-loss-4088278 ; https://astromedha.in/insights/vedic/my-vehicle-number-and-my-chart | альтернативные таблицы дружбы; Раху и Кету нейтральны | вторичный |
 | https://namenumerologycalculator.com/lo-shu-grid-calculator/ | формула Куа (с опечаткой в примере) | калькулятор (низкая) |
-| http://www.tarokki.fi/tarotpuu/2011/07/22/lifetime-lesson-card-the-year-card-cycles/ | Арриен: Growth Symbol от дня рождения до дня рождения (известно только по поисковой выдаче, сайт не открылся) | вторичный ⚠ |
+| http://www.tarokki.fi/tarotpuu/2011/07/22/lifetime-lesson-card-the-year-card-cycles/ | Арриен: Growth Symbol от дня рождения до дня рождения (сайт не открылся; утверждение теперь подтверждено книгой Арриен) | вторичный, не нужен |
 
 **Что осталось неподтверждённым (⚠):**
-* Точные правила Арриен (диапазон 1–21 или 1–22, «Lifetime Lesson Card»).
-* Третья карта n + 18 в методе Tarot School.
-* Индийское правило «не добавлять Драйвер при однозначном дне».
+* Индийское правило «не добавлять Драйвер при однозначном дне» (повторный поиск ничего не дал).
 * Имена стрел 4-3-8 (сила), 4-9-2 и 2-5-8 (слабость).
 * Опубликованные примеры Куа «год → число» (формула подтверждена, готовых таблиц нет; T1–T4 совпадают с модулем 03).
 * Названия «Determination line» / «Compassion line» (astrosight) для диагоналей Ло Шу.
-* Значения F = 8, K = 2 в скане Хейро (OCR не читается; подтверждены вторичным источником).
 * Правила «русских» арканов для сумм, где одного вычитания 22 мало (45–48), и для суммы цифр года > 22 в схеме «день + месяц + год».
 
 Часть пунктов закрыта при проверке (волна 2), см. «Протокол проверки» ниже.
@@ -708,3 +713,20 @@ ICAO 9303 (загранпаспорт РФ): А A, Б B, В V, Г G, Д D, Е E,
 **Сфабрикованных ссылок не найдено.** Все открытые URL существуют, ключевые векторы на них есть.
 
 **Остаётся ⚠:** правила Арриен; третья карта n + 18 у Tarot School; «не добавлять Драйвер при однозначном дне»; имена стрел 4-3-8 (сила), 4-9-2 и 2-5-8 (слабость); F/K в скане Хейро; повторное «−22» и сумма цифр года > 22 в «русских» схемах; Раху и Кету нейтральны (конвенция); включать ли отчество в число имени; «Determination/Compassion line»; не перепроверены nur.kz, svitstyle, bivs, pathnumbers, vastucart, instaastro, panchangbodh, devcomma, namenumerologycalculator и tarokki.fi.
+
+### Повторная проверка (приоритет 1), 2026-10-14
+
+Цель: закрыть пункты «⚠», которые влияют на вычисляемые карты и числа. Тесты: `.venv/bin/python -m pytest calculators/tests/test_numerology.py calculators/tests/test_tarot_loshu.py calculators/tests/test_cross_year_boundary.py -q` — все зелёные.
+
+| Пункт | Статус | Источник и цитата |
+|---|---|---|
+| Tarot School: третья карта n + 18 для однозначной суммы | **опровергнуто** | Amberstone, «Tarot Tips» (2003), Tip #69, с. 129: «Almost everyone should have two birth cards. If your birth date sum reduces to a single digit … the higher octave is implied (in this case, 18 …). The one exception is if your birth date sum equals 19»; пары 2 → 11 и 3 → 12 («the first of these numbers is the one that works»). Код уже давал n и n + 9; из заметок калькулятора убрано «возможна третья карта ⚠». Добавлены 3 первоисточниковых вектора (1941, 1969, 1931) |
+| Арриен: диапазон 1–21 или 1–22 | **подтверждено с уточнением** | «The Tarot Handbook» (1987): карты рождения в диапазоне 1–22 («If your final total equals 22, it reduces to 4 and also become 0»; «… higher than 22, reduce to a single digit»; «If your final total equals 28, it will reduce to 10») — арифметика совпадает с Грир. Для Growth Symbol 22 даёт Императора: «Emperor years (where your birthday and the current year add up to the number 22 or 4)». **Код изменён:** для `tarot_method=arrien` карта года при сумме 22 — Император (4); прежнее поведение (Шут) — опция `year_card_22='fool'`. Векторы 1940, 1956, 1982 и 1957 в тестах |
+| Арриен: режим карты года | **подтверждено** (раньше — только пересказ tarokki.fi) | «(The growth year is from birthday to birthday, not the calendar year.)». Режим `birthday` для Арриен уже был по умолчанию |
+| Грир: начало года карты | **уточнено** | «Archetypal Tarot» (2021), с. 172: «when does my Year Card begin, on January 1 or on my birthday? The answer is both!» — календарный год (внешние события) по умолчанию оставлен, режим `birthday` описан как второй цикл Грир |
+| Хейро: F = 8 и K = 2 | **подтверждено первоисточником** | OCR второго скана `cheirosbookofnum00chei`, с. 70: «F = 8», «K = 2» (вся таблица читается). Таблица в обоих модулях не менялась и совпадает (тест `test_chaldean_table_matches_tarot_loshu`). Добавлен пример RAMSAY MACDONALD 3 + 5 = 8 |
+| ICAO 9303 для Намянка (Ё → E, Ъ → IE, Ь —) | **подтверждено** (вторичные источники, см. модуль 11, §4.4) | Комментарий к таблице исправлен: вместо «с 2014 г.» указаны приказ ФМС № 320 (2012) и приказы МВД № 889 (2017) и № 996 (2019) |
+| Ло Шу: «не добавлять Драйвер при однозначном дне» | **не подтверждено** | bivs.com, panchangbodh.com (hi), пересказы видеокурсов, поиск на английском и хинди — правила нет. Не реализовано |
+
+Остаётся ⚠, влияющее на числа: правило «не добавлять Драйвер»; повторное «−22» (суммы 45–48) и сумма цифр года > 22 в «русских» схемах (lenta.ru и vikna.tv перепроверены 2026-10-14: «Если получившееся число больше 22, нужно отнять от него 22» — один раз; для года > 22 правила нет); константа века 18 для Tarot School до 1900 г. (у Амберстоунов только 19 и 20). Остальные ⚠ модуля (имена стрел, «Determination/Compassion line», интерпретации, Раху/Кету как конвенция, отчество в имени) на расчёт не влияют или являются явными соглашениями.
+

@@ -547,7 +547,7 @@ def test_day_star_ja_leap_is_sonoda_rule():
     assert day_star(date(2020, 1, 21), "ja_leap")["leap_segment"] is False
     r = day_star(date(1939, 12, 23), "ja_leap")                                         # 甲午 → «閏»
     assert r["leap_segment"] and r["number"] == 7 and r["day_ganzhi"] == "甲午"
-    # Сонода, с. 14–15 (зимний «閏»): «癸己の七赤中宮の日の、翌日甲午の日にも、亦七赤が中宮に起つて» — 七赤 два дня
+    # Сонода, с. 15–16 (зимний «閏»): «癸己の七赤中宮の日の、翌日甲午の日にも、亦七赤が中宮に起つて» — 七赤 два дня
     assert day_star(date(1939, 12, 22), "ja_leap")["number"] == 7
 
 
@@ -700,3 +700,24 @@ def test_tendency_western_center_rule():
     assert nsk(r)["notation"] == "9.9.1" and nsk(r)["tendency"]["alt_western"]["number"] == 5
     rw = calculate(BirthInput(2000, 8, 1, 12, 0, place="Москва", gender="female"), tendency_method="western")
     assert nsk(rw)["notation"] == "9.9.5" and nsk(rw)["tendency"]["alt_japanese"]["number"] == 1
+
+
+def test_day_star_switch_intervals_invariant():
+    """Между 甲子-переключениями любого японского варианта — ровно 180 или 240 дней (1800–2200)."""
+    from calculators.ninestar import _Zone, _day_star_switches
+    for m in ("ja_leap", "ja_leap_wiki", "ja_jiawu"):
+        ev = _day_star_switches(1800, 2200, m, _Zone("UTC+09:00"))
+        assert {(b[0] - a[0]).days for a, b in zip(ev, ev[1:])} == {180, 240}, m
+
+
+def test_hour_star_zi_invariant():
+    """Звезда часа 子: Ян-дунь только 1/4/7, Инь-дунь только 9/6/3; за сутки 12 значений подряд."""
+    rnd = random.Random(3)
+    for _ in range(60):
+        d = date(1950, 1, 1) + timedelta(days=rnd.randint(0, 36000))
+        for meth in ("ja", "cn_solstice"):
+            z = hour_star(datetime(d.year, d.month, d.day, 0, 30), meth)
+            assert z["number"] in ({1, 4, 7} if z["dun"] == "yang" else {9, 6, 3})
+            seq = [hour_star(datetime(d.year, d.month, d.day, 2 * k + 1, 0), meth)["number"] for k in range(11)]
+            step = 1 if z["dun"] == "yang" else -1
+            assert all((b - a - step) % 9 == 0 for a, b in zip([z["number"]] + seq, seq))
