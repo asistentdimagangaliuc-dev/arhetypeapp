@@ -88,6 +88,22 @@ def _solar_year_of(jd: float) -> int:
     return y if jd >= bz.li_chun_jd(y) else y - 1
 
 
+def _jie_on_date_warning(ref_jd: float, on_date: date, zone: "ns._Zone", warnings: list[str]) -> None:
+    """Предупреждение, если на дату прогноза приходится цзе (смена месяца Ба-цзы и звезды месяца Ки).
+
+    Добавляется один раз, даже если его запрашивают оба блока (bazi и ninestar)."""
+    slot = bz.month_slot(sun_longitude(ref_jd))
+    mstart = find_sun_longitude(bz.JIE[slot][0], ref_jd, search_back=True)
+    mend = find_sun_longitude(bz.JIE[(slot + 1) % 12][0], ref_jd, search_back=False)
+    for jd_j in (mstart, mend):
+        if zone.to_local(jd_to_utc(jd_j)).date() == on_date:
+            w = (f"На {on_date.isoformat()} приходится цзе ({_when(jd_j, zone)['local']}): месячный столп Ба-цзы и "
+                 f"звезда месяца Ки в этот день зависят от времени (расчёт — на момент {_when(ref_jd, zone)['local']}, "
+                 f"опция on_time).")
+            if w not in warnings:
+                warnings.append(w)
+
+
 # ---------------------------------------------------------------------------
 # A. Ба-цзы: 流年, 流月, 大运 и взаимодействия
 # ---------------------------------------------------------------------------
@@ -436,10 +452,7 @@ def _bazi_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zone: 
     mi = bz.ganzhi_index((bz.month_first_stem(bz.year_index(y_ref) % 10) + slot) % 10, (slot + 2) % 12)
     mstart = find_sun_longitude(bz.JIE[slot][0], ref_jd, search_back=True)
     mend = find_sun_longitude(bz.JIE[(slot + 1) % 12][0], ref_jd, search_back=False)
-    for jd_j in (mstart, mend):
-        if zone.to_local(jd_to_utc(jd_j)).date() == on_date:
-            warnings.append(f"На {on_date.isoformat()} приходится цзе ({_when(jd_j, zone)['local']}): месячный "
-                            f"столп в этот день зависит от времени (расчёт — на момент {_when(ref_jd, zone)['local']}).")
+    _jie_on_date_warning(ref_jd, on_date, zone, warnings)
     ext_m = dict(ext, month=mi % 12)
     month_now = {"solar_year": y_ref, **bz.pillar_brief(mi), "start": _when(mstart, zone), "end": _when(mend, zone),
                  "ten_gods": _ten_gods_of(mi, dm), "relations_with_natal": _relations_with_natal(mi, pidx),
@@ -547,6 +560,7 @@ def chart_directions(chart: dict[str, int], branch: int, kind: str, honmei: int 
     歳破/月破/日破 — сторона, противоположная ветви периода; 本命殺 — дворец звезды рождения (нет, если она
     в центре), 本命的殺 — противоположный; 月命殺/月命的殺 — то же для звезды месяца рождения (только 月盤);
     定位対冲 — звезда стоит напротив своего «родного» дворца.
+    В 年盤 getsumei влияет только на also_good_for_month_star / max_lucky_honmei_getsumei («最大吉方» (а)).
     """
     ha_name = {"year": "歳破", "month": "月破", "day": "日破"}[kind]
     c = chart["C"]
@@ -613,11 +627,15 @@ def _ninestar_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zo
                       options: dict, warnings: list[str], steps: list[str]) -> dict:
     nat_opts = {k: options[k] for k in ("tendency_method",) if k in options}
     natal = ns.calculate(b, day_star_method=None, hour_star_method=None, **nat_opts)
+    # предупреждения натала (Личунь/цзе в день рождения без времени и т. п.) важны: от них зависят 本命星/月命星;
+    # предупреждения о числе Гуа здесь не нужны
+    warnings.extend(f"Ки (натал): {w}" for w in natal["warnings"] if "Гуа" not in w)
     honmei = natal["nine_star_ki"]["principal"]["number"]
     getsumei = natal["nine_star_ki"]["month"]["number"]
     ys = ns.year_star(year)
     ychart = flying_chart(ys)
-    ydir = chart_directions(ychart, bz.year_index(year) % 12, "year", honmei)
+    # getsumei передаётся, чтобы в 年盤 был посчитан «最大吉方» (а): 月命殺 в 年盤 не ставится (только в 月盤)
+    ydir = chart_directions(ychart, bz.year_index(year) % 12, "year", honmei, getsumei)
     hp = ydir["honmei"]["palace"]
     steps.append(f"Ки. Звезда года {year}: 11 − ({year} mod 9) → {ys} {ns.STARS[ys]['ja']}; 年盤 прямым полётом "
                  f"(центр → СЗ → З → СВ → Ю → С → ЮЗ → В → ЮВ). Звезда рождения {honmei} стоит в "
@@ -656,7 +674,9 @@ def _ninestar_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zo
     mchart = flying_chart(ms)
     mdir = chart_directions(mchart, mbranch, "month", honmei, getsumei)
     ychart_ref = flying_chart(ns.year_star(y_ref))
-    ydir_ref = ydir if y_ref == year else chart_directions(ychart_ref, bz.year_index(y_ref) % 12, "year", honmei)
+    ydir_ref = ydir if y_ref == year else chart_directions(ychart_ref, bz.year_index(y_ref) % 12, "year", honmei,
+                                                          getsumei)
+    _jie_on_date_warning(ref_jd, on_date, zone, warnings)
     y_good = {x["direction"] for x in ydir_ref.get("lucky", [])}
     mdir["lucky_year_and_month"] = [x["direction"] for x in mdir["lucky"] if x["direction"] in y_good]
     steps.append(f"Месяц на дату ({bz.BRANCHES[mbranch][0]}, год Ки {y_ref}): звезда {ms}; 五黄殺 "
@@ -701,7 +721,9 @@ GOCHARA_GOOD: dict[str, dict[int, int | None]] = {
     "mars": {3: 12, 6: 9, 11: 5},
     "mercury": {2: 5, 4: 3, 6: 9, 8: 1, 10: 8, 11: 12},
     "jupiter": {2: 12, 5: 4, 7: 3, 9: 10, 11: 8},
-    "venus": {1: 8, 2: 7, 3: 1, 4: 10, 5: 9, 8: 5, 9: 11, 11: 6, 12: 3},
+    # XXVI.8: «1st, 2nd, 3rd, 4th, 5th, 8th, 9th, 12th and 11th … 8th, 7th, 1st, 10th, 9th, 5th, 11th, 6th and 3rd
+    # respectively» → 12-й ↔ 6-й, 11-й ↔ 3-й (не наоборот).
+    "venus": {1: 8, 2: 7, 3: 1, 4: 10, 5: 9, 8: 5, 9: 11, 11: 3, 12: 6},
     "saturn": {3: 12, 6: 9, 11: 5},
     # XXVI.2: «Rahu and Ketu are similar to the Sun»; точки ведхи для узлов в тексте не даны.
     "rahu": {3: None, 6: None, 10: None, 11: None},
