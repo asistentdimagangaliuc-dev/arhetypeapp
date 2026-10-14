@@ -107,44 +107,54 @@ GREER_CONSTELLATIONS: dict[int, tuple[str, str, str]] = {
 LOSHU_LAYOUT = [[4, 9, 2], [3, 5, 7], [8, 1, 6]]   # юг сверху (Wikipedia: Lo Shu Square)
 
 # (ключ, клетки, тип линии, название плана RU, EN, альтернативные названия в источниках)
+# Источники имён: astromedha.in, ganak.app, sheelaa.com, numerologynamcalc.com,
+# astrosight.ai/numerology/lo-shu-grid-course-online, L. Too «Chinese Numerology in Feng Shui» (1994),
+# R. Webster «Chinese Numerology» (1998); полнотекстовый поиск archive.org, см. модуль 12, §4.3–4.5.
 LOSHU_LINES: list[tuple[str, tuple[int, int, int], str, str, str, list[str]]] = [
     ("mental", (4, 9, 2), "row", "Ментальный план (план ума)", "Mental / Mind plane",
      ["Thought plane (sheelaa.com)"]),
     ("emotional", (3, 5, 7), "row", "Эмоциональный (духовный) план", "Emotional / Spiritual plane",
-     ["Will plane (sheelaa.com)"]),
+     ["Will plane (sheelaa.com)", "Practical plane (astrosight.ai)"]),
     ("practical", (8, 1, 6), "row", "Практический (физический) план", "Practical / Physical plane",
-     ["Action plane (sheelaa.com)"]),
+     ["Action plane (sheelaa.com; astrosight.ai)", "Material dimension (L. Too 1994)"]),
     ("thought", (4, 3, 8), "column", "План мысли", "Thought plane", ["Mind plane (sheelaa.com)"]),
     ("will", (9, 5, 1), "column", "План воли (решимости и воли)", "Will / Determination and Will plane",
      ["Practical plane (sheelaa.com)"]),
     ("action", (2, 7, 6), "column", "План действия", "Action plane", ["Spiritual plane (sheelaa.com)"]),
     ("golden_yog", (4, 5, 6), "diagonal", "Золотая (Раджа-) йога", "Golden Yog / Raj Yog",
-     ["Spiritual plane (ganak.app)", "Determination line (astrosight.ai ⚠ не найдено при повторной проверке)", "Stability arrow (astromedha.in)"]),
+     ["Spiritual plane (ganak.app)", "Determination Line (astrosight.ai, курс Lo Shu)",
+      "Stability arrow (astromedha.in)", "Arrow of Compassion (R. Webster 1998)"]),
     ("silver_yog", (2, 5, 8), "diagonal", "Серебряная йога", "Silver Yog / Rajat Yog",
-     ["Material plane (ganak.app)", "Compassion line (astrosight.ai ⚠ не найдено при повторной проверке)", "Prosperity arrow (astromedha.in; sheelaa.com)"]),
+     ["Material plane (ganak.app)", "Compassion Line (astrosight.ai, курс Lo Shu)",
+      "Prosperity arrow (astromedha.in; sheelaa.com)",
+      "Line of Emotional Balance / Line of Determination (L. Too 1994)"]),
 ]
 
 # Стрелы силы (все три числа присутствуют) — названия разнятся по источникам, см. базу знаний.
 LOSHU_STRENGTH_ARROWS: dict[tuple[int, int, int], str] = {
-    (4, 9, 2): "Стрела планировщика (Arrow of the Planner; у sheelaa.com — Intellect)",
+    (4, 9, 2): "Стрела планировщика (Arrow of the Planner, astromedha.in; у sheelaa.com, L. Too и "
+               "R. Webster — Intellect)",
     (3, 5, 7): "Стрела духовности (Arrow of Spirituality; варианты: Intellect, Willpower)",
-    (8, 1, 6): "Стрела активности (Arrow of Activity) ⚠ один источник",
-    (4, 3, 8): "Полный план мысли (отдельное имя стрелы не найдено ⚠)",
-    (9, 5, 1): "Стрела решимости (Arrow of Determination; вариант: Willpower)",
+    (8, 1, 6): "Стрела активности (Arrow of Activity, sheelaa.com; у L. Too и R. Webster — Prosperity)",
+    (4, 3, 8): "Линия планировщика (Line/Arrow of the Planner — L. Too 1994, R. Webster 1998); "
+               "полный план мысли",
+    (9, 5, 1): "Стрела решимости (Arrow of Determination; вариант: Willpower — astromedha.in, L. Too, R. Webster)",
     (2, 7, 6): "Стрела действия (Arrow of Action; у sheelaa.com — Compassion)",
     (4, 5, 6): "Золотая (Раджа-) йога / Стрела стабильности (Golden Yog / Arrow of Stability)",
     (2, 5, 8): "Серебряная йога / Стрела процветания (Silver Yog / Arrow of Prosperity)",
 }
-# Стрелы слабости (все три числа отсутствуют) — по astromedha.in.
+# Стрелы слабости (все три числа отсутствуют) — по astromedha.in; для 4-9-2 и 2-5-8 у astromedha
+# имён нет, они взяты из книг R. Webster (1998) и L. Too (1994).
 LOSHU_WEAKNESS_ARROWS: dict[tuple[int, int, int], str] = {
-    (4, 5, 6): "Стрела фрустрации (Arrow of Frustration)",
-    (3, 5, 7): "Стрела плохой памяти (Arrow of Poor Memory)",
-    (2, 7, 6): "Стрела одиночества (Arrow of Loneliness)",
+    (4, 5, 6): "Стрела фрустрации (Arrow of Frustration; у L. Too и R. Webster — Suspicion)",
+    (3, 5, 7): "Стрела плохой памяти (Arrow of Poor Memory; у L. Too и R. Webster — Loneliness)",
+    (2, 7, 6): "Стрела одиночества (Arrow of Loneliness; у L. Too и R. Webster — Apathy)",
     (8, 1, 6): "Стрела потерь (Arrow of Losses)",
-    (4, 3, 8): "Стрела нерешительности (Arrow of Indecision)",
+    (4, 3, 8): "Стрела нерешительности (Arrow of Indecision; у L. Too — Confusion)",
     (9, 5, 1): "Стрела пассивности (Arrow of Passivity)",
-    (4, 9, 2): "Пустой ментальный план (имя стрелы слабости не найдено ⚠)",
-    (2, 5, 8): "Пустая серебряная линия (имя стрелы слабости не найдено ⚠)",
+    (4, 9, 2): "Пустой ментальный план; у R. Webster (1998) — Стрела плохой памяти (Arrow of Poor Memory)",
+    (2, 5, 8): "Пустая серебряная линия; у L. Too (1994) и R. Webster (1998) — Стрела фрустрации "
+               "(Arrow of Frustration)",
 }
 
 # Число -> (стихия, сторона света, триграмма «Позднего неба», цвет стихии, планета инд. традиции)

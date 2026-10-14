@@ -2,7 +2,7 @@
 
 Каждый документ метода содержит раздел «Источники» с оценкой надёжности каждого источника и раздел «Протокол проверки» (что именно было независимо перепроверено). Здесь — сводный индекс всех процитированных URL по модулям (сгенерирован `calculators/tools/build_sources.py`).
 
-Всего уникальных ссылок по модулям: **450**.
+Всего уникальных ссылок по модулям: **509**.
 
 **Шкала надёжности, используемая в документах:**
 
@@ -17,10 +17,13 @@
 
 ## [00-input-normalization.md](00-input-normalization.md) — 00. Нормализация входных данных: дата, время, место, календарь
 
-Уникальных URL: 30
+Уникальных URL: 34
 
+- <https://ru.wikisource.org/wiki/Федеральный_закон_от_15.11.1997_№_143-ФЗ/Глава_II>
+- <https://www.astro.com/cgi/xa.cgi/faq/fq_de_time_e.htm>
 - <http://besp.narod.ru/images/trud_1982.jpg>
 - <http://pravo.gov.ru/proxy/ips/?doc_itself=&nd=102010545>
+- <https://www.astro.com/wiki/astro-databank/index.php?title=Help:RR&action=raw>
 - <https://raw.githubusercontent.com/eggert/tz/main/europe>
 - <https://raw.githubusercontent.com/eggert/tz/main/asia>
 - <https://raw.githubusercontent.com/eggert/tz/main/theory.html>
@@ -36,6 +39,7 @@
 - <https://eclipse.gsfc.nasa.gov/SEhelp/deltatpoly2004.html>
 - <https://www.astro.com/swisseph/swephprg.htm>
 - <https://www.astro.com/astro-databank/Einstein,_Albert>
+- <https://www.astro.com/wiki/astro-databank/index.php?title=Einstein,_Albert&action=raw>
 - <https://www.astro-seek.com/birth-chart/albert-einstein-horoscope>
 - <https://www.astrotheme.com/astrology/Albert_Einstein>
 - <http://maps.monetonos.ru/maps/raznoe/Old_Maps/Old_Maps/Articles/022/3_1981.html>
@@ -52,12 +56,13 @@
 
 ## [01-bazi.md](01-bazi.md) — 01. Ба-цзы (八字, 四柱命理): Четыре столпа судьбы
 
-Уникальных URL: 35
+Уникальных URL: 39
 
 - <https://tea.ru/article/syutsay-tsifrovaya-psikhologiya-ili-kazakhstanskiy-biznes-po-prodazhe-kursov-stoimostyu-630-tysyach-rubley/>
 - <https://t-j.ru/cifrovaya-psihologiya/>
 - <https://astrologi-runologi.ru/kitajskaya-numerologiya-syuczaj.html>
 - <https://tengrinews.kz/kazakhstan_news/syutsay-sravnili-astrologiey-nazvali-psevdonaukoy-kazahstane-584538/>
+- <https://zhanatglobal.com/filosofiya-syucai/>
 - <https://www.masterseanchan.com/ru/bazi-1984/>
 - <https://joeyyap.com/askjoey-details.asp?aid=2262>
 - <https://www.mingli.ru/blog/post/2487>
@@ -65,6 +70,7 @@
 - <https://www.163.com/dy/article/EEB7TVDL0525AEBH.html>
 - <https://chengbazi.blogspot.com/2021/08/blog-post.html>
 - <https://www.fengshuied.com/late-rat-early-rat-hour>
+- <https://www.masterseanchan.com/ru/калькулятор-бацзы-диаграмма-четыре/>
 - <https://www.sohu.com/a/17409692_125692>
 - <https://zh.wikisource.org/wiki/三命通會/卷二>
 - <https://www.masterseanchan.com/ru/bazi-<год>
@@ -86,6 +92,8 @@
 - <https://zh.wikisource.org/wiki/三命通會/卷三>
 - <https://synthesisastrology.com/chart/albert-einstein/example/bazi>
 - <https://www.masterseanchan.com/ru/bazi-2004/>
+- <https://zh.wikisource.org/wiki/窮通寶鑑>
+- <https://archive.org/details/astronomical-algorithms-meeus>
 - <https://www.masterseanchan.com/ru/bazi-1990/>
 - <https://www.mingli.ru/bazi/>
 - <https://chinadigitaltimes.net/chinese/?p=99537>
@@ -115,15 +123,15 @@
 
 ## [03-nine-star-ki-gua.md](03-nine-star-ki-gua.md) — 03. Девятизвёздная Ки (九星気学), летящие звёзды натала, число Гуа (命卦) и китайский зодиак
 
-Уникальных URL: 32
+Уникальных URL: 35
 
+- <https://www.skillon.com/kua-number-calculator.cfm>
 - <https://www.hko.gov.hk/en/gts/time/calendar/text/files/T1984e.txt>
 - <https://ja.wikipedia.org/wiki/九星>
 - <https://en.wikipedia.org/wiki/Nine_Star_Ki>
 - <https://en.wikipedia.org/wiki/Chinese_zodiac>
 - <https://www.luft.co.jp/cgi/nine-star-ki-table.php>
 - <https://shin-yu.net/kyuseikigaku/en/>
-- <https://www.skillon.com/kua-number-calculator.cfm>
 - <https://www.skillon.com/bazi-feng-shui.cfm/topic/2020/When-is-2012-Year-of-Dragon-begins-4-Feb-2012-or-23-Jan-2012>
 - <https://www.9starki.com/toolbox.htm>
 - <https://jobcannon.io/blog/how-nine-star-ki-is-calculated>
@@ -148,13 +156,21 @@
 - <https://downloads.wordpress.org/plugin/nine-star-ki.1.1.1.zip>
 - <https://www.9starki.com/free_lessons.htm>
 - <https://archive.org/details/illustratedencyc0000tool>
+- <https://archive.org/details/fengshuijourney0000sand>
+- <https://archive.org/details/fengshuiastrolog0000thom>
+- <https://en.wikipedia.org/wiki/Vietnamese_calendar>
 - <https://idolsaju.com/en/blog/nine-star-ki-japanese-numerology-guide>
 
 ## [04-human-design.md](04-human-design.md) — 04. Дизайн Человека (Human Design System)
 
-Уникальных URL: 23
+Уникальных URL: 29
 
+- <https://jovianarchive.com/pages/what-is-circuitry-in-human-design>
+- <http://humandesign.wikidot.com/channels>
+- <https://jovianarchive.com/pages/type-and-strategy-in-human-design>
 - <https://app.mybodygraph.com/js/app.*.js>
+- <https://jovianarchive.com/products/lesson-10-the-faces-of-initiation-qxq-the-16-faces-of-the-godhead>
+- <https://human-design.space/inkarnatsionnye-kresty/>
 - <https://totalhumandesign.com/design/albert-einstein>
 - <https://www.astrotheme.com/astrology/Barack_Obama>
 - <https://charts.maiamechanics.com/api/charts/free-chart>
@@ -162,6 +178,7 @@
 - <https://jovianarchive.com/pages/get-your-human-design-chart>
 - <https://jovianarchive.com/pages/incarnation-crosses-in-human-design>
 - <https://www.jovianarchive.com/Human_Design/Incarnation_Cross>
+- <https://jovianarchive.com/blogs/chart-interpretations-components/planetary-accents-in-human-design>
 - <https://www.barneyandflow.com/gate-zodiac-degrees>
 - <https://bonniesorsby.com/human-design-gates-by-degree/>
 - <https://thehumandesignsystem.com/crosses>
@@ -180,7 +197,7 @@
 
 ## [05-gene-keys.md](05-gene-keys.md) — 05. Генные ключи (Gene Keys) — Гологенетический профиль (Hologenetic Profile)
 
-Уникальных URL: 23
+Уникальных URL: 33
 
 - <https://genekeys.com/docs/why-do-i-have-different-line-keynotes-in-my-venus-or-pearl-sequence/>
 - <https://bonniesorsby.com/human-design-gates-by-degree/>
@@ -190,14 +207,20 @@
 - <https://www.kellyharringtonrd.com/post/gene-keys-human-design-gates>
 - <https://beyonduality.com/planets-in-the-gene-keys-hologenetic-profile/>
 - <https://myrahpenaloza.com/blogs/journal/gene-keys-venus-sequence>
-- <https://awakeningcatalyst.substack.com/p/sphere-creativity>
+- <https://genekeys.ru/about-gene-keys>
 - <https://cosmo-360.com/gene-keys/>
+- <https://genekeys.com/free-profile/>
+- <https://genekeys.com/docs/questions-about-the-lines/>
+- <https://genekeys.com/codon-ring/>
+- <https://genekeys.com/codon-rings/>
+- <https://genekeys.com/docs/what-about-the-codon-rings/>
 - <https://waynebuckhanan.com/wb/20200728_WLB_GeneKeys.pdf>
 - <https://waynebuckhanan.com/wb/20141130_WLB_GeneKeys.pdf>
 - <https://www.leben-mit-ohne.de/wp-content/uploads/2022/10/LMO_Profile.pdf>
 - <https://www.integralhumandesign.net/examples/SchneiderRomy.GOLDENPATH.pdf>
 - <https://www.integralhumandesign.net/examples/KahloFrida.GOLDENPATH.pdf>
-- <https://awakeningcatalyst.substack.com/p/pathway-core-stability>
+- <https://genekeys.com/how-to-read-your-profile/>
+- <https://genekeys.com/docs/questions-about-pathways/>
 - <https://genekeys.com/docs/what-is-a-sphere-gene-key-or-line/>
 - <https://genekeys.com/wp-content/uploads/2020/02/Deep-Dive-Keynotes-Evolution.pdf>
 - <https://www.kemenczy.at/wp-content/uploads/2016/05/GeneKey-GoldenPathRK.pdf>
@@ -205,17 +228,25 @@
 - <https://www.augurine.com/tools/gene-keys-calculator>
 - <https://amyhatescarrots.com/gene-keys-attraction-sphere>
 - <https://justfollowjoy.substack.com/p/what-your-gene-keys-sphere-of-attraction>
+- <https://genekeys.com/wp-content/themes/buddyboss-theme-child/assets/js/profilerreact.js?ver=1.2.2>
+- <https://genekeys.com/star-pearl/>
+- <https://genekeys.com/russian/>
+- <https://awakeningcatalyst.substack.com/p/pathway-core-stability>
 
 ## [06-western-astrology.md](06-western-astrology.md) — 06. Западная (тропическая) астрология: натальная карта
 
-Уникальных URL: 18
+Уникальных URL: 24
 
-- <https://www.astrotheme.com/astrology_aspects.php>
+- <https://astrologyking.com/aspects/>
+- <https://www.astro.com/cgi/xa.cgi/faq/fq_fh_owstyle_e.htm>
+- <https://theastrologypodcast.com/transcripts/taep-311-transcript-stelliums-in-astrology-interpreting-planetary-clusters/>
 - <https://github.com/CruiserOne/Astrolog/blob/master/data.cpp>
+- <https://en.wikipedia.org/wiki/Exaltation_(astrology>
+- <https://www.astrotheme.com/astrology_aspects.php>
 - <https://github.com/CruiserOne/Astrolog/blob/master/general.cpp>
 - <https://www.skyscript.co.uk/aspectorbs.html>
 - <https://astromaya.ru/astroschool/postroenie-goroskopa/hand1/aspectcalculation>
-- <https://www.astro.com/astrologie/in_aspect_e.htm>
+- <https://www.astro.com/cgi/xa.cgi/astrologie/in_aspect_e.htm>
 - <https://www.astro.com/swisseph/swisseph.htm>
 - <https://aa.usno.navy.mil/faq/GAST>
 - <https://aa.usno.navy.mil/api/seasons?year=2000>
@@ -227,15 +258,19 @@
 - <https://www.astrologbrova.com/aspekty-teoriya/orbisy-lekciya-135.html>
 - <http://globaastra.by/pavel-globa-konfiguracii-aspektov/>
 - <https://www.astro.com/astro-databank/Einstein,_Albert>
+- <https://www.astro.com/h/astrodienst2609010844.css>
+- <https://astromaya.ru/astroschool/postroenie-goroskopa/hand1/housecuspculculation>
 - <https://www.astrotheme.com/astrology/<Имя>
 
 ## [07-jyotish.md](07-jyotish.md) — 07. Джйотиш (ведическая астрология, Jyotiṣa)
 
-Уникальных URL: 34
+Уникальных URL: 37
 
 - <https://www.vedicastrologer.org/jh/update_7.4.htm>
 - <https://www.drikpanchang.com/panchang/sunrise/panchang-sunrise.html>
 - <https://www.drikpanchang.com/faq/faq-ans2.html>
+- <https://archive.org/details/surya-siddhanta-english-translation-ebenezer-burgess>
+- <https://archive.org/details/in.ernet.dli.2015.128092>
 - <https://yourastroguide.wordpress.com/2012/09/01/brihat-parashara-hora-sashtra-chapter-3/>
 - <https://www.vedicastrologer.org/articles/vedic_astro_textbook.pdf>
 - <https://www.vedicastrologer.org/jh/features.htm>
@@ -247,6 +282,7 @@
 - <https://www.astrotheme.com/astrology/Albert_Einstein>
 - <https://www.halloran.com/Albert_Einstein_Ranking.pdf>
 - <https://www.astro.com/astro-databank/Einstein,_Albert>
+- <https://panchangbodh.com/birth-combust-planets>
 - <https://astrosage.com/celebrity-Horoscope/barack-obama-birth-chart.asp>
 - <https://astrosage.com/celebrity-Horoscope/mahatma-gandhi-birth-chart.asp>
 - <https://astrosage.com/celebrity-Horoscope/steve-jobs-birth-chart.asp>
@@ -295,8 +331,9 @@
 
 ## [09-alexandrov-square.md](09-alexandrov-square.md) — 09. Психоматрица Александрова («квадрат Александрова», цифровой анализ дат)
 
-Уникальных URL: 12
+Уникальных URL: 13
 
+- <https://www.litres.ru/author/aleksandr-aleksandrov/>
 - <https://thelib.ru/books/aleksandr_fedorovich_aleksandrov/cifrovoy_analiz_dat_rozhdeniya_i_sobytiy_kniga_1_psihomatrica_i_ee_svoystva-read.html>
 - <https://thelib.ru/books/aleksandr_fedorovich_aleksandrov/cifrovoy_analiz_dat_rozhdeniya_i_sobytiy_kniga_2_tipy_myshleniya_i_ih_primenenie-read.html>
 - <https://litresp.ru/chitat/ru/%D0%90/aleksandrov-aleksandr-fedorovich/data-rozhdeniya--klyuch-k-ponimaniyu-cheloveka/4>
@@ -312,8 +349,10 @@
 
 ## [10-destiny-matrix.md](10-destiny-matrix.md) — 10. Матрица судьбы (метод 22 арканов, школа Натальи Ладини)
 
-Уникальных URL: 28
+Уникальных URL: 30
 
+- <https://eksmo.ru/book/matritsa-sudby-pervoistochnik-ITD1409842/>
+- <https://matrica-sudby.ru/wp-content/uploads/2022/10/zony-talantov-v-matricu-sudby.jpg>
 - <https://matrica-sudby.ru/matrix/chto-takoe-matrica-sudby-i-kak-rasschitat.html>
 - <https://matrica-sudby.ru/razbor-matric/razbor-matriczy-sudby-larisy-dolinoj-po-date-rozhdeniya.html>
 - <https://matrica-sudby.ru/razbor-matric/razbor-detskoj-matricy-sudby-makoleya-kalkina.html>
@@ -345,9 +384,11 @@
 
 ## [11-numerology.md](11-numerology.md) — 11. Нумерология по дате рождения и имени (пифагорейская/западная и халдейская)
 
-Уникальных URL: 47
+Уникальных URL: 49
 
+- <https://www.yourtango.com/self/attitude-number-meaning-numerology>
 - <https://www.worldnumerology.com/numerology-master-numbers.htm>
+- <https://archive.org/details/cheirosbookofnumbers>
 - <https://ru.wikipedia.org/wiki/Транслитерация_русского_алфавита_латиницей>
 - <https://pddmaster.ru/documents/prikaz-267/pr4-d97/pr4-1-d97>
 - <https://www.change.org/p/министерство-внутренних-дел-российской-федерации-изменить-правила-транслитерации-буквы-ё-для-заграничных-документов-оформляемых-в-рф>
@@ -397,9 +438,10 @@
 
 ## [12-tarot-loshu-vedic.md](12-tarot-loshu-vedic.md) — 12. Арканы Таро по дате рождения, сетка Ло Шу, ведическая нумерология
 
-Уникальных URL: 41
+Уникальных URL: 46
 
 - <https://archive.org/details/cheirosbookofnum00chei>
+- <https://archive.org/details/heag_brihat-parasara-hora-sastra-vol-1-by-maharshi-parasara-commentary-editor-tr>
 - <https://joyvernon.com/images/Tarot%20Birth%20Cards.pdf>
 - <https://marykgreer.com/2011/08/17/who-are-you-in-the-tarot/>
 - <https://angelorum.co/topics/divination/how-to-calculate-your-personality-sou/>
@@ -431,6 +473,10 @@
 - <https://instaastro.com/numerology/lo-shu-grid/>
 - <https://astroarunpandit.org/lo-shu-grid-planes-numerology/>
 - <https://www.lovetoknow.com/life/astrology/chinese-numerology>
+- <https://archive.org/details/chinesenumerolog0000tool>
+- <https://archive.org/details/lilliantoos168wa0000tool>
+- <https://archive.org/details/chinesenumerolog00webs>
+- <https://astrosight.ai/numerology/lo-shu-grid-course-online>
 - <https://archive.org/details/in.ernet.dli.2015.70770>
 - <https://archive.org/details/cheirosbookofnumbers>
 - <https://panchangbodh.com/vedic-numerology>
@@ -443,8 +489,11 @@
 
 ## [13-tzolkin.md](13-tzolkin.md) — 13. Майянский календарь: Цолькин (Dreamspell / «13 Лун» и классический счёт майя)
 
-Уникальных URL: 28
+Уникальных URL: 33
 
+- <https://www.law-of-time.ru/13moon/rukovodstvo/>
+- <https://www.law-of-time.ru/timeship-earth/genezis-drimspell/>
+- <https://www.law-of-time.ru/time/level-1/>
 - <https://lawoftime.org/decode/>
 - <http://www.lawoftime.org/thirteenmoon/tutorial.html>
 - <http://www.lawoftime.org/images/oracle-board.png>
@@ -462,6 +511,8 @@
 - <https://lawoftime.org/wp-content/uploads/28-Meditations-on-the-Law-of-Time.pdf>
 - <https://13moon.com/decoder.php>
 - <https://news.law-of-time.ru/>
+- <https://archive.org/services/search/beta/page_production/?service_backend=fts>
+- <https://ru.wikipedia.org/wiki/Календарь_майя>
 - <https://hunab.ru/tzolkin/13-tonov/>
 - <http://tsolkin.ru/api/>
 - <https://en.wikipedia.org/wiki/Dreamspell>
@@ -476,7 +527,7 @@
 
 ## [14-socionics-enneagram.md](14-socionics-enneagram.md) — 14. Соционика и эннеаграмма (типирование опросником; по дате рождения НЕ вычисляются)
 
-Уникальных URL: 28
+Уникальных URL: 34
 
 - <https://www.katherinefauvre.com/tritype>
 - <https://wikisocion.github.io/content/intertype.html>
@@ -496,6 +547,11 @@
 - <https://libraryofprofessionalcoaching.com/tools/executive-presence/the-coaching-of-anticipation-ii-the-enneagram-and-dynamics-of-anticipation/16/>
 - <https://typevolution.com/2016/11/21/your-enneagram-dual/>
 - <https://en.wikipedia.org/wiki/Enneagram_of_Personality>
+- <https://archive.org/details/wisdomofenneagra0000riso>
+- <https://archive.org/services/search/beta/page_production/?service_backend=fts>
+- <https://archive.org/details/understandingenn00riso_0>
+- <https://socioniko.net/ru/gazeta/2003-11/index.html>
+- <https://socioniko.net/ru/gazeta/2003-11/garant.html>
 - <https://www.themeaningmovement.com/enneagram-tritype>
 - <https://enneagramtest.com/blog/enneagram-and-astrology>
 - <https://sovmestimost-lab.ru/>
@@ -506,10 +562,11 @@
 - <https://scinquisitor.livejournal.com/24346.html>
 - <https://www.typologycentral.com/threads/enneagram-and-numerology.24344/>
 - <https://www.astro.com/astro-databank/Einstein,_Albert>
+- <https://www.astro.com/wiki/astro-databank/api.php?action=parse&page=Einstein,_Albert&prop=wikitext&format=json>
 
 ## [15-syutsay.md](15-syutsay.md) — 15. Сюцай — «цифровая психология» Жаната Кожамжарова
 
-Уникальных URL: 33
+Уникальных URL: 35
 
 - <https://syutsay.ru/syutsay-chislo-2>
 - <https://syutsay.ru/syutsay-chislo-4>
@@ -521,6 +578,8 @@
 - <https://zhanatglobal.com/wp-json/wc/store/v1/products>
 - <https://zhanatglobal.com/wp-content/uploads/2024/12/webpconverter-2-1-scaled.webp>
 - <https://zhanatglobal.com/product/biznes-kalendar-odnostranichnik-uspeshnyh-dnej/>
+- <https://en.wiktionary.org/wiki/秀才>
+- <https://en.wiktionary.org/wiki/秀才不出門，能知天下事>
 - <https://zhanatglobal.com/kak-czifrovaya-nauka-syuczaj-menyaet-zhizn/>
 - <https://zhanatglobal.com/konsultaczii/>
 - <https://syutsay.ru/matritsa-syutsay>

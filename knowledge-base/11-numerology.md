@@ -103,7 +103,7 @@ CLI: `python -m calculators numerology --date 1990-05-15 --name "Иванова 
 
 ### 3.3 Остальные числа даты
 - **День рождения (Birthday):** сам день (1–31) и его сведение (29 → 11, 22 = 22). Дни 13, 14, 16, 19 — кармический долг.
-- **Отношение (Attitude):** свести(свести(месяц) + свести(день)), мастер-числа сохраняются. Это то же число, что первая вершина. ⚠ Часть сайтов складывает месяц и день целиком (5 + 15 = 20 → 2). Однозначный итог тот же, мастер-11 теряется.
+- **Отношение (Attitude):** свести(свести(месяц) + свести(день)), мастер-числа сохраняются. Это то же число, что первая вершина. Часть сайтов складывает месяц и день целиком (5 + 15 = 20 → 2). Однозначный итог тот же, мастер-11 теряется. ✅ Пример такого счёта — yourtango.com («if your birthday is October 3rd … 10 + 3 = 13 … 1 + 3 = Attitude Number 4»; там же «Master Numbers cannot be Attitude Numbers»), https://www.yourtango.com/self/attitude-number-meaning-numerology, проверено 14.10.2026.
 - **Число рождения Кейро** (только `system='chaldean'`): день, сведённый без мастер-чисел (2, 11, 20, 29 → 2).
 
 ### 3.4 Вершины (Pinnacles)
@@ -172,7 +172,7 @@ CLI: `python -m calculators numerology --date 1990-05-15 --name "Иванова 
 ### 3.10 Халдейская система (`system='chaldean'`)
 - Таблица Кейро (раздел 4.3), мастер-чисел нет.
 - **Число имени по Кейро:** для каждого слова берётся сумма (составное число) и её однозначное сведение. Однозначные числа слов складываются, получается составное число имени, затем однозначное: «Lloyd 18/9 + George 25/7 = 16/7».
-- Экспрессия, Душа и Личность считаются той же таблицей. ⚠ Это расширение современных халдейских сайтов: у Кейро гласных и согласных нет.
+- Экспрессия, Душа и Личность считаются той же таблицей. Это расширение современных халдейских сайтов: у Кейро гласных и согласных нет ✅ (в полном OCR-тексте «Cheiro's Book of Numbers», https://archive.org/details/cheirosbookofnumbers, слов «vowel» и «consonant» нет; его «spirit or soul number» — просто итоговая цифра суммы, а не число гласных).
 - Кириллица: единой халдейской таблицы нет, поэтому имя транслитерируется по ICAO 9303, и выдаётся предупреждение. ⚠ Встречающиеся русские «халдейские» таблицы (А-1, Б-2, В-6, Г-3, Д-4, Е-5, Ж-2, З-7, И-1, Й-1 …) не удалось подтвердить полностью.
 - Таблица включений и кармические уроки для халдейской системы **не считаются**: девятки в таблице нет, поэтому «урок 9» был бы всегда.
 
@@ -586,10 +586,10 @@ PDF самого Doc 9303 (icao.int) из среды проверки не от�
 | galactica.ru, курс нумерологии, [уроки 2](https://galactica.ru/numero/lessons/2), [3](https://galactica.ru/numero/lessons/3), [4](https://galactica.ru/numero/lessons/4), [6](https://galactica.ru/numero/lessons/6), [7](https://galactica.ru/numero/lessons/7), [8](https://galactica.ru/numero/lessons/8), [11](https://galactica.ru/numero/lessons/11), [12](https://galactica.ru/numero/lessons/12), [14](https://galactica.ru/numero/lessons/14), [15](https://galactica.ru/numero/lessons/15), [16](https://galactica.ru/numero/lessons/16), [21](https://galactica.ru/numero/lessons/21), [23](https://galactica.ru/numero/lessons/23) | русская таблица, Й/Ь (урок 15), ФИО при рождении, все русские примеры, правило «завершающего» кармического числа (урок 8), календарная граница ЛГ (урок 11), вершины по годам (урок 12), список ЧЭ 8 с «Пугачева» (урок 21) | **школа** (русская адаптация Декоза/Адриен) |
 | Cheiro, «Cheiro's Book of Numbers» (1926), [archive.org](https://archive.org/details/numerology-cheiro) | халдейская таблица, отсутствие 9, «самое употребительное имя», примеры John Smith / Lloyd George / Baldwin | **первоисточник** халдейской системы (OCR-текст, таблица восстановлена по примерам) |
 | [numeroscop.ru — число души](https://numeroscop.ru/numerologija_imeni/chislo_dushi/) | 10 гласных с числами, пример Пушкина (все гласные сразу) | вторичный / калькулятор |
-| [kudago.com](https://kudago.com/all/news/numerologi-rasskazali-kak/), [hpforum.ru](https://hpforum.ru/hogwarts/lectures/numerology/lk02.html) | та же таблица 33 букв; «Ё — полноценная буква» | вторичный (kudago при проверке 2026-10-14 закрыт антибот-страницей, ⚠ не перепроверен; hpforum подтверждён) |
+| [kudago.com](https://kudago.com/all/news/numerologi-rasskazali-kak/), [hpforum.ru](https://hpforum.ru/hogwarts/lectures/numerology/lk02.html) | та же таблица 33 букв; «Ё — полноценная буква» | вторичный (kudago при проверке 2026-10-14 закрыт антибот-страницей, при повторной проверке — снова HTTP 403, ⚠ не перепроверен; hpforum подтверждён) |
 | [sovet.mygadanie.ru](https://sovet.mygadanie.ru/oboznachenie-bukv-tsiframi-v-numerologii.html) | правило «старой» таблицы (Е=Ё и И=Й в одной клетке, Ж=7, З=8 «и так далее»), упоминание А. Киселя | вторичный; полная таблица — реконструкция (⚠) |
 | [calcforlife.com](https://calcforlife.com/?p=2372), [numerology.pardesco.com](https://numerology.pardesco.com/life-path/how-to-calculate/) | способы ЧЖП, пример 24.07.1990 (calcforlife, все цифры); вариант «месяц 11 → 2» (pardesco) | калькулятор |
-| [roxyapi.com](https://roxyapi.com/tools/numerology/personal-year), [bonniesorsby.com](https://bonniesorsby.com/personal-year-number-numerology/) | граница личного года (1 января / «some traditions — birthday»), примеры ЛГ | калькулятор / вторичный (roxyapi подтверждён; bonniesorsby при проверке отдавал 504, ⚠ не перепроверен) |
+| [roxyapi.com](https://roxyapi.com/tools/numerology/personal-year), [bonniesorsby.com](https://bonniesorsby.com/personal-year-number-numerology/) | граница личного года (1 января / «some traditions — birthday»), примеры ЛГ | калькулятор / вторичный (roxyapi подтверждён: «Most numerologists agree the Personal Year cycle begins on January 1 … Some traditions suggest the transition happens around your birthday»; bonniesorsby ✅ перепроверен 14.10.2026: личный год меняется «on January 1st, regardless of when your birthday falls», варианта «от дня рождения» у него нет) |
 | [astroreka (Einstein LP 33)](https://astroreka.metfone.com.kh/language/en/bai-viet/the-life-path-numbers-of-great-minds-in-history-3265.html) | пример расхождения способов для T4 | вторичный, низкая |
 | [Romanization of Russian (Wikipedia)](https://en.wikipedia.org/wiki/Romanization_of_Russian), [Транслитерация русского алфавита латиницей (ru.wikipedia)](https://ru.wikipedia.org/wiki/Транслитерация_русского_алфавита_латиницей) | ICAO 9303 / приказ ФМС № 320; колонка «Стандарт ИКАО»: Ё e, Ъ ie, Ь — | вторичный (стандарт — первоисточник; PDF ICAO из среды проверки недоступен) |
 | [Таблица МВД «Транслитерация кириллических знаков»](https://pddmaster.ru/documents/prikaz-267/pr4-d97/pr4-1-d97); [петиция change.org о приказах МВД № 889 и № 996](https://www.change.org/p/министерство-внутренних-дел-российской-федерации-изменить-правила-транслитерации-буквы-ё-для-заграничных-документов-оформляемых-в-рф); [consultant.ru: правила транслитерации](https://www.consultant.ru/law/podborki/pravila_transliteracii/) | Ё → E, Ъ → IE, Ь не передаётся; номера и даты приказов | вторичный (пересказ нормативных актов) |
@@ -677,3 +677,15 @@ PDF самого Doc 9303 (icao.int) из среды проверки не от�
 
 Не трогались (влияют только на текст или являются явными соглашениями): Отношение «месяц + день целиком», дефис, буквы І/Ї/Є/Ґ/Ў, `ru_signs='ignore'`, кириллическая халдейская таблица, эвристика порядка двух частей.
 
+### Повторная проверка (приоритет 2), 2026-10-14
+
+Цель — текстовые пункты «⚠» (атрибуции, цитаты, перепроверка источников). Веб-поиск: 1 запрос (Attitude).
+
+| Пункт | Статус | Источник и цитата |
+|---|---|---|
+| Отношение: «часть сайтов складывает месяц и день целиком» | **подтверждено** | yourtango.com: «if your birthday is October 3rd … 10 + 3 = 13 … 1 + 3 = Attitude Number 4»; там же «Master Numbers cannot be Attitude Numbers». Код не менялся (по умолчанию — Декоз) |
+| «У Кейро гласных и согласных нет» | **подтверждено** | полный OCR «Cheiro's Book of Numbers» (https://archive.org/details/cheirosbookofnumbers, `_djvu.txt`): слов «vowel» и «consonant» в книге нет; «spirit or soul number» — итоговая цифра суммы |
+| bonniesorsby.com (раньше HTTP 504) | **подтверждено** | «it updates for everyone at the same time, on January 1st, regardless of when your birthday falls». Фраза «Some traditions suggest the transition happens around your birthday» есть только у roxyapi — атрибуция в таблице источников уточнена |
+| kudago.com | **не перепроверено** | снова HTTP 403 (антибот); утверждения подтверждены galactica и hpforum |
+
+Не трогались (влияют на числа или являются соглашениями модуля): кириллическая халдейская таблица, `ru_signs='ignore'`, `old31`, дефис, 29.02, буквы І/Ї/Є/Ґ/Ў. Код не менялся. Тесты: `.venv/bin/python -m pytest calculators/tests/test_numerology.py -q` — все зелёные.

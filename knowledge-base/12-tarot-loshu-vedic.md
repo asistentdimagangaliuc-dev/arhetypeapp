@@ -228,13 +228,13 @@ year = год рождения
 | Ключ | Клетки | Тип | Название по умолчанию | Другие названия в источниках |
 |---|---|---|---|---|
 | mental | 4-9-2 | верхняя строка | Ментальный план (Mind/Mental) | Thought plane (sheelaa) |
-| emotional | 3-5-7 | средняя строка | Эмоциональный (духовный) план | Will plane (sheelaa) |
-| practical | 8-1-6 | нижняя строка | Практический (физический) план | Action plane (sheelaa) |
+| emotional | 3-5-7 | средняя строка | Эмоциональный (духовный) план | Will plane (sheelaa); Practical Plane (astrosight) |
+| practical | 8-1-6 | нижняя строка | Практический (физический) план | Action plane (sheelaa, astrosight); Material dimension (L. Too 1994) |
 | thought | 4-3-8 | левый столбец | План мысли | Mind plane (sheelaa) |
 | will | 9-5-1 | средний столбец | План воли («решимости и воли», lovetoknow) | Practical plane (sheelaa) |
 | action | 2-7-6 | правый столбец | План действия | Spiritual plane (sheelaa) |
-| golden_yog | 4-5-6 | диагональ | Золотая (Раджа-) йога (Golden Yog / Raj Yog) | Spiritual plane (ganak), Golden Yoga (numerologynamcalc), Golden Arrow / Raj Yog Arrow (sheelaa), стрела Stability (astromedha); «Determination line» (astrosight) ⚠ на указанной странице astrosight не найдено |
-| silver_yog | 2-5-8 | диагональ | Серебряная йога (Silver Yog / Rajat Yog) | Material plane (ganak), Silver Yoga (numerologynamcalc), стрела Prosperity (astromedha, sheelaa); «Compassion line» (astrosight) ⚠ не найдено |
+| golden_yog | 4-5-6 | диагональ | Золотая (Раджа-) йога (Golden Yog / Raj Yog) | Spiritual plane (ganak), Golden Yoga (numerologynamcalc), Golden Arrow / Raj Yog Arrow (sheelaa), стрела Stability (astromedha); «Determination Line» (astrosight, курс Lo Shu: «4-5-6 Determination Line»); Arrow of Compassion (R. Webster 1998: «consists of the numbers 4, 5, and 6») |
+| silver_yog | 2-5-8 | диагональ | Серебряная йога (Silver Yog / Rajat Yog) | Material plane (ganak), Silver Yoga (numerologynamcalc), стрела Prosperity (astromedha, sheelaa); «Compassion Line» (astrosight, курс Lo Shu: «Compassion Line (2-5-8)»); Line of Emotional Balance («the diagonal 2-5-8 line») и Line of Determination («diagonal line made up of numbers 8, 5 and 2») у L. Too 1994 |
 
 Названия по умолчанию — те, что встречаются в большинстве источников (astromedha: Mind/Emotional/Practical, Thought/Will/Action; ganak: Mental/Emotional/Practical, Thought/Will/Action — сверено повторно). У sheelaa.com строки и столбцы названы иначе. Это ⚠ расхождение школ, а не ошибка калькулятора.
 
@@ -242,27 +242,29 @@ year = год рождения
 
 | Линия | Имя по умолчанию | Варианты |
 |---|---|---|
-| 9-5-1 | Стрела решимости (Determination) | Willpower (astromedha) |
-| 3-5-7 | Стрела духовности (Spirituality) | Intellect (astromedha), Willpower (sheelaa) |
-| 4-9-2 | Стрела планировщика (Planner) | Intellect (sheelaa) |
-| 2-7-6 | Стрела действия (Action) | Compassion (sheelaa) |
-| 4-5-6 | Золотая (Раджа-) йога / Стрела стабильности | Golden Arrow (sheelaa) |
-| 2-5-8 | Серебряная йога / Стрела процветания (Prosperity) | — |
-| 8-1-6 | Стрела активности (Activity) ⚠ один источник (sheelaa) | — |
-| 4-3-8 | имя не найдено ⚠: «полный план мысли» | — |
+| 9-5-1 | Стрела решимости (Determination) | Willpower (astromedha); Line of Will Power (L. Too 1994, «the 1-5-9 line»); Arrow of Willpower (R. Webster 1998) |
+| 3-5-7 | Стрела духовности (Spirituality) | Intellect (astromedha), Willpower (sheelaa); line of Spirituality (L. Too 1994) |
+| 4-9-2 | Стрела планировщика (Planner), astromedha | Intellect (sheelaa); line of the intellect (L. Too 1994: «4, 9 and 2 … on the mental dimension»); Arrow of Intellect (R. Webster 1998: «the numbers it comprises are 4, 9, and 2») |
+| 2-7-6 | Стрела действия (Action) | Compassion (sheelaa); Line of Action (L. Too 1994: «This is the vertical 2-7-6»); Arrow of Action (R. Webster 1998) |
+| 4-5-6 | Золотая (Раджа-) йога / Стрела стабильности | Golden Arrow (sheelaa); Determination Line (astrosight); Arrow of Compassion (R. Webster 1998) |
+| 2-5-8 | Серебряная йога / Стрела процветания (Prosperity) | Compassion Line (astrosight); Emotional Balance и Determination (L. Too 1994) |
+| 8-1-6 | Стрела активности (Activity), sheelaa | Prosperity: L. Too 1994 («the prosperity line 1-6-8»), R. Webster 1998 («made up of the numbers 8, 1, and 6») |
+| 4-3-8 | Линия планировщика (Line of the Planner): L. Too 1994 — «The 4-3-8 combination forms the vertical line of the planner»; у R. Webster 1998 Arrow of the Planner стоит там же («in the same position in both the solar and lunar charts») | у astromedha «Planner» — это 4-9-2 |
 
 ### 4.5. Стрелы слабости (линия пустая), по astromedha.in
 
-| Линия | Имя |
-|---|---|
-| 4-5-6 | Стрела фрустрации (Frustration) |
-| 3-5-7 | Стрела плохой памяти (Poor Memory) |
-| 2-7-6 | Стрела одиночества (Loneliness) |
-| 8-1-6 | Стрела потерь (Losses) |
-| 4-3-8 | Стрела нерешительности (Indecision) |
-| 9-5-1 | Стрела пассивности (Passivity) |
-| 4-9-2 | имя не найдено ⚠ («пустой ментальный план») |
-| 2-5-8 | имя не найдено ⚠ |
+| Линия | Имя | Варианты: L. Too (1994), R. Webster (1998) |
+|---|---|---|
+| 4-5-6 | Стрела фрустрации (Frustration) | Suspicion: Too «When all three numbers 4-5-6 are missing», Webster «an absence of 4, 5, and 6»; у Too там же и «poison arrow of scepticism» |
+| 3-5-7 | Стрела плохой памяти (Poor Memory) | Loneliness: Too «The absence of all three numbers on the line of Spirituality, 3-5-7»; так же у Webster |
+| 2-7-6 | Стрела одиночества (Loneliness) | Apathy: Too «When the vertical sequence of 2-7-6 is missing», Webster «lacks the numbers 2, 7, and 6» |
+| 8-1-6 | Стрела потерь (Losses) | Losses: Webster «absence of the numbers 8, 1, and 6» |
+| 4-3-8 | Стрела нерешительности (Indecision) | Confusion: Too «When the vertical numbers of 4-3-8 are missing» |
+| 9-5-1 | Стрела пассивности (Passivity) | — |
+| 4-9-2 | у astromedha имени нет («пустой ментальный план»); по умолчанию — Стрела плохой памяти (Poor Memory) по Webster: «created by an absence of the numbers 4, 9, and 2» | — |
+| 2-5-8 | у astromedha имени нет; по умолчанию — Стрела фрустрации (Frustration) по Too («The absence of the 8-5-2 diagonal numbers indicates frustration»; так же в книге Too 2010) и Webster («absence of the numbers 8, 5, and 2») | — |
+
+**Почему имена расходятся.** Западные «стрелы» описаны у D. A. Phillips («The Complete Book of Numerology», изд. 1992, гл. 6 «The Arrows of Individuality») на другой сетке: 3-6-9 сверху, 2-5-8 в середине, 1-4-7 снизу. По заголовкам и примерам дат у него: Planner 1-2-3, Will 4-5-6, Activity 7-8-9, Intellect 3-6-9, Emotional Balance 2-5-8, Practicality 1-4-7, Determination 1-5-9, Spirituality 3-5-7; пустые — Frustration 4-5-6, Poor Memory 3-6-9, Hypersensitivity 2-5-8. На Ло Шу эти имена переносят двумя способами. **По набору цифр** (astromedha): 9-5-1 Determination, 3-5-7 Spirituality, пустая 4-5-6 Frustration. **По положению линии в квадрате** (Webster прямо пишет «in the same position as the arrow of practicality on the Western chart» и т. п.): нижняя строка 8-1-6 = Prosperity, правый столбец 2-7-6 = Action, верхняя строка 4-9-2 = Intellect, пустая диагональ 2-5-8 = Frustration. Имена у L. Too в основном совпадают с Webster. Поэтому одно и то же имя у разных школ может стоять на разных линиях: агент называет стрелу по умолчанию модуля и, если нужно, вариант с указанием источника.
 
 ### 4.6. Позиции клеток
 
@@ -327,7 +329,7 @@ ICAO 9303 (загранпаспорт РФ): А A, Б B, В V, Г G, Д D, Е E,
 
 ### 4.11. Дружба чисел по умолчанию (натуральная дружба планет BPHS 3.55; 4 и 7 нейтральны ⚠)
 
-Отношение «строки к столбцу»; таблица несимметрична.
+Отношение «строки к столбцу»; таблица несимметрична. ✅ Сверено с переводом R. Santhanam (BPHS, т. 1, Ranjan Publications, 1992, гл. 3, шл. 55 «Natural Relationships», с. 40–41; https://archive.org/details/heag_brihat-parasara-hora-sastra-vol-1-by-maharshi-parasara-commentary-editor-tr): друзья, враги и нейтральные всех семи планет совпадают построчно. В самой шлоке Раху и Кету нет. Сантханам в комментарии (не в шлоке) приводит их отношения: у Раху друзья Юпитер, Венера, Сатурн, враги Солнце, Луна, Марс, Меркурий нейтрален; у Кету друзья Марс, Венера, Сатурн, враги Солнце и Луна, Меркурий и Юпитер нейтральны. Это возможная альтернатива конвенции «4 и 7 нейтральны»; в код не включена.
 
 | Число | Друзья | Нейтральные | Враги |
 |---|---|---|---|
@@ -522,7 +524,7 @@ ICAO 9303 (загранпаспорт РФ): А A, Б B, В V, Г G, Д D, Е E,
   3   .   7
   8  11   .
 ```
-Столбец 4-3-8 полный: «полный план мысли», имя стрелы ⚠ не найдено. Пустых линий нет, отсутствуют 2, 5, 6. С Драйвером (5) и Кондуктором (6) отсутствует только 2, а стрел силы становится пять: 3-5-7, 8-1-6, 4-3-8, 9-5-1, 4-5-6.
+Столбец 4-3-8 полный: «полный план мысли», у L. Too и R. Webster — линия (стрела) планировщика (§4.4). Пустых линий нет, отсутствуют 2, 5, 6. С Драйвером (5) и Кондуктором (6) отсутствует только 2, а стрел силы становится пять: 3-5-7, 8-1-6, 4-3-8, 9-5-1, 4-5-6.
 **Веда.** Мулянк 14 → 5 (Меркурий), Бхагьянк 33 → 6 (Венера) — взаимные друзья.
 **Куа (м, 1879).** Рождение 14 марта — после Личуня (1879-02-04 03:40 UT), год 1879. (11 − 1879) mod 9 = 4 (Восток, Сюнь). По XIX-вековой «школьной» формуле: r = 7 + 9 = 16 → 7, 11 − 7 = 4 ✓. Формула «10 − r» для 1900-х здесь дала бы 3 — это ошибка. Модуль 03 даёт Гуа 4.
 **Имя.** ALBERT (1+3+2+5+2+4) 17 → 8 + EINSTEIN (5+1+5+3+4+5+1+5) 29 → 2. `compound` = 46 → 10 → 1 (Солнце); `compound_cheiro` = 8 + 2 = 10 → 1. Солнце → Меркурий (Мулянк): нейтрал; Солнце → Венера (Бхагьянк): враг.
@@ -623,7 +625,7 @@ ICAO 9303 (загранпаспорт РФ): А A, Б B, В V, Г G, Д D, Е E,
 | 9-5-1 воли | решимость, целеустремлённость | пассивность |
 | 2-7-6 действия | реализация, исполнительность | одиночество, нехватка поддержки |
 | 4-5-6 золотая йога | стабильность, достаток | фрустрация |
-| 2-5-8 серебряная йога | процветание, интуиция | — |
+| 2-5-8 серебряная йога | процветание, интуиция | фрустрация (имя стрелы — по L. Too и R. Webster, §4.5) |
 
 ### 8.5. Ведические числа (Мулянк, Бхагьянк, имя)
 | № | Планета | Ключ |
@@ -668,19 +670,22 @@ ICAO 9303 (загранпаспорт РФ): А A, Б B, В V, Г G, Д D, Е E,
 | https://ganak.app/calculators/lo-shu-grid-calculator/ | формула Куа, плоскости, примеры 15.03.1990, 25.12.1990 | калькулятор |
 | https://bivs.com/tools/lo-shu-grid-calculator/ ; https://pathnumbers.com/chinese-numerology-calculator/ ; https://sheelaa.com/blog/what-is-lo-shu-grid-the-ancient-magic-square-that-reveals-your-lifes-blueprint/ | сетка с Драйвером и Кондуктором, примеры | калькулятор / практик |
 | https://www.vastucart.in/tools/lo-shu-grid ; https://instaastro.com/numerology/lo-shu-grid/ ; https://astroarunpandit.org/lo-shu-grid-planes-numerology/ ; https://www.lovetoknow.com/life/astrology/chinese-numerology | примеры, названия планов | калькулятор / вторичный |
-| D. A. Phillips, *The Complete Book of Numerology* (гл. 6, «Arrows of Individuality») | происхождение «стрел» | первоисточник для западной сетки (текст не просматривался ⚠) |
+| D. A. Phillips, *The Complete Book of Numerology* (изд. 1992, гл. 6 «The Arrows of Individuality») | западные имена стрел и их наборы цифр (§4.5) | первоисточник для западной сетки. Книга целиком не просматривалась: заголовки стрел и примеры дат найдены полнотекстовым поиском archive.org (OCR издания 1992 г. в составе сборника `core-432-logo`; файл закрыт, доступны только фрагменты поиска) |
+| L. Too, *Chinese Numerology in Feng Shui: The Time Dimension* (1994), около с. 146–151 — https://archive.org/details/chinesenumerolog0000tool ; L. Too, *168 Ways to Harness Your Lucky Numbers* (2010) — https://archive.org/details/lilliantoos168wa0000tool | имена линий и стрел на сетке Ло Шу (Planner 4-3-8, Prosperity 1-6-8, Action 2-7-6, Will Power 1-5-9, Intellect 4-9-2; пустые: Frustration 8-5-2, Suspicion 4-5-6, Loneliness 3-5-7, Apathy 2-7-6, Confusion 4-3-8) | школа (фэншуй); книги в режиме выдачи, цитаты получены полнотекстовым поиском archive.org |
+| R. Webster, *Chinese Numerology* (Llewellyn, 1998), гл. 4 (западная сетка) и гл. 9 «Numerology in the East» (Ло Шу) — https://archive.org/details/chinesenumerolog00webs | перенос стрел на Ло Шу «по положению»: Intellect 4-9-2, Willpower, Action, Prosperity 8-1-6, Compassion 4-5-6, Planner; пустые: Poor Memory 4-9-2, Frustrations 8-5-2, Suspicion 4-5-6, Apathy 2-7-6, Losses 8-1-6, Loneliness | школа; книга в режиме выдачи, цитаты — полнотекстовый поиск archive.org |
+| https://astrosight.ai/numerology/lo-shu-grid-course-online | «4-5-6 Determination Line», «Compassion Line (2-5-8)», планы (Mind 4-9-2, Practical 3-5-7, Action 8-1-6), линии Thought/Will/Action | калькулятор/курс (найдено при повторной проверке 14.10.2026) |
 | Cheiro (L. Hamon), *Cheiro's Book of Numbers*, London: Herbert Jenkins, гл. XIII–XIV, с. 70–76, 86–88. Сканы: https://archive.org/details/in.ernet.dli.2015.70770 ; https://archive.org/details/cheirosbookofnumbers ; https://archive.org/details/cheirosbookofnum00chei (F = 8 и K = 2 читаются здесь) | халдейская таблица, «9 не присваивается», правило составного числа имени (сумма чисел слов), «most used Christian and Surname», примеры имён (вкл. Ramsay MacDonald) | **первоисточник** (OCR-сканы; таблица читается полностью) |
-| https://panchangbodh.com/vedic-numerology ; https://anktriveni.onrender.com/ ; https://astrosight.ai/kundli/psychic-and-destiny-number-compatibility | Мулянк/Бхагьянк, планеты (astrosight: 1 Солнце … 9 Марс), халдейская таблица (anktriveni), примеры | калькулятор/вторичный. На astrosight нет названий линий Ло Шу «Determination/Compassion line» ⚠ |
-| Brihat Parashara Hora Shastra, гл. 3, шл. 55 (натуральная дружба) — та же таблица в `calculators/jyotish.py` | дружба чисел по умолчанию | первоисточник (классический текст; URL в этой сессии не сверялся ⚠) |
+| https://panchangbodh.com/vedic-numerology ; https://anktriveni.onrender.com/ ; https://astrosight.ai/kundli/psychic-and-destiny-number-compatibility | Мулянк/Бхагьянк, планеты (astrosight: 1 Солнце … 9 Марс), халдейская таблица (anktriveni), примеры | калькулятор/вторичный. На этой странице astrosight названий линий Ло Шу нет; «Determination/Compassion Line» есть на другой странице astrosight (курс Lo Shu, см. ниже) ✅ |
+| Brihat Parashara Hora Shastra, гл. 3, шл. 55 (натуральная дружба) — та же таблица в `calculators/jyotish.py`; перевод R. Santhanam (1992), с. 40–41: https://archive.org/details/heag_brihat-parasara-hora-sastra-vol-1-by-maharshi-parasara-commentary-editor-tr | дружба чисел по умолчанию | первоисточник (классический текст); ✅ таблица сверена с OCR перевода 14.10.2026 |
 | https://www.dnaindia.com/hindi/spiritual/report-numerology-astrology-prediction-who-is-friend-and-enemy-which-numbers-will-lucky-give-benefit-or-loss-4088278 ; https://astromedha.in/insights/vedic/my-vehicle-number-and-my-chart | альтернативные таблицы дружбы; Раху и Кету нейтральны | вторичный |
 | https://namenumerologycalculator.com/lo-shu-grid-calculator/ | формула Куа (с опечаткой в примере) | калькулятор (низкая) |
 | http://www.tarokki.fi/tarotpuu/2011/07/22/lifetime-lesson-card-the-year-card-cycles/ | Арриен: Growth Symbol от дня рождения до дня рождения (сайт не открылся; утверждение теперь подтверждено книгой Арриен) | вторичный, не нужен |
 
 **Что осталось неподтверждённым (⚠):**
 * Индийское правило «не добавлять Драйвер при однозначном дне» (повторный поиск ничего не дал).
-* Имена стрел 4-3-8 (сила), 4-9-2 и 2-5-8 (слабость).
+* ~~Имена стрел 4-3-8 (сила), 4-9-2 и 2-5-8 (слабость)~~ — найдены у L. Too (1994) и R. Webster (1998), см. §4.4–4.5 (повторная проверка 14.10.2026).
 * Опубликованные примеры Куа «год → число» (формула подтверждена, готовых таблиц нет; T1–T4 совпадают с модулем 03).
-* Названия «Determination line» / «Compassion line» (astrosight) для диагоналей Ло Шу.
+* ~~Названия «Determination line» / «Compassion line» (astrosight)~~ — найдены на https://astrosight.ai/numerology/lo-shu-grid-course-online.
 * Правила «русских» арканов для сумм, где одного вычитания 22 мало (45–48), и для суммы цифр года > 22 в схеме «день + месяц + год».
 
 Часть пунктов закрыта при проверке (волна 2), см. «Протокол проверки» ниже.
@@ -730,3 +735,21 @@ ICAO 9303 (загранпаспорт РФ): А A, Б B, В V, Г G, Д D, Е E,
 
 Остаётся ⚠, влияющее на числа: правило «не добавлять Драйвер»; повторное «−22» (суммы 45–48) и сумма цифр года > 22 в «русских» схемах (lenta.ru и vikna.tv перепроверены 2026-10-14: «Если получившееся число больше 22, нужно отнять от него 22» — один раз; для года > 22 правила нет); константа века 18 для Tarot School до 1900 г. (у Амберстоунов только 19 и 20). Остальные ⚠ модуля (имена стрел, «Determination/Compassion line», интерпретации, Раху/Кету как конвенция, отчество в имени) на расчёт не влияют или являются явными соглашениями.
 
+### Повторная проверка (приоритет 2), 2026-10-14
+
+Цель — текстовые пункты «⚠» (имена линий и стрел Ло Шу, атрибуции, BPHS). Главный инструмент — полнотекстовый поиск archive.org (`services/search/beta/page_production/?service_backend=fts`, с фильтром `identifier:`): он возвращает фрагменты текста даже для книг в режиме выдачи. Веб-поиск: 1 запрос (astrosight).
+
+| Пункт | Статус | Источник и цитата |
+|---|---|---|
+| D. A. Phillips, гл. 6 «The Arrows of Individuality» (раньше «текст не просматривался») | **подтверждено частично** | OCR издания 1992 г. («Copyright © 1992 by David A. Phillips») в сборнике archive.org `core-432-logo` (файл закрыт, только фрагменты поиска): оглавление «Chapter 6: The Arrows of Individuality»; заголовки «ARROW OF DETERMINATION Birth date: 3.31.1950», «ARROW OF SPIRITUALITY … 7/6/1953», «ARROW OF THE INTELLECT … 3/7/1960», «ARROW OF EMOTIONAL BALANCE … (2, 5 and 8)», «ARROW OF PRACTICALITY … 4/23/1987», «ARROW OF THE WILL … 4/26/1952», «ARROW OF ACTIVITY … 7/8/1989», «ARROW OF THE PLANNER … 3/12/1991», «ARROW OF POOR MEMORY … 8/15/2007», «ARROW OF HYPERSENSITIVITY … 6/1/1971», «ARROW OF FRUSTRATION … 12.21.1973». Наборы цифр выведены из примеров дат. Добавлено объяснение расхождений имён (§4.5) |
+| Имя полной 4-3-8 | **найдено** | L. Too (1994): «The 4-3-8 combination forms the vertical line of the planner»; R. Webster (1998): «The Arrow of the Planner — This arrow is in the same position in both the solar and lunar charts» |
+| Имя пустой 4-9-2 | **найдено** | Webster (1998): «created by an absence of the numbers 4, 9, and 2» — Arrow of Poor Memory; там же «This arrow will not be found until …», пример — дата 3087 г. |
+| Имя пустой 2-5-8 | **найдено** | Too (1994): «The absence of the 8-5-2 diagonal numbers indicates frustration»; Too (2010): «numbers 2-5-8 is missing it creates the arrow of frustration»; Webster (1998): «a diagonal arrow created by the absence of the numbers 8, 5, and 2» |
+| 8-1-6 «Activity — один источник» | **расхождение задокументировано** | у Too и Webster полная 8-1-6 — Prosperity («the prosperity line 1-6-8»; «It is made up of the numbers 8, 1, and 6»). Имя по умолчанию (sheelaa) сохранено, вариант добавлен |
+| «Determination/Compassion line» (astrosight) | **найдено** | https://astrosight.ai/numerology/lo-shu-grid-course-online: «4-5-6 Determination Line», «Compassion Line (2-5-8)» (на прежней проверенной странице astrosight их действительно нет). Там же планы Mind 4-9-2 / Practical 3-5-7 / Action 8-1-6 — добавлены как варианты |
+| Остальные варианты имён | **добавлено** | Too/Webster: пустые 4-5-6 Suspicion, 3-5-7 Loneliness, 2-7-6 Apathy, 8-1-6 Losses, 4-3-8 Confusion (Too); полные 4-9-2 Intellect, 9-5-1 Will Power/Willpower, 2-7-6 Action, 4-5-6 Compassion (Webster), 2-5-8 Emotional Balance/Determination (Too) |
+| BPHS 3.55 (URL «не сверялся») | **подтверждено** | перевод R. Santhanam (Ranjan, 1992), гл. 3, шл. 55, с. 40–41, OCR archive.org: таблица друзей/врагов/нейтральных совпадает с §4.11 построчно. Отношения Раху и Кету есть только в комментарии Сантханама — добавлены справочно, конвенция «4 и 7 нейтральны» сохранена (⚠) |
+| Паттерн 1-1 у Грир «для карт имени» | **не найдено** | полнотекстовый поиск по «Tarot for Your Self» (archive.org `tarotforyourself00gree`) находит только строку таблицы «1-1 · 10-1 · 19-10-1», объяснения нет — ⚠ оставлен |
+| Трактовки чисел Ло Шу (8.3), ремедии, Драйвер–Кондуктор | **не сверялись** | интерпретации, ⚠ оставлены |
+
+**Код:** в `calculators/tarot_loshu.py` изменены только тексты `LOSHU_LINES` (альтернативные названия), `LOSHU_STRENGTH_ARROWS` и `LOSHU_WEAKNESS_ARROWS` (убраны «имя не найдено ⚠» и «⚠ не найдено при повторной проверке», добавлены варианты Too/Webster/astrosight). Какие линии считаются стрелами, не менялось. Тесты: `.venv/bin/python -m pytest calculators/tests/test_tarot_loshu.py -q` — все зелёные.
