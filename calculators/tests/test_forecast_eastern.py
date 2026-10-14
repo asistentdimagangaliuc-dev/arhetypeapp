@@ -311,6 +311,53 @@ def test_lucky_stars_vs_ja_wikipedia_table():
         assert set(lucky_stars(p)) == stars, p
 
 
+# https://oggi.jp/6752236 «2026年の吉方位と凶方位»: 吉方位 по звезде рождения (年盤 2026).
+OGGI_2026_LUCKY = {2: {"SW", "E"}, 3: {"SE", "NE"}, 4: {"W", "SE"}, 5: {"SW", "NW", "E", "SE"},
+                   6: {"SW", "NW", "E"}, 7: {"NW", "E"}, 8: {"SW", "NW", "SE"}, 9: {"W", "NE", "E"}}
+
+
+def test_year_lucky_directions_2026_vs_oggi():
+    """Правила 相生/比和 минус 五黄殺/暗剣殺/歳破/本命殺/本命的殺 дают ровно списки oggi.jp для звёзд 2–9.
+    Для 一白 (1 в центре, 八方塞がり) oggi добавляет ещё 東南 (там 九紫 — 相剋 с 一白, по правилу ja.wikipedia
+    «九星» не 吉方): расхождение источника, калькулятор следует правилу."""
+    ch = flying_chart(ns.year_star(2026))
+    yb = bz.year_index(2026) % 12
+    for honmei, exp in OGGI_2026_LUCKY.items():
+        d = chart_directions(ch, yb, "year", honmei)
+        assert {x["direction"] for x in d["lucky"]} == exp, honmei
+    d1 = chart_directions(ch, yb, "year", 1)
+    assert {x["direction"] for x in d1["lucky"]} == {"SW", "W", "NE"} and ch["SE"] == 9
+
+
+def test_year_max_lucky_uses_month_star(R):
+    """«最大吉方» (а) — звезда, благоприятная и для 本命星, и для 月命星, — считается и в 年盤.
+    T1 (1.5): 7 (ЮЗ) хороша и для 1, и для 5; T2 (7.8): 2 (СЗ); T3 (5.2): 7, 8, 9; T4 (4.7): нет."""
+    exp = {"T1": ["SW"], "T2": ["NW"], "T3": ["SW", "E", "SE"], "T4": []}
+    for k, v in exp.items():
+        y = R[k]["ninestar_year"]["year"]
+        assert y["max_lucky_honmei_getsumei"] == v, k
+        assert "getsumei" not in y                      # 月命殺 в 年盤 не ставится
+        assert not any("月命" in r for u in y["unlucky"] for r in u["reasons"]), k
+
+
+def test_chart_invariants_all_centers():
+    """Инварианты §6: каждая звезда один раз; 五黄殺 ↔ 暗剣殺 противоположны; 吉方 не пересекается с 凶方."""
+    for c in range(1, 10):
+        ch = flying_chart(c)
+        assert sorted(ch.values()) == list(range(1, 10))
+        for br in range(12):
+            for h in range(1, 10):
+                for g in range(1, 10):
+                    d = chart_directions(ch, br, "month", h, g)
+                    if c == 5:
+                        assert d["go_o_satsu"] is None and d["anken_satsu"] is None
+                    else:
+                        assert d["anken_satsu"] == {"N": "S", "S": "N", "E": "W", "W": "E", "NE": "SW", "SW": "NE",
+                                                    "SE": "NW", "NW": "SE"}[d["go_o_satsu"]]
+                    bad = {u["direction"] for u in d["unlucky"]}
+                    assert not bad & {x["direction"] for x in d["lucky"]}
+
+
 def test_teii_taichu_2026(R):
     """2026: 三碧 (дом — Восток) стоит на Западе → 定位対冲 W."""
     assert R["T1"]["ninestar_year"]["year"]["teii_taichu"] == ["W"]
@@ -349,6 +396,12 @@ def test_gochara_table_vs_phaladeepika():
     assert set(GOCHARA_GOOD["rahu"]) == set(GOCHARA_GOOD["ketu"]) == set(GOCHARA_GOOD["sun"])
     assert GOCHARA_GOOD["saturn"] == GOCHARA_GOOD["mars"] == {3: 12, 6: 9, 11: 5}      # XXVI.5
     assert GOCHARA_GOOD["jupiter"] == {2: 12, 11: 8, 9: 10, 5: 4, 7: 3}               # XXVI.7
+    # Полная таблица XXVI.3–8 (archive.org, djvu-текст перевода 1950 г.), включая порядок «respectively»:
+    assert GOCHARA_GOOD["sun"] == {11: 5, 3: 9, 10: 4, 6: 12}                           # XXVI.3
+    assert GOCHARA_GOOD["moon"] == {7: 2, 1: 5, 6: 12, 11: 8, 10: 4, 3: 9}              # XXVI.4
+    assert GOCHARA_GOOD["mercury"] == {2: 5, 4: 3, 6: 9, 8: 1, 10: 8, 11: 12}           # XXVI.6
+    # XXVI.8: «1st, 2nd, 3rd, 4th, 5th, 8th, 9th, 12th and 11th … 8th, 7th, 1st, 10th, 9th, 5th, 11th, 6th and 3rd»
+    assert GOCHARA_GOOD["venus"] == {1: 8, 2: 7, 3: 1, 4: 10, 5: 9, 8: 5, 9: 11, 12: 6, 11: 3}
     assert VEDHA_EXEMPT == {"sun": "saturn", "saturn": "sun", "moon": "mercury", "mercury": "moon"}
     for g in ("sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn"):      # у каждого дома своя ведха
         assert len(set(GOCHARA_GOOD[g].values())) == len(GOCHARA_GOOD[g])
