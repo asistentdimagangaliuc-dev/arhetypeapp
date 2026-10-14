@@ -2,7 +2,7 @@
 
 Каждый документ метода содержит раздел «Источники» с оценкой надёжности каждого источника и раздел «Протокол проверки» (что именно было независимо перепроверено). Здесь — сводный индекс всех процитированных URL по модулям (сгенерирован `calculators/tools/build_sources.py`).
 
-Всего уникальных ссылок по модулям: **380**.
+Всего уникальных ссылок по модулям: **450**.
 
 **Шкала надёжности, используемая в документах:**
 
@@ -17,8 +17,10 @@
 
 ## [00-input-normalization.md](00-input-normalization.md) — 00. Нормализация входных данных: дата, время, место, календарь
 
-Уникальных URL: 18
+Уникальных URL: 30
 
+- <http://besp.narod.ru/images/trud_1982.jpg>
+- <http://pravo.gov.ru/proxy/ips/?doc_itself=&nd=102010545>
 - <https://raw.githubusercontent.com/eggert/tz/main/europe>
 - <https://raw.githubusercontent.com/eggert/tz/main/asia>
 - <https://raw.githubusercontent.com/eggert/tz/main/theory.html>
@@ -36,11 +38,21 @@
 - <https://www.astro.com/astro-databank/Einstein,_Albert>
 - <https://www.astro-seek.com/birth-chart/albert-einstein-horoscope>
 - <https://www.astrotheme.com/astrology/Albert_Einstein>
+- <http://maps.monetonos.ru/maps/raznoe/Old_Maps/Old_Maps/Articles/022/3_1981.html>
+- <http://besp.narod.ru/nauka_1981_3.htm>
+- <https://ru.wikipedia.org/wiki/Время_в_России>
+- <https://ru.wikipedia.org/wiki/Время_на_Украине>
+- <https://ru.wikipedia.org/wiki/Время_в_Грузии>
+- <https://ru.wikipedia.org/wiki/Время_в_Узбекистане>
+- <https://ru.wikipedia.org/wiki/Время_в_Таджикистане>
+- <https://ru.wikipedia.org/wiki/Григорианский_календарь>
+- <https://de.wikipedia.org/wiki/Ortszeit>
+- <https://raw.githubusercontent.com/eggert/tz/2022c/europe>
 - <https://raw.githubusercontent.com/eggert/tz/main/>
 
 ## [01-bazi.md](01-bazi.md) — 01. Ба-цзы (八字, 四柱命理): Четыре столпа судьбы
 
-Уникальных URL: 33
+Уникальных URL: 35
 
 - <https://tea.ru/article/syutsay-tsifrovaya-psikhologiya-ili-kazakhstanskiy-biznes-po-prodazhe-kursov-stoimostyu-630-tysyach-rubley/>
 - <https://t-j.ru/cifrovaya-psihologiya/>
@@ -60,6 +72,7 @@
 - <https://www.hko.gov.hk/tc/gts/time/calendar/text/files/T1984c.txt>
 - <https://en.wikipedia.org/wiki/Sexagenary_cycle>
 - <https://zh.wikipedia.org/wiki/干支>
+- <https://zh.wikisource.org/wiki/淵海子平>
 - <https://www.masterseanchan.com/ru/blog/desyat-bogov-bazi-profil-kak-eto-rabotaet/>
 - <https://www.infengi.ru/ba-tszy>
 - <https://xn--80aaczlbgb1auuk9b6de5c.xn--p1ai/>
@@ -70,6 +83,7 @@
 - <https://www.163.com/dy/article/FAVJASFE0548B7V5.html>
 - <https://tools.devcomma.com/calculators/yeokmasal>
 - <https://tools.devcomma.com/calculators/hwagaesal>
+- <https://zh.wikisource.org/wiki/三命通會/卷三>
 - <https://synthesisastrology.com/chart/albert-einstein/example/bazi>
 - <https://www.masterseanchan.com/ru/bazi-2004/>
 - <https://www.masterseanchan.com/ru/bazi-1990/>
@@ -78,9 +92,12 @@
 
 ## [02-ziwei-doushu.md](02-ziwei-doushu.md) — 02. Цзы Вэй Доу Шу (紫微斗数, Zi Wei Dou Shu) — астрология Пурпурной звезды
 
-Уникальных URL: 15
+Уникальных URL: 18
 
+- <https://zh.wikisource.org/wiki/紫微斗數全書/卷二>
 - <https://wfate.blogspot.com/2013/06/blog-post_15.html>
+- <https://zh.wikisource.org/wiki/紫微斗數全書/卷一>
+- <https://zh.wikisource.org/wiki/紫微斗數全書/卷三>
 - <https://github.com/SylarLong/iztro>
 - <https://iztro.com/learn/setup>
 - <https://iztro.com/zh_TW/learn/star>
@@ -98,7 +115,7 @@
 
 ## [03-nine-star-ki-gua.md](03-nine-star-ki-gua.md) — 03. Девятизвёздная Ки (九星気学), летящие звёзды натала, число Гуа (命卦) и китайский зодиак
 
-Уникальных URL: 19
+Уникальных URL: 32
 
 - <https://www.hko.gov.hk/en/gts/time/calendar/text/files/T1984e.txt>
 - <https://ja.wikipedia.org/wiki/九星>
@@ -118,17 +135,31 @@
 - <https://amenouranai.com/kyuseikigaku-keisha/>
 - <https://m.sohu.com/n/485037481/>
 - <https://ndlsearch.ndl.go.jp/en/books/R100000039-I760820>
+- <https://dl.ndl.go.jp/pid/1104437>
+- <https://lab.ndl.go.jp/dl/api/book/fulltext-json/1104437>
+- <https://dl.ndl.go.jp/pid/1137380>
+- <https://lab.ndl.go.jp/dl/api/book/fulltext-json/1137380>
+- <https://dl.ndl.go.jp/pid/897744>
+- <https://nobml.hatenablog.jp/entry/20121231/1356881216>
+- <https://nobml.hatenablog.jp/entry/20180113/1515770790>
+- <https://zh.wikisource.org/wiki/欽定協紀辨方書_(四庫全書本>
+- <https://www.skillon.com/feng-shui-flying-star.cfm/date/2026-07-01>
+- <https://wordpress.org/plugins/nine-star-ki/>
+- <https://downloads.wordpress.org/plugin/nine-star-ki.1.1.1.zip>
+- <https://www.9starki.com/free_lessons.htm>
+- <https://archive.org/details/illustratedencyc0000tool>
 - <https://idolsaju.com/en/blog/nine-star-ki-japanese-numerology-guide>
 
 ## [04-human-design.md](04-human-design.md) — 04. Дизайн Человека (Human Design System)
 
-Уникальных URL: 21
+Уникальных URL: 23
 
+- <https://app.mybodygraph.com/js/app.*.js>
 - <https://totalhumandesign.com/design/albert-einstein>
+- <https://www.astrotheme.com/astrology/Barack_Obama>
 - <https://charts.maiamechanics.com/api/charts/free-chart>
 - <https://app.mybodygraph.com/free-chart>
 - <https://jovianarchive.com/pages/get-your-human-design-chart>
-- <https://app.mybodygraph.com/js/app.*.js>
 - <https://jovianarchive.com/pages/incarnation-crosses-in-human-design>
 - <https://www.jovianarchive.com/Human_Design/Incarnation_Cross>
 - <https://www.barneyandflow.com/gate-zodiac-degrees>
@@ -145,10 +176,11 @@
 - <https://github.com/jessicaakombi-bot/free-human-design>
 - <https://roxyapi.com/docs/guides/human-design>
 - <https://www.geneticmatrix.com/learn-hub/calculations/draconic.html>
+- <https://app.mybodygraph.com/js/app.5623a478.js>
 
 ## [05-gene-keys.md](05-gene-keys.md) — 05. Генные ключи (Gene Keys) — Гологенетический профиль (Hologenetic Profile)
 
-Уникальных URL: 22
+Уникальных URL: 23
 
 - <https://genekeys.com/docs/why-do-i-have-different-line-keynotes-in-my-venus-or-pearl-sequence/>
 - <https://bonniesorsby.com/human-design-gates-by-degree/>
@@ -165,6 +197,7 @@
 - <https://www.leben-mit-ohne.de/wp-content/uploads/2022/10/LMO_Profile.pdf>
 - <https://www.integralhumandesign.net/examples/SchneiderRomy.GOLDENPATH.pdf>
 - <https://www.integralhumandesign.net/examples/KahloFrida.GOLDENPATH.pdf>
+- <https://awakeningcatalyst.substack.com/p/pathway-core-stability>
 - <https://genekeys.com/docs/what-is-a-sphere-gene-key-or-line/>
 - <https://genekeys.com/wp-content/uploads/2020/02/Deep-Dive-Keynotes-Evolution.pdf>
 - <https://www.kemenczy.at/wp-content/uploads/2016/05/GeneKey-GoldenPathRK.pdf>
@@ -175,7 +208,7 @@
 
 ## [06-western-astrology.md](06-western-astrology.md) — 06. Западная (тропическая) астрология: натальная карта
 
-Уникальных URL: 17
+Уникальных URL: 18
 
 - <https://www.astrotheme.com/astrology_aspects.php>
 - <https://github.com/CruiserOne/Astrolog/blob/master/data.cpp>
@@ -194,11 +227,15 @@
 - <https://www.astrologbrova.com/aspekty-teoriya/orbisy-lekciya-135.html>
 - <http://globaastra.by/pavel-globa-konfiguracii-aspektov/>
 - <https://www.astro.com/astro-databank/Einstein,_Albert>
+- <https://www.astrotheme.com/astrology/<Имя>
 
 ## [07-jyotish.md](07-jyotish.md) — 07. Джйотиш (ведическая астрология, Jyotiṣa)
 
-Уникальных URL: 28
+Уникальных URL: 34
 
+- <https://www.vedicastrologer.org/jh/update_7.4.htm>
+- <https://www.drikpanchang.com/panchang/sunrise/panchang-sunrise.html>
+- <https://www.drikpanchang.com/faq/faq-ans2.html>
 - <https://yourastroguide.wordpress.com/2012/09/01/brihat-parashara-hora-sashtra-chapter-3/>
 - <https://www.vedicastrologer.org/articles/vedic_astro_textbook.pdf>
 - <https://www.vedicastrologer.org/jh/features.htm>
@@ -227,11 +264,15 @@
 - <https://barbarapijan.com/bpa/Graha/Rahu/Rahu_Ketu_Mean_True.htm>
 - <https://shyamasundaradasa.com/jyotish/resources/articles/pdf_versions/english/360_vs_365.pdf>
 - <https://www.astro.com/swisseph/swephprg.htm>
+- <https://www.vedicastrologer.org/jh/update_7.61.htm>
+- <https://astrosage.com/celebrity-horoscope/<имя>
+- <https://www.vedicastrologer.org/jh/update_7.2.htm>
 
 ## [08-pythagoras-square.md](08-pythagoras-square.md) — 08. Квадрат Пифагора (психоматрица)
 
-Уникальных URL: 19
+Уникальных URL: 20
 
+- <https://web-calculator.ru/js/ezoterika/kvadrat-pifagora.js>
 - <https://litresp.ru/chitat/ru/%D0%90/aleksandrov-aleksandr-fedorovich/data-rozhdeniya--klyuch-k-ponimaniyu-cheloveka/4>
 - <https://thelib.ru/books/aleksandr_fedorovich_aleksandrov/cifrovoy_analiz_dat_rozhdeniya_i_sobytiy_kniga_1_psihomatrica_i_ee_svoystva-read-2.html>
 - <https://infojournal.ru/wp-content/uploads/2020/03/mir_info-5-2017.pdf>
@@ -254,7 +295,7 @@
 
 ## [09-alexandrov-square.md](09-alexandrov-square.md) — 09. Психоматрица Александрова («квадрат Александрова», цифровой анализ дат)
 
-Уникальных URL: 11
+Уникальных URL: 12
 
 - <https://thelib.ru/books/aleksandr_fedorovich_aleksandrov/cifrovoy_analiz_dat_rozhdeniya_i_sobytiy_kniga_1_psihomatrica_i_ee_svoystva-read.html>
 - <https://thelib.ru/books/aleksandr_fedorovich_aleksandrov/cifrovoy_analiz_dat_rozhdeniya_i_sobytiy_kniga_2_tipy_myshleniya_i_ih_primenenie-read.html>
@@ -267,10 +308,11 @@
 - <https://numerolog.ru/psihomatrica-kvadrat-pifagora>
 - <https://monte24.ru/gadaniya/psihomatrica-po-date-rozhdeniya.html>
 - <https://heaclub.ru/primenenie-sistemy-pifagora-v-numerologii-dlya-lic-rozhdennyh-posle-2000-goda>
+- <https://thelib.ru/books/aleksandr_fedorovich_aleksandrov/cifrovoy_analiz_dat_rozhdeniya_i_sobytiy_kniga_1_psihomatrica_i_ee_svoystva-read-4.html>
 
 ## [10-destiny-matrix.md](10-destiny-matrix.md) — 10. Матрица судьбы (метод 22 арканов, школа Натальи Ладини)
 
-Уникальных URL: 24
+Уникальных URL: 28
 
 - <https://matrica-sudby.ru/matrix/chto-takoe-matrica-sudby-i-kak-rasschitat.html>
 - <https://matrica-sudby.ru/razbor-matric/razbor-matriczy-sudby-larisy-dolinoj-po-date-rozhdeniya.html>
@@ -296,11 +338,21 @@
 - <https://ask-sibylla.com/ru/statti/matrytsia-doli-samostiino-pokrokovo>
 - <https://www.destinynums.com/raschet-linii-deneg/>
 - <https://sutra.center/matrix-sudby>
+- <https://matrica-sudby.ru/lk/matrix/get>
+- <https://matrica-sudby.ru/build/assets/v47-show.42fdc28a.js>
+- <http://web.archive.org/web/20211212154012/http://ladini.ru/>
+- <https://web.archive.org/web/20230204122238/https://matrica-sudby.ru/matrix/chakry-i-karta-zdorovya-v-matrice-sudby.html>
 
 ## [11-numerology.md](11-numerology.md) — 11. Нумерология по дате рождения и имени (пифагорейская/западная и халдейская)
 
-Уникальных URL: 40
+Уникальных URL: 47
 
+- <https://www.worldnumerology.com/numerology-master-numbers.htm>
+- <https://ru.wikipedia.org/wiki/Транслитерация_русского_алфавита_латиницей>
+- <https://pddmaster.ru/documents/prikaz-267/pr4-d97/pr4-1-d97>
+- <https://www.change.org/p/министерство-внутренних-дел-российской-федерации-изменить-правила-транслитерации-буквы-ё-для-заграничных-документов-оформляемых-в-рф>
+- <https://github.com/Arg0s1080/mrz>
+- <https://archive.org/details/GoodwinMatthewOliverNumerologyTheCompleteGuideVolume1ThePersonalityReading1988>
 - <https://www.worldnumerology.com/numerology-life-path/>
 - <https://www.worldnumerology.com/do-your-own-reading/>
 - <https://www.worldnumerology.com/numerology-expression-number.htm>
@@ -341,17 +393,22 @@
 - <https://bonniesorsby.com/personal-year-number-numerology/>
 - <https://astroreka.metfone.com.kh/language/en/bai-viet/the-life-path-numbers-of-great-minds-in-history-3265.html>
 - <https://en.wikipedia.org/wiki/Romanization_of_Russian>
+- <https://www.consultant.ru/law/podborki/pravila_transliteracii/>
 
 ## [12-tarot-loshu-vedic.md](12-tarot-loshu-vedic.md) — 12. Арканы Таро по дате рождения, сетка Ло Шу, ведическая нумерология
 
-Уникальных URL: 37
+Уникальных URL: 41
 
+- <https://archive.org/details/cheirosbookofnum00chei>
 - <https://joyvernon.com/images/Tarot%20Birth%20Cards.pdf>
 - <https://marykgreer.com/2011/08/17/who-are-you-in-the-tarot/>
 - <https://angelorum.co/topics/divination/how-to-calculate-your-personality-sou/>
 - <https://musingmystical.com/tag/birth-card>
 - <https://www.findyourfate.com/tarot/birth-personality-card.php>
 - <https://www.aeclectic.net/tarot/books/who-are-you-in-the-tarot/>
+- <https://archive.org/details/tarot_202304>
+- <https://archive.org/details/tarothandbookpra00arri>
+- <https://archive.org/details/tarot-empress>
 - <https://biddytarot.com/podcast/btp86-birth-cards-part-1/>
 - <https://labyrinthos.co/blogs/learn-tarot-with-labyrinthos-academy/how-to-calculate-your-tarot-birth-card-plus-short-birth-card-meanings-infographic>
 - <https://www.aeclectic.net/tarot/blog/numerology-tarot-birth-cards.shtml>
@@ -386,7 +443,7 @@
 
 ## [13-tzolkin.md](13-tzolkin.md) — 13. Майянский календарь: Цолькин (Dreamspell / «13 Лун» и классический счёт майя)
 
-Уникальных URL: 21
+Уникальных URL: 28
 
 - <https://lawoftime.org/decode/>
 - <http://www.lawoftime.org/thirteenmoon/tutorial.html>
@@ -395,6 +452,13 @@
 - <https://lawoftime.org/infobooth/thegalacticcompass.html>
 - <http://www.lawoftime.org/thirteenmoon/kin/kin260.html>
 - <https://lawoftime.org/wp-content/uploads/Planetary-Kin-Report.pdf>
+- <https://www.lawoftime.org/pdfs/Rinri-III-3.1.pdf>
+- <http://www.lawoftime.org/timeshipearth/articlesbyvv/1000daysto2012.html>
+- <https://lawoftime.org/solstice-2025-thirteen-years-later/>
+- <https://lawoftime.org/parallel-time/>
+- <https://news.law-of-time.ru/blog/2024/03/01/problema-visokosnogo-goda-razvitie-i/>
+- <https://popol-mayab.org/wp-content/uploads/2017/10/barbara-tedlock-el-tiempo-y-los-mayas-del-altiplano.pdf>
+- <https://neonvagabond.xyz/mirrors/sacred-texts/nam/maya/mhw/mhwap2.htm>
 - <https://lawoftime.org/wp-content/uploads/28-Meditations-on-the-Law-of-Time.pdf>
 - <https://13moon.com/decoder.php>
 - <https://news.law-of-time.ru/>
@@ -412,8 +476,9 @@
 
 ## [14-socionics-enneagram.md](14-socionics-enneagram.md) — 14. Соционика и эннеаграмма (типирование опросником; по дате рождения НЕ вычисляются)
 
-Уникальных URL: 27
+Уникальных URL: 28
 
+- <https://www.katherinefauvre.com/tritype>
 - <https://wikisocion.github.io/content/intertype.html>
 - <https://wikisocion.github.io/content/model_a.html>
 - <https://wikisocion.github.io/content/reinin_dich.html>
@@ -444,7 +509,7 @@
 
 ## [15-syutsay.md](15-syutsay.md) — 15. Сюцай — «цифровая психология» Жаната Кожамжарова
 
-Уникальных URL: 28
+Уникальных URL: 33
 
 - <https://syutsay.ru/syutsay-chislo-2>
 - <https://syutsay.ru/syutsay-chislo-4>
@@ -452,6 +517,11 @@
 - <https://zhanatglobal.com/>
 - <https://zhanatglobal.com/osnovatel-nauki/>
 - <https://zhanatglobal.com/product/personalnyj-biznes-kalendar-na-2025-god/>
+- <https://zhanatglobal.com/product/kalendar-2025-1/>
+- <https://zhanatglobal.com/wp-json/wc/store/v1/products>
+- <https://zhanatglobal.com/wp-content/uploads/2024/12/webpconverter-2-1-scaled.webp>
+- <https://zhanatglobal.com/product/biznes-kalendar-odnostranichnik-uspeshnyh-dnej/>
+- <https://zhanatglobal.com/kak-czifrovaya-nauka-syuczaj-menyaet-zhizn/>
 - <https://zhanatglobal.com/konsultaczii/>
 - <https://syutsay.ru/matritsa-syutsay>
 - <https://syutsay.ru/syutsay-chislo-1>
