@@ -848,3 +848,8 @@ def calculate(b: BirthInput, ayanamsa: str = "lahiri", node: str = "mean",
 
 __all__ = ["calculate", "vimshottari", "panchanga", "nakshatra_of", "navamsa_sign", "dasamsa_sign",
            "dignity_bphs", "relation_simple", "NAKSHATRAS", "DASHA_ORDER", "DASHA_YEARS", "YEAR_LENGTHS"]
+
+
+# Публичные имена для повторного использования другими модулями (например, forecast_eastern).
+DashaClock = _DashaClock
+sub_periods = _sub_periods

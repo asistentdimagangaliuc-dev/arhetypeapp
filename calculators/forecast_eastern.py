@@ -57,7 +57,7 @@ def _iso_min(dt: datetime) -> str:
     return (dt + timedelta(seconds=30)).replace(second=0, microsecond=0).strftime("%Y-%m-%d %H:%M")
 
 
-def _forecast_zone(b: BirthInput, tz_opt: str | None) -> tuple["ns._Zone", str, list[str]]:
+def _forecast_zone(b: BirthInput, tz_opt: str | None) -> tuple["ns.Zone", str, list[str]]:
     """Пояс, в котором показываются даты прогноза (по умолчанию — пояс места рождения)."""
     warns: list[str] = []
     tz = tz_opt or b.tz
@@ -72,10 +72,10 @@ def _forecast_zone(b: BirthInput, tz_opt: str | None) -> tuple["ns._Zone", str, 
         tz = "UTC"
         if not tz_opt:
             warns.append("Пояс прогноза неизвестен: даты показаны по UTC (опция tz).")
-    return ns._Zone(tz), tz, warns
+    return ns.Zone(tz), tz, warns
 
 
-def _when(jd: float, zone: "ns._Zone") -> dict:
+def _when(jd: float, zone: "ns.Zone") -> dict:
     """Момент JD(UT) → UTC, местное время пояса прогноза и IST (для сверки с индийскими таблицами)."""
     u = jd_to_utc(jd)
     return {"utc": _iso_min(u), "local": _iso_min(zone.to_local(u)),
@@ -88,7 +88,7 @@ def _solar_year_of(jd: float) -> int:
     return y if jd >= bz.li_chun_jd(y) else y - 1
 
 
-def _jie_on_date_warning(ref_jd: float, on_date: date, zone: "ns._Zone", warnings: list[str]) -> None:
+def _jie_on_date_warning(ref_jd: float, on_date: date, zone: "ns.Zone", warnings: list[str]) -> None:
     """Предупреждение, если на дату прогноза приходится цзе (смена месяца Ба-цзы и звезды месяца Ки).
 
     Добавляется один раз, даже если его запрашивают оба блока (bazi и ninestar)."""
@@ -354,7 +354,7 @@ def bazi_months(year: int) -> list[dict]:
     return out
 
 
-def _bazi_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zone: "ns._Zone",
+def _bazi_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zone: "ns.Zone",
                   options: dict, warnings: list[str], steps: list[str]) -> dict:
     luck_count = max(10, (year + 1 - b.year) // 10 + 2)
     nat_opts = {k: options[k] for k in ("solar_time", "zi_hour", "nobleman_variant") if k in options}
@@ -623,7 +623,7 @@ def ninestar_months(year: int) -> list[dict]:
             for m in bazi_months(year)]
 
 
-def _ninestar_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zone: "ns._Zone",
+def _ninestar_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zone: "ns.Zone",
                       options: dict, warnings: list[str], steps: list[str]) -> dict:
     nat_opts = {k: options[k] for k in ("tendency_method",) if k in options}
     natal = ns.calculate(b, day_star_method=None, hour_star_method=None, **nat_opts)
@@ -812,7 +812,7 @@ SADE_PHASE = {12: ("rising", "восходящая (12-й от Луны)"), 1: (
               2: ("setting", "заходящая (2-й от Луны)")}
 
 
-def saturn_periods(moon_sign: int, jd_center: float, zone: "ns._Zone", ayan: str = "lahiri",
+def saturn_periods(moon_sign: int, jd_center: float, zone: "ns.Zone", ayan: str = "lahiri",
                    span_years: float = 31.0) -> dict:
     """Саде-сати (12/1/2 от Луны), Аштама-Шани (8) и Ардхаштама/Кантака-Шани (4) в окне ±span_years."""
     a, z = jd_center - span_years * YEAR_DAYS, jd_center + span_years * YEAR_DAYS
@@ -866,7 +866,7 @@ def saturn_periods(moon_sign: int, jd_center: float, zone: "ns._Zone", ayan: str
 def _dasha_walk(moon_lon: float, jd_birth: float, dasha_year: str, ayan: str, jd_a: float, jd_b: float,
                 jd_ref: float) -> dict:
     """Периоды Вимшоттари (как jyotish.vimshottari): текущие на jd_ref и пересекающие [jd_a, jd_b)."""
-    clock = jy._DashaClock(jd_birth, dasha_year, ayan)
+    clock = jy.DashaClock(jd_birth, dasha_year, ayan)
     nak = jy.nakshatra_of(moon_lon)
     lord = nak["lord"]
     frac = nak["degrees_in_nakshatra"] / jy.NAK_SPAN
@@ -884,7 +884,7 @@ def _dasha_walk(moon_lon: float, jd_birth: float, dasha_year: str, ayan: str, jd
         if hit_ref:
             current["mahadasha"] = {"lord": md, "lord_ru": jy.GRAHA_RU[md], "start_jd": m0, "end_jd": m1}
         if hit_ref or hit_year:
-            for ad, a0, a1 in jy._sub_periods(md, t, length):
+            for ad, a0, a1 in jy.sub_periods(md, t, length):
                 j0, j1 = clock.jd(a0), clock.jd(a1)
                 in_ref = j0 <= jd_ref < j1
                 in_year = j0 < jd_b and j1 > jd_a
@@ -893,7 +893,7 @@ def _dasha_walk(moon_lon: float, jd_birth: float, dasha_year: str, ayan: str, jd
                 if in_year:
                     ads_in_year.append({"mahadasha": md, "antardasha": ad, "start_jd": j0, "end_jd": j1})
                 if in_ref or in_year:
-                    for pd, p0, p1 in jy._sub_periods(ad, a0, a1 - a0):
+                    for pd, p0, p1 in jy.sub_periods(ad, a0, a1 - a0):
                         q0, q1 = clock.jd(p0), clock.jd(p1)
                         if q0 <= jd_ref < q1:
                             current["pratyantardasha"] = {"lord": pd, "lord_ru": jy.GRAHA_RU[pd],
@@ -907,14 +907,14 @@ def _dasha_walk(moon_lon: float, jd_birth: float, dasha_year: str, ayan: str, jd
     return {"current": current, "antardashas_in_year": ads_in_year, "pratyantardashas_in_year": pds_in_year}
 
 
-def _jd_fmt(d: dict, zone: "ns._Zone") -> dict:
+def _jd_fmt(d: dict, zone: "ns.Zone") -> dict:
     out = {k: v for k, v in d.items() if k not in ("start_jd", "end_jd")}
     out["start"] = _when(d["start_jd"], zone)["local"]
     out["end"] = _when(d["end_jd"], zone)["local"]
     return out
 
 
-def _jyotish_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zone: "ns._Zone",
+def _jyotish_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zone: "ns.Zone",
                      options: dict, warnings: list[str], steps: list[str]) -> dict:
     ayan = options.get("ayanamsa", "lahiri")
     node = options.get("node", "mean")

@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import random
+from dataclasses import replace
 from datetime import date, timedelta
 
 import pytest
@@ -412,6 +413,18 @@ def test_qimen_dunjia_npm_snapshot(args, method, label):
     assert calculate(bj(*args), ju_method=method, **BJ)["ju"]["label"] == label
 
 
+@pytest.mark.parametrize("d,label", [
+    # Независимая проверка 14.10.2026 (qimen-dunjia 3.1.0 «符頭», полдень UTC+8; цепочка 1900–2100 совпала
+    # за все 73 414 дней). Эти даты различают два прочтения триггера 置闰: по удалённости 符头 от
+    # солнцестояния (《統宗» 1718, наш zhirun) и по 超 самого 芒种/大雪 (《演義» «遇芒種大雪超過九日»):
+    # 1987 — 芒种 超 7 дн., 夏至 超 8 → 闰; 2012 — 大雪 超 8, 冬至 超 7 → без 闰.
+    (date(1987, 6, 14), "阳遁6局 芒种闰上元"),
+    (date(2012, 12, 14), "阳遁1局 冬至上元"),
+])
+def test_qimen_dunjia_zhirun_trigger_dates(d, label):
+    assert calculate(bj(d.year, d.month, d.day, 12), ju_method="zhirun", **BJ)["ju"]["label"] == label
+
+
 def test_qimen_dunjia_late_rat_pillars():
     # README qimen-dunjia: «'2024011523' // 日柱己卯、時柱甲子（預設，次日派）»
     r = calculate(bj(2024, 1, 15, 23), **BJ)
@@ -585,12 +598,61 @@ def test_no_time_day_level():
     r = calculate(BirthInput(1990, 5, 15, place="Москва"))
     assert r["inputs_used"]["has_time"] is False and r["chart"] is None
     assert r["ju"]["label"] == "阳遁4局 立夏上元" and r["pillars"]["hour"] is None
-    assert len(r["hour_candidates"]) == 12 and r["hour_candidates"][0]["hour_pillar"] == "丙子"
     assert any("нужен час" in w for w in r["warnings"])
-    r = calculate(BirthInput(1984, 2, 4, place="Москва"))       # день Личуня
+    c = r["hour_candidates"]
+    # Истинное солнечное время Москвы (MSD) отстаёт от часов на ~1 ч 26 мин: местные 00:00–00:26 — ещё 亥
+    # предыдущего дня (己卯), далее 丙子…丁亥 дня 庚辰 → 13 вариантов, покрывающих сутки по часам без дыр.
+    assert len(c) == 13 and (c[0]["day_pillar"], c[0]["hour_pillar"], c[0]["clock_hours"]) == ("己卯", "乙亥", "00:00–00:26")
+    assert (c[1]["hour_pillar"], c[1]["hours"], c[1]["clock_hours"]) == ("丙子", "23:00–01:00", "00:26–02:26")
+    assert c[-1]["clock_hours"].endswith("24:00") and c[0]["clock_hours"].startswith("00:00")
+    assert all(a["clock_hours"].split("–")[1] == b["clock_hours"].split("–")[0] for a, b in zip(c, c[1:]))
+    # Время часов + early: 23:00–24:00 — уже следующий день (辛巳, 戊子); с late — тот же день, ствол часа от следующего
+    c = calculate(BirthInput(1990, 5, 15, place="Москва"), solar_time="clock")["hour_candidates"]
+    assert len(c) == 13 and c[0]["hour_pillar"] == "丙子" and (c[-1]["day_pillar"], c[-1]["hour_pillar"]) == ("辛巳", "戊子")
+    c = calculate(BirthInput(1990, 5, 15, place="Москва"), solar_time="clock", zi_hour="late")["hour_candidates"]
+    assert (c[-1]["day_pillar"], c[-1]["hour_pillar"], c[-1]["clock_hours"]) == ("庚辰", "戊子", "23:00–24:00")
+    # День Личуня (T2): 局 меняется в 18:19 MSK (термин) и в 23:44 (истинный 23:00 → день 己巳 при early)
+    r = calculate(BirthInput(1984, 2, 4, place="Москва"))
+    assert [(v["local_from"], v["local_to"], v["ju"]) for v in r["ju"]["variants_in_day"]] == [
+        ("00:00", "18:19", "阳遁3局 大寒上元"), ("18:19", "23:44", "阳遁8局 立春上元"), ("23:44", "24:00", "阳遁5局 立春中元")]
+    assert r["ju"]["label"] == "阳遁8局 立春上元"       # 局 дня 戊辰 — на последнюю минуту с этим столпом дня
+    assert any("局 меняется" in w for w in r["warnings"])
+    r = calculate(BirthInput(1984, 2, 4, place="Москва"), solar_time="clock", zi_hour="late")
     assert [v["ju"] for v in r["ju"]["variants_in_day"]] == ["阳遁3局 大寒上元", "阳遁8局 立春上元"]
-    assert any("сменяется 局" in w for w in r["warnings"])
     json.dumps(r, ensure_ascii=False)
+
+
+@pytest.mark.parametrize("b,opts", [
+    (BirthInput(1984, 2, 4, place="Москва"), {}),
+    (BirthInput(1984, 2, 4, place="Москва"), {"solar_time": "clock", "zi_hour": "late"}),
+    (BirthInput(1990, 5, 15, place="Москва"), {"ju_method": "maoshan"}),     # граница 10 сут 茅山 в 22:36
+    (BirthInput(1718, 6, 29, tz="UTC+08:00"), {"ju_method": "zhirun"}),
+])
+def test_no_time_candidates_match_timed_chart(b, opts):
+    """Каждый вариант без времени = расчёт с конкретным временем из его диапазона clock_hours (середина)."""
+    for c in calculate(b, **opts)["hour_candidates"]:
+        s, e = c["clock_hours"].split("–")
+        m0 = int(s[:2]) * 60 + int(s[3:])
+        m1 = int(e[:2]) * 60 + int(e[3:])
+        mid = (m0 + m1) // 2
+        r = calculate(replace(b, hour=mid // 60, minute=mid % 60), **opts)
+        assert (r["pillars"]["day"], r["pillars"]["hour"], r["ju"]["label"]) == (c["day_pillar"], c["hour_pillar"], c["ju"])
+        assert (r["zhi_fu"]["star"], r["zhi_fu"]["palace"], r["zhi_shi"]["door"], r["zhi_shi"]["palace"]) == (
+            c["zhi_fu_star"], c["zhi_fu_palace"], c["zhi_shi_door"], c["zhi_shi_palace"])
+
+
+def test_no_time_pre_1645_warning():
+    r = calculate(BirthInput(1589, 12, 13, tz="UTC+08:00"), ju_method="zhirun")
+    assert any("1645" in w for w in r["warnings"]) and r["ju"]["label"] == "阴遁4局 大雪闰上元"
+
+
+def test_zhirun_threshold_dependence_is_warned():
+    # 《統宗» 1718: при пороге 8 — 闰 (芒种闰上元), при 9 — уже 夏至 (7,7 % дней 1900–2100 зависят от порога)
+    r = calculate(bj(1718, 6, 14, 12), ju_method="zhirun", **BJ)
+    assert r["ju"]["label"] == "阳遁6局 芒种闰上元"
+    assert r["alternatives"]["zhirun_other_threshold"] == {"zhirun_leap_days": 9, "label": "阴遁9局 夏至上元"}
+    assert any("порога 置闰" in w for w in r["warnings"])
+    assert calculate(T1)["alternatives"]["zhirun_other_threshold"] is None
 
 
 @pytest.mark.parametrize("opt", [{"ju_method": "x"}, {"solar_time": "x"}, {"zi_hour": "x"}, {"tianqin": "x"},

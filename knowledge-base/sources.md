@@ -2,7 +2,7 @@
 
 Каждый документ метода содержит раздел «Источники» с оценкой надёжности каждого источника и раздел «Протокол проверки» (что именно было независимо перепроверено). Здесь — сводный индекс всех процитированных URL по модулям (сгенерирован `calculators/tools/build_sources.py`).
 
-Всего уникальных ссылок по модулям: **574**.
+Всего уникальных ссылок по модулям: **578**.
 
 **Шкала надёжности, используемая в документах:**
 
@@ -606,9 +606,10 @@
 
 ## [16-qimen-dunjia.md](16-qimen-dunjia.md) — 16. Ци Мэнь Дунь Цзя (奇门遁甲): карта часа рождения (时家奇门)
 
-Уникальных URL: 12
+Уникальных URL: 13
 
 - <https://zh.wikisource.org/wiki/煙波釣叟歌>
+- <https://apps.apple.com/us/app/id1635309476>
 - <https://zh.wikisource.org/wiki/易學象數論/超神接氣直指>
 - <https://www.masterseanchan.com/qi-men-dun-jia-calculator/>
 - <https://zh.wikisource.org/wiki/奇門遁甲統宗>
@@ -623,7 +624,7 @@
 
 ## [17-da-liu-ren.md](17-da-liu-ren.md) — 17. Да Лю Жэнь (大六壬): «урок» (课盘) на момент рождения или консультации
 
-Уникальных URL: 12
+Уникальных URL: 13
 
 - <https://zh.wikisource.org/wiki/六壬大全/7>
 - <https://simplelits.com/books/classical/classical-06985-注解大六壬指南/7>
@@ -636,11 +637,12 @@
 - <https://github.com/kentang2017/kinliuren>
 - <https://www.npmjs.com/package/liuren-ts-lib>
 - <https://github.com/look-fate/liuren-ts-lib>
+- <https://registry.npmjs.org/liuren-ts-lib/-/liuren-ts-lib-3.1.0.tgz>
 - <https://blog.udn.com/tsao144/182048738>
 
 ## [18-forecast-western.md](18-forecast-western.md) — 18. Западная прогностика: транзиты, прогрессии, дирекции, соляр, профекции
 
-Уникальных URL: 15
+Уникальных URL: 17
 
 - <https://www.astro.com/cgi/xa.cgi/faq/fq_fh_owtype_e.htm>
 - <https://www.astro.com/cgi/xa.cgi/faq/fq_fh_methods_e.htm>
@@ -657,6 +659,8 @@
 - <https://github.com/CruiserOne/Astrolog>
 - <https://kerykeion.net/content/learn-astrology/guide-orbs-which-to-use>
 - <https://ssd.jpl.nasa.gov/api/horizons.api>
+- <https://www.astro.com/astrology/…>
+- <https://www.astro.com/cgi/xa.cgi/astrology/…>
 
 ## [19-forecast-eastern.md](19-forecast-eastern.md) — 19. Восточная прогностика на заданный год или дату (流年 Ба-цзы, 年盤/月盤 Девятизвёздной Ки, гочара и даши Джйотиш)
 

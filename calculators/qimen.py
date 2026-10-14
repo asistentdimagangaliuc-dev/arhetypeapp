@@ -578,7 +578,7 @@ def calculate(b: BirthInput, **options) -> dict:
         warnings.append("Нет ни времени, ни пояса: термин определён по UTC.")
 
     if not has_time:
-        return _day_level(b, method, zi_hour, tianqin, deities, leap_days, warnings, steps, add)
+        return _day_level(b, method, solar_time, zi_hour, tianqin, deities, leap_days, warnings, steps, add)
 
     n = normalize(b)
     warnings.extend(n.warnings)
@@ -726,6 +726,15 @@ def calculate(b: BirthInput, **options) -> dict:
             alt_methods[m] = f"ошибка: {e}"
     if len(set(alt_methods.values())) > 1:
         warnings.append("局 зависит от метода определения (拆补/置闰/茅山) — см. alternatives.ju_methods.")
+    # Порог 置闰 — школьный: 8 (《统宗》 1718, счёт «включительно») или 9 (黄宗羲 считает разностью дат).
+    other_leap = 9 if leap_days == 8 else 8
+    zr_other = _ju_label(_determine("zhirun", jd, d_chart, clock, other_leap))
+    zhirun_other = None
+    if zr_other != alt_methods["zhirun"]:
+        zhirun_other = {"zhirun_leap_days": other_leap, "label": zr_other}
+        if method == "zhirun":
+            warnings.append(f"置闰法: 局 зависит от порога 置闰 (zhirun_leap_days={leap_days} → {alt_methods['zhirun']}, "
+                            f"{other_leap} → {zr_other}); см. alternatives.zhirun_other_threshold.")
     alt_time = []
     seen = set()
     for mode in ("clock", "mean", "true"):
@@ -810,66 +819,139 @@ def calculate(b: BirthInput, **options) -> dict:
                              "далее 戊己庚辛壬癸丁丙乙 вперёд (阳) / назад (阴) по числам Ло Шу; правило kinqimen "
                              "TS 0.3.1, ⚠ в классических текстах не найдено",
         "natal": natal,
-        "alternatives": {"ju_methods": alt_methods, "time_bases": alt_time},
+        "alternatives": {"ju_methods": alt_methods, "zhirun_other_threshold": zhirun_other, "time_bases": alt_time},
         "steps": steps,
     }
 
 
-def _day_level(b: BirthInput, method: str, zi_hour: str, tianqin: str, deities: str, leap_days: int,
-               warnings: list[str], steps: list[str], add) -> dict:
-    """Без времени рождения: только данные дня (столпы, термин, 局, земной диск, 12 вариантов часа)."""
+def _day_level(b: BirthInput, method: str, solar_time: str, zi_hour: str, tianqin: str, deities: str,
+               leap_days: int, warnings: list[str], steps: list[str], add) -> dict:
+    """Без времени рождения: данные дня и все варианты часа в пределах местных суток.
+
+    Местные сутки (00:00–24:00 по часам) просматриваются поминутно: для каждой минуты — время карты
+    (solar_time; без долготы — часы), дата столпа дня (zi_hour), столп часа и 局. Подряд идущие минуты
+    с одинаковыми (день, час, 局) образуют вариант. Обычно вариантов 13, а не 12: сутки по часам не
+    совпадают с сутками карты (солнечное время, час 23:00–24:00 при early — уже следующий день).
+    """
     warnings.append("Время рождения неизвестно: карта Ци Мэнь строится на ЧАС (值符, 值使, звёзды, двери, духи "
-                    "меняются каждые 2 часа). Ниже — только данные дня и 12 вариантов по часам; для карты нужен час.")
-    res_by_edge = []
-    for hh, mm in ((0, 0), (23, 59)):
-        nb = replace(b, hour=hh, minute=mm)
-        n = normalize(nb)
-        clock = _Clock(nb.tz, n.offset_source, n.utc_offset_hours, nb.lon, "clock")
-        r = _determine(method, n.jd_ut, b.date, clock, leap_days)
-        res_by_edge.append((n, clock, r))
-    n0, clock0, r0 = res_by_edge[0]
-    n1, _, r1 = res_by_edge[1]
+                    "меняются каждые 2 часа). Ниже — только данные дня и варианты по часам; для карты нужен час.")
+    used_mode = solar_time
+    if solar_time != "clock" and b.lon is None:
+        warnings.append("Долгота неизвестна — солнечное время не вычислить, использовано время часов.")
+        used_mode = "clock"
+    d_next = b.date + timedelta(days=1)
+    n0 = normalize(replace(b, hour=0, minute=0, second=0))
+    n1 = normalize(replace(b, year=d_next.year, month=d_next.month, day=d_next.day, hour=0, minute=0, second=0))
+    warnings.extend(w for w in n0.warnings if w not in warnings)
+    clock = _Clock(b.tz, n0.offset_source, n0.utc_offset_hours, b.lon, used_mode)
+    total = int(round((n1.jd_ut - n0.jd_ut) * 1440))          # 1440 (1380/1500 в дни перевода часов)
+
+    def moment(i: int) -> tuple[float, datetime, datetime]:
+        utc = n0.utc + timedelta(minutes=i)                    # точно, без округления JD → datetime
+        return n0.jd_ut + i / 1440.0, clock.civil(utc), clock.chart(utc)
+
+    # 1) поминутно: (дата столпа дня, столп часа)
+    runs: list[list] = []                                     # [day_date, hour_idx, i_start, i_end]
+    for i in range(total):
+        _, _, ct = moment(i)
+        key = (chart_day(ct, zi_hour), hour_pillar(ct))
+        if runs and (runs[-1][0], runs[-1][1]) == key:
+            runs[-1][3] = i
+        else:
+            runs.append([key[0], key[1], i, i])
+
+    # 2) 局 на границах каждого отрезка; если внутри сменился термин / юань — делим (бисекция по минутам)
+    cache: dict[int, dict] = {}
+
+    def ju_at(i: int, dd: date) -> dict:
+        if i not in cache:
+            cache[i] = _determine(method, n0.jd_ut + i / 1440.0, dd, clock, leap_days)
+        return cache[i]
+
+    segs: list[tuple] = []                                    # (day_date, hour_idx, i_s, i_e, r)
+
+    def split(dd: date, hh: int, i_s: int, i_e: int) -> None:
+        rs, re_ = ju_at(i_s, dd), ju_at(i_e, dd)
+        if _ju_label(rs) == _ju_label(re_):
+            segs.append((dd, hh, i_s, i_e, rs))
+            return
+        lo, hi = i_s, i_e                                     # label(lo) = начальный, label(hi) ≠
+        while hi - lo > 1:
+            mid = (lo + hi) // 2
+            if _ju_label(ju_at(mid, dd)) == _ju_label(rs):
+                lo = mid
+            else:
+                hi = mid
+        segs.append((dd, hh, i_s, lo, rs))
+        split(dd, hh, hi, i_e)
+
+    for dd, hh, i_s, i_e in runs:
+        split(dd, hh, i_s, i_e)
+
+    def hm(t: datetime) -> str:
+        return f"{t:%H:%M}"
+
+    candidates = []
+    for dd, hh, i_s, i_e, r in segs:
+        k = r["term"]
+        ch = build_chart(term_is_yang(k), JU_TABLE[k][r["yuan"]], hh, tianqin, deities)
+        _, civ_s, ct_s = moment(i_s)
+        _, civ_e, ct_e = moment(i_e + 1)
+        candidates.append({
+            "hour_branch": BRANCHES[hh % 12][0], "hours": f"{hm(ct_s)}–{hm(ct_e)}",
+            "clock_hours": f"{hm(civ_s)}–{'24:00' if i_e + 1 == total else hm(civ_e)}",
+            "day_pillar": ganzhi(day_index(dd)), "hour_pillar": ganzhi(hh), "ju": _ju_label(r),
+            "xun_head": ganzhi(ch["xun_head"]), "zhi_fu_star": STARS[ch["p0"]][0], "zhi_fu_palace": ch["t"],
+            "zhi_shi_door": DOORS[ch["door_src"]][0], "zhi_shi_palace": ch["door"],
+        })
+
+    # 3) 局 по отрезкам суток и «局 дня» — на последнюю минуту суток со столпом дня этой даты
+    variants = []
+    for c in candidates:
+        if variants and variants[-1]["ju"] == c["ju"]:
+            variants[-1]["local_to"] = c["clock_hours"].split("–")[1]
+        else:
+            variants.append({"local_from": c["clock_hours"].split("–")[0], "local_to": c["clock_hours"].split("–")[1],
+                             "ju": c["ju"]})
     di = day_index(b.date)
+    own = [s for s in segs if s[0] == b.date] or segs
+    r = own[-1][4]
+    if len(variants) > 1:
+        warnings.append("В эти сутки 局 меняется: " + "; ".join(f"{v['local_from']}–{v['local_to']} — {v['ju']}"
+                                                              for v in variants) + ". Без времени нельзя выбрать.")
+    if b.year < 1645:
+        warnings.append("Дата до 1645 г.: китайские календари того времени считали термины «средними» (平气); "
+                        "здесь — истинные (定气), поэтому 局 может не совпасть с историческими книгами.")
+
     lc = li_chun_jd(n1.utc.year)
-    jd_end = n1.jd_ut
+    jd_end = n1.jd_ut - 1e-6
     bazi_year = n1.utc.year if jd_end >= lc else n1.utc.year - 1
     yi_idx = year_index(bazi_year)
     slot = month_slot(sun_longitude(jd_end))
     mi = ganzhi_index((month_first_stem(yi_idx % 10) + slot) % 10, (slot + 2) % 12)
+    mode_ru = {"clock": "время часов", "mean": "местное среднее солнечное (LMT)",
+               "true": "истинное солнечное"}[used_mode]
     add(f"Дата {b.date:%d.%m.%Y} (без времени): столп дня {ganzhi(di)}; год {ganzhi(yi_idx)}, месяц {ganzhi(mi)} "
         f"— на конец местной даты (как в модуле 01).")
-    variants = []
-    for (n, _, r), when in zip(res_by_edge, ("00:00", "23:59")):
-        variants.append({"local_time": when, "ju": _ju_label(r), "term": TERMS[r["term"]][0]})
-    if variants[0]["ju"] != variants[1]["ju"]:
-        warnings.append(f"В этот день сменяется 局 ({variants[0]['ju']} → {variants[1]['ju']}): без времени "
-                        f"нельзя выбрать.")
-    r = r1
+    add(f"Сутки 00:00–24:00 по часам ({b.tz}) просмотрены поминутно; время карты — {mode_ru}, граница дня "
+        f"zi_hour='{zi_hour}'. Вариантов (день, час, 局): {len(candidates)}; поле clock_hours — по часам, "
+        f"hours — по времени карты.")
     k = r["term"]
     yang = term_is_yang(k)
     ju = JU_TABLE[k][r["yuan"]]
-    add(f"局 на конец дня ({JU_METHOD_RU[method]}): {_ju_label(r)}.")
+    add(f"局 дня {ganzhi(di)} (последняя минута суток с этим столпом дня; {JU_METHOD_RU[method]}): {_ju_label(r)}"
+        + ("" if len(variants) == 1 else "; в течение суток: " + ", ".join(v["ju"] for v in variants)) + ".")
     earth = earth_plate(yang, ju)
     add("Земной диск: " + ", ".join(f"{STEMS[earth[p]][0]}→{_palace_brief(p)}" for p in
                                    sorted(earth, key=lambda q: STEM_ORDER.index(earth[q]))) + ".")
-    candidates = []
-    zi_stem = zi_first_stem(di % 10)
-    for hb in range(12):
-        # час 子 (23–01) берётся как ранний час Крысы ЭТОГО дня (00–01): ствол от этого дня
-        hidx = ganzhi_index((zi_stem + hb) % 10, hb)
-        ch = build_chart(yang, ju, hidx, tianqin, deities)
-        candidates.append({
-            "hour_branch": BRANCHES[hb][0], "hours": BRANCHES[hb][5], "hour_pillar": ganzhi(hidx),
-            "xun_head": ganzhi(ch["xun_head"]), "zhi_fu_star": STARS[ch["p0"]][0], "zhi_fu_palace": ch["t"],
-            "zhi_shi_door": DOORS[ch["door_src"]][0], "zhi_shi_palace": ch["door"],
-        })
     dx = di - di % 10
     return {
         "method": "qimen",
-        "variant": f"时家奇门 转盘; ju_method='{method}'; без времени — только данные дня",
+        "variant": (f"时家奇门 转盘; ju_method='{method}'; solar_time='{used_mode}'; zi_hour='{zi_hour}'; "
+                    f"без времени — только данные дня"),
         "inputs_used": {"local": b.date.isoformat(), "tz": b.tz, "lat": b.lat, "lon": b.lon, "has_time": False,
-                        "options": {"ju_method": method, "zi_hour": zi_hour, "tianqin": tianqin, "deities": deities,
-                                    "zhirun_leap_days": leap_days}},
+                        "options": {"ju_method": method, "solar_time": used_mode, "zi_hour": zi_hour,
+                                    "tianqin": tianqin, "deities": deities, "zhirun_leap_days": leap_days}},
         "warnings": warnings,
         "pillars": {"year": ganzhi(yi_idx), "month": ganzhi(mi), "day": ganzhi(di), "hour": None,
                     "day_date": b.date.isoformat()},

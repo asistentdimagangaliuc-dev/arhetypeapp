@@ -909,3 +909,7 @@ if __name__ == "__main__":  # pragma: no cover
 
     r = calculate(BirthInput(1990, 5, 15, 14, 30, place="Москва", gender="female"))
     print(json.dumps(r, ensure_ascii=False, indent=2))
+
+
+# Публичное имя для повторного использования другими модулями (например, forecast_eastern).
+Zone = _Zone
