@@ -114,7 +114,9 @@ QUADRAS: dict[str, dict[str, Any]] = {
 
 CLUBS = {"NT": "Исследователи (НТ)", "NF": "Гуманитарии (НЭ)", "SF": "Социалы (СЭ)", "ST": "Прагматики (СЛ)"}
 
-#: Темпераменты по Аугустинавичюте: экстра/интро × рацио/иррацио.
+#: Соционические темпераменты: экстра/интро × рацио/иррацио. Система и русские названия — по
+#: В. Гуленко (Wikisocion «Temperament»: EP flexible-maneuvering, EJ linear-assertive,
+#: IP receptive-adaptive, IJ balanced-stable). С классическими темпераментами не совпадают.
 TEMPERAMENTS = {
     "Ej": "линейно-напористый (ЛН)",
     "Ep": "гибко-маневренный (ГМ)",
@@ -285,7 +287,7 @@ def reinin_traits(tim: str) -> dict[str, str]:
 
 ENNEA_TYPES: dict[int, dict[str, str]] = {
     1: {"name_ru": "Реформатор", "name_en": "The Reformer",
-        "fear_ru": "быть плохим, испорченным, «неправильным»", "desire_ru": "быть хорошим, честным, уравновешенным",
+        "fear_ru": "быть испорченным, плохим (злым), ущербным", "desire_ru": "быть хорошим, честным, уравновешенным",
         "passion": "гнев (Anger)", "virtue": "безмятежность (Serenity)", "fixation": "негодование (Resentment)"},
     2: {"name_ru": "Помощник", "name_en": "The Helper",
         "fear_ru": "быть нежеланным, недостойным любви", "desire_ru": "чувствовать себя любимым",
@@ -969,6 +971,9 @@ def score_enneagram(answers: dict[str, Any]) -> dict[str, Any]:
             steps.append(f"Ничья {top} и {second} ({adjusted[top]}), ключевые пункты тоже равны — тип не выдаётся.")
     steps.append("Ранжирование: " + " > ".join(f"{t}({adjusted[t]})" for t in ranking))
 
+    # проверка ключевого утверждения ядра — ДО понижения уверенности (раздел 3.4, п. 4 и 9)
+    if core is not None and anchors[core] <= 1 and answered[core] == 4:
+        flags.append(f"Ключевое утверждение типа {core} (EN-{core}-1) оценено низко ({anchors[core]}) — проверьте тип интервью.")
     if resolved_by == "unresolved":
         level = "undetermined"
     elif resolved_by == "anchor" or margin <= 1:
@@ -982,8 +987,6 @@ def score_enneagram(answers: dict[str, Any]) -> dict[str, Any]:
     if flags and level in ("high", "medium"):
         level = "low" if level == "medium" else "medium"
         steps.append("Есть флаги согласованности — уверенность понижена на ступень.")
-    if core is not None and anchors[core] <= 1 and answered[core] == 4:
-        flags.append(f"Ключевое утверждение типа {core} (EN-{core}-1) оценено низко ({anchors[core]}) — проверьте тип интервью.")
 
     # уточнения: соседние кандидаты в пределах 3 баллов
     followup_items, interview = [], []
@@ -1008,7 +1011,9 @@ def score_enneagram(answers: dict[str, Any]) -> dict[str, Any]:
                                     "с юности и использовать всю шкалу 0–4, либо проведите интервью о мотивах и страхах.")
 
     if core is None:
-        result.update({"type": None, "candidates": [top, second]})
+        # все типы, совпадающие с лидером и по баллу, и по ключевому пункту (при «4 на всё» — все девять)
+        tied = [t for t in ranking if adjusted[t] == adjusted[top] and anchors[t] == anchors[top]]
+        result.update({"type": None, "candidates": tied})
     else:
         w1, w2 = wings(core)
         dw = adjusted[w1] - adjusted[w2]
