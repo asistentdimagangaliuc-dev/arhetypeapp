@@ -465,11 +465,14 @@ def test_t1_solar_return_vs_horizons(r1):
 
 
 @pytest.mark.parametrize("b", [T1(), T2(), T3(), T4()])
-@pytest.mark.parametrize("year", [1905, 1990, 2000, 2026, 2100])
-def test_solar_return_within_a_day(b, year):
-    if year <= b.year:
-        pytest.skip("соляр до рождения")
-    r = calculate(b, on_date=ON if year < 2027 else "2026-10-14", sr_year=year, hit_bodies=[], include_lunar_return=False)
+@pytest.mark.parametrize("offset", [1, 4, 26, 50, 96])
+def test_solar_return_within_a_day(b, offset):
+    """Соляр каждого года отстоит от годовщины момента рождения (UT) меньше чем на сутки
+    (AstroWiki: «either on the same date as the day of birth or the day before or after»).
+    Годы — от рождения: 1-й, 4-й (високосный цикл), 26-й, 50-й и 96-й (у T4 — 1975 г., через
+    невисокосный 1900 г.; у T3 — 2100 г., невисокосный по григорианскому правилу)."""
+    year = b.year + offset
+    r = calculate(b, on_date=ON, sr_year=year, hit_bodies=[], include_lunar_return=False)
     sr = r["solar_return"]
     assert abs(sr["days_from_birth_anniversary_utc"]) < 1.0
     assert abs(sd(sr["natal_sun"], lon(swe.SUN, sr["moment_jd"]))) < 1e-6
