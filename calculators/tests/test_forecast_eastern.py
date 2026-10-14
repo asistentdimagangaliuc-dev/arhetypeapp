@@ -411,12 +411,16 @@ def test_gochara_table_vs_phaladeepika():
 SATURN_INGRESS_IST = [("2020-01-24", 9), ("2022-04-29", 10), ("2022-07-12", 9), ("2023-01-17", 10),
                       ("2025-03-29", 11), ("2027-06-03", 0), ("2027-10-20", 11), ("2028-02-23", 0),
                       ("2029-08-08", 1), ("2029-10-05", 0), ("2030-04-17", 1), ("2032-05-31", 2),
-                      ("2034-07-13", 3)]
+                      ("2034-07-13", 3), ("2036-08-27", 4), ("2038-10-22", 5), ("2039-04-05", 4),
+                      ("2039-07-13", 5), ("2041-01-28", 6), ("2041-02-06", 5), ("2041-09-26", 6),
+                      ("2043-12-11", 7), ("2044-06-23", 6), ("2044-08-30", 7), ("2046-12-08", 8),
+                      ("2049-03-06", 9), ("2049-07-10", 8), ("2049-12-04", 9), ("2052-02-25", 10)]
 
 
 def test_saturn_ingresses_vs_onlinejyotish():
+    """Все 27 смен знака из таблицы onlinejyotish (2020–2052), включая 9-дневный заход в Весы 28.01–06.02.2041."""
     a = julian_day_ut(datetime(2019, 6, 1, tzinfo=timezone.utc))
-    z = julian_day_ut(datetime(2035, 1, 1, tzinfo=timezone.utc))
+    z = julian_day_ut(datetime(2052, 6, 1, tzinfo=timezone.utc))
     segs = sign_segments("saturn", a, z)
     got = [((jd_to_utc(s["start_jd"]) + IST).date().isoformat(), s["sign"]) for s in segs if s["start_jd"]]
     assert got == SATURN_INGRESS_IST
