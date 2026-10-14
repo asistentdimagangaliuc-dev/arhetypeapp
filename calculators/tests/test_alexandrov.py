@@ -242,6 +242,30 @@ def test_tmc_30_7_1998():
     assert c[7] == 2
 
 
+@pytest.mark.parametrize("dmy,grid", [
+    # Матрицы, напечатанные автором в [TMC] гл. 2–4 (litresp.ru …/tajni-magicheskih-cifr/3, /4, /5);
+    # сверено при проверке 2-й волны.
+    ((4, 4, 1964), "11 444 - / 222 - 8 / - 6 9"),
+    ((30, 4, 1969), "1 4 - / 22 5 8 / 33 66 99"),
+    ((17, 8, 1982), "11 4 77 / 2 - 88 / 33 6 99"),
+    ((3, 9, 1937), "1 - 7 / 22 5 8 / 333 6 99"),
+    ((9, 8, 1965), "111 - - / 22 5 88 / 3 6 99"),
+])
+def test_tmc_published_matrices(dmy, grid):
+    d, m, y = dmy
+    assert _counts(calculate(BirthInput(y, m, d))) == _grid_counts(grid)
+
+
+def test_tmc_2_11_1943_book_typo():
+    # [TMC] гл. 4: «2 11 1943 / 21 3 17 8 / 11111 4 7 / 22 нет 8 / 333 нет 9».
+    # ⚠ Троек в расчёте две (год 1943 и второе число 3), а не три — опечатка книги, как и у 30 7 1998.
+    r = calculate(BirthInput(1943, 11, 2))
+    c = _counts(r)
+    assert r["working_numbers_list"] == [21, 3, 17, 8]
+    assert {d: c[d] for d in (1, 2, 4, 5, 6, 7, 8, 9)} == {1: 5, 2: 2, 4: 1, 5: 0, 6: 0, 7: 1, 8: 1, 9: 1}
+    assert c[3] == 2
+
+
 def test_tmc_15_8_1957_strong_lines():
     # [TMC] гл. 1: 15 8 1957 → 36 9 34 7; психоматрица 11 4 77 / нет 55 8 / 33 6 99; 5-й период.
     r = calculate(BirthInput(1957, 8, 15))

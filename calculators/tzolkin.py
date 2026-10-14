@@ -5,8 +5,10 @@ A) **Dreamspell / «13 Лун»** (Хосе Аргуэльес, Foundation for t
    * Якорь: 26.07.1987 = Кин 34 (Белый Галактический Волшебник); каждый год 26 июля
      («Галактический Новый год», 1-й день Магнитной Луны) кин сдвигается на +105.
    * 25 июля — «День вне времени» (у него ЕСТЬ свой кин).
-   * 29 февраля — «0.0 Хунаб Ку»: кин НЕ продвигается, день получает кин 28 февраля
-     (так в официальном виджете lawoftime.org/decode: ``2==p&&29==m&&(m=28)``).
+   * 29 февраля — «0.0 Хунаб Ку»: вне лун и недель, собственного кина нет. Официальное правило
+     Фонда (текст страницы lawoftime.org/decode): родившимся 29.02 ДО полудня местного времени
+     брать 28 февраля, ПОСЛЕ полудня — 1 марта. Сам JS-виджет (``2==p&&29==m&&(m=28)``) и
+     13moon.com времени не спрашивают и всегда дают кин 28.02. Опция ``feb29_rule``.
    * Оракул судьбы: Ведущий (по группе тона), Аналог (сумма печатей 19),
      Антипод (печать ±10), Оккультный (сумма печатей 21, сумма тонов 14, сумма кинов 261).
    * Волновой модуль, замок, земная семья, цветовая семья, ПГА, дата «13 Лун».
@@ -184,13 +186,20 @@ GUIDE_RULE_TEXT: dict[int, str] = {
     8: "тоны 5, 10: Ведущий = печать +8 (или −12)",
 }
 
-#: 5 замков по 52 кина. Источник русских названий: news.law-of-time.ru.
+#: 5 замков по 52 кина. Источник русских названий и «дворов»: news.law-of-time.ru («Ноосферное письмо»
+#: № 22–27, 2024: «Красный Восточный Замок Поворота: Двор Рождения (Кины 1-52)» и т.д.).
+#: Для Зелёного замка в одном выпуске встречается и «Двор Матрицы».
 CASTLES: dict[int, dict[str, Any]] = {
-    1: {"ru": "Красный Восточный Замок Поворота", "en": "Red Eastern Castle of Turning", "kins": (1, 52)},
-    2: {"ru": "Белый Северный Замок Перехода", "en": "White Northern Castle of Crossing", "kins": (53, 104)},
-    3: {"ru": "Синий Западный Замок Горения", "en": "Blue Western Castle of Burning", "kins": (105, 156)},
-    4: {"ru": "Жёлтый Южный Замок Даяния", "en": "Yellow Southern Castle of Giving", "kins": (157, 208)},
-    5: {"ru": "Зелёный Центральный Замок Чарования", "en": "Green Central Castle of Enchantment", "kins": (209, 260)},
+    1: {"ru": "Красный Восточный Замок Поворота", "en": "Red Eastern Castle of Turning",
+        "court_ru": "Двор Рождения", "kins": (1, 52)},
+    2: {"ru": "Белый Северный Замок Перехода", "en": "White Northern Castle of Crossing",
+        "court_ru": "Двор Смерти", "kins": (53, 104)},
+    3: {"ru": "Синий Западный Замок Горения", "en": "Blue Western Castle of Burning",
+        "court_ru": "Двор Магии", "kins": (105, 156)},
+    4: {"ru": "Жёлтый Южный Замок Даяния", "en": "Yellow Southern Castle of Giving",
+        "court_ru": "Двор Интеллекта", "kins": (157, 208)},
+    5: {"ru": "Зелёный Центральный Замок Чарования", "en": "Green Central Castle of Enchantment",
+        "court_ru": "Двор Синхронизации", "kins": (209, 260)},
 }
 
 #: 5 земных семей = печати с одинаковым остатком по модулю 5 (Аргуэльес, «28 Meditations on the Law of Time»,
@@ -547,9 +556,44 @@ def affirmation_en(kin: int) -> list[str]:
     return lines
 
 
-def dreamspell(y: int, m: int, d: int) -> dict[str, Any]:
-    """Полный расчёт Dreamspell для григорианской даты."""
-    kin = dreamspell_kin(y, m, d)
+#: Правила для 29 февраля в Dreamspell (опция ``feb29_rule``).
+FEB29_RULES = ("noon", "feb28", "mar1")
+
+
+def feb29_kin_date(rule: str = "noon", hour: int | None = None, minute: int | None = None) -> dict[str, Any]:
+    """По какой дате брать кин для рождения 29 февраля.
+
+    * ``noon`` (по умолчанию) — официальное указание Фонда Закона Времени (lawoftime.org/decode):
+      «If you were born on February 29 before noon local time, use February 28. If you were born after
+      noon local time, use March 1». Время неизвестно → 28.02 (как сам виджет и 13moon.com) + предупреждение.
+      Ровно 12:00 считается «после полудня» (граница, тоже с предупреждением).
+    * ``feb28`` — всегда 28.02 (поведение JS-виджета lawoftime.org/decode и калькулятора 13moon.com).
+    * ``mar1`` — всегда 1 марта.
+
+    Возвращает ``{"use": "feb28"|"mar1", "kin_date": (м, д), "time_known": bool, "after_noon": bool|None}``.
+    """
+    if rule not in FEB29_RULES:
+        raise ValueError(f"feb29_rule: одно из {FEB29_RULES}")
+    time_known = hour is not None
+    after_noon = (hour * 60 + (minute or 0)) >= 720 if time_known else None
+    if rule == "feb28":
+        use = "feb28"
+    elif rule == "mar1":
+        use = "mar1"
+    else:
+        use = "mar1" if after_noon else "feb28"
+    return {"use": use, "kin_date": (3, 1) if use == "mar1" else (2, 28),
+            "time_known": time_known, "after_noon": after_noon}
+
+
+def dreamspell(y: int, m: int, d: int, kin_date: tuple[int, int] | None = None) -> dict[str, Any]:
+    """Полный расчёт Dreamspell для григорианской даты.
+
+    ``kin_date`` — (месяц, день), по которым считать кин, если он отличается от самой даты
+    (только для 29.02: (2, 28) или (3, 1), см. ``feb29_kin_date``). Дата «13 Лун» всегда по самой дате.
+    """
+    km, kd = kin_date if kin_date else (m, d)
+    kin = dreamspell_kin(y, km, kd)
     t, s = tone_of(kin), seal_of(kin)
     color = _COLOR_BY_MOD4[s % 4]
     seal, tone = SEALS[s], TONES[t]
@@ -571,7 +615,7 @@ def dreamspell(y: int, m: int, d: int) -> dict[str, Any]:
         "thirteen_moon": thirteen_moon_date(y, m, d),
         "affirmation_en": affirmation_en(kin),
         "year_code": dreamspell_year_code(y),
-        "month_code": DS_MONTH_CODES[m],
+        "month_code": DS_MONTH_CODES[km],
     }
 
 
@@ -659,6 +703,9 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
       * ``input_calendar`` — "gregorian" (по умолчанию) или "julian" (для исторических дат;
         Dreamspell тогда считается по пересчитанной григорианской дате).
       * ``primary`` — "dreamspell" (по умолчанию) или "classic": какая система идёт в сводку первой.
+      * ``feb29_rule`` — только для рождения 29 февраля в Dreamspell: "noon" (по умолчанию, официальное
+        правило Фонда: до полудня → кин 28.02, после полудня → кин 01.03), "feb28" (всегда 28.02, как
+        виджет lawoftime.org/decode и 13moon.com) или "mar1".
     """
     correlation = _resolve_correlation(options.get("correlation"))
     input_calendar = str(options.get("input_calendar", "gregorian")).lower()
@@ -667,6 +714,9 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
     primary = str(options.get("primary", "dreamspell")).lower()
     if primary not in ("dreamspell", "classic"):
         raise ValueError("primary: 'dreamspell' или 'classic'")
+    feb29_rule = str(options.get("feb29_rule", "noon")).lower()
+    if feb29_rule not in FEB29_RULES:
+        raise ValueError(f"feb29_rule: одно из {FEB29_RULES}")
 
     warnings: list[str] = []
     steps: list[str] = []
@@ -681,7 +731,8 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
         gy, gm, gd = b.year, b.month, b.day
         jdn = gregorian_to_jdn(gy, gm, gd)
 
-    if b.has_time:
+    is_feb29 = (gm, gd) == (2, 29)
+    if b.has_time and not is_feb29:
         warnings.append("Время рождения не используется: день цолькина определяется гражданской датой "
                         "(местная полночь — граница дня). При рождении около полуночи проверьте дату.")
     if gy < 1582 or (gy == 1582 and (gm, gd) < (10, 15)):
@@ -689,14 +740,37 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
                         "пролептическому григорианскому календарю — это экстраполяция, а не практика системы.")
 
     # --- Dreamspell ---
-    ds = dreamspell(gy, gm, gd)
+    feb29: dict[str, Any] | None = None
+    kin_m, kin_d = gm, gd
+    if is_feb29:
+        f = feb29_kin_date(feb29_rule, b.hour, b.minute)
+        kin_m, kin_d = f["kin_date"]
+        k28, k01 = dreamspell_kin(gy, 2, 28), dreamspell_kin(gy, 3, 1)
+        feb29 = {"rule": feb29_rule, "used": f["use"], "time_known": f["time_known"],
+                 "after_noon": f["after_noon"], "kin_if_before_noon": k28, "kin_if_after_noon": k01,
+                 "source": "lawoftime.org/decode: до полудня местного времени — 28.02, после полудня — 01.03"}
+    ds = dreamspell(gy, gm, gd, kin_date=(kin_m, kin_d))
+    if feb29 is not None:
+        ds["feb29"] = feb29
     tm = ds["thirteen_moon"]
     y0 = tm["year_start"]
-    off = dreamspell_day_offset(gm, gd)
-    if gm == 2 and gd == 29:
-        warnings.append("29 февраля = «0.0 Хунаб Ку»: в 13-лунном календаре этот день вне лун и недель, "
-                        "кин не продвигается — принят кин 28 февраля (как в официальном калькуляторе "
-                        "Фонда Закона Времени). Классический счёт майя 29 февраля считает обычным днём.")
+    off = dreamspell_day_offset(kin_m, kin_d)
+    if is_feb29:
+        used_txt = "28 февраля" if feb29["used"] == "feb28" else "1 марта"
+        if feb29_rule == "noon" and not feb29["time_known"]:
+            why = ("время рождения неизвестно, поэтому взят кин 28.02 (так считают виджет lawoftime.org/decode "
+                   f"и 13moon.com); если рождение было после полудня — Кин {feb29['kin_if_after_noon']} (01.03)")
+        elif feb29_rule == "noon":
+            why = (f"рождение {'после' if feb29['after_noon'] else 'до'} полудня местного времени → кин {used_txt}"
+                   + (" (ровно 12:00 — граница, считаем «после полудня»; проверьте время)"
+                      if (b.hour, b.minute or 0) == (12, 0) else ""))
+        else:
+            why = f"по опции feb29_rule='{feb29_rule}' взят кин {used_txt}"
+        warnings.append("29 февраля = «0.0 Хунаб Ку»: в 13-лунном календаре этот день вне лун и недель и своего "
+                        "кина не имеет. Официальное правило Фонда Закона Времени: до полудня местного времени — "
+                        f"кин 28.02 (Кин {feb29['kin_if_before_noon']}), после полудня — кин 01.03 "
+                        f"(Кин {feb29['kin_if_after_noon']}). Здесь: {why}. "
+                        "Классический счёт майя 29 февраля считает обычным днём.")
     if tm["is_day_out_of_time"]:
         warnings.append("25 июля — «День вне времени»: вне лун и недель, но собственный кин у дня есть.")
 
@@ -709,10 +783,11 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
     steps.append(f"Кин 26.07.{y0} (Носитель года) = (34 − 1 + 105·({y0} − 1987)) mod 260 + 1 = "
                  f"({raw}) mod 260 + 1 = {bearer} — {tm['year_bearer']['name_ru']}.")
     steps.append(f"Дней от 26.07.{y0} до даты (без 29 февраля) = {off}"
-                 + (" (29.02 приравнено к 28.02)" if (gm, gd) == (2, 29) else "") + ".")
+                 + ((" (29.02 приравнено к 28.02)" if kin_m == 2 else " (29.02 приравнено к 01.03)")
+                    if is_feb29 else "") + ".")
     steps.append(f"Кин = ({bearer} − 1 + {off}) mod 260 + 1 = {ds['kin']}.")
     yc, mc = ds["year_code"], ds["month_code"]
-    dd = 28 if (gm, gd) == (2, 29) else gd
+    dd = kin_d
     s = (yc + mc + dd) % 260
     steps.append(f"Проверка по таблице кодов: код года {gy} = {yc}, код месяца = {mc}, число = {dd}; "
                  f"{yc} + {mc} + {dd} = {yc + mc + dd} → mod 260 = {s if s else 260}.")
@@ -726,7 +801,8 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
                  f"Оккультный (261 − кин) → Кин {o['occult']['kin']} {o['occult']['name_ru']}.")
     w = ds["wavespell"]
     steps.append(f"Волновой модуль № {w['number']} (кины {w['first_kin']}–{w['last_kin']}): {w['name_ru']}, "
-                 f"позиция {w['position']}; замок № {ds['castle']['number']}: {ds['castle']['ru']}; "
+                 f"позиция {w['position']}; замок № {ds['castle']['number']}: {ds['castle']['ru']} "
+                 f"({ds['castle']['court_ru']}); "
                  f"земная семья: {ds['earth_family']['ru']}; ПГА: {'да' if ds['is_gap'] else 'нет'}.")
     steps.append(f"Дата 13 Лун: {tm['label_ru']}; год {tm['year_span']}"
                  + (f" ({tm['ns']})." if tm["ns"] else "."))
@@ -774,8 +850,10 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
         "default_system": primary,
         "inputs_used": {
             "date": f"{b.year:04d}-{b.month:02d}-{b.day:02d}", "input_calendar": input_calendar,
-            "gregorian_date": f"{gy:04d}-{gm:02d}-{gd:02d}", "jdn": jdn, "time_used": False,
+            "gregorian_date": f"{gy:04d}-{gm:02d}-{gd:02d}", "jdn": jdn,
+            "time_used": bool(is_feb29 and feb29_rule == "noon" and b.has_time),
             "place_used": False, "correlation": correlation,
+            "feb29_rule": feb29_rule if is_feb29 else None,
         },
         "warnings": warnings,
         "summary": {"primary": ds_summary if primary == "dreamspell" else cl_summary,

@@ -205,26 +205,31 @@ DECOZ_SAMPLES = [
     ("Vincent Michael Tarriano", (1988, 1, 8), "Vince Tarriano",
      dict(exp="72/9", soul="19/10/1", pers="17/8", lp="17/8", mat=8, rt=5, bal=1, hp=[5, 9], kl=[7], ss=8,
           ch=[7, 0, 7, 7], pin=[9, 7, 7, 9], ages=[0, 28, 37, 46], per=[1, 8, 8],
-          br=(0, 1, 7), minor=("14/5", "13/4", "10/1"))),
+          br=(0, 1, 7), minor=("14/5", "13/4", "10/1"),
+          planes=("14/5", "29/11", "55/10/1", "10/1"))),   # Mental 29/11: мастер-11 в плане сохраняется
     # https://www.worldnumerology.com/numerology-app/sample-readings-new/personality-profile-sample-wn-app.pdf
     ("Jonathan Livingston Seagull", (1991, 7, 25), "Jonathan Seagull",
      dict(exp="22", soul="23/5", pers="17/8", lp="16/7", mat=2, rt=9, bal=5, hp=[1], kl=[], ss=9,
           ch=[0, 5, 5, 5], pin=[5, 9, 5, 9], ages=[0, 29, 38, 47], per=[7, 7, 2],
-          br=(0, 3, 3), minor=("16/7", "17/8", "8"))),
+          br=(0, 3, 3), minor=("16/7", "17/8", "8"),
+          planes=("5", "55/10/1", "36/9", "7"))),
     # https://www.worldnumerology.com/pdf-readings-wn-collection/ultimate-numerology-reading.pdf
     ("Kathleen Karen Johnson", (1990, 6, 3), "Kathy Johnson",
      dict(exp="31/4", soul="20/2", pers="11", lp="10/1", mat=5, rt=7, bal=5, hp=[5], kl=[4, 7], ss=7,
           ch=[3, 2, 1, 5], pin=[9, 4, 4, 7], ages=[0, 35, 44, 53], per=[6, 3, 1],
-          br=(2, 3, 0), minor=("7", "11", "5"))),
+          br=(2, 3, 0), minor=("7", "11", "5"),
+          planes=("15/6", "42/6", "24/6", "4"))),
     # https://www.worldnumerology.com/pdf-sample-reports/numerology-personality-profile-forecast-report.pdf
-    ("Markus Angel Dunvale", (1977, 3, 3), None,
+    ("Markus Angel Dunvale", (1977, 3, 3), "Markus Dunvale",
      dict(exp="12/3", soul="19/10/1", pers="20/2", lp="12/3", mat=6, rt=5, bal=9, hp=[1, 3, 5], kl=[6, 8], ss=7,
-          ch=[0, 3, 3, 3], pin=[6, 9, 6, 9], ages=[0, 33, 42, 51], per=[3, 3, 6], br=(0, 0, 1), minor=None)),
+          ch=[0, 3, 3, 3], pin=[6, 9, 6, 9], ages=[0, 33, 42, 51], per=[3, 3, 6], br=(0, 0, 1),
+          minor=("9", "13/4", "14/5"), planes=("18/9", "26/8", "10/1", "12/3"))),
     # https://www.worldnumerology.com/member-report-samples/ultimate-numerology-report.pdf
     ("Anthony Joseph Mercier", (1989, 5, 18), "Anthony Mercier",
      dict(exp="16/7", soul="17/8", pers="17/8", lp="23/5", mat=3, rt=7, bal=6, hp=[5], kl=[], ss=9,
           ch=[4, 0, 4, 4], pin=[5, 9, 5, 5], ages=[0, 31, 40, 49], per=[5, 9, 9],
-          br=(4, 2, 0), minor=("15/6", "6", None))),
+          br=(4, 2, 0), minor=("15/6", "6", "9"),
+          planes=("19/10/1", "35/8", "42/6", "10/1"))),
 ]
 
 
@@ -253,6 +258,31 @@ def test_decoz_software_samples(name, ymd, short, exp):
         for key, want in zip(("expression", "soul_urge", "personality"), exp["minor"]):
             if want is not None:
                 assert mn[key]["notation"] == want
+    planes = nn["planes_of_expression"]
+    assert tuple(planes[k]["notation"] for k in ("physical", "mental", "emotional", "intuitive")) == exp["planes"]
+
+
+def test_decoz_app_sample_mercier_1981():
+    # Приложение Декоза, образец «Sample Personality Profile»: Anthony Joseph Mercier, 12.10.1981
+    # https://www.worldnumerology.com/numerology-readings/sample-readings/sample-numerology-profile.pdf
+    r = calc("Anthony Joseph Mercier", 1981, 10, 12, current_name="Anthony Mercier")
+    dn, nn, br = r["date_numbers"], r["name_numbers"], r["bridges"]
+    assert dn["life_path"]["notation"] == "5" and dn["birthday"]["notation"] == "12/3"
+    assert [c["value"] for c in dn["challenges"]] == [2, 2, 0, 0]
+    assert [p["value"] for p in dn["period_cycles"]] == [1, 3, 1]
+    assert [p["value"] for p in dn["pinnacles"]] == [4, 4, 8, 2]
+    assert (nn["expression"]["notation"], nn["soul_urge"]["notation"], nn["personality"]["notation"]) == (
+        "16/7", "17/8", "17/8")
+    assert (nn["rational_thought"]["value"], nn["maturity"]["value"], nn["balance"]["value"]) == (1, 3, 6)
+    assert (br["life_path_birthday"], br["life_path_expression"], br["soul_personality"]) == (2, 2, 0)
+    assert nn["hidden_passion"]["values"] == [5] and nn["subconscious_self"] == 9
+    assert nn["cornerstone"]["letter"] == "A"
+    pl = nn["planes_of_expression"]
+    # приложение пишет Physical 10/1 (а отчёт pdf6 для того же имени — 19/10/1): однозначный итог один
+    assert pl["physical"]["value"] == 1
+    assert (pl["mental"]["notation"], pl["emotional"]["notation"], pl["intuitive"]["notation"]) == (
+        "35/8", "42/6", "10/1")
+    assert nn["minor"]["expression"]["notation"] == "15/6" and nn["minor"]["soul_urge"]["notation"] == "6"
 
 
 def test_decoz_planes_of_expression():
@@ -356,6 +386,31 @@ def test_pushkin_soul_numeroscop():
     assert analyze_name("Пушкин Александр Сергеевич")["soul_urge"]["chain"] == [13, 4]
 
 
+def test_name_order_two_parts_and_dropped_letters():
+    # Личные имена с «фамильным» окончанием (‑ИНА, ‑ИН, ‑ЕВ) не должны приниматься за фамилию
+    for name, given in [("Ирина Петрова", "ИРИНА"), ("Петрова Ирина", "ИРИНА"), ("Лев Толстой", "ЛЕВ"),
+                        ("Екатерина Смирнова", "ЕКАТЕРИНА"), ("Валентин Петров", "ВАЛЕНТИН")]:
+        nn = analyze_name(name)
+        assert nn["given_name"] == given, name
+        assert not any("Порядок" in w for w in nn["warnings"]), name
+    # Буквы вне таблицы (украинская І) не исчезают молча — есть предупреждение
+    nn = analyze_name("Олексій Петренко")
+    assert any("'І'" in w for w in nn["warnings"])
+    # Ł не разлагается NFKD — сводится к L явно (⚠ соглашение модуля, как и снятие диакритики)
+    assert analyze_name("Łukasz Nowak")["name_used"] == "LUKASZ NOWAK"
+    # дефис склеивает части: «Анна-Мария» — одна часть, один инициал
+    nn = analyze_name("Анна-Мария Иванова")
+    assert [p["part"] for p in nn["parts"]] == ["АННАМАРИЯ", "ИВАНОВА"] and nn["balance"]["initials"] == ["А", "И"]
+
+
+def test_galactica_pugacheva_e_vs_yo():
+    # galactica.ru урок 4: «Пугачёва» (Ё=7) → Экспрессия 9; урок 21 (https://galactica.ru/numero/lessons/21)
+    # перечисляет «Алла Борисовна Пугачева» среди Экспрессии 8 — это вариант с Е=6 (33 → 6 у galactica)
+    assert analyze_name("Алла Борисовна Пугачева")["expression"]["value"] == 8
+    assert analyze_name("Алла Борисовна Пугачева", masters=(11, 22), part_masters=(11, 22))["expression"][
+        "chain"] == [8]
+
+
 def test_balance_letter_count_galactica():
     # https://galactica.ru/numero/lessons/23 : «Андрей Вадимович Макаревич» 6 + 9 + 9 = 24 → 6
     nn = analyze_name("Андрей Вадимович Макаревич")
@@ -380,6 +435,14 @@ def test_chaldean_cheiro(name, words, total):
     cn = analyze_name(name, system="chaldean")["chaldean_name_number"]
     assert [(w["compound"], w["single"]) for w in cn["words"]] == words
     assert cn["chain"] == total
+
+
+def test_chaldean_table_matches_tarot_loshu():
+    # Одна и та же таблица Кейро используется в модуле 12 (calculators/tarot_loshu.py)
+    tl = pytest.importorskip("calculators.tarot_loshu")
+    assert tl.CHALDEAN == LATIN_CHALDEAN
+    assert LATIN_CHALDEAN == dict(A=1, B=2, C=3, D=4, E=5, F=8, G=3, H=5, I=1, J=1, K=2, L=3, M=4, N=5, O=7,
+                                  P=8, Q=1, R=2, S=3, T=4, U=6, V=6, W=6, X=5, Y=1, Z=7)
 
 
 def test_chaldean_cyrillic_is_transliterated():
@@ -433,6 +496,15 @@ def test_T2_petrov():
     assert r["name_numbers"]["given_name"] == "ДМИТРИЙ"
     # Й — согласная: в «Дмитрий» гласные только И, И
     assert r["name_numbers"]["parts"][1]["vowel_sum"] == 2
+    nn = r["name_numbers"]
+    assert c["periods"] == [2, 4, 22] and [p["age_from"] for p in dn["period_cycles"]] == [0, 35, 62]
+    assert nn["karmic_lessons"] == [] and nn["hidden_passion"] == {"values": [7], "count": 4}
+    assert nn["balance"]["chain"] == [20, 2] and nn["rational_thought"]["chain"] == [29, 11, 2]
+    assert (nn["cornerstone"]["letter"], nn["capstone"]["letter"], nn["first_vowel"]["letter"]) == ("Д", "Й", "И")
+    assert r["bridges"] == {"life_path_birthday": 3, "life_path_expression": 8, "soul_personality": 0}
+    pc = r["personal_cycles"]                      # 2 + 4 + 1 = 7; 7 + 10 = 17 → 8; 8 + 14 = 22 → 4
+    assert (pc["personal_year"]["value"], pc["personal_month"]["value"], pc["personal_day"]["value"]) == (7, 8, 4)
+    assert r["karmic_debts"] == []
 
 
 def test_T3_smirnova_feb29():
@@ -448,6 +520,15 @@ def test_T3_smirnova_feb29():
     assert c["pinnacles"] == [4, 8, 3, 8] and c["challenges"] == [0, 4, 4, 4]
     assert [p["sum"] for p in r["name_numbers"]["parts"]] == [33, 22, 53]
     assert (c["exp"], c["exp_compound"], c["soul"], c["pers"]) == (9, 63, 6, 3)
+    nn = r["name_numbers"]
+    assert c["maturity"] == 1 and dn["attitude"]["chain"] == [13, 4]
+    assert c["periods"] == [2, 11, 6] and [p["age_from"] for p in dn["period_cycles"]] == [0, 35, 62]
+    assert nn["karmic_lessons"] == [2, 8] and nn["hidden_passion"] == {"values": [1], "count": 9}
+    assert nn["balance"]["value"] == 7 and nn["rational_thought"]["chain"] == [51, 6]
+    assert r["bridges"] == {"life_path_birthday": 1, "life_path_expression": 8, "soul_personality": 3}
+    pc0 = r["personal_cycles"]                     # 2 + 11 + 1 = 14 → 5; 15 → 6; 20 → 2
+    assert (pc0["personal_year"]["value"], pc0["personal_month"]["value"], pc0["personal_day"]["value"]) == (5, 6, 2)
+    assert r["karmic_debts"] == [{"number": 19, "where": "life_path"}]
     # граница «birthday»: 28.02.2025 — ещё год 2024
     pc = calc("Смирнова Мария Александровна", 2004, 2, 29, on_date="2025-02-28",
               personal_year_boundary="birthday")
@@ -472,14 +553,30 @@ def test_T4_einstein_latin_and_cyrillic():
     assert (c["exp"], c["soul"], c["pers"], c["maturity"]) == (9, 7, 11, 6)
     assert nn["karmic_lessons"] == [4, 6, 7, 8] and nn["hidden_passion"]["values"] == [5]
     assert nn["rational_thought"]["chain"] == [36, 9] and nn["balance"]["value"] == 6
+    assert dn["attitude"]["value"] == 8 and c["periods"] == [3, 5, 7]
+    assert {k: v["notation"] for k, v in nn["planes_of_expression"].items()} == {
+        "physical": "15/6", "mental": "14/5", "emotional": "34/7", "intuitive": "0"}
+    assert r["bridges"] == {"life_path_birthday": 1, "life_path_expression": 3, "soul_personality": 5}
+    pc = r["personal_cycles"]                      # 3 + 5 + 1 = 9; 19 → 1; 15 → 6
+    assert (pc["personal_year"]["value"], pc["personal_month"]["value"], pc["personal_day"]["value"]) == (9, 1, 6)
+    assert r["karmic_debts"] == [{"number": 14, "where": "birthday"}]
     # кириллица (первый вариант имени): Эйнштейн 36/9 + Альберт 27/9 = 18/9
     rc = calc(name, 1879, 3, 14)
     ncy = rc["name_numbers"]
     assert ncy["name_used"] == "ЭЙНШТЕЙН АЛЬБЕРТ" and ncy["given_name"] == "АЛЬБЕРТ"
     assert (ncy["expression"]["value"], ncy["soul_urge"]["value"], ncy["personality"]["value"]) == (9, 8, 1)
+    assert [p["sum"] for p in ncy["parts"]] == [36, 27] and ncy["karmic_lessons"] == [5, 7]
+    assert ncy["balance"]["value"] == 5 and ncy["rational_thought"]["chain"] == [41, 5]
     # халдейская: Albert 17/8 + Einstein 29/2 → 10/1
-    ch = calc(name, 1879, 3, 14, alphabet="latin", system="chaldean")["name_numbers"]["chaldean_name_number"]
-    assert ch["notation"] == "10/1"
+    rch = calc(name, 1879, 3, 14, alphabet="latin", system="chaldean")
+    ch = rch["name_numbers"]["chaldean_name_number"]
+    assert ch["notation"] == "10/1" and ch["letters_total_chain"] == [46, 10, 1]
+    assert [(w["compound"], w["single"]) for w in ch["words"]] == [(17, 8), (29, 2)]
+    # Экспрессия/Душа/Личность по таблице Кейро (⚠ расширение современных сайтов): 10/1, 6 + 12/3 = 9, 11/2 + 17/8 = 10/1
+    nch = rch["name_numbers"]
+    assert (nch["expression"]["notation"], nch["soul_urge"]["notation"], nch["personality"]["notation"]) == (
+        "10/1", "9", "10/1")
+    assert rch["date_numbers"]["chaldean_birth_number"]["notation"] == "14/5"
 
 
 # ---------------------------------------------------------------------------

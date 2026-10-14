@@ -110,6 +110,16 @@ _PATRONYMIC_RE = re.compile(r"(ОВИЧ|ЕВИЧ|ЬИЧ|ИЧ|ОВНА|ЕВНА|�
 _RU_SURNAME_RE = re.compile(
     r"(ОВ|ЕВ|ЁВ|ИН|ЫН|ОВА|ЕВА|ЁВА|ИНА|ЫНА|СКИЙ|ЦКИЙ|СКАЯ|ЦКАЯ|ОЙ|ИХ|ЫХ|ЕНКО|УК|ЮК|ЧУК|ЕЦ)$"
 )
+#: Частые личные имена, которые по окончанию похожи на фамилию (Ирина, Екатерина, Лев…).
+#: Без этого списка «Ирина Петрова» распознавалась как «Фамилия Имя».
+_RU_GIVEN_LOOKALIKES = frozenset((
+    "ЛЕВ", "ЯКОВ", "КОНСТАНТИН", "ВАЛЕНТИН", "ВЕНИАМИН", "ЕВА",
+    "ИРИНА", "МАРИНА", "АЛИНА", "ПОЛИНА", "КРИСТИНА", "КАРИНА", "АРИНА", "ГАЛИНА", "НИНА",
+    "ДИНА", "ВАЛЕНТИНА", "РЕГИНА", "АНГЕЛИНА", "КАРОЛИНА", "ЕКАТЕРИНА", "ЯНИНА", "ЭВЕЛИНА",
+    "ЗАРИНА", "ДАРИНА", "АЛЕВТИНА", "ЛИНА", "ИНА", "МАЛЬВИНА", "ЗИНА",
+))
+#: Латинские буквы, которые Unicode-разложение (NFKD) не сводит к базовой: Ł, Đ, Ħ, ı.
+_LATIN_EXTRA = {"Ł": "L", "ł": "L", "Đ": "D", "đ": "D", "Ħ": "H", "ħ": "H", "ı": "I", "Ŧ": "T", "ŧ": "T"}
 
 
 # ---------------------------------------------------------------------------
@@ -145,7 +155,12 @@ def to_single(n: int) -> int:
 
 
 def notation(chain: list[int]) -> str:
-    """Запись в стиле Декоза: «19/10/1», «16/7», «22», «8/8» для дня рождения."""
+    """Запись цепочки через «/»: «19/10/1», «16/7», «22».
+
+    Однозначное число записывается одной цифрой («8»). Программа Декоза пишет день
+    рождения как «8/8» и пропускает промежуточное мастер-число в сведённых числах
+    («29/2» для Зрелости). Значения от этого не меняются.
+    """
     if len(chain) == 1:
         return str(chain[0])
     return "/".join(str(x) for x in chain)
@@ -358,6 +373,7 @@ def pick_name_variant(name: str, alphabet: str) -> tuple[str, list[str]]:
 def _strip_latin_diacritics(s: str) -> str:
     s = s.replace("ß", "SS").replace("ẞ", "SS").replace("Æ", "AE").replace("æ", "AE")
     s = s.replace("Ø", "O").replace("ø", "O").replace("Œ", "OE").replace("œ", "OE")
+    s = "".join(_LATIN_EXTRA.get(ch, ch) for ch in s)
     out = []
     for ch in s:
         if _is_cyrillic(ch):
@@ -374,10 +390,12 @@ def transliterate_icao(text: str) -> str:
 
 
 def split_name(name: str, alphabet: str, yo_as_e: bool = False,
-               ru_signs: str = "consonant") -> list[str]:
+               ru_signs: str = "consonant", dropped: list[str] | None = None) -> list[str]:
     """Разбить имя на части (слова) в верхнем регистре, оставив только буквы алфавита.
 
     Дефис и апостроф склеивают части («Анна-Мария» → «АННАМАРИЯ»).
+    Если передан список ``dropped``, в него складываются отброшенные буквы, которых нет
+    в таблице алфавита (украинские І/Ї/Є/Ґ, латиница внутри кириллического имени и т. п.).
     """
     name = name.replace("-", "").replace("‐", "").replace("'", "").replace("’", "")
     parts: list[str] = []
@@ -388,10 +406,13 @@ def split_name(name: str, alphabet: str, yo_as_e: bool = False,
                 w = w.replace("Ё", "Е")
             if ru_signs == "ignore":
                 w = w.replace("Ъ", "").replace("Ь", "")
-            w = "".join(c for c in w if c in RU_PYTHAGOREAN)
+            table = RU_PYTHAGOREAN
         else:
             w = _strip_latin_diacritics(w)
-            w = "".join(c for c in w if c in LATIN_PYTHAGOREAN)
+            table = LATIN_PYTHAGOREAN
+        if dropped is not None:
+            dropped += [c for c in w if c.isalpha() and c not in table]
+        w = "".join(c for c in w if c in table)
         if w:
             parts.append(w)
     return parts
@@ -477,7 +498,9 @@ def _detect_given_index(parts: list[str], alphabet: str, order: str) -> tuple[in
                      "Укажите name_order или first_name.")
         return 1, "surname_first", warns
     if n == 2:
-        s0, s1 = bool(_RU_SURNAME_RE.search(parts[0])), bool(_RU_SURNAME_RE.search(parts[1]))
+        def surname_like(p: str) -> bool:
+            return bool(_RU_SURNAME_RE.search(p)) and p not in _RU_GIVEN_LOOKALIKES
+        s0, s1 = surname_like(parts[0]), surname_like(parts[1])
         if s1 and not s0:
             return 0, "given_first", warns
         if not (s0 and not s1):
@@ -552,9 +575,15 @@ def analyze_name(name: str, *, alphabet: str = "auto", system: str = "pythagorea
         warnings.append("В имени есть Ё (=7). Если в документе написано Е (=6), результат другой: "
                         "опция yo_as_e=True.")
 
-    parts = split_name(chosen, alpha, yo_as_e=yo_as_e, ru_signs=ru_signs)
+    dropped: list[str] = []
+    parts = split_name(chosen, alpha, yo_as_e=yo_as_e, ru_signs=ru_signs, dropped=dropped)
     if not parts:
         raise ValueError("В имени нет букв выбранного алфавита.")
+    if dropped:
+        warnings.append(
+            f"Буквы {sorted(set(dropped))} не входят в таблицу алфавита «{alpha}» и НЕ учтены. "
+            "Для украинских/белорусских букв (І, Ї, Є, Ґ, Ў) единой таблицы нет (⚠): передайте имя "
+            "так, как оно записано в русском документе, или латиницей, как в загранпаспорте.")
     table = letter_table(alpha, system)
 
     given_idx, order_used, w = _detect_given_index(parts, alpha, name_order)
@@ -631,10 +660,12 @@ def analyze_name(name: str, *, alphabet: str = "auto", system: str = "pythagorea
             "subconscious_self": 9 - len(lessons),
         })
         if alpha == "latin":
+            # Сумма всех букв плана, сведённая с мастер-числами: программа Декоза 2020-х
+            # оставляет 11 (Tarriano: Mental 29/11). У Декоза 2003 мастер-сумм в планах нет.
             planes = {}
             for plane, letters in PLANES_LATIN.items():
                 s = sum(table[c] for p in parts for c in p if c in letters)
-                planes[plane] = _num(reduce_chain(s, ()))
+                planes[plane] = _num(reduce_chain(s, masters))
             res["planes_of_expression"] = planes
     else:
         # Кейро: число имени = сумма однозначных чисел слов («Lloyd George» → 9 + 7 = 16/7)

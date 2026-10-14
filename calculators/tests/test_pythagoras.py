@@ -75,8 +75,9 @@ def test_t4_14_03_1879_einstein():
 
 # ---------------------------------------------------------------------------
 # Первоисточник: А. Ф. Александров, «Дата рождения — ключ к пониманию человека»
-# https://royallib.com/read/aleksandrov_aleksandr/data_rogdeniya___klyuch_k_ponimaniyu_cheloveka.html
-# (тот же пример: https://thelib.ru/books/aleksandr_fedorovich_aleksandrov/cifrovoy_analiz_dat_rozhdeniya_i_sobytiy_kniga_1_psihomatrica_i_ee_svoystva-read-2.html)
+# https://litresp.ru/chitat/ru/%D0%90/aleksandrov-aleksandr-fedorovich/data-rozhdeniya--klyuch-k-ponimaniyu-cheloveka/4
+# (копия на royallib.com содержит только предисловие; тот же пример 15 4 1972:
+#  https://thelib.ru/books/aleksandr_fedorovich_aleksandrov/cifrovoy_analiz_dat_rozhdeniya_i_sobytiy_kniga_1_psihomatrica_i_ee_svoystva-read-2.html)
 # ---------------------------------------------------------------------------
 
 def test_alexandrov_15_04_1972():

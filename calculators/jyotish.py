@@ -139,7 +139,10 @@ SOUTH_INDIAN_CELLS = {11: (0, 0), 0: (0, 1), 1: (0, 2), 2: (0, 3), 3: (1, 3), 4:
                       5: (3, 3), 6: (3, 2), 7: (3, 1), 8: (3, 0), 9: (2, 0), 10: (1, 0)}
 
 AYANAMSA_LABELS = {"lahiri": "Lahiri (Chitrapaksha)", "raman": "B.V. Raman",
-                   "krishnamurti": "Krishnamurti (KP, старая)", "fagan_bradley": "Fagan-Bradley (западная сидерическая)"}
+                   "krishnamurti": "Krishnamurti (KP, старая)", "fagan_bradley": "Fagan-Bradley (западная сидерическая)",
+                   "true_citra": "True Chitrapaksha (Спика ровно 0° Весов)",
+                   "krishnamurti_vp291": "Krishnamurti (KP, новая, VP291)",
+                   "yukteshwar": "Sri Yukteshwar"}
 
 
 # ---------------------------------------------------------------------------
@@ -575,7 +578,8 @@ def calculate(b: BirthInput, ayanamsa: str = "lahiri", node: str = "mean",
     """Ведическая натальная карта (D1, D9, D10), панчанга и Вимшоттари-даша.
 
     Параметры:
-      ayanamsa: 'lahiri' (по умолчанию) | 'raman' | 'krishnamurti' | 'fagan_bradley'
+      ayanamsa: 'lahiri' (по умолчанию) | 'raman' | 'krishnamurti' | 'krishnamurti_vp291' |
+                'true_citra' | 'yukteshwar' | 'fagan_bradley'
       node: 'mean' (по умолчанию, средний узел) | 'true' (истинный)
       dasha_year: 'gregorian' (365.2425, по умолчанию) | 'julian' (365.25) | 'tropical' |
                   'sidereal' (365.256363) | 'savana' (360) | 'true_solar' (как JHora)
@@ -588,8 +592,9 @@ def calculate(b: BirthInput, ayanamsa: str = "lahiri", node: str = "mean",
                   'apparent' (верхний край + рефракция, гражданский восход)
       include_outer: добавить Уран/Нептун/Плутон (в классический анализ не входят)
     """
-    if ayanamsa not in eph.AYANAMSAS:
-        raise ValueError(f"Аянамша {ayanamsa!r} не поддерживается: {list(eph.AYANAMSAS)}")
+    if ayanamsa not in eph.AYANAMSAS or ayanamsa not in AYANAMSA_LABELS:
+        raise ValueError(f"Аянамша {ayanamsa!r} не поддерживается: "
+                         f"{[k for k in eph.AYANAMSAS if k in AYANAMSA_LABELS]}")
     if node not in ("mean", "true"):
         raise ValueError("node: 'mean' или 'true'")
     if bhava_system not in ("sripati", "placidus", "equal"):
@@ -621,7 +626,8 @@ def calculate(b: BirthInput, ayanamsa: str = "lahiri", node: str = "mean",
     if not has_place:
         warnings.append("Нет координат места: Лагна, дома и восход (вара) не определяются.")
 
-    steps.append(f"1. Местное время {nt.local:%Y-%m-%d %H:%M} (смещение {off:+.4f} ч, источник {nt.offset_source}) → "
+    local_fmt = "%Y-%m-%d %H:%M:%S" if nt.local.second else "%Y-%m-%d %H:%M"
+    steps.append(f"1. Местное время {nt.local.strftime(local_fmt)} (смещение {off:+.4f} ч, источник {nt.offset_source}) → "
                  f"UT {nt.utc:%Y-%m-%d %H:%M:%S}, JD(UT) = {jd:.6f}.")
 
     # --- аянамша
@@ -629,12 +635,9 @@ def calculate(b: BirthInput, ayanamsa: str = "lahiri", node: str = "mean",
     trop = eph.planet_positions(jd, sidereal=None, node=node)
     sid = eph.planet_positions(jd, sidereal=ayanamsa, node=node)
     ayan_true = (trop["sun"]["lon"] - sid["sun"]["lon"]) % 360.0
-    comparison = {}
-    for key in ("lahiri", "raman", "krishnamurti"):
-        swe.set_sid_mode(eph.AYANAMSAS[key])
-        comparison[key] = {"mean": round(swe.get_ayanamsa_ex_ut(jd, swe.FLG_SWIEPH | swe.FLG_NONUT)[1], 6),
-                           "true": round(swe.get_ayanamsa_ex_ut(jd, swe.FLG_SWIEPH)[1], 6)}
-    swe.set_sid_mode(eph.AYANAMSAS[ayanamsa])
+    comparison = {key: {"mean": round(eph.ayanamsa(jd, key), 6), "true": round(eph.ayanamsa(jd, key, true=True), 6)}
+                  for key in ("lahiri", "raman", "krishnamurti")}
+    swe.set_sid_mode(eph.AYANAMSAS[ayanamsa])   # eph.ayanamsa меняет глобальный режим — вернуть выбранный
     steps.append(f"2. Аянамша {AYANAMSA_LABELS[ayanamsa]}: средняя {dms(ayan_mean)}, истинная (с нутацией) "
                  f"{dms(ayan_true)}. Сидерическая долгота = тропическая − истинная аянамша.")
 
@@ -793,7 +796,11 @@ def calculate(b: BirthInput, ayanamsa: str = "lahiri", node: str = "mean",
         "variant": variant,
         "inputs_used": {
             "date": f"{b.year:04d}-{b.month:02d}-{b.day:02d}",
-            "time": f"{b_calc.hour:02d}:{(b_calc.minute or 0):02d}" + ("" if time_known else " (подставлено)"),
+            "date_julian_input": ("{:04d}-{:02d}-{:02d}".format(*b.julian_date)
+                                  if getattr(b, "julian_date", None) else None),
+            "time": f"{b_calc.hour:02d}:{(b_calc.minute or 0):02d}"
+                    + (f":{b_calc.second:02d}" if getattr(b_calc, "second", 0) else "")
+                    + ("" if time_known else " (подставлено)"),
             "tz": b_calc.tz, "lat": b_calc.lat, "lon": b_calc.lon, "place": b.place,
             "utc": nt.utc.isoformat(), "jd_ut": round(jd, 6), "utc_offset_hours": round(off, 6),
             "offset_source": nt.offset_source,

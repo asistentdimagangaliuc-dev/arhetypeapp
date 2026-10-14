@@ -3,8 +3,12 @@
 Независимые эталонные векторы:
 * Таблица интертипных отношений 16×16 — Wikisocion:
   https://wikisocion.github.io/content/intertype.html
+* Та же таблица, независимый второй эталон (В. Ляшкявичюс, ученик Аугустинавичюте) — Cyclowiki:
+  https://cyclowiki.org/wiki/Шаблон:Таблица_интертипных_отношений
 * Список отношений ИЛЭ (благодетель ЛСЭ, ревизор ЭИИ и т.д.) — Wikisocion, страница ILE:
   https://wikisocion.github.io/content/ILE.html
+* Отношения внутри клубов и темпераментов — Wikisocion: https://wikisocion.github.io/content/club.html ,
+  https://wikisocion.github.io/content/temperament.html
 * Модель А всех 16 ТИМов (буквы Гуленко) — Wikipedia «Socionics»:
   https://en.wikipedia.org/wiki/Socionics
 * Признаки Рейнина для 16 ТИМов — Wikisocion: https://wikisocion.github.io/content/reinin_dich.html
@@ -107,6 +111,57 @@ def test_relation_table_matches_wikisocion_all_256_cells():
         a, cells = row[0], row[1:]
         for b, cell in zip(WS_ORDER, cells):
             assert mine[a][b] == WS_ABBR[cell], (a, b, cell, mine[a][b])
+
+
+# --- второй, независимый эталон: таблица В. Ляшкявичюса (ученика А. Аугустинавичюте), Cyclowiki
+# https://cyclowiki.org/wiki/Шаблон:Таблица_интертипных_отношений
+# Т тождество, Д дуал, А активация, З зеркало, ро родственные, дел деловые, пД полудуал, м миражные,
+# СЭ суперэго, пп полная противоположность (погашение), квт квазитождество, К конфликт,
+# П/п — заказ (в строке заказчик / подзаказный), Р/р — ревизия (в строке ревизор / подревизный).
+CW_ORDER = "ИЛЭ СЭИ ЭСЭ ЛИИ ЭИЭ ЛСИ СЛЭ ИЭИ СЭЭ ИЛИ ЛИЭ ЭСИ ЛСЭ ЭИИ ИЭЭ СЛИ".split()
+CW_TABLE = """
+ИЛЭ Т Д А З П Р дел м СЭ пп квт К п р ро пД
+СЭИ Д Т З А Р П м дел пп СЭ К квт р п пД ро
+ЭСЭ А З Т Д ро пД п р квт К СЭ пп дел м П Р
+ЛИИ З А Д Т пД ро р п К квт пп СЭ м дел Р П
+ЭИЭ п р ро пД Т Д А З П Р дел м СЭ пп квт К
+ЛСИ р п пД ро Д Т З А Р П м дел пп СЭ К квт
+СЛЭ дел м П Р А З Т Д ро пД п р квт К СЭ пп
+ИЭИ м дел Р П З А Д Т пД ро р п К квт пп СЭ
+СЭЭ СЭ пп квт К п р ро пД Т Д А З П Р дел м
+ИЛИ пп СЭ К квт р п пД ро Д Т З А Р П м дел
+ЛИЭ квт К СЭ пп дел м П Р А З Т Д ро пД п р
+ЭСИ К квт пп СЭ м дел Р П З А Д Т пД ро р п
+ЛСЭ П Р дел м СЭ пп квт К п р ро пД Т Д А З
+ЭИИ Р П м дел пп СЭ К квт р п пД ро Д Т З А
+ИЭЭ ро пД п р квт К СЭ пп дел м П Р А З Т Д
+СЛИ пД ро р п К квт пп СЭ м дел Р П З А Д Т
+"""
+CW_ABBR = {"Т": "identity", "Д": "duality", "А": "activation", "З": "mirror", "ро": "kindred", "дел": "business",
+           "пД": "semi_duality", "м": "mirage", "СЭ": "super_ego", "пп": "extinguishment", "квт": "quasi_identity",
+           "К": "conflict", "П": "benefactor_of", "п": "beneficiary_of", "Р": "supervisor_of", "р": "supervisee_of"}
+
+
+def test_relation_table_matches_cyclowiki_lyashkyavichus_all_256_cells():
+    for row in CW_TABLE.strip().splitlines():
+        a, *cells = row.split()
+        for b, cell in zip(CW_ORDER, cells):
+            assert T.intertype_relation(a, b)["relation"] == CW_ABBR[cell], (a, b, cell)
+
+
+def test_club_and_temperament_internal_relations():
+    # Wikisocion «Club»: внутри клуба — тождество, зеркало, погашение, квазитождество;
+    # Wikisocion «Temperament»: внутри темперамента — тождество, деловые, суперэго, родственные.
+    for field, allowed in (("club", {"identity", "mirror", "extinguishment", "quasi_identity"}),
+                           ("temperament", {"identity", "business", "super_ego", "kindred"})):
+        groups: dict[str, list[str]] = {}
+        for k, t in T.TIMS.items():
+            groups.setdefault(t[field], []).append(k)
+        assert len(groups) == 4 and all(len(v) == 4 for v in groups.values())
+        for members in groups.values():
+            assert {T.intertype_relation(a, b)["relation"] for a in members for b in members} == allowed
+    assert {k for k, t in T.TIMS.items() if t["club"].startswith("Исследователи")} == {"ILE", "ILI", "LIE", "LII"}
+    assert T.TIMS["ILE"]["temperament"].startswith("гибко-маневренный")   # Wikisocion ILE: «EP temperament»
 
 
 def test_ile_relations_from_wikisocion_type_page():
@@ -420,10 +475,34 @@ def test_example_3_invalid_protocol():
     ex3.update({i: "A" for i in T.INSTINCT_FC_ITEMS})
     s = T.score_socionics(ex3)
     assert s["tim"] is None and s.get("invalid_protocol") and s["confidence"]["level"] == "undetermined"
+    assert s["protocol_ok"] is False and s["followup"]["items"] == []
     e = T.score_enneagram(ex3)
     assert e["type"] is None and e["confidence"]["level"] == "undetermined"
-    assert "recommendation" in e and e["followup"]["items"] == []
+    assert e["candidates"] == list(range(1, 10))          # ничья всех девяти, а не «1 или 2»
+    assert "recommendation" in e and e["followup"]["items"] == [] and e["protocol_ok"] is False
     assert e["instincts"]["dominant"] is None
+
+
+def test_mechanical_answers_with_neutral_and_side_bias():
+    base = {i: "A" for i, it in T.SOCIONICS_ITEMS.items() if not it.extra}
+    # один «?» не спасает механический протокол
+    r = T.score_socionics(dict(base, **{"SO-EI-2": "?"}))
+    assert r["tim"] is None and r.get("invalid_protocol") and r["protocol_ok"] is False
+    # 23 «A» + 1 «b»: протокол формально действителен, но перекос сторон → protocol_ok = False
+    r = T.score_socionics(dict(base, **{"SO-EI-2": "b"}))
+    assert r["protocol_ok"] is False and any(f.startswith("Перекос") for f in r["consistency_flags"])
+    assert r["confidence"]["level"] in ("low", "undetermined")
+    # у чистых профилей сторон A и B поровну — флага нет
+    assert T.score_socionics(_soc_answers("ISTj"))["protocol_ok"] is True
+
+
+def test_low_core_anchor_downgrades_confidence():
+    ans = _ennea_answers(4, 5)
+    assert T.score_enneagram(ans)["confidence"]["level"] == "high"
+    ans["EN-4-1"] = 1           # ключевое утверждение ядра почти отвергнуто
+    r = T.score_enneagram(ans)
+    assert r["type"] == 4 and r["confidence"]["level"] == "medium"
+    assert any("EN-4-1" in f for f in r["consistency_flags"])
 
 
 # ============================ дата рождения: не вычисляется ============================

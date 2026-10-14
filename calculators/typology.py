@@ -796,10 +796,12 @@ def score_socionics(answers: dict[str, Any]) -> dict[str, Any]:
                      + f" | сумма {score:+d} из ±{maxp}, ясность {clarity:.2f} → {pole or '?'} ({resolved_by})")
 
     invalid_protocol = False
+    protocol_ok = True      # False — проблема протокола: агент не называет тип, а предлагает повтор или интервью
     all_answers = [v for k, v in per_item.items() if not SOCIONICS_ITEMS[k].extra]
     if all_answers:
         n_q = sum(1 for s, _ in all_answers if s is None)
         if n_q / len(all_answers) > 0.25:
+            protocol_ok = False
             flags.append(f"Много ответов «?» ({n_q} из {len(all_answers)}) — пользователь не может выбирать, нужен разговор.")
         # «?» нейтрален: 23 ответа «A» и один «?» — такой же механический протокол, как 24 «A».
         decided = [s for s, _ in all_answers if s is not None]
@@ -809,6 +811,7 @@ def score_socionics(answers: dict[str, Any]) -> dict[str, Any]:
             flags.append("Все ответы (кроме «?») на одной стороне (A или B) — признак механического ответа; "
                          "полюса в пунктах чередуются. Протокол недействителен.")
         elif len(decided) >= 12 and max(n_a, len(decided) - n_a) / len(decided) >= 0.8:
+            protocol_ok = False
             # У последовательного респондента сторон A и B поровну (в каждой шкале 3 + 3), см. раздел 3.2.
             flags.append(f"Перекос ответов в одну сторону ({max(n_a, len(decided) - n_a)} из {len(decided)} на стороне "
                          f"{'A' if n_a * 2 > len(decided) else 'B'}) — возможна склонность соглашаться с первым/вторым вариантом.")
@@ -834,6 +837,7 @@ def score_socionics(answers: dict[str, Any]) -> dict[str, Any]:
         "dichotomies": dich,
         "confidence": {"level": level, "min_clarity": round(min_clar, 3)},
         "consistency_flags": flags,
+        "protocol_ok": protocol_ok and not invalid_protocol,
         "warnings": warnings,
     }
 
@@ -1005,6 +1009,7 @@ def score_enneagram(answers: dict[str, Any]) -> dict[str, Any]:
         "computable_from_birth_date": False,
         "scores": raw, "followup_points": fu, "adjusted": adjusted, "ranking": ranking,
         "confidence": {"level": level, "margin": margin, "top_raw": raw[top], "resolved_by": resolved_by},
+        "protocol_ok": not protocol_problem,
     }
     if protocol_problem:
         result["recommendation"] = ("Профиль не дифференцирован: повторите опрос, попросив отвечать о типичном поведении "

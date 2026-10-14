@@ -94,6 +94,34 @@ def test_t3_feb29_hunab_ku():
     assert classic(2004, 3, 1)["tzolkin"]["index_260"] == 63
 
 
+def test_feb29_official_noon_rule():
+    # https://lawoftime.org/decode/ (текст страницы над виджетом): «For Feb 29 Birthdays: If you were born on
+    # February 29 before noon local time, use February 28. If you were born after noon local time, use March 1
+    # to find your galactic signature.» Сам JS-виджет и 13moon.com времени не спрашивают → кин 28.02.
+    # T3 родилась в 08:15 (до полудня) → Кин 111.
+    assert calculate(T3)["dreamspell"]["feb29"]["used"] == "feb28"
+    pm = calculate(BirthInput(2004, 2, 29, 14, 0))
+    assert pm["dreamspell"]["kin"] == 112 == dreamspell_kin(2004, 3, 1)
+    assert pm["dreamspell"]["name_en"] == "Yellow Galactic Human"
+    assert pm["dreamspell"]["thirteen_moon"]["is_hunab_ku"] is True     # дата 13 Лун — всё равно 0.0 Хунаб Ку
+    assert pm["inputs_used"]["time_used"] is True
+    assert calculate(BirthInput(2004, 2, 29, 12, 0))["dreamspell"]["kin"] == 112   # 12:00 — граница → 01.03
+    assert calculate(BirthInput(2004, 2, 29, 11, 59))["dreamspell"]["kin"] == 111
+    # время неизвестно → 28.02 (как виджет и 13moon.com) + альтернатива в предупреждении
+    nt = calculate(BirthInput(2004, 2, 29))
+    assert nt["dreamspell"]["kin"] == 111 and nt["dreamspell"]["feb29"]["kin_if_after_noon"] == 112
+    assert any("Кин 112" in w for w in nt["warnings"])
+    # явные варианты
+    assert calculate(BirthInput(2004, 2, 29, 14, 0), feb29_rule="feb28")["dreamspell"]["kin"] == 111
+    assert calculate(BirthInput(2004, 2, 29, 8, 0), feb29_rule="mar1")["dreamspell"]["kin"] == 112
+    # классический счёт от правила не зависит
+    assert pm["classic"]["tzolkin"]["index_260"] == 62
+    # обычные даты: время не используется
+    assert "feb29" not in calculate(T1)["dreamspell"] and calculate(T1)["inputs_used"]["time_used"] is False
+    with pytest.raises(ValueError):
+        calculate(T3, feb29_rule="midnight")
+
+
 def test_t4_einstein():
     # Dreamspell: Фонд Закона Времени, «Find Who Shares Your Galactic Signature», Kin 260 Yellow Cosmic Sun —
     # Albert Einstein: http://www.lawoftime.org/thirteenmoon/kin/kin260.html
@@ -134,6 +162,15 @@ DECODER_13MOON = {
     (2012, 12, 21): (207, "Self-generation", False),
     (2021, 12, 21): (112, "Intelligence", True),
     (2024, 2, 29): (131, None, False),
+    # Проверка волны 2 (тот же POST на https://www.13moon.com/galactic-signature.php, 14.10.2026):
+    (1955, 4, 12): (209, None, False),             # «Kin 209: Red Magnetic Moon … my own power doubled»
+    (2023, 11, 7): (18, "Death", False),           # «Kin 18: White Overtone Mirror … power of Death»
+    (1988, 2, 28): (251, "Accomplishment", False), # «Kin 251: Blue Self-Existing Monkey»
+    (1988, 2, 29): (251, "Accomplishment", False), # 29.02 без времени = кин 28.02
+    (1985, 7, 25): (83, "Magic", False),           # «Kin 83: Blue Overtone Night» (День вне времени)
+    (1985, 7, 26): (84, None, False),              # «Kin 84: Yellow Rhythmic Seed»
+    (1952, 2, 29): (111, "Abundance", True),       # «Kin 111: Blue Resonant Monkey»
+    (2028, 2, 29): (31, "Self-generation", False), # «Kin 31: Blue Overtone Monkey»
 }
 
 
@@ -279,6 +316,20 @@ def test_tables_consistency():
     # 28 Meditations on the Law of Time (Meditation 5): Gateway = Seed, Moon, Wizard, Storm
     assert earth_family(4)["seals"] == (4, 9, 14, 19)
     assert all(earth_family(seal_of(dreamspell_year_bearer(y)))["key"] == "gateway" for y in range(1900, 2100))
+    # Там же: «the 28th day of the 13th moon is always a two-dot day [Core] … the Day-Out-Of-Time, is always
+    # a three-dot day [Signal]» (https://lawoftime.org/wp-content/uploads/28-Meditations-on-the-Law-of-Time.pdf)
+    for y in range(1900, 2100):
+        assert earth_family(seal_of(dreamspell_kin(y, 7, 24)))["key"] == "core"
+        assert earth_family(seal_of(dreamspell_kin(y, 7, 25)))["key"] == "signal"
+    # Замки и дворы: https://news.law-of-time.ru/blog/2024/08/23/dobro-pozhalovat-v-noosfernoe-pismo-26/ и
+    # выпуски № 22, 24, 27: «Красный Восточный Замок Поворота: Двор Рождения (Кины 1-52)», «Белый Северный Замок
+    # Перехода: Двор Смерти (Кины 53-104)», «Синий Западный Замок Горения: Двор Магии (Кины 105-156)», «Жёлтый
+    # Южный Замок Даяния: Двор Интеллекта (Кины 157-208)», «Зелёный Центральный Замок Чарования: Двор
+    # Синхронизации (Кины 209-260)».
+    from calculators.tzolkin import castle
+    assert [(castle(k)["number"], castle(k)["court_ru"]) for k in (1, 104, 105, 208, 260)] == [
+        (1, "Двор Рождения"), (2, "Двор Смерти"), (3, "Двор Магии"), (4, "Двор Интеллекта"),
+        (5, "Двор Синхронизации")]
 
 
 # ---------------------------------------------------------------------------
@@ -338,6 +389,11 @@ def test_classic_colonial_highland_records():
     # https://sacredroad.org/ — заголовки дневных постов Cholqʼij: «1 Bʼatzʼ · 2.VI.2026», «12 Qʼanil · 9.VII.2026»,
     # «1 Toj · 19.VIII.2026»
     ((2026, 6, 2), "1 Bʼatzʼ"), ((2026, 7, 9), "12 Qʼanil"), ((2026, 8, 19), "1 Toj"),
+    # Проверка волны 2: шапка https://sacredroad.org/ 14.10.2026 «5 Kan · 14.X.2026 … CHOLQʼIJ 5/260»;
+    # заголовки постов (WP REST https://sacredroad.org/wp-json/wp/v2/posts): «JUN TOJ ~ Today's Chʼumil»
+    # 02.12.2025, «JUN QʼANIL» 27.09.2026, «BʼELEJEBʼ BʼATZ» 14.11.2025. Всего сверено 775 дневных постов:
+    # 759 совпали, остальные — посты с опозданием на день или опечатки в числе.
+    ((2026, 10, 14), "5 Kan"), ((2025, 12, 2), "1 Toj"), ((2026, 9, 27), "1 Qʼanil"), ((2025, 11, 14), "9 Bʼatzʼ"),
 ])
 def test_classic_living_kiche_count(ymd, label_kiche):
     assert classic(*ymd)["tzolkin"]["label_kiche"] == label_kiche

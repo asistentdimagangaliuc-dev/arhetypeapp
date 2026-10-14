@@ -42,14 +42,29 @@ class BirthInput:
     julian_date: tuple[int, int, int] | None = None  # исходная дата по ст. ст., если была
 
     def __post_init__(self) -> None:
-        if self.calendar not in ("gregorian", "julian"):
+        cal = str(self.calendar).strip().lower()
+        if cal not in ("gregorian", "julian"):
             raise ValueError("calendar должен быть 'gregorian' или 'julian'")
+        self.calendar = cal
         if self.calendar == "julian":
             # Перевод даты старого стиля в григорианскую (+10…+13 дней в зависимости от века).
+            # swe.julday() не проверяет дату: «30.02» или «31.04» молча перекатились бы
+            # в следующий месяц, поэтому сверяем обратным переводом.
             jd = swe.julday(self.year, self.month, self.day, 12.0, swe.JUL_CAL)
+            if tuple(swe.revjul(jd, swe.JUL_CAL)[:3]) != (self.year, self.month, self.day):
+                raise ValueError(
+                    f"Несуществующая дата юлианского календаря: {self.day:02d}.{self.month:02d}.{self.year}"
+                )
             self.julian_date = (self.year, self.month, self.day)
             self.year, self.month, self.day, _ = swe.revjul(jd, swe.GREG_CAL)
             self.calendar = "gregorian"   # чтобы dataclasses.replace() не перевёл дату повторно
+        else:
+            try:
+                date(self.year, self.month, self.day)
+            except ValueError:
+                raise ValueError(
+                    f"Несуществующая дата: {self.day:02d}.{self.month:02d}.{self.year}"
+                ) from None
         if self.place and (self.lat is None or self.lon is None or self.tz is None):
             p = resolve_place(self.place)
             if p:
@@ -120,6 +135,14 @@ _RU_EMPIRE_MEAN_TIME: dict[str, set[str]] = {
     "Asia/Irkutsk": {"IMT"},
 }
 
+# С этих дат (местное время) «среднее время столицы» в tzdb относится уже к независимому
+# государству и могло быть законным для всей страны (⚠ не подтверждено): LMT места
+# по-прежнему подставляется, но с предупреждением и альтернативой.
+_NATIONAL_MEAN_TIME_FROM: dict[str, datetime] = {
+    "Europe/Riga": datetime(1918, 11, 18),     # Латвийская Республика; RMT до 11.05.1926
+    "Europe/Tallinn": datetime(1919, 7, 1),    # Эстонская Республика; TMT до 01.05.1921
+}
+
 _DOUBLE_SUMMER = {"CEMT", "BDST", "MDST", "WEMT"}
 
 
@@ -170,6 +193,14 @@ def normalize(b: BirthInput) -> NormalizedTime:
                     "среднее время по долготе места рождения"
                     + (f" (tzdb: {abbr} {fmt_offset(aware.utcoffset().total_seconds() / 3600)})." if mean_time_city else ".")
                 )
+                if mean_time_city and local >= _NATIONAL_MEAN_TIME_FROM.get(b.tz, datetime.max):
+                    # Независимые Латвия (1918–1926) и Эстония (1919–1921): время столицы могло быть
+                    # законным для всей страны (Byalokoz 1919: «Latvia was 1:36:34», tzdb europe).
+                    warnings.append(
+                        f"⚠ В {local.year} г. {abbr} могло быть законным временем всей страны, а не "
+                        "только столицы: для другого населённого пункта посчитайте также вариант "
+                        f"tz='{fmt_offset_hms(aware.utcoffset())}'."
+                    )
             else:
                 warnings.append(f"Дата до введения поясного времени, долгота неизвестна: LMT столицы зоны ({abbr}).")
         # проверка на несуществующее/неоднозначное время
@@ -226,3 +257,11 @@ def fmt_offset(hours: float) -> str:
     sign = "+" if hours >= 0 else "-"
     total = round(abs(hours) * 60)
     return f"UTC{sign}{total // 60:02d}:{total % 60:02d}"
+
+
+def fmt_offset_hms(offset: timedelta) -> str:
+    """Смещение с секундами в виде, который принимает BirthInput.tz: 'UTC+01:36:34'."""
+    sec = round(offset.total_seconds())
+    sign = "+" if sec >= 0 else "-"
+    sec = abs(sec)
+    return f"UTC{sign}{sec // 3600:02d}:{sec % 3600 // 60:02d}:{sec % 60:02d}"

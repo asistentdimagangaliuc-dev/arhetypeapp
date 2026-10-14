@@ -454,7 +454,7 @@ def calculate(b: BirthInput, **options) -> dict:
       year_boundary: 'li_chun' (по умолчанию) | 'feb4' (упрощённо, 4 февраля) | 'lunar_new_year'
       boundary_precision: 'auto' (момент, если известны время и пояс; иначе дата) | 'moment' | 'date'
       almanac_tz: пояс для сравнения по датам (по умолчанию пояс рождения, иначе UTC+8);
-                  'Asia/Tokyo' воспроизводит японские таблицы, 'Asia/Shanghai' — китайские.
+                  'UTC+09:00' воспроизводит японские таблицы, 'UTC+08:00' — китайские.
       gua_boundary: 'li_chun' (по умолчанию, как у Ки) | 'lunar_new_year'
       zodiac_boundary: 'lunar_new_year' (по умолчанию) | 'li_chun'
       day_star_method: 'ja_leap' (по умолчанию) | 'nearest_no_leap' | None (не считать)

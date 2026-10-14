@@ -94,7 +94,8 @@ MAJOR = [k for k, v in ASPECTS.items() if v[2]]
 #   орбис по аспекту + 0,3° если участвует Солнце или Луна, + 0,6° для пары Солнце–Луна;
 #   для узлов и Лилит орбис ограничен 3°.
 # astrolog: https://github.com/CruiserOne/Astrolog/blob/master/data.cpp (rAspOrb, rObjAdd)
-#   + general.cpp GetOrb(): орбис аспекта + добавка Солнца (1°) + добавка Луны (1°).
+#   + general.cpp GetOrb(): min(орбис аспекта, rObjOrb каждого объекта) + добавка Солнца (1°) + Луны (1°).
+#   rObjOrb = 2° у узлов (oNod, oSou) и Вертекса, у остальных объектов 360° (без ограничения).
 # moiety: традиционные «половины орбисов» (moieties) по Лилли, стандартный список Skyscript
 #   https://www.skyscript.co.uk/aspectorbs.html: допустимо (orbA + orbB) / 2, только птолемеевы аспекты.
 # ru_points: «баллы» планет по astromaya.ru (рус. школа):
@@ -111,6 +112,7 @@ ORB_SCHEMES: dict[str, dict] = {
                  "quincunx": 3.0, "semisextile": 3.0, "semisquare": 3.0, "sesquisquare": 3.0,
                  "quintile": 2.0, "biquintile": 2.0},
         "add": {"sun": 1.0, "moon": 1.0},
+        "obj_cap": {"north_node": 2.0, "south_node": 2.0, "vertex": 2.0},
     },
     "moiety": {
         "orb": {"sun": 15.0, "moon": 12.0, "mercury": 7.0, "venus": 7.0, "mars": 7.0,
@@ -127,6 +129,10 @@ ORB_SCHEMES: dict[str, dict] = {
         "aspects": ["conjunction", "opposition", "trine", "square", "sextile", "semisquare", "sesquisquare"],
     },
 }
+
+# Swiss Ephemeris, документация §2.3.4: Хирон надёжно считается в 700–4650 гг. н.э.
+# (сближение с Сатурном в 720 г.). 1 января 700 г. по юлианскому календарю:
+CHIRON_RELIABLE_FROM_JD = 1976732.5
 
 HOUSE_SYSTEMS = {"P": "Плацидус (Placidus)", "K": "Кох (Koch)", "E": "Равнодомная от ASC (Equal)",
                  "W": "Целые знаки (Whole Sign)", "O": "Порфирий (Porphyry)",
@@ -162,7 +168,8 @@ def dms(lon: float, with_sign: bool = True, seconds: bool = True) -> str:
     lon = norm360(lon)
     s = int(lon // 30)
     x = lon - 30 * s
-    total = int(x * 3600 + 1e-7)
+    # усечение; эпсилон гасит ошибку плавающей точки, а min() не даёт получить «30°00′00″»
+    total = min(int(x * 3600 + 1e-7), 30 * 3600 - 1)
     d, rem = divmod(total, 3600)
     m, sec = divmod(rem, 60)
     body = f"{d}°{m:02d}′{sec:02d}″" if seconds else f"{d}°{m:02d}′"
@@ -170,8 +177,16 @@ def dms(lon: float, with_sign: bool = True, seconds: bool = True) -> str:
 
 
 def dm_rounded(lon: float) -> str:
-    """Долгота с округлением до минуты (как печатают большинство сайтов)."""
-    return eph.format_lon(lon, "ru")
+    """Долгота с округлением до минуты (как печатают большинство сайтов), но без выхода за знак.
+
+    Общий common.ephemeris.format_lon переносит 29°59,5′+ в «0°00′ следующего знака».
+    Здесь знак — самостоятельный результат (знак Солнца, управитель куспида), поэтому подпись
+    должна совпадать с полем sign: 29°59′56″ Тельца печатается как «29°59′ Телец»."""
+    lon = norm360(lon)
+    s = int(lon // 30)
+    total = min(int(round((lon - 30 * s) * 60)), 30 * 60 - 1)
+    d, m = divmod(total, 60)
+    return f"{d}°{m:02d}′ {SIGNS_RU[s]}"
 
 
 def fmt_orb(x: float) -> str:
@@ -266,6 +281,17 @@ def asc_from_ramc(ramc: float, eps: float, lat: float) -> float:
     if (asc - mc_from_ramc(ramc, eps)) % 360.0 > 180.0:
         asc = norm360(asc + 180.0)
     return asc
+
+
+def vertex_from_ramc(ramc: float, eps: float, lat: float) -> float:
+    """Вертекс: формула ASC с RAMC + 180° и широтой 90° − φ, затем правило «Вертекс в западной
+    половине»: (Vx − MC) mod 360 ∈ [180°, 360°). В тропиках (|φ| < ε) сырая формула иногда даёт
+    Антивертекс, и тогда прибавляем 180° (так делает Swiss Ephemeris, документация §6.4)."""
+    r, e, f = math.radians(ramc + 180.0), math.radians(eps), math.radians(90.0 - lat)
+    vx = norm360(math.degrees(math.atan2(math.cos(r), -(math.sin(r) * math.cos(e) + math.tan(f) * math.sin(e)))))
+    if (vx - mc_from_ramc(ramc, eps)) % 360.0 < 180.0:
+        vx = norm360(vx + 180.0)
+    return vx
 
 
 def sun_lon_low_precision(jd_ut: float) -> float:
@@ -365,7 +391,8 @@ def allowed_orb(scheme: str, asp: str, p1: str, p2: str) -> float | None:
             orb = min(orb, cfg["point_cap"])
         return orb
     if scheme == "astrolog":
-        return cfg["base"][asp] + cfg["add"].get(p1, 0.0) + cfg["add"].get(p2, 0.0)
+        orb = min(cfg["base"][asp], cfg["obj_cap"].get(p1, 360.0), cfg["obj_cap"].get(p2, 360.0))
+        return orb + cfg["add"].get(p1, 0.0) + cfg["add"].get(p2, 0.0)
     if scheme == "moiety":
         if asp not in cfg["aspects"]:
             return None
@@ -587,11 +614,21 @@ def calculate(b: BirthInput, hsys: str = "P", node: str = "true", lilith: str = 
     steps.append({"step": "2. Юлианский день (UT)", "detail": f"JD = {jd:.6f}"})
 
     # --- 2. Тела ------------------------------------------------------------
-    raw = eph.planet_positions(jd, node=node, include_chiron=include_chiron)
+    raw = eph.planet_positions(jd, node=node, include_chiron=False)
+    if include_chiron:
+        # Хирону нужен файл астероидов seas_*.se1 (в репозитории только seas_18: 1800–2399 гг.);
+        # аналитической замены (Moshier), как у планет, для него нет.
+        try:
+            raw["chiron"] = eph.body_position(jd, swe.CHIRON)
+        except swe.Error:
+            include_chiron = False
+            warnings.append("Хирон не вычислен: нет файла эфемерид астероидов (seas_*.se1) для этой даты "
+                            "(в calculators/ephe только 1800–2399 гг.). Аспекты к Хирону не считались.")
+        else:
+            if jd < CHIRON_RELIABLE_FROM_JD:
+                warnings.append("Хирон до 700 г. н.э. недостоверен (Swiss Ephemeris, документация §2.3.4).")
     lil_code = swe.MEAN_APOG if lilith == "mean" else swe.OSCU_APOG
     raw["lilith"] = eph.body_position(jd, lil_code)
-    if include_chiron and jd < 1967601.5:  # 675 г. н.э. — граница достоверности Хирона в Swiss Ephemeris
-        warnings.append("Хирон до 675 г. н.э. недостоверен.")
     bodies: dict[str, dict] = {}
     for name, v in raw.items():
         bodies[name] = _point(name, v["lon"], v["speed"], v["lat"])

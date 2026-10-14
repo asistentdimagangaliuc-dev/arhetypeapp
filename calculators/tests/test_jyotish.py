@@ -213,9 +213,9 @@ ASTROSAGE = {
         ends=["1971-07-24", "1978-07-24", "1996-07-24", "2012-07-24", "2031-07-24", "2048-07-24",
               "2055-07-24", "2075-07-24", "2081-07-24"]),
     # https://astrosage.com/celebrity-Horoscope/mahatma-gandhi-birth-chart.asp (08:36:19, TZ 5.5, 21N40 69E40)
-    # Секунды (19 с) не передаются в BirthInput → Лагна у нас на ~4′ меньше.
+    # Секунды важны: без 19 с Лагна была бы на 3.9′ меньше (4 с времени ≈ 1′ Лагны); с ними — 0.4′.
     "gandhi": dict(
-        b=BirthInput(1869, 10, 2, 8, 36, tz="UTC+05:30", lat=21 + 40 / 60, lon=69 + 40 / 60),
+        b=BirthInput(1869, 10, 2, 8, 36, tz="UTC+05:30", lat=21 + 40 / 60, lon=69 + 40 / 60, second=19),
         pos={"asc": (6, "12-06-43", "Svati", 2), "sun": (5, "16-55-40", "Hasta", 3),
              "moon": (3, "28-16-51", "Ashlesha", 4), "mars": (6, "26-22-48", "Vishakha", 2),
              "mercury": (6, "11-45-36", "Svati", 2), "jupiter": (0, "28-09-47", "Krittika", 1),
@@ -272,8 +272,7 @@ def test_astrosage_positions(name):
     for k, (sign, deg, nak, pada) in v["pos"].items():
         rec = r["lagna"] if k == "asc" else r["grahas"][k]
         exp_lon = sign * 30 + dms(deg)
-        tol = POS_TOL[k] if not (name == "gandhi" and k == "asc") else 5.0
-        assert arcmin(rec["lon"], exp_lon) < tol, (name, k, rec["lon"], exp_lon)
+        assert arcmin(rec["lon"], exp_lon) < POS_TOL[k], (name, k, rec["lon"], exp_lon)
         assert rec["sign"] == sign + 1, (name, k)
         assert (rec["nakshatra"], rec["pada"]) == (nak, pada), (name, k)
     # колонка Relation и пометка C (сожжение)
@@ -306,7 +305,7 @@ def test_astrosage_dasha(name):
     exp_years = y + m / 12 + dd / 360
     # Луна у AstroSage отличается до ~1′: 1′ = P/800 лет (для Меркурия ≈ 7.8 сут)
     assert abs(d["balance"]["years"] - exp_years) < 0.03
-    tol = 9 if name == "gandhi" else 3
+    tol = 7 if name == "gandhi" else 3        # у Ганди наша Луна на 0.8′ меньше → даты +5…6 сут
     for md, e in zip(d["mahadashas"], v["ends"]):
         diff = (date.fromisoformat(md["end"][:10]) - date.fromisoformat(e)).days
         assert abs(diff) <= tol, (name, md["lord"], md["end"], e)
@@ -540,3 +539,129 @@ def test_current_dasha_on_date():
     cur = r["dasha"]["current"]
     assert cur["mahadasha"] == "rahu"
     assert cur["antardasha"] == "moon"
+
+
+# ---------------------------------------------------------------------------
+# 7. Независимая перепроверка (верификация, волна 2)
+# ---------------------------------------------------------------------------
+
+def test_independent_swisseph_t1_t4():
+    """T1 и T4 пересчитаны напрямую через pyswisseph (без обёрток common/ephemeris):
+    тропическая видимая долгота − истинная аянамша Lahiri, Лагна по формуле §3.4 из GAST."""
+    import math
+    for tid, ut_h, (y, mo, d), lat, lon in (
+            ("T1", 10.5, (1990, 5, 15), 55.7558, 37.6173),
+            ("T4", 11.5 - 9.9876 / 15, (1879, 3, 14), 48.4011, 9.9876)):
+        r = calculate(T[tid])
+        jd = swe.julday(y, mo, d, ut_h, swe.GREG_CAL)
+        swe.set_sid_mode(swe.SIDM_LAHIRI)
+        a_true = swe.get_ayanamsa_ex_ut(jd, swe.FLG_SWIEPH)[1]
+        for g, code in (("sun", swe.SUN), ("moon", swe.MOON), ("mars", swe.MARS), ("mercury", swe.MERCURY),
+                        ("jupiter", swe.JUPITER), ("venus", swe.VENUS), ("saturn", swe.SATURN),
+                        ("rahu", swe.MEAN_NODE)):
+            lam = (swe.calc_ut(jd, code, swe.FLG_SWIEPH)[0][0] - a_true) % 360
+            assert arcmin(r["grahas"][g]["lon"], lam) < 0.01, (tid, g)
+        eps = swe.calc_ut(jd, swe.ECL_NUT, 0)[0][0]
+        ramc = math.radians((swe.sidtime(jd) * 15 + lon) % 360)
+        e, f = math.radians(eps), math.radians(lat)
+        asc = math.degrees(math.atan2(math.cos(ramc), -(math.sin(e) * math.tan(f) + math.cos(e) * math.sin(ramc))))
+        assert arcmin(r["lagna"]["lon"], (asc - a_true) % 360) < 0.01, tid
+
+
+def test_natural_friendship_derived_from_bphs_rule():
+    """BPHS 3.55 (https://yourastroguide.wordpress.com/2012/09/01/brihat-parashara-hora-sashtra-chapter-3/):
+    друзья — управители 2, 4, 5, 8, 9, 12-го от мулатриконы и знака экзальтации; враги — управители
+    остальных знаков; посчитан и тем и другим → нейтрал. Вывод из правила = таблица NATURAL_FRIENDS."""
+    from calculators.jyotish import EXALTATION, MOOLATRIKONA, NATURAL_FRIENDS
+    seven = list(NATURAL_FRIENDS)
+    for p in seven:
+        m = MOOLATRIKONA[p][0]
+        fr = {SIGN_LORDS[(m + h - 1) % 12] for h in (2, 4, 5, 8, 9, 12)} | {SIGN_LORDS[EXALTATION[p][0]]}
+        en = {SIGN_LORDS[(m + h - 1) % 12] for h in (1, 3, 6, 7, 10, 11)}
+        fr.discard(p)
+        en.discard(p)
+        friends, neutral, enemies = NATURAL_FRIENDS[p]
+        assert set(friends) == {x for x in fr - en if x in seven}, p
+        assert set(neutral) == {x for x in fr & en if x in seven}, p
+        assert set(enemies) == {x for x in en - fr if x in seven}, p
+
+
+def test_pvr_varga_examples():
+    """PVR, гл. 6, пример 16 (D9: Меркурий 11° Близнецов → Козерог; Юпитер 19° Скорпиона → Стрелец;
+    правило «огненные от Овна, земные от Козерога, воздушные от Весов, водные от Рака») и
+    пример 17 (D10: Меркурий 10° Близнецов → Дева; Юпитер 19° Скорпиона → Козерог)."""
+    assert navamsa_sign(60 + 11) == 9 and navamsa_sign(210 + 19) == 8
+    assert dasamsa_sign(60 + 10) == 5 and dasamsa_sign(210 + 19) == 9
+    for s in range(12):      # стихийное правило ≡ правилу подвижные/фиксированные/двойственные
+        start = (0, 9, 6, 3)[s % 4]
+        assert navamsa_sign(30 * s + 0.1) == start
+
+
+def test_pada_to_navamsa():
+    """Пада p накшатры n (обе с 1) → знак D9 = ((n − 1)·4 + p − 1) mod 12 + 1 (108 пад = 9 кругов зодиака)."""
+    for n in range(1, 28):
+        for p in range(1, 5):
+            lon = (n - 1) * 40 / 3 + (p - 1) * 10 / 3 + 0.01
+            assert nakshatra_of(lon)["pada"] == p
+            assert navamsa_sign(lon) + 1 == ((n - 1) * 4 + p - 1) % 12 + 1
+
+
+def test_pyjhora_example_51_balances():
+    """PyJHora pvr_tests.py, Example 50/51 (наша Луна 2°23′15″, а не округлённая 2°23′ книги):
+    кшема Сатурн (6,1,5), утпанна Меркурий (5,5,14), адхана Солнце (1,11,3).
+    https://raw.githubusercontent.com/naturalstupid/PyJHora/main/src/jhora/tests/pvr_tests.py"""
+    b = BirthInput(2000, 4, 28, 5, 50, tz="UTC-04:00")
+    for star, lord, ymd in ((4, "saturn", "6 г. 1 мес. 5 дн."), (5, "mercury", "5 г. 5 мес. 14 дн."),
+                            (8, "sun", "1 г. 11 мес. 3 дн.")):
+        d = calculate(b, dasha_year="savana", dasha_levels=1, dasha_start_star=star)["dasha"]
+        assert (d["first_lord"], d["balance"]["ymd"]) == (lord, ymd)
+
+
+def test_pvr_example_50_book_moon_date():
+    """Книга: «about 7 pm on 2002 July 15». На округлённой Луне книги (2°23′) 2.24875 савана-года =
+    809.55 сут дают 16.07.2002 19:02 — время совпадает, дата на 1 сут позже (⚠ вероятно, арифметика книги).
+    На нашей Луне 2°23′15″ — 15.07.2002 23:37 (см. test_pvr_example_50_51)."""
+    from calculators.common.time import normalize
+    jd = normalize(BirthInput(2000, 4, 28, 5, 50, tz="UTC-04:00")).jd_ut
+    d = vimshottari(300 + 2 + 23 / 60, jd, -4.0, year="savana", levels=1)
+    assert d["balance"]["ends"] == "2002-07-16 19:02"
+
+
+@pytest.mark.parametrize("mode,diff_arcmin", [
+    ("true_citra", -0.65), ("krishnamurti_vp291", -4.6), ("yukteshwar", -82.7), ("krishnamurti", -5.8)])
+def test_extra_ayanamsas(mode, diff_arcmin):
+    """Аянамши, добавленные в common/ephemeris, работают в калькуляторе (раньше — KeyError в подписи).
+    Разность с Lahiri для T1 (Swiss Ephemeris 2.10)."""
+    base = calculate(T["T1"], dasha_levels=1)
+    r = calculate(T["T1"], ayanamsa=mode, dasha_levels=1)
+    assert r["ayanamsa"]["name"] == mode and r["ayanamsa"]["label"]
+    assert abs((r["ayanamsa"]["true"] - base["ayanamsa"]["true"]) * 60 - diff_arcmin) < 0.1
+    d = r["grahas"]["moon"]["lon"] - base["grahas"]["moon"]["lon"]
+    assert abs(d - (base["ayanamsa"]["true"] - r["ayanamsa"]["true"])) < 1e-6
+    with pytest.raises(ValueError):
+        calculate(T["T1"], ayanamsa="no_such_ayanamsa")
+
+
+def test_seconds_and_julian_calendar_inputs():
+    """BirthInput.second попадает в расчёт; дата по старому стилю переводится в григорианскую."""
+    r = calculate(BirthInput(1869, 10, 2, 8, 36, tz="UTC+05:30", lat=21 + 40 / 60, lon=69 + 40 / 60, second=19),
+                  dasha_levels=1)
+    assert r["inputs_used"]["time"] == "08:36:19" and r["inputs_used"]["utc"].startswith("1869-10-02T03:06:19")
+    # 02.10.1869 н. ст. = 20.09.1869 ст. ст. (разница 12 сут в XIX в.)
+    j = calculate(BirthInput(1869, 9, 20, 8, 36, tz="UTC+05:30", lat=21 + 40 / 60, lon=69 + 40 / 60, second=19,
+                             calendar="julian"), dasha_levels=1)
+    assert j["inputs_used"]["date"] == "1869-10-02" and j["inputs_used"]["date_julian_input"] == "1869-09-20"
+    assert j["grahas"]["moon"]["lon"] == r["grahas"]["moon"]["lon"]
+
+
+def test_einstein_place_ulm_is_lmt():
+    """place='Ульм' (tz Europe/Berlin): до 01.04.1893 tzdb даёт LMT, common/time подставляет LMT по долготе
+    Ульма → тот же результат, что tz='LMT'. Astro-Databank/Halloran: 11:30, «Time Zone −00:40 (LT)», BC/AA
+    (https://www.halloran.com/Albert_Einstein_Ranking.pdf)."""
+    a = calculate(BirthInput(1879, 3, 14, 11, 30, place="Ульм"), dasha_levels=1)
+    b = calculate(T["T4"], dasha_levels=1)
+    assert a["inputs_used"]["offset_source"] == "LMT(longitude)"
+    assert a["lagna"]["lon"] == b["lagna"]["lon"]
+    # координаты ADB (48N24, 10E00) меняют Лагну лишь на 3″
+    c = calculate(BirthInput(1879, 3, 14, 11, 30, tz="UTC+00:40", lat=48.4, lon=10.0), dasha_levels=1)
+    assert arcmin(c["lagna"]["lon"], b["lagna"]["lon"]) < 0.1

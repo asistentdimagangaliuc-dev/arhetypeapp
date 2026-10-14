@@ -117,12 +117,12 @@ TEN_GODS = {
     (0, True): ("比肩", "bǐ jiān", "Friend", "Друг", ["Братство", "Плечо к плечу", "Компаньон"]),
     (0, False): ("劫财", "jié cái", "Rob Wealth", "Грабитель Богатства", ["Соперник", "Похититель богатства"]),
     (1, True): ("食神", "shí shén", "Eating God", "Бог Еды", ["Дух Наслаждения", "Божество пищи"]),
-    (1, False): ("伤官", "shāng guān", "Hurting Officer", "Ранящий Офицер", ["Вызов власти", "Повреждающий чиновник"]),
+    (1, False): ("伤官", "shāng guān", "Hurting Officer", "Ранящий Офицер", ["Вызов власти", "Ранящий Чиновник", "Повреждающий чиновник"]),
     (2, True): ("偏财", "piān cái", "Indirect Wealth", "Непрямое Богатство", ["Косвенное богатство", "Склонность к богатству"]),
     (2, False): ("正财", "zhèng cái", "Direct Wealth", "Прямое Богатство", []),
     (3, True): ("七杀", "qī shā", "Seven Killings", "Семь Убийц", ["7 убийц", "Убийца на 7 позиции", "Непрямой Офицер (偏官)"]),
     (3, False): ("正官", "zhèng guān", "Direct Officer", "Прямой Офицер", ["Чиновник", "Прямой чиновник"]),
-    (4, True): ("偏印", "piān yìn", "Indirect Resource", "Непрямой Ресурс", ["Косая Печать", "Косвенная печать", "枭神"]),
+    (4, True): ("偏印", "piān yìn", "Indirect Resource", "Непрямой Ресурс", ["Косвенный Ресурс", "Косая Печать", "Косвенная печать", "枭神"]),
     (4, False): ("正印", "zhèng yìn", "Direct Resource", "Прямой Ресурс", ["Правильная Печать", "Прямая печать"]),
 }
 
@@ -583,8 +583,14 @@ def calculate(b: BirthInput, **options) -> dict:
       nobleman_variant: 'main' | 'alt' (庚 → 寅午);
       annual_from, annual_to: диапазон лет для流年 (необязательно).
     """
-    zi_hour = options.get("zi_hour", "late")
+    zi_hour = str(options.get("zi_hour", "late")).strip().lower()
     solar_time = options.get("solar_time", "true")
+    # CLI (`--opt solar_time=true`) превращает строку 'true' в булево True — принимаем и его.
+    if solar_time is True:
+        solar_time = "true"
+    elif solar_time is False:
+        solar_time = "clock"
+    solar_time = str(solar_time).strip().lower()
     luck_count = int(options.get("luck_count", 10))
     if zi_hour not in ("late", "early"):
         raise ValueError("zi_hour: 'late' | 'early'")
@@ -647,11 +653,13 @@ def calculate(b: BirthInput, **options) -> dict:
     add(f"Пять тигров (五虎遁): ствол года {STEMS[ys][0]} → месяц 寅 начинается со ствола "
                  f"{STEMS[month_first_stem(ys)][0]}; +{slot} → {STEMS[m_stem][0]}. Столп месяца {ganzhi(mi)}.")
     for jd_j, nm in ((prev_jd, JIE[slot][1]), (next_jd, JIE[(slot + 1) % 12][1])):
-        if abs(jd - jd_j) < 1.0:
+        if has_time and abs(jd - jd_j) < 1.0:
             warnings.append(f"Рождение в пределах {abs(jd - jd_j) * 24:.1f} ч от цзе {nm}: при ошибке во времени "
                             f"рождения столп месяца{' и года' if nm == '立春' else ''} может смениться.")
-            if not has_time:
-                warnings.append(f"Цзе {nm} приходится на дату рождения, время неизвестно — столп месяца неоднозначен.")
+        # без времени: предупреждаем, только если цзе попадает на МЕСТНУЮ дату рождения
+        if not has_time and to_local(jd_j)[:10] == b.date.isoformat():
+            warnings.append(f"Цзе {nm} приходится на дату рождения ({to_local(jd_j)} по местному), время "
+                            f"неизвестно — столп месяца{' и года' if nm == '立春' else ''} неоднозначен.")
 
     # --- 4–5. день и час ---
     chart_t = None
