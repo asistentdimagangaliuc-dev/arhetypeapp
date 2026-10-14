@@ -532,7 +532,7 @@ def human_design(utc_moment, node="true"):
   "undefined_centers": ["..."], "open_centers": ["head", "spleen"],
   "motors_to_throat": [],
   "definition": {"id": "split", "name_en": "Split Definition", "name_ru": "Расщеплённая (split)", "components": 2,
-                 "groups": [["sacral", "solar_plexus", "root"], ["g", "heart"]]},
+                 "groups": [["g", "heart"], ["sacral", "solar_plexus", "root"]]},
   "type": {"id": "generator", "name_en": "Generator", "name_ru": "Генератор", "strategy_en": "To Respond",
            "strategy_ru": "...", "signature_en": "Satisfaction", "signature_ru": "...", "not_self_en": "Frustration",
            "not_self_ru": "..."},

@@ -423,7 +423,10 @@ def _components(nodes: set[str], edges: list[tuple[str, str]]) -> list[set[str]]
         adj[b].add(a)
     seen: set[str] = set()
     comps: list[set[str]] = []
-    for n in nodes:
+    # обход в фиксированном порядке центров (а не в порядке хэшей множества), чтобы порядок
+    # групп в definition.groups не зависел от PYTHONHASHSEED
+    order = [c for c in CENTERS if c in nodes] + sorted(n for n in nodes if n not in CENTERS)
+    for n in order:
         if n in seen:
             continue
         comp, q = set(), deque([n])

@@ -371,6 +371,22 @@ def test_late_zi_month_end_differs_from_iztro():
     assert signature(r)["ming"] != IZTRO["X7_latezi_month_end"]["ming"] == "戌"
 
 
+def test_late_zi_leap_month_day15_differs_from_iztro():
+    """2004-04-04 = 闰二月十五, поздний Цзы (проверка wave 2).
+    ziwei.py: следующий день = 闰二月十六 -> по split_15 месяц 3 -> 命宫 辰 (戊辰, 木三局), 紫微 酉.
+    iztro 2.6.2 (timeIndex=12, node calculators/tools/iztro_crosscheck.mjs, кейс X8_latezi_leap15):
+    при timeIndex=12 правило 闰月 не применяется вовсе -> месяц 2, 命宫 卯 (丁卯, 火六局), 紫微 午."""
+    r = calculate(BirthInput(2004, 4, 4, gender="male"), hour_branch="晚子")
+    assert (r["lunar_date"]["day"], r["lunar_date"]["is_leap_month"], r["lunar_date"]["month_used"]) == (16, True, 3)
+    assert r["ming_palace"]["stem_branch"] == "戊辰" and r["bureau"]["name"] == "木三局"
+    assert r["star_positions"]["紫微"] == "酉"
+    iztro_ming = "卯"  # заморожено из iztro 2.6.2
+    assert r["ming_palace"]["branch"] != iztro_ming
+    # день 14 + поздний Цзы = день 15 -> месяц 2 у обеих реализаций (расхождения нет)
+    r14 = calculate(BirthInput(2004, 4, 3, gender="male"), hour_branch="晚子")
+    assert r14["lunar_date"]["month_used"] == 2 and r14["ming_palace"]["branch"] == "卯"
+
+
 # ---------------------------------------------------------------------------
 # Эталонные персоны T1–T4 с реальным временем и местом
 # ---------------------------------------------------------------------------

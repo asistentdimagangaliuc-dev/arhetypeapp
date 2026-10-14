@@ -542,3 +542,12 @@ def test_t1_moon_gate_boundary_documented():
     assert r["personality"]["moon"]["deg_in_gate"] == pytest.approx(0.0153, abs=5e-5)
     earlier = chart_from_jd(r["inputs_used"]["jd_ut"] - 2 / 1440)
     assert earlier["personality"]["moon"]["gate_line"] == "61.6"
+
+
+def test_definition_groups_order_is_deterministic():
+    # группы перечисляются в порядке центров CENTERS (не зависят от PYTHONHASHSEED)
+    r = calculate(T4)
+    assert r["definition"]["groups"] == [["g", "heart"], ["sacral", "solar_plexus", "root"]]
+    order = list(CENTERS)
+    firsts = [order.index(g[0]) for g in r["definition"]["groups"]]
+    assert firsts == sorted(firsts)
