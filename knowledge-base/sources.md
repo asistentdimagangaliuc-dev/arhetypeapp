@@ -2,7 +2,7 @@
 
 Каждый документ метода содержит раздел «Источники» с оценкой надёжности каждого источника и раздел «Протокол проверки» (что именно было независимо перепроверено). Здесь — сводный индекс всех процитированных URL по модулям (сгенерирован `calculators/tools/build_sources.py`).
 
-Всего уникальных ссылок по модулям: **376**.
+Всего уникальных ссылок по модулям: **380**.
 
 **Шкала надёжности, используемая в документах:**
 
@@ -98,7 +98,7 @@
 
 ## [03-nine-star-ki-gua.md](03-nine-star-ki-gua.md) — 03. Девятизвёздная Ки (九星気学), летящие звёзды натала, число Гуа (命卦) и китайский зодиак
 
-Уникальных URL: 17
+Уникальных URL: 19
 
 - <https://www.hko.gov.hk/en/gts/time/calendar/text/files/T1984e.txt>
 - <https://ja.wikipedia.org/wiki/九星>
@@ -113,6 +113,8 @@
 - <http://www.freeflow-fengshui.com/resources/the_ki_astrology.php>
 - <https://the-art-of-wind-and-water.com/9-star-ki-astrology/calculate-your-superficial-star/>
 - <https://yakumoin.info/about/keisha>
+- <https://zh.wikisource.org/wiki/易傳/說卦>
+- <https://www.masterseanchan.com/fengshui-2028-kua-6-directions/>
 - <https://amenouranai.com/kyuseikigaku-keisha/>
 - <https://m.sohu.com/n/485037481/>
 - <https://ndlsearch.ndl.go.jp/en/books/R100000039-I760820>
@@ -442,10 +444,12 @@
 
 ## [15-syutsay.md](15-syutsay.md) — 15. Сюцай — «цифровая психология» Жаната Кожамжарова
 
-Уникальных URL: 26
+Уникальных URL: 28
 
+- <https://syutsay.ru/syutsay-chislo-2>
 - <https://syutsay.ru/syutsay-chislo-4>
 - <https://zhanatglobal.com/filosofiya-syucai/>
+- <https://zhanatglobal.com/>
 - <https://zhanatglobal.com/osnovatel-nauki/>
 - <https://zhanatglobal.com/product/personalnyj-biznes-kalendar-na-2025-god/>
 - <https://zhanatglobal.com/konsultaczii/>

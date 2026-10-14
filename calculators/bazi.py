@@ -614,14 +614,16 @@ def calculate(b: BirthInput, **options) -> dict:
         if has_time:
             raise ValueError("Не задан часовой пояс (tz) или место — без них нельзя найти момент в UT.")
         b = replace(b, tz="UTC")
-        warnings.append("Нет ни времени, ни пояса: для года/месяца взят полдень UTC.")
-    nb = b if has_time else replace(b, hour=12, minute=0)
+        warnings.append("Нет ни времени, ни пояса: год/месяц определены на конец даты по UTC.")
+    # Без времени год и месяц определяются на КОНЕЦ местной даты (23:59): день цзе (в т.ч. Личуня)
+    # считается уже новым периодом — то же соглашение, что в модулях 03 (ninestar) и 12 (Гуа).
+    nb = b if has_time else replace(b, hour=23, minute=59)
     n = normalize(nb)
     warnings.extend(n.warnings)
     jd = n.jd_ut
     if not has_time:
         warnings.append("Время рождения неизвестно: столп часа не строится; год и месяц определены "
-                        "на полдень местной даты.")
+                        "на конец местной даты (день цзе/Личуня считается новым периодом, как в модулях 03 и 12).")
     add(f"Местное время {n.local:%d.%m.%Y %H:%M} ({b.tz}, {fmt_offset(n.utc_offset_hours)}, "
                  f"источник смещения: {n.offset_source}) → UTC {n.utc:%d.%m.%Y %H:%M:%S}; JD(UT) = {jd:.5f}.")
 
