@@ -12,7 +12,11 @@
 * Матрица — все ненулевые цифры даты, разложенные по сетке 3-6-9 / 2-5-8 / 1-4-7 (нули не
   ставятся, ЧС и миссия в матрицу не добавляются); присутствующие / отсутствующие / повторяющиеся
   энергии, 8 геометрических линий сетки («линия денег» 1-4-7) и «программа доминирующего эго» (1 и 9).
-* Общий год (сумма цифр календарного года) и личный год (день + месяц + текущий год), 9-летний цикл.
+* Общий год (сумма цифр календарного года) и личный год (день + месяц + текущий год), 9-летний цикл;
+  граница личного года — 1 января (календари школы «2026 — год N» начинаются с января).
+* Общие и личные месяцы и дни (общий месяц = общий год + месяц, общий день = общий месяц + число;
+  личные — то же от личного года), «дни обнуления» 10/20/30 — по образцу официального календаря
+  zhanatglobal.com (январь и февраль 2026).
 * Возрастные вехи (сознание раскрывается к 21 году, миссия — с 22 до 33 лет).
 * Совместимость чисел сознания двух людей по описаниям школы (если передан партнёр).
 * Число имени (халдейская таблица по латинской записи имени) — если известно имя.
@@ -151,9 +155,13 @@ MATRIX_ENERGY: dict[int, dict[str, str]] = {
 GRID_ROWS: tuple[tuple[int, int, int], ...] = ((3, 6, 9), (2, 5, 8), (1, 4, 7))
 
 #: Восемь геометрических линий сетки. Школа говорит о «12 радиальных линиях», но их состав не
-#: опубликован; достоверно названа только «линия денег» 1-4-7 (t-j.ru, gems-brokers.ru).
+#: опубликован; достоверно названа только «линия денег» 1-4-7 (t-j.ru, gems-brokers.ru), о строке 3-6-9 есть
+#: упоминание в блоге официального сайта (поле ``note``).
 LINES: list[dict[str, Any]] = [
-    {"id": "row_369", "cells": [3, 6, 9], "kind": "строка (верх)", "name": None},
+    # Блог официального сайта (А. Шаталин, мастер Сюцай, https://zhanatglobal.com/kak-czifrovaya-nauka-syuczaj-menyaet-zhizn/):
+    # «Моя линия цифр 3-6-9 помогала мне анализировать ситуацию и видеть окончание любого процесса».
+    {"id": "row_369", "cells": [3, 6, 9], "kind": "строка (верх)", "name": None,
+     "note": "«линия цифр 3-6-9» — анализировать ситуацию и видеть окончание любого процесса (zhanatglobal.com, блог)"},
     {"id": "row_258", "cells": [2, 5, 8], "kind": "строка (середина)", "name": None},
     {"id": "row_147", "cells": [1, 4, 7], "kind": "строка (низ)", "name": "линия денег"},
     {"id": "col_321", "cells": [3, 2, 1], "kind": "столбец (левый)", "name": None},
@@ -336,7 +344,7 @@ def build_matrix(year: int, month: int, day: int) -> dict:
         filled = [c for c in ln["cells"] if counts[c]]
         status = "full" if len(filled) == 3 else ("empty" if not filled else "partial")
         lines.append({
-            "id": ln["id"], "cells": ln["cells"], "kind": ln["kind"], "name": ln["name"],
+            "id": ln["id"], "cells": ln["cells"], "kind": ln["kind"], "name": ln["name"], "note": ln.get("note"),
             "status": status, "filled_cells": filled,
             "missing_cells": [c for c in ln["cells"] if not counts[c]],
             "digits_total": sum(counts[c] for c in ln["cells"]),
@@ -383,7 +391,8 @@ def personal_year(day: int, month: int, year: int) -> dict:
     """Личный год: цифры дня и месяца рождения + цифры текущего года, до 1–9.
 
     Трамп 14.06.1946, 2024: 1+4+0+6+2+0+2+4 = 19 → 10 → 1 (syutsay.ru: «2024 год … энергия Солнца (1)»).
-    Граница года — 1 января (⚠ вывод из того, что календари продаются на календарный год).
+    Граница года — 1 января: официальный «Персональный бизнес календарь 2026 — год N» (zhanatglobal.com)
+    один на весь 2026 год, с января по декабрь, и месяцы/дни в нём считаются от личного года N.
     """
     digits = [int(c) for c in f"{day:02d}{month:02d}{year:04d}"]
     total = sum(digits)
@@ -391,6 +400,66 @@ def personal_year(day: int, month: int, year: int) -> dict:
     n = chain[-1]
     return {"year": year, "number": n, "digits": digits, "sum": total, "chain": chain,
             "planet": PLANETS[n]}
+
+
+#: Темы личного года — обложки официальных «Персональных бизнес-календарей 2026 — год N»
+#: (https://zhanatglobal.com/product/kalendar-2025-1/ … personalnyj-biznes-kalendar-2025-god-9/):
+#: «Персональный помощник на пути к успеху в ваш личный год построения стратегии» и т.д.
+YEAR_THEMES: dict[int, str] = {
+    1: "построение стратегии", 2: "построение отношений", 3: "систематизация и управление",
+    4: "целеполагание", 5: "масштабирование", 6: "комфорт и творчество",
+    7: "дисциплина и внедрение целей", 8: "упорный труд и контроль процессов", 9: "генерация идей и здоровье",
+}
+
+#: Подсветка дней в официальном календаре (легенда «Обозначения» на образцах января и февраля 2026,
+#: https://zhanatglobal.com/wp-content/uploads/2024/12/webpconverter-3-1-scaled.webp и -4-1-scaled.webp):
+#: зелёный — «успех через анализ» (день 3), бирюзовый — «успех через любовь и комфорт» (день 6),
+#: красный — «обнуление» (10, 20, 30 число любого месяца; перекрывает остальные цвета: 10.01.2026 = 3, но красный).
+DAY_HIGHLIGHTS: dict[int, str] = {3: "успех через анализ", 6: "успех через любовь и комфорт"}
+ZEROING_DATES = (10, 20, 30)
+
+
+def universal_month(year: int, month: int) -> dict:
+    """Общий месяц = общий год + номер месяца, до 1–9 (образец календаря 2026: январь 2, февраль 3)."""
+    uy = reduce_chain(year)[-1]
+    chain = reduce_chain(uy + month)
+    return {"year": year, "month": month, "number": chain[-1], "sum": uy + month, "chain": chain,
+            "planet": PLANETS[chain[-1]]}
+
+
+def personal_month(day: int, month: int, year: int, target_month: int) -> dict:
+    """Личный месяц = личный год + номер месяца, до 1–9 (та же схема, что у общего месяца)."""
+    py = personal_year(day, month, year)["number"]
+    chain = reduce_chain(py + target_month)
+    return {"year": year, "month": target_month, "number": chain[-1], "sum": py + target_month,
+            "chain": chain, "planet": PLANETS[chain[-1]]}
+
+
+def _day_highlight(day_of_month: int, number: int) -> str | None:
+    if day_of_month in ZEROING_DATES:
+        return "обнуление"
+    return DAY_HIGHLIGHTS.get(number)
+
+
+def calendar_day(day: int, month: int, on: date) -> dict:
+    """Общий и личный день на дату ``on`` для рождённого day.month.
+
+    Общий день = общий месяц + число (образец календаря zhanatglobal.com: 01.01.2026 → 2 + 1 = 3,
+    09.01.2026 → 2 + 9 = 11 → 2, 31.01.2026 → 33 → 6, 01.02.2026 → 3 + 1 = 4). Личный день = личный месяц + число.
+    """
+    um = universal_month(on.year, on.month)
+    pm = personal_month(day, month, on.year, on.month)
+    uc = reduce_chain(um["number"] + on.day)
+    pc = reduce_chain(pm["number"] + on.day)
+    return {
+        "date": on.isoformat(),
+        "universal_day": {"number": uc[-1], "sum": um["number"] + on.day, "chain": uc,
+                          "highlight": _day_highlight(on.day, uc[-1])},
+        "personal_day": {"number": pc[-1], "sum": pm["number"] + on.day, "chain": pc,
+                         "highlight": _day_highlight(on.day, pc[-1])},
+        "universal_month": um["number"], "personal_month": pm["number"],
+        "zeroing_day": on.day in ZEROING_DATES,
+    }
 
 
 def financial_code_findh(year: int, month: int, day: int) -> dict:
@@ -534,6 +603,8 @@ def calculate(b: BirthInput, **options) -> dict:
 
     Опции:
       target_year (или year): год для личного года (по умолчанию — текущий календарный)
+      target_date: дата ('YYYY-MM-DD' | 'ДД.ММ.ГГГГ' | date) для общего/личного дня; задаёт и target_year,
+        если тот не передан
       cycle_years: сколько лет показать в таблице личных лет, начиная с target_year (по умолчанию 9)
       partner: дата партнёра ('YYYY-MM-DD', 'ДД.ММ.ГГГГ', BirthInput) — совместимость чисел сознания
       given_name: личное имя для числа имени (иначе берётся из b.name); name_latin — готовая латиница
@@ -544,7 +615,19 @@ def calculate(b: BirthInput, **options) -> dict:
     warnings: list[str] = []
     steps: list[str] = []
 
+    target_date = options.get("target_date")
+    on: date | None = None
+    if target_date is not None:
+        if isinstance(target_date, date):
+            on = target_date
+        else:
+            parsed = _parse_partner(str(target_date))
+            if parsed is None:
+                raise ValueError("target_date: 'YYYY-MM-DD' или 'ДД.ММ.ГГГГ'")
+            on = date(*parsed)
     target_year = options.get("target_year", options.get("year"))
+    if target_year is None and on is not None:
+        target_year = on.year
     target_year = int(target_year) if target_year is not None else date.today().year
     cycle_years = int(options.get("cycle_years", 9))
     with_fin = options.get("financial_code", True)
@@ -583,6 +666,21 @@ def calculate(b: BirthInput, **options) -> dict:
     cycle = [{"year": yy, "personal_year": personal_year(d, m, yy)["number"],
               "universal_year": universal_year(yy)["number"]}
              for yy in range(target_year, target_year + max(cycle_years, 0))]
+    py["theme"] = YEAR_THEMES[py["number"]]
+    months = [{"month": mm, "universal_month": universal_month(target_year, mm)["number"],
+               "personal_month": personal_month(d, m, target_year, mm)["number"]} for mm in range(1, 13)]
+    steps.append(f"Месяцы {target_year}: общий = {uy['number']} + номер месяца, личный = {py['number']} + номер "
+                 f"месяца (до 1–9): личные " + ", ".join(str(x["personal_month"]) for x in months))
+    day_info = None
+    if on is not None:
+        day_info = calendar_day(d, m, on)
+        if on.year != target_year:
+            warnings.append(f"target_date {on.isoformat()} не в target_year {target_year}: "
+                            f"день посчитан по личному году {on.year}.")
+        steps.append(f"День {on.strftime('%d.%m.%Y')}: общий = общий месяц {day_info['universal_month']} + "
+                     f"{on.day} = {_chain_str(day_info['universal_day']['chain'])}; личный = личный месяц "
+                     f"{day_info['personal_month']} + {on.day} = {_chain_str(day_info['personal_day']['chain'])}"
+                     + ("; 10/20/30 число — «день обнуления»" if day_info["zeroing_day"] else ""))
 
     consciousness = {
         **cs,
@@ -615,11 +713,18 @@ def calculate(b: BirthInput, **options) -> dict:
         "mission": mission,
         "matrix": mx,
         "years": {"target_year": target_year, "universal_year": uy, "personal_year": py,
-                  "cycle": cycle,
-                  "boundary": "1 января (⚠ граница личного года школой явно не названа)"},
+                  "cycle": cycle, "months": months,
+                  "boundary": ("1 января (официальные календари zhanatglobal.com «2026 — год N» охватывают "
+                               "январь–декабрь и считают месяцы от личного года календарного года)"),
+                  "months_days_source": ("образец «Персонального бизнес календаря 2026» zhanatglobal.com: "
+                                         "общий месяц = общий год + месяц, общий день = общий месяц + число; "
+                                         "личные — так же от личного года (⚠ в образце личный год = общему)")},
         "life_stages": stages,
         "steps": steps,
     }
+    if day_info is not None:
+        result["day"] = day_info
+        result["inputs_used"]["target_date"] = day_info["date"]
 
     # 5. Партнёр
     partner = _parse_partner(options.get("partner"))
@@ -670,7 +775,6 @@ def calculate(b: BirthInput, **options) -> dict:
         "12 радиальных линий матрицы (состав не опубликован; посчитаны 8 линий сетки)",
         "«Задача от Творца», «сфера/предназначение», «число финансового взлёта», «число денег» — "
         "формулы не опубликованы",
-        "личные месяц и день (школа их считает, формула не опубликована)",
         "цвета и дни недели по числам (опубликовано только для 1: красный и белый, кошелёк серебристый)",
     ]
     return result

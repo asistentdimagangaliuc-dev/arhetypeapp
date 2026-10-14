@@ -14,8 +14,8 @@ from calculators.common.time import BirthInput
 from calculators.tzolkin import (
     GAP_KINS, POLAR_KINS, SEALS, affirmation_en, calculate, classic, classic_from_jdn,
     dreamspell_kin, dreamspell_year_bearer, dreamspell_year_code, earth_family, gregorian_to_jdn,
-    jdn_to_gregorian, julian_to_jdn, kin_from_tone_seal, kin_info, long_count_to_days, oracle,
-    seal_of, thirteen_moon_date, tone_of, wavespell,
+    jdn_to_gregorian, julian_to_jdn, kin_from_tone_seal, kin_info, long_count_to_days, new_sirius_year,
+    oracle, seal_of, thirteen_moon_date, tone_of, wavespell,
 )
 
 SEAL_BY_POWER_EN = {v["power"][1]: k for k, v in SEALS.items()}
@@ -439,3 +439,78 @@ def test_result_schema_and_options():
     assert any("1582" in w for w in r3["warnings"])
     with pytest.raises(ValueError):
         calculate(BirthInput(2001, 2, 29))
+
+
+# ---------------------------------------------------------------------------
+# Хронология «Нового Сириуса» (NS), включая годы до 1987 (повторная проверка, приоритет 1)
+# ---------------------------------------------------------------------------
+
+# Rinri Project Newsletter III, Vol. 3 No. 1 «Dreamspell: The Sirius Code Revealed»,
+# https://www.lawoftime.org/pdfs/Rinri-III-3.1.pdf, с. 9–10 (запись «цикл.год.луна.день Kin»):
+NS_RINRI = [
+    ((1987, 7, 26), "NS1.0.1.1", 34),     # «NS1.0.1.1 Kin 34»
+    ((1988, 7, 24), "NS1.0.13.28", 137),  # «NS1.0.13.28. Kin 137»
+    ((1988, 7, 25), "NS1.1.0.0", 138),    # «NS1.1.0.0 Kin 138» (День вне времени 1988)
+    ((2007, 7, 25), "NS1.20.0.0", 53),    # «NS1.20.0.0 = 365th day of Red Magnetic Moon year, Kin 53»
+    ((2006, 12, 21), "NS1.19.6.9", 97),   # «NS1.19.6.9 Kin 97 — solstice date»
+    ((1993, 7, 26), "NS1.6.1.1", 144),    # «NS1.6.1.1 = 1987 + 6 = 1993 … Kin 144»
+    ((2007, 7, 26), "NS1.20.1.1", 54),    # «NS1.20, 1.1 … Kin 54»
+    ((2012, 12, 21), "NS1.25.6.9", 207),  # «NS1.25.6.9 … Kin 207 (… December 21, 2012)»
+    ((2013, 7, 26), "NS1.26.1.1", 164),   # «NS1.26.1.1 … Kin 164»
+    ((2053, 1, 24), "NS2.13.7.15", 21),   # «NS.2. 13.7.15 … 2052-53, Resonant Moon, day 15, Kin 21»
+    ((2007, 1, 1), "NS1.19.6.20", 108),   # «1NS19.6.20 Kin 108 … January 1, 2007»
+    ((1939, 1, 24), "-NS1.3.7.15", 11),   # «- NS1.3.7.15 = -NS1 = 1935-1987 … (1938-39) … Kin 11»
+    ((1987, 7, 25), "-NS1.52.0.0", 33),   # «- NS1.52.0.0 = Day Out of Time July 25, 1987, Kin 33»
+    # Отчёт Стефани Саут, https://lawoftime.org/solstice-2025-thirteen-years-later/ :
+    # «NS1.38.6.8 (December 20, 2025) Kin 11: Blue Spectral Monkey»
+    ((2025, 12, 20), "NS1.38.6.8", 11),
+    # https://lawoftime.org/parallel-time/ : «NS1.39.3.19–22 • Kin 43–46 October 8–11, 2026»,
+    # «NS1.39.3.24 • Kin 48 October 13, 2026»
+    ((2026, 10, 8), "NS1.39.3.19", 43),
+    ((2026, 10, 13), "NS1.39.3.24", 48),
+]
+
+
+@pytest.mark.parametrize("ymd,ns_date,kin", NS_RINRI)
+def test_new_sirius_full_date_official(ymd, ns_date, kin):
+    tm = thirteen_moon_date(*ymd)
+    assert tm["ns_date"] == ns_date
+    assert dreamspell_kin(*ymd) == kin
+
+
+def test_new_sirius_cycles_before_1987():
+    # Rinri III 3.1: «For cycles before NS 1, simply add a minus sign before the NS: - NS1 = 1935-1987,
+    # - NS2 = 1883-1935, - NS3 = 1831-1883 …»; «You do not count backwards. Only the numbering of the
+    # Sirius cycles runs backwards from NS1.»
+    assert new_sirius_year(1986)["label"] == "-NS1.51"
+    assert new_sirius_year(1935)["label"] == "-NS1.0"
+    assert new_sirius_year(1934)["label"] == "-NS2.51"
+    assert new_sirius_year(1883)["cycle_span"] == "1883–1935"
+    assert new_sirius_year(1831)["label"] == "-NS3.0"
+    assert new_sirius_year(1987)["label"] == "NS1.0" and new_sirius_year(2039)["label"] == "NS2.0"
+    # https://lawoftime.org/timeshipearth/articlesbyvv/1000daysto2012.html : «N.S.1.51.13.28 … will be followed by
+    # the Day Out of Time … Then will commence N.S.2.0.1.1 Kin 34»
+    assert thirteen_moon_date(2039, 7, 24)["ns_date"] == "NS1.51.13.28"
+    assert thirteen_moon_date(2039, 7, 26)["ns_date"] == "NS2.0.1.1" and dreamspell_kin(2039, 7, 26) == 34
+    # T2 (04.02.1984 → год 1983–84) и T4 (14.03.1879 → год 1878–79)
+    assert calculate(T2)["dreamspell"]["thirteen_moon"]["ns"] == "-NS1.48"
+    assert calculate(T4)["dreamspell"]["thirteen_moon"]["ns"] == "-NS3.47"
+    # 0.0 Хунаб Ку: полная запись в источнике не определена
+    assert thirteen_moon_date(2004, 2, 29)["ns_date"] is None and thirteen_moon_date(2004, 2, 29)["ns"] == "NS1.16"
+
+
+def test_classic_day_boundary_kiche_midnight_and_night_overlap():
+    # B. Tedlock, «El tiempo y los mayas del altiplano» (2002), с. 88–89: «a la medianoche entra el primer Mam»;
+    # с. 181: ночь — «imbricación» двух соседних дней (хранитель дней «спрашивает оба дня»).
+    # https://popol-mayab.org/wp-content/uploads/2017/10/barbara-tedlock-el-tiempo-y-los-mayas-del-altiplano.pdf
+    r2 = calculate(T2)                                   # 23:30 → вечер, соседний — следующий день
+    assert r2["classic"]["day_boundary"]["rule"] == "midnight"
+    assert r2["classic"]["tzolkin"]["label"] == "12 Ebʼ"   # основной результат не меняется
+    no = r2["classic"]["night_overlap"]
+    assert no["other_day_is"] == "следующий" and no["other_day_label"] == "13 Bʼen"
+    assert any("наложения" in w for w in r2["warnings"])
+    early = calculate(BirthInput(1984, 2, 5, 3, 0, tz="Europe/Moscow"))
+    assert early["classic"]["tzolkin"]["label"] == "13 Bʼen"
+    assert early["classic"]["night_overlap"]["other_day_label"] == "12 Ebʼ"
+    assert "night_overlap" not in calculate(T1)["classic"]        # 14:30 — день
+    assert "night_overlap" not in calculate(BirthInput(1984, 2, 4))["classic"]   # время неизвестно

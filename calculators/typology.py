@@ -322,6 +322,21 @@ DISINTEGRATION = {1: 4, 4: 2, 2: 8, 8: 5, 5: 7, 7: 1, 9: 6, 6: 3, 3: 9}
 CENTERS = {"gut": (8, 9, 1), "heart": (2, 3, 4), "head": (5, 6, 7)}
 CENTERS_RU = {"gut": "инстинктивный (телесный) — гнев", "heart": "чувствующий (сердечный) — стыд",
               "head": "мыслительный (головной) — страх"}
+#: 27 архетипов тритипа К. Шерник Фовр (Tritype®). Ключ — три цифры по возрастанию, порядок в самом
+#: тритипе на название не влияет («The Mentor Tritype®: 125, 152, 215, 251, 512, 521»).
+#: Источник: https://www.katherinefauvre.com/tritype (список «125 - The Mentor … 479 - The Gentle Spirit»).
+TRITYPE_ARCHETYPES_EN: dict[str, str] = {
+    "125": "The Mentor", "126": "The Supporter", "127": "The Teacher",
+    "135": "The Technical Expert", "136": "The Taskmaster", "137": "The Systems Builder",
+    "145": "The Researcher", "146": "The Philosopher", "147": "The Visionary",
+    "258": "The Strategist", "259": "The Problem Solver", "268": "The Rescuer",
+    "269": "The Good Samaritan", "278": "The Free Spirit", "279": "The Peacemaker",
+    "358": "The Solution Master", "359": "The Thinker", "368": "The Justice Fighter",
+    "369": "The Mediator", "378": "The Mover Shaker", "379": "The Ambassador",
+    "458": "The Scholar", "459": "The Contemplative", "468": "The Truth Teller",
+    "469": "The Seeker", "478": "The Messenger", "479": "The Gentle Spirit",
+}
+
 HORNEVIAN = {"assertive": (3, 7, 8), "compliant": (1, 2, 6), "withdrawn": (4, 5, 9)}
 HORNEVIAN_RU = {"assertive": "напористые (против людей)", "compliant": "уступчивые/долженствующие (к людям)",
                 "withdrawn": "уходящие (от людей)"}
@@ -1050,7 +1065,13 @@ def score_enneagram(answers: dict[str, Any]) -> dict[str, Any]:
         core_c = info["center"]
         others = sorted([best[c] for c in CENTERS if c != core_c], key=lambda t: (-adjusted[t], t))
         result["tritype"] = f"{core}{others[0]}{others[1]}"
-        steps.append(f"Тритип (ядро + лучший тип каждого другого центра): {result['tritype']}.")
+        # Определение Фовр: «the dominant type in each of the three centers … in a hierarchical stacking order.
+        # The type at the top of your Tritype® Stacking is your "core" type» (https://www.katherinefauvre.com/tritype).
+        arch_key = "".join(sorted(result["tritype"]))
+        result["tritype_archetype"] = {"key": arch_key, "name_en": TRITYPE_ARCHETYPES_EN[arch_key],
+                                       "source": "https://www.katherinefauvre.com/tritype"}
+        steps.append(f"Тритип (ядро + лучший тип каждого другого центра, по убыванию балла): {result['tritype']} "
+                     f"— архетип Фовр {arch_key} «{TRITYPE_ARCHETYPES_EN[arch_key]}».")
 
     result["centers"] = {c: sum(adjusted[t] for t in m) for c, m in CENTERS.items()}
 

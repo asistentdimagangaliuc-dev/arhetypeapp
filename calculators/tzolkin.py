@@ -494,19 +494,43 @@ def earth_family(seal: int) -> dict[str, Any]:
     return {**fam, "seals_ru": [SEALS[x]["ru"] for x in fam["seals"]]}
 
 
+def new_sirius_year(y0: int) -> dict[str, Any]:
+    """Год «Нового Сириуса» (New Sirius, NS) для 13-лунного года, начавшегося 26.07.y0.
+
+    Rinri Project Newsletter III, Vol. 3 No. 1 «Dreamspell: The Sirius Code Revealed»
+    (https://www.lawoftime.org/pdfs/Rinri-III-3.1.pdf, с. 9–10):
+      * «NS1.0.1.1 Kin 34 … The first year of any New Sirius Cycle is always registered as 0»;
+      * «For cycles before NS 1, simply add a minus sign before the NS: - NS1 = 1935-1987,
+        - NS2 = 1883-1935, - NS3 = 1831-1883 …»;
+      * «In the cycles prior to NS1.0.1.1, the count of the years/rings follows the same order as the
+        NS cycles. You do not count backwards. Only the numbering of the Sirius cycles runs backwards
+        from NS1»; пример «- NS1.3.7.15 = -NS1 = 1935-1987, 1935 + 3 = Red Spectral Moon year (1938-39)».
+    Итого: q, r = divmod(y0 − 1987, 52); q ≥ 0 → «NS{q+1}.{r}», q < 0 → «-NS{−q}.{r}».
+    """
+    q, r = divmod(y0 - DS_ANCHOR_YEAR, 52)
+    cycle = q + 1 if q >= 0 else -q
+    prefix = "NS" if q >= 0 else "-NS"
+    start = DS_ANCHOR_YEAR + 52 * q
+    return {"label": f"{prefix}{cycle}.{r}", "prefix": prefix, "cycle": cycle, "year": r,
+            "before_1987": q < 0, "cycle_span": f"{start}–{start + 52}"}
+
+
 def thirteen_moon_date(y: int, m: int, d: int) -> dict[str, Any]:
-    """Дата календаря 13 Лун: луна 1–13 и день 1–28, День вне времени (25.07) или 0.0 Хунаб Ку (29.02)."""
+    """Дата календаря 13 Лун: луна 1–13 и день 1–28, День вне времени (25.07) или 0.0 Хунаб Ку (29.02).
+
+    ``ns`` — год «Нового Сириуса» (см. ``new_sirius_year``), ``ns_date`` — полная запись даты по Rinri III
+    (цикл.год.луна.день): «NS1.19.6.9 Kin 97» = 21.12.2006; День вне времени — «следующий год.0.0»
+    («NS1.1.0.0 Kin 138» = 25.07.1988, «-NS1.52.0.0» = 25.07.1987). Для 0.0 Хунаб Ку (29.02) запись
+    в источнике не определена → ``ns_date = None``.
+    """
     _validate_gregorian(y, m, d)
     y0 = dreamspell_year_start(y, m, d)
     bearer = dreamspell_year_bearer(y0)
-    # Нумерация «Нового Сириуса»: NS1.0 = 1987–1988 (Planetary Kin Report: «NS1.34 / 2021-2022»).
-    # Для лет до 1987 принятая запись не подтверждена — не выдаём.
-    ns = None
-    if y0 >= DS_ANCHOR_YEAR:
-        ns = f"NS{1 + (y0 - DS_ANCHOR_YEAR) // 52}.{(y0 - DS_ANCHOR_YEAR) % 52}"
+    nsy = new_sirius_year(y0)
+    ns = nsy["label"]
     out: dict[str, Any] = {
         "year_start": y0, "year_span": f"26.07.{y0} — 25.07.{y0 + 1}",
-        "year_bearer": kin_info(bearer), "ns": ns,
+        "year_bearer": kin_info(bearer), "ns": ns, "ns_cycle_span": nsy["cycle_span"], "ns_date": None,
         "is_day_out_of_time": False, "is_hunab_ku": False,
     }
     if m == 2 and d == 29:
@@ -516,12 +540,14 @@ def thirteen_moon_date(y: int, m: int, d: int) -> dict[str, Any]:
     off = dreamspell_day_offset(m, d)
     if off == 364:
         out.update(is_day_out_of_time=True, moon=None, day=None, plasma=None,
+                   ns_date=f"{nsy['prefix']}{nsy['cycle']}.{nsy['year'] + 1}.0.0",
                    label_ru="День вне времени (25 июля)")
         return out
     moon, day = off // 28 + 1, off % 28 + 1
     pl = PLASMAS[(day - 1) % 7]
     out.update(moon=moon, day=day, moon_name_ru=MOONS[moon]["ru"], moon_name_en=MOONS[moon]["en"],
                plasma={"ru": pl[0], "en": pl[1], "index": (day - 1) % 7 + 1},
+               ns_date=f"{ns}.{moon}.{day}",
                label_ru=f"{MOONS[moon]['ru']}, день {day} ({moon}.{day}), плазма {pl[0]}")
     return out
 
@@ -735,6 +761,23 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
     if b.has_time and not is_feb29:
         warnings.append("Время рождения не используется: день цолькина определяется гражданской датой "
                         "(местная полночь — граница дня). При рождении около полуночи проверьте дату.")
+    # Граница суток в классическом счёте. Кʼиче (Момостенанго): новый день (Mam) «входит» в полночь,
+    # а ночь — время «наложения» двух соседних дней (B. Tedlock, «El tiempo y los mayas del altiplano»,
+    # 2002, с. 88–89 и 181; https://popol-mayab.org/wp-content/uploads/2017/10/barbara-tedlock-el-tiempo-y-los-mayas-del-altiplano.pdf).
+    night_overlap: dict[str, Any] | None = None
+    if b.has_time and b.hour is not None and (b.hour >= 18 or b.hour < 6):
+        evening = b.hour >= 18
+        other_jdn = jdn + 1 if evening else jdn - 1
+        other = classic_from_jdn(other_jdn, correlation)["tzolkin"]
+        night_overlap = {
+            "other_day_label": other["label"], "other_day_label_kiche": other["label_kiche"],
+            "other_day_is": "следующий" if evening else "предыдущий",
+            "night_rule": "по часам 18:00–06:00 (грубая оценка без учёта места)",
+            "source": ("B. Tedlock, El tiempo y los mayas del altiplano (2002), с. 181: «En vez de intentar "
+                       "determinar si el sueño ocurrió antes o después de la medianoche, el contador del tiempo "
+                       "le pregunta a los dos días en cuestión … la noche es cuando las influencias de dos "
+                       "Señores de Día «consecutivos» manifiestan imbricación»"),
+        }
     if gy < 1582 or (gy == 1582 and (gm, gd) < (10, 15)):
         warnings.append("Дата раньше введения григорианского календаря (15.10.1582): Dreamspell посчитан по "
                         "пролептическому григорианскому календарю — это экстраполяция, а не практика системы.")
@@ -804,8 +847,8 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
                  f"позиция {w['position']}; замок № {ds['castle']['number']}: {ds['castle']['ru']} "
                  f"({ds['castle']['court_ru']}); "
                  f"земная семья: {ds['earth_family']['ru']}; ПГА: {'да' if ds['is_gap'] else 'нет'}.")
-    steps.append(f"Дата 13 Лун: {tm['label_ru']}; год {tm['year_span']}"
-                 + (f" ({tm['ns']})." if tm["ns"] else "."))
+    steps.append(f"Дата 13 Лун: {tm['label_ru']}; год {tm['year_span']} ({tm['ns']}, цикл {tm['ns_cycle_span']}"
+                 + (f"; полная запись {tm['ns_date']}" if tm["ns_date"] else "") + ").")
 
     # --- Классический счёт ---
     cl = classic_from_jdn(jdn, correlation)
@@ -818,6 +861,19 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
                      f"→ {cl['long_count']}.")
     tz = cl["tzolkin"]
     hb = cl["haab"]
+    cl["day_boundary"] = {
+        "rule": "midnight",
+        "note_ru": ("День = местная гражданская дата. У кʼиче Момостенанго новый день входит в полночь "
+                    "(Tedlock 2002, с. 88–89: «a la medianoche entra el primer Mam»); у ишилей, хакальтеков и "
+                    "канхобалей день «входит» на закате предыдущих суток, но в таблицах и корреляции GMT "
+                    "берётся день, когда он «текущий» (Thompson, Maya Hieroglyphic Writing, прил. 2)."),
+    }
+    if night_overlap is not None:
+        cl["night_overlap"] = night_overlap
+        warnings.append(f"Рождение ночью: у кʼиче ночь — время «наложения» двух соседних дней (Tedlock), "
+                        f"поэтому хранитель дней может рассматривать и {night_overlap['other_day_is']} день "
+                        f"{night_overlap['other_day_label']} ({night_overlap['other_day_label_kiche']}). "
+                        f"Основной результат — по гражданской дате: {tz['label']}.")
     steps.append(f"Цолькин: число = ({x} + 3) mod 13 + 1 = {tz['number']}; имя = ({x} + 19) mod 20 + 1 = "
                  f"{tz['day_index']} ({tz['day_name']}, кʼиче {tz['day_name_kiche']}) → {tz['label']}.")
     steps.append(f"Хааб: ({x} + 348) mod 365 = {hb['month_index'] * 20 + hb['day']} → месяц {hb['month_index']} "

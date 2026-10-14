@@ -445,6 +445,9 @@ def test_example_1_clear_profile():
     assert e["scores"] == {1: 14, 2: 5, 3: 6, 4: 3, 5: 7, 6: 8, 7: 3, 8: 5, 9: 9}
     assert e["label"] == "1w9" and e["confidence"]["level"] == "high" and e["confidence"]["margin"] == 5
     assert e["tritype"] == "163"
+    # Архетип Фовр: https://www.katherinefauvre.com/tritype — «136 - The Taskmaster»
+    assert e["tritype_archetype"] == {"key": "136", "name_en": "The Taskmaster",
+                                      "source": "https://www.katherinefauvre.com/tritype"}
     assert e["instincts"]["scores"] == {"sp": 17, "so": 12, "sx": 3}
     assert e["instincts"]["full_stacking"] == "sp/so/sx" and e["instincts"]["confidence"] == "high"
 
@@ -465,6 +468,7 @@ def test_example_2_tie_breaks_and_followups():
     e2 = T.score_enneagram(r2)
     assert e2["adjusted"][9] == 13 and e2["adjusted"][6] == 11
     assert e2["label"] == "9w1" and e2["confidence"]["level"] == "medium" and e2["tritype"] == "962"
+    assert e2["tritype_archetype"]["name_en"] == "The Good Samaritan"   # «269 - The Good Samaritan»
     assert e2["instincts"]["full_stacking"] == "so/sp/sx" and e2["instincts"]["confidence"] == "medium"
 
 
@@ -557,3 +561,14 @@ def test_noncanonical_without_time_flags_cusp():
     # 20.03.2004 — день равноденствия (Солнце входит в Овен 20.03.2004 ок. 06:49 UT): без времени знак неоднозначен
     r = T.noncanonical_date_variant(BirthInput(2004, 3, 20), user_explicitly_asked=True)
     assert "на границе знаков" in r["variants"][1]["calc"]
+
+
+def test_tritype_archetypes_fauvre_complete():
+    # https://www.katherinefauvre.com/tritype : 27 архетипов, по одному типу из каждого центра
+    # («head (5, 6, 7), heart (2, 3, 4), and gut (8, 9, 1)»); «The Mentor Tritype®: 125, 152, 215, 251, 512, 521».
+    from itertools import product
+    from calculators.typology import TRITYPE_ARCHETYPES_EN
+    keys = {"".join(sorted(f"{a}{b}{c}")) for a, b, c in product((8, 9, 1), (2, 3, 4), (5, 6, 7))}
+    assert keys == set(TRITYPE_ARCHETYPES_EN) and len(keys) == 27
+    assert TRITYPE_ARCHETYPES_EN["125"] == "The Mentor" and TRITYPE_ARCHETYPES_EN["479"] == "The Gentle Spirit"
+    assert TRITYPE_ARCHETYPES_EN["278"] == "The Free Spirit" and TRITYPE_ARCHETYPES_EN["358"] == "The Solution Master"

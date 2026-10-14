@@ -14,15 +14,19 @@ from calculators.common.time import BirthInput
 from calculators.syutsay import (
     CONSCIOUSNESS_DAYS,
     PLANETS,
+    YEAR_THEMES,
     build_matrix,
     calculate,
+    calendar_day,
     compatibility,
     consciousness_number,
     extract_given_name,
     financial_code_findh,
     mission_number,
     name_number,
+    personal_month,
     personal_year,
+    universal_month,
     universal_year,
 )
 
@@ -357,3 +361,104 @@ def test_no_name_no_partner():
     assert "name" not in r and "compatibility" not in r and "financial_code_findh" not in r
     assert r["consciousness"]["zero_in_day"] and r["consciousness"]["day_note"]
     assert len(r["years"]["cycle"]) == 9
+
+
+# ---------------------------------------------------------------------------
+# Официальный календарь школы: месяцы, дни, граница года, сведение 11/22/33
+# (повторная проверка, приоритет 1)
+# ---------------------------------------------------------------------------
+
+# Образец «Персонального бизнес календаря 2026» на zhanatglobal.com (общие картинки всех товаров «2026 — год N»,
+# напр. https://zhanatglobal.com/product/kalendar-2025-1/):
+#   https://zhanatglobal.com/wp-content/uploads/2024/12/webpconverter-3-1-scaled.webp — «ЯНВАРЬ», круг «2»,
+#   «Покровитель месяца — Луна»; https://zhanatglobal.com/wp-content/uploads/2024/12/webpconverter-4-1-scaled.webp —
+#   «ФЕВРАЛЬ», круг «3», «Планета месяца — Юпитер»; https://zhanatglobal.com/wp-content/uploads/2024/12/
+#   webpconverter-2-1-scaled.webp — «Глобальный год 2026 - 1». В каждой клетке «общий день» и «личный день»
+#   (в образце они совпадают). Числа переписаны с картинок:
+OFFICIAL_JAN_2026 = [3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6]
+OFFICIAL_FEB_2026 = [4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4]
+# Цвета клеток (легенда «Обозначения»): зелёный «успех через анализ», бирюзовый «успех через любовь и комфорт»,
+# красный «обнуление».
+OFFICIAL_COLORS_2026 = {
+    1: {"успех через анализ": [1, 19, 28], "успех через любовь и комфорт": [4, 13, 22, 31], "обнуление": [10, 20, 30]},
+    2: {"успех через анализ": [9, 18, 27], "успех через любовь и комфорт": [3, 12, 21], "обнуление": [10, 20]},
+}
+
+
+def test_official_calendar_universal_months_and_days_2026():
+    from datetime import date
+    assert universal_year(2026)["number"] == 1                       # «Глобальный год 2026 - 1»
+    assert universal_month(2026, 1)["number"] == 2 and PLANETS[2] == "Луна"
+    assert universal_month(2026, 2)["number"] == 3 and PLANETS[3] == "Юпитер"
+    for month, expected in ((1, OFFICIAL_JAN_2026), (2, OFFICIAL_FEB_2026)):
+        got = [calendar_day(15, 5, date(2026, month, dd))["universal_day"]["number"] for dd in range(1, len(expected) + 1)]
+        assert got == expected
+        for label, days in OFFICIAL_COLORS_2026[month].items():
+            for dd in days:
+                assert calendar_day(15, 5, date(2026, month, dd))["universal_day"]["highlight"] == label
+        coloured = {dd for days in OFFICIAL_COLORS_2026[month].values() for dd in days}
+        for dd in set(range(1, len(expected) + 1)) - coloured:
+            assert calendar_day(15, 5, date(2026, month, dd))["universal_day"]["highlight"] is None
+
+
+def test_official_calendar_master_numbers_reduced():
+    # В том же образце суммы 11, 22 и 33 сведены к 2, 4 и 6 (мастер-чисел нет):
+    # 09.01: 2 + 9 = 11 → «2»; 20.01: 2 + 20 = 22 → «4»; 31.01: 2 + 31 = 33 → «6»; 08.02: 3 + 8 = 11 → «2»;
+    # 19.02: 3 + 19 = 22 → «4».
+    from datetime import date
+    for (mm, dd), (chain, n) in {(1, 9): ([11, 2], 2), (1, 20): ([22, 4], 4), (1, 31): ([33, 6], 6),
+                                 (2, 8): ([11, 2], 2), (2, 19): ([22, 4], 4)}.items():
+        u = calendar_day(15, 5, date(2026, mm, dd))["universal_day"]
+        official = (OFFICIAL_JAN_2026 if mm == 1 else OFFICIAL_FEB_2026)[dd - 1]
+        assert u["chain"] == chain and u["number"] == n == official
+
+
+def test_personal_month_day_and_year_boundary():
+    from datetime import date
+    # Родившийся 04.05 имеет личный 2026 = 0+4+0+5+2+0+2+6 = 19 → 1 = общему году. Для него личные числа
+    # совпадают с общими — ровно как в образце календаря (строки «общий день» и «личный день» одинаковы).
+    assert personal_year(4, 5, 2026)["number"] == 1
+    for mm, expected in ((1, OFFICIAL_JAN_2026), (2, OFFICIAL_FEB_2026)):
+        assert personal_month(4, 5, 2026, mm)["number"] == universal_month(2026, mm)["number"]
+        assert [calendar_day(4, 5, date(2026, mm, dd))["personal_day"]["number"]
+                for dd in range(1, len(expected) + 1)] == expected
+    # T1 (15.05): личный 2026 = 3 → личный январь = 3 + 1 = 4, июнь = 3 + 6 = 9, декабрь = 3 + 12 = 15 → 6.
+    r = calculate(T1, target_date="2026-01-09")
+    assert r["years"]["target_year"] == 2026 and r["years"]["personal_year"]["number"] == 3
+    assert [x["personal_month"] for x in r["years"]["months"]] == [4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6]
+    assert [x["universal_month"] for x in r["years"]["months"]] == [2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4]
+    assert r["day"]["universal_day"]["number"] == 2 and r["day"]["personal_day"]["number"] == 4   # 4 + 9 = 13 → 4
+    # Граница личного года — 1 января (календарь «2026 — год N» начинается с января): для T1 (день рождения
+    # 15 мая) январь 2026 считается уже от личного года 2026, а не 2025.
+    assert r["day"]["personal_month"] == personal_month(15, 5, 2026, 1)["number"] == 4
+    assert personal_year(15, 5, 2025)["number"] == 2
+    assert r["years"]["boundary"].startswith("1 января")
+    assert "личные месяц и день" not in " ".join(r["not_computed"])
+    assert r["years"]["personal_year"]["theme"] == YEAR_THEMES[3] == "систематизация и управление"
+    # 10/20/30 — «дни обнуления» (zhanatglobal.com, «Бизнес календарь — одностраничник успешных дней»:
+    # «10, 20 и 30 число каждого месяца — дни обнуления»)
+    z = calculate(T1, target_date="20.02.2026")["day"]
+    assert z["zeroing_day"] is True and z["personal_day"]["highlight"] == "обнуление"
+    assert "day" not in calculate(T1, target_year=2026)
+
+
+def test_year_themes_official_covers():
+    # Обложки «Персональный бизнес календарь 2026 — год N» (zhanatglobal.com/product/…, картинки webpconverter-god-N):
+    # «в ваш личный год построения стратегии / построения отношений / систематизации и управления / целеполагания /
+    # масштабирования / комфорта и творчества / дисциплины и внедрения целей / упорного труда и контроля процессов /
+    # генерации идей и здоровья»
+    assert [YEAR_THEMES[n] for n in range(1, 10)] == [
+        "построение стратегии", "построение отношений", "систематизация и управление", "целеполагание",
+        "масштабирование", "комфорт и творчество", "дисциплина и внедрение целей",
+        "упорный труд и контроль процессов", "генерация идей и здоровье"]
+
+
+def test_row_369_note_official_blog():
+    # https://zhanatglobal.com/kak-czifrovaya-nauka-syuczaj-menyaet-zhizn/ (А. Шаталин, 03.11.1961):
+    # «Моя линия цифр 3-6-9 помогала мне анализировать ситуацию и видеть окончание любого процесса.
+    # Четыре единицы давали способность самостоятельно действовать.»
+    mx = build_matrix(1961, 11, 3)
+    assert mx["counts"]["1"] == 4
+    row = line(mx, "row_369")
+    assert row["status"] == "full" and "анализировать ситуацию" in row["note"] and row["name"] is None
+    assert line(mx, "row_147")["name"] == "линия денег"
