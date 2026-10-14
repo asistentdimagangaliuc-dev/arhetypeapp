@@ -15,8 +15,8 @@
 * [PTB]  https://www.ptb.de/cms/en/ptb/fachabteilungen/abt4/fb-44/ag-441/realisation-of-legal-time-in-germany/dst-and-midsummer-dst-in-germany-until-1979.html
 * [MEEUS]  J. Meeus, Astronomical Algorithms, 2nd ed., гл. 7 (юлианский день).
 
-Тесты с пометкой xfail фиксируют найденные ошибки common/time.py. Исправления
-предложены в отчёте (раздел common_changes_needed) и в базе знаний, §6.
+Тесты регрессии для ошибок, найденных при исследовании (разбор UTC+0530, DST-эвристика zoneinfo,
+двойное летнее время, LMT места до 1919–1924, старый стиль) — исправления внесены в common/time.py.
 """
 from __future__ import annotations
 
@@ -179,8 +179,8 @@ class TestMoscowHistory:
         "date_, expected",
         [
             # 27.03.2011 последний переход на летнее время, далее «вечное летнее» UTC+4;
-            # 26.10.2014 02:00 возврат на UTC+3. ФЗ «Об исчислении времени» (2011),
-            # ФЗ от 21.07.2014 № 248-ФЗ; [ENWIKI-MSK]; [RUWIKI-DEKRET]; [TZDB-EU].
+            # 26.10.2014 02:00 возврат на UTC+3. ФЗ «Об исчислении времени» (2011) и поправки
+            # 2014 г. (законопроект 431985-6); [ENWIKI-MSK]; [RUWIKI-DEKRET]; [TZDB-EU].
             ((2011, 3, 26, 12), 3.0),
             ((2011, 6, 15, 12), 4.0),
             ((2012, 1, 15, 12), 4.0),  # зимой 2011/12 стрелки не переводили
@@ -474,30 +474,24 @@ class TestInputValidation:
 
 
 class TestKnownBugs:
-    @pytest.mark.xfail(strict=True, reason="BUG: 'UTC+0530' разбирается как +530 ч; нужен разбор HHMM и проверка |смещение| ≤ 14 ч")
     def test_fixed_offset_hhmm_without_colon(self):
         assert normalize(BirthInput(2000, 1, 1, 12, 0, tz="UTC+0530")).utc_offset_hours == 5.5
 
-    @pytest.mark.xfail(strict=True, reason="BUG: zoneinfo.dst() для CEST после MSK даёт −1 ч; предупреждение «DST -1 day, 23:00:00»")
     def test_dst_warning_never_negative(self):
         n = normalize(BirthInput(1942, 7, 1, 12, 0, place="Киев"))
         assert not any("-1 day" in w for w in n.warnings)
 
-    @pytest.mark.xfail(strict=True, reason="BUG: двойное летнее время 1945 (+2 ч к CET) в предупреждении показано как 1:00:00")
     def test_double_summer_time_warning_shows_two_hours(self):
         # [PTB]: 24.05–24.09.1945 Берлин/советская зона — CEMT (UT+3 = CET+2).
         n = normalize(BirthInput(1945, 6, 15, 12, 0, place="Берлин"))
         assert any("2:00:00" in w or "2 ч" in w for w in n.warnings)
 
-    @pytest.mark.xfail(strict=True, reason="BUG: до 1919 tzdb даёт MMT (среднее время Москвы +2:30:17) для всего Europe/Moscow; "
-                                          "для Петербурга нужно LMT по долготе (+2:01:20). Подстановка срабатывает только для tzname=='LMT'")
     def test_spb_1900_uses_birthplace_mean_time(self):
         # Петербург жил по своему среднему (пулковскому) времени 2:01:18.7
         # (Karpinsky / Бялокоз 1919, цит. в [TZDB-EU]); λ=30.3351° → 2:01:20.4.
         n = normalize(BirthInput(1900, 1, 1, 12, 0, place="Санкт-Петербург"))
         assert n.utc_offset_hours * 3600 == pytest.approx(30.3351 / 15 * 3600, abs=60)
 
-    @pytest.mark.xfail(strict=True, raises=TypeError, reason="НЕТ ФУНКЦИИ: BirthInput не принимает calendar='julian' (даты по старому стилю до 14.02.1918)")
     def test_julian_calendar_input(self):
         # 2 марта 1879 ст. ст. = 14 марта 1879 н. ст.
         b = BirthInput(1879, 3, 2, 11, 30, tz="LMT", lat=48.4011, lon=9.9876, calendar="julian")  # type: ignore[call-arg]

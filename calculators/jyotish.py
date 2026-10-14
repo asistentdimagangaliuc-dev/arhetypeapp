@@ -592,8 +592,16 @@ def calculate(b: BirthInput, ayanamsa: str = "lahiri", node: str = "mean",
         raise ValueError(f"Аянамша {ayanamsa!r} не поддерживается: {list(eph.AYANAMSAS)}")
     if node not in ("mean", "true"):
         raise ValueError("node: 'mean' или 'true'")
+    if bhava_system not in ("sripati", "placidus", "equal"):
+        raise ValueError("bhava_system: 'sripati' | 'placidus' | 'equal'")
+    if sunrise_method not in ("hindu", "apparent"):
+        raise ValueError("sunrise_method: 'hindu' | 'apparent'")
+    if dasha_start_star not in (1, 4, 5, 8):
+        raise ValueError("dasha_start_star: 1 | 4 | 5 | 8")
     warnings: list[str] = []
     steps: list[str] = []
+    if _ignored:
+        warnings.append(f"Неизвестные опции проигнорированы: {sorted(_ignored)}")
 
     time_known = b.has_time
     if not time_known:
@@ -648,7 +656,7 @@ def calculate(b: BirthInput, ayanamsa: str = "lahiri", node: str = "mean",
                  "d9_sign": navamsa_sign(asc) + 1, "d9_sign_ru": SIGNS_RU[navamsa_sign(asc)],
                  "d10_sign": dasamsa_sign(asc) + 1, "d10_sign_ru": SIGNS_RU[dasamsa_sign(asc)],
                  "mc_sidereal": round(h_sid["mc"] % 360.0, 6)}
-        steps.append(f"3. Тропический ASC {sign_dms(h_trop['asc']).replace(' ', ' (троп.) ', 1)} → сидерическая Лагна "
+        steps.append(f"3. Тропический ASC {sign_dms(h_trop['asc'])} (RAMC {h_sid['armc']:.4f}°) → сидерическая Лагна "
                      f"{sign_dms(asc)} ({lnak['name']} пада {lnak['pada']}).")
         dd = asc - 30 * lagna_sign
         if dd < 1.0 or dd > 29.0:

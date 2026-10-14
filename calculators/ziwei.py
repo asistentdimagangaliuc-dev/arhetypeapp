@@ -24,9 +24,13 @@ from __future__ import annotations
 from datetime import date, datetime, timedelta, timezone
 from typing import Any
 
+import swisseph as swe
 from lunar_python import LunarMonth, Solar
 
-from .common.time import BirthInput, fmt_offset, local_mean_time, normalize, true_solar_time
+from .common import ephemeris as _ephemeris  # noqa: F401  (ставит путь к файлам эфемерид)
+from .common.ephemeris import find_sun_longitude
+from .common.time import (BirthInput, fmt_offset, jd_to_utc, julian_day_ut, local_mean_time, normalize,
+                          true_solar_time)
 
 # ---------------------------------------------------------------------------
 # Базовые справочники
@@ -330,8 +334,7 @@ def _lunar_of(d: date):
 
 
 def _elongation(jd: float) -> float:
-    import swisseph as swe  # уже инициализирован в common.ephemeris
-    from .common import ephemeris  # noqa: F401  (ставит путь к эфемеридам)
+    """Элонгация Луны от Солнца, градусы в (−180, 180]; 0 = новолуние."""
     m = swe.calc_ut(jd, swe.MOON)[0][0]
     s = swe.calc_ut(jd, swe.SUN)[0][0]
     return (m - s + 540.0) % 360.0 - 180.0
@@ -358,7 +361,6 @@ def _new_moon_near(jd0: float) -> float:
 
 
 def _jd_to_date_at_offset(jd: float, offset_hours: float) -> date:
-    from .common.time import jd_to_utc
     return (jd_to_utc(jd) + timedelta(hours=offset_hours)).date()
 
 
@@ -535,8 +537,6 @@ def calculate(b: BirthInput, **options: Any) -> dict:
         if norm is not None:
             # Момент Личуня (Солнце на 315°) сравниваем с реальным моментом рождения (UT),
             # поэтому часовой пояс места рождения учтён точно (а не по пекинскому времени).
-            from .common.ephemeris import find_sun_longitude
-            from .common.time import julian_day_ut
             lc = find_sun_longitude(315.0, julian_day_ut(datetime(b.year, 2, 25, tzinfo=timezone.utc)))
             sy = b.year if norm.jd_ut >= lc else b.year - 1
             y_stem, y_branch = (sy - 4) % 10, (sy - 4) % 12
