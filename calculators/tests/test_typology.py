@@ -301,6 +301,22 @@ def test_wings_centers_groups():
         T.wings(0)
 
 
+def test_harmonic_groups_riso_hudson_names():
+    # Riso & Hudson, «The Wisdom of the Enneagram» (1999), полный текст archive.org wisdomofenneagra0000riso:
+    # «The Positive Outlook Group is composed of types Nine, Two, and Seven», «The Competency Group is composed of
+    # types Three, One, and Five», «The Reactive Group is composed of types Six, Four, and Eight».
+    assert T.HARMONIC == {"positive_outlook": (2, 7, 9), "competency": (1, 3, 5), "reactive": (4, 6, 8)}
+    assert [T.enneagram_type_info(t)["harmonic"] for t in (6, 4, 8)] == ["reactive"] * 3
+    assert "Reactive" in T.HARMONIC_RU["reactive"]
+
+
+def test_temperament_naming_note_gulenko():
+    # Д. Лытов, «Проблема темперамента в соционике» (2003): Гуленко ввёл «линейно-напористые …, гибко-разворотливые
+    # …, уравновешенно-стабильные …, восприимчиво-адаптивные» (https://socioniko.net/ru/gazeta/2003-11/index.html).
+    assert {t["temperament"].split(" (")[0] for t in T.TIMS.values()} == {
+        "линейно-напористый", "гибко-маневренный", "уравновешенно-стабильный", "восприимчиво-адаптивный"}
+
+
 # ============================ опросник ============================
 
 def test_question_bank_integrity():

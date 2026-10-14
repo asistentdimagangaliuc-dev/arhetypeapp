@@ -462,3 +462,13 @@ def test_row_369_note_official_blog():
     row = line(mx, "row_369")
     assert row["status"] == "full" and "анализировать ситуацию" in row["note"] and row["name"] is None
     assert line(mx, "row_147")["name"] == "линия денег"
+
+
+def test_matrix_energy_3_6_9_official_calendar_wording():
+    # Официальный «Бизнес-календарь 2026. Одностраничник успешных дней» (zhanatglobal.com, описание товара):
+    # «Комфорт и творчество — дни мягких решений…», «Систематизация и анализ — дни логики, расчётов…»;
+    # обложки «Персональный бизнес календарь 2026 — год 9»: «генерация идей и здоровье».
+    from calculators.syutsay import MATRIX_ENERGY, YEAR_THEMES
+    assert "анализ" in MATRIX_ENERGY[3]["competence"] and "систематизация" in MATRIX_ENERGY[3]["competence"]
+    assert "комфорт" in MATRIX_ENERGY[6]["competence"] and "творчество" in MATRIX_ENERGY[6]["competence"]
+    assert "генерация идей" in MATRIX_ENERGY[9]["competence"] and "генерация идей" in YEAR_THEMES[9]
