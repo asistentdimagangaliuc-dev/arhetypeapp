@@ -120,6 +120,10 @@ KEYS: dict[int, dict[str, tuple[str, str]]] = {
 
 # ---------------------------------------------------------------------------
 # Кодоновые кольца (21) и аминокислоты — по заголовкам глав русского издания 2013 г.
+# Английские названия, состав и аминокислоты сверены 14.10.2026 с официальной таблицей
+# https://genekeys.com/codon-ring/ (все 21 совпали). Там же 22-е «кольцо в кольце» —
+# Ring of Secrets (ключ 12, стоп-кодон) внутри Ring of Trials; в таблицу ниже оно не входит,
+# чтобы каждый ключ относился ровно к одному кольцу (в изд. 2013: «Кольцо Тайн»).
 # Состав колец согласуется со стандартным генетическим кодом (6/4/3/2/1 кодонов).
 # ---------------------------------------------------------------------------
 
@@ -192,24 +196,50 @@ SPHERES: list[dict] = [
      "side": "personality", "body": "jupiter", "lines": "pearl"},
 ]
 
-#: Дополнительные сферы, перечисленные в той же официальной таблице (12.2024) для
-#: «последовательностей в разработке»; принадлежность к последовательности не опубликована.
+#: Дополнительные сферы из той же официальной таблицы (12.2024). Это три новые сферы курса
+#: Star Pearl (в официальном профайлере — последовательность «Harmony»: Vocation, Culture,
+#: Brand, Pearl + Stability, Creativity, Relating), см. https://genekeys.com/star-pearl/ и
+#: JS официального профайлера genekeys.com/free-profile/ (GK_TO_SEQUENCE, lineTeaching), 14.10.2026.
 EXTENDED_SPHERES: list[dict] = [
-    {"id": "relating", "ru": "Взаимодействие (Relating)", "en": "Relating", "sequence": "extended",
-     "side": "personality", "body": "mercury", "lines": None},
-    {"id": "stability", "ru": "Стабильность (Stability)", "en": "Stability", "sequence": "extended",
-     "side": "design", "body": "saturn", "lines": None},
-    {"id": "creativity", "ru": "Творчество (Creativity)", "en": "Creativity", "sequence": "extended",
-     "side": "design", "body": "uranus", "lines": None},
+    {"id": "relating", "ru": "Взаимодействие (Relating)", "en": "Relating", "sequence": "star_pearl",
+     "side": "personality", "body": "mercury", "lines": "relating"},
+    {"id": "stability", "ru": "Стабильность (Stability)", "en": "Stability", "sequence": "star_pearl",
+     "side": "design", "body": "saturn", "lines": "stability"},
+    {"id": "creativity", "ru": "Творчество (Creativity)", "en": "Creativity", "sequence": "star_pearl",
+     "side": "design", "body": "uranus", "lines": "creativity"},
 ]
 
+#: Пути (Pathways) Золотого пути: какие сферы соединяет каждый путь. Источник — официальный
+#: профайлер genekeys.com/free-profile/ (pathwayMappings) и описания уроков курсов Gene Keys
+#: («The Pathway of … connects the Sphere of … with the Sphere of …»), проверено 14.10.2026.
+#: Всего 12 путей (как в профиле 2012 г.). Русские названия — перевод составителя.
 SEQUENCES: dict[str, dict] = {
     "activation": {"ru": "Последовательность Активации", "en": "Activation Sequence",
-                   "spheres": ["lifes_work", "evolution", "radiance", "purpose"]},
+                   "spheres": ["lifes_work", "evolution", "radiance", "purpose"],
+                   "pathways": [
+                       {"en": "Challenge", "ru": "Вызов", "from": ["lifes_work"], "to": "evolution"},
+                       {"en": "Breakthrough", "ru": "Прорыв", "from": ["evolution"], "to": "radiance"},
+                       {"en": "Core Stability", "ru": "Глубинная стабильность", "from": ["radiance"], "to": "purpose"},
+                   ]},
     "venus": {"ru": "Последовательность Венеры", "en": "Venus Sequence",
-              "spheres": ["purpose", "attraction", "iq", "eq", "sq", "core"]},
+              "spheres": ["purpose", "attraction", "iq", "eq", "sq", "core"],
+              "pathways": [
+                  {"en": "Dharma", "ru": "Дхарма", "from": ["purpose"], "to": "attraction"},
+                  {"en": "Karma", "ru": "Карма", "from": ["attraction"], "to": "iq"},
+                  {"en": "Intelligence", "ru": "Интеллект", "from": ["iq"], "to": "eq"},
+                  {"en": "Love", "ru": "Любовь", "from": ["eq"], "to": "sq"},
+                  {"en": "Realisation", "ru": "Реализация", "from": ["sq"], "to": "core"},
+              ]},
     "pearl": {"ru": "Последовательность Жемчужины", "en": "Pearl Sequence",
-              "spheres": ["vocation", "culture", "brand", "pearl"]},
+              "spheres": ["vocation", "culture", "brand", "pearl"],
+              "pathways": [
+                  {"en": "Initiative", "ru": "Инициатива", "from": ["vocation"], "to": "culture"},
+                  # описание урока Pearl Sequence называет для Growth пару Vocation–Culture (повтор
+                  # Initiative); схема профайлера и курс Star Pearl — Culture–Brand. Принято второе.
+                  {"en": "Growth", "ru": "Рост", "from": ["culture"], "to": "brand"},
+                  {"en": "Service", "ru": "Служение", "from": ["brand"], "to": "vocation"},
+                  {"en": "Quantum", "ru": "Квант", "from": ["brand", "vocation", "culture"], "to": "pearl"},
+              ]},
 }
 
 BODY_RU = {"sun": "Солнце", "earth": "Земля", "moon": "Луна", "mercury": "Меркурий", "venus": "Венера",
@@ -222,7 +252,9 @@ SIDE_RU = {"personality": "Личность (натал, момент рожде
 # status: "official"   — подтверждено официальным материалом/профилем Gene Keys
 #         "secondary"  — только вторичный источник (практикующие), ⚠ не подтверждено официально
 #         "unconfirmed"— не найдено
-# Русские формулировки — перевод составителя базы (официального русского перевода нет).
+# 14.10.2026 все 13 таблиц сфер (+ Relating, Stability, Creativity) сверены с таблицей lineTeaching
+# в JS официального профайлера genekeys.com/free-profile/ (profilerreact.js v1.2.2) — все «official».
+# Русские формулировки — перевод составителя базы (официальный русский словарь профайлера закрыт).
 # ---------------------------------------------------------------------------
 
 _O, _S, _U = "official", "secondary", "unconfirmed"
@@ -238,9 +270,9 @@ LINE_KEYNOTES: dict[str, dict[int, dict]] = {
     },
     "lifes_work": {
         1: {"en": "Creator", "ru": "Творец", "status": _O},
-        2: {"en": "Natural", "ru": "Самородок", "status": _S},
-        3: {"en": "Changer", "ru": "Преобразователь", "status": _S},
-        4: {"en": "Server", "ru": "Служитель", "status": _S},
+        2: {"en": "Dancer", "ru": "Танцор", "status": _O},
+        3: {"en": "Changer", "ru": "Преобразователь", "status": _O},
+        4: {"en": "Server", "ru": "Служитель", "status": _O},
         5: {"en": "Fixer", "ru": "Решатель проблем", "status": _O},
         6: {"en": "Teacher", "ru": "Учитель", "status": _O},
     },
@@ -253,100 +285,125 @@ LINE_KEYNOTES: dict[str, dict[int, dict]] = {
         6: {"en": "Education and Surrender (shadow keynote: Seeking Resolution)", "ru": "Обучение и сдача (теневая нота: поиск разрешения)", "status": _O},
     },
     "radiance": {
-        1: {"en": "Solitude", "ru": "Уединение", "status": _S},
+        1: {"en": "Solitude", "ru": "Уединение", "status": _O},
         2: {"en": "Marriage", "ru": "Союз (брак)", "status": _O},
         3: {"en": "Interaction", "ru": "Взаимодействие", "status": _O},
-        4: {"en": "Friendship", "ru": "Дружба", "status": _S},
-        5: {"en": "Impact", "ru": "Влияние", "status": _S},
-        6: {"en": "Nurture", "ru": "Забота", "status": _S},
+        4: {"en": "Friendship", "ru": "Дружба", "status": _O},
+        5: {"en": "Impact", "ru": "Влияние", "status": _O},
+        6: {"en": "Nurture", "ru": "Забота", "status": _O},
     },
     "purpose_activation": {
         1: {"en": "Physicality (bones)", "ru": "Телесность (кости)", "status": _O},
         2: {"en": "Posture (fluids)", "ru": "Осанка (жидкости)", "status": _O},
         3: {"en": "Movement (blood)", "ru": "Движение (кровь)", "status": _O},
-        4: {"en": "Breath", "ru": "Дыхание", "status": _S},
-        5: {"en": "Voice", "ru": "Голос", "status": _S},
-        6: {"en": "Presence", "ru": "Присутствие", "status": _S},
+        4: {"en": "Breath (rhythm)", "ru": "Дыхание (ритм)", "status": _O},
+        5: {"en": "Voice (frequency)", "ru": "Голос (частота)", "status": _O},
+        6: {"en": "Intent (cells)", "ru": "Намерение (клетки)", "status": _O},
     },
     "purpose_venus": {
         1: {"en": "The Loner / Anchor", "ru": "Одиночка / Якорь", "status": _O},
         2: {"en": "The Natural / Accuser", "ru": "Естественный / Обвинитель", "status": _O},
         3: {"en": "The Adventurer / Escape Artist", "ru": "Искатель приключений / Беглец", "status": _O},
-        4: {"en": "The Nurturer / Politician", "ru": "Опекун / Политик", "status": _S},
-        5: {"en": "The Leader / Victim", "ru": "Лидер / Жертва", "status": _S},
-        6: {"en": "The Visionary / Judge", "ru": "Визионер / Судья", "status": _S},
+        4: {"en": "The Nurturer / Politician", "ru": "Опекун / Политик", "status": _O},
+        5: {"en": "The Leader / Victim", "ru": "Лидер / Жертва", "status": _O},
+        6: {"en": "The Visionary / Judge", "ru": "Визионер / Судья", "status": _O},
     },
     "attraction": {
-        1: {"en": "Sterility / Fertility", "ru": "Бесплодность / Плодородие", "status": _S},
-        2: {"en": "Lust / Passion", "ru": "Похоть / Страсть", "status": _S},
-        3: {"en": "Promiscuity / Playfulness", "ru": "Неразборчивость / Игривость", "status": _S},
+        1: {"en": "Sterility / Fertility", "ru": "Бесплодность / Плодородие", "status": _O},
+        2: {"en": "Lust / Passion", "ru": "Похоть / Страсть", "status": _O},
+        3: {"en": "Promiscuity / Playfulness", "ru": "Неразборчивость / Игривость", "status": _O},
         4: {"en": "Frigidity / Romance (distant / intimate)", "ru": "Холодность / Романтика (отстранённый / близкий)", "status": _O},
-        5: {"en": "Entrapment / Sensuality", "ru": "Ловушка / Чувственность", "status": _S},
+        5: {"en": "Entrapment / Sensuality", "ru": "Ловушка / Чувственность", "status": _O},
         6: {"en": "Disappointment / Innocence", "ru": "Разочарование / Невинность", "status": _O},
     },
     "iq": {
-        1: {"en": "The Contemplative mind (hidden)", "ru": "Созерцательный ум (скрытый)", "status": _S},
+        1: {"en": "The Contemplative mind (hidden)", "ru": "Созерцательный ум (скрытый)", "status": _O},
         2: {"en": "The Brilliant mind (provocative)", "ru": "Блестящий ум (провокационный)", "status": _O},
         3: {"en": "The Flexible mind (evasive)", "ru": "Гибкий ум (уклончивый)", "status": _O},
-        4: {"en": "The Influential mind (inflexible)", "ru": "Влиятельный ум (негибкий)", "status": _S},
-        5: {"en": "The Practical mind (defensive)", "ru": "Практичный ум (обороняющийся)", "status": _S},
-        6: {"en": "The Objective mind (absent)", "ru": "Объективный ум (отсутствующий)", "status": _S},
+        4: {"en": "The Influential mind (inflexible)", "ru": "Влиятельный ум (негибкий)", "status": _O},
+        5: {"en": "The Practical mind (defensive)", "ru": "Практичный ум (обороняющийся)", "status": _O},
+        6: {"en": "The Objective mind (absent)", "ru": "Объективный ум (отсутствующий)", "status": _O},
     },
     "eq": {
         1: {"en": "Self-esteem / Self-sabotage", "ru": "Самоуважение / Самосаботаж", "status": _O},
         2: {"en": "Courtesy / Aggression", "ru": "Учтивость / Агрессия", "status": _O},
-        3: {"en": "Sympathy / Apathy", "ru": "Сочувствие / Апатия", "status": _S},
+        3: {"en": "Sympathy / Apathy", "ru": "Сочувствие / Апатия", "status": _O},
         4: {"en": "Kindness / Meanness", "ru": "Доброта / Злонравие", "status": _O},
-        5: {"en": "Respect / Disrespect", "ru": "Уважение / Неуважение", "status": _S},
-        6: {"en": "Reverence / Alienation", "ru": "Благоговение / Отчуждение", "status": _S},
+        5: {"en": "Respect / Disrespect", "ru": "Уважение / Неуважение", "status": _O},
+        6: {"en": "Reverence / Alienation", "ru": "Благоговение / Отчуждение", "status": _O},
     },
     "sq": {
         1: {"en": "Certainty (rhythm and routine)", "ru": "Уверенность (ритм и распорядок)", "status": _O},
-        2: {"en": "Freedom (wildness and boundaries)", "ru": "Свобода (дикость и границы)", "status": _S},
-        3: {"en": "Pleasure (adventure and understanding)", "ru": "Удовольствие (приключение и понимание)", "status": _S},
-        4: {"en": "Belonging (kinship and community)", "ru": "Принадлежность (родство и общность)", "status": _S},
+        2: {"en": "Freedom (wildness and boundaries)", "ru": "Свобода (дикость и границы)", "status": _O},
+        3: {"en": "Pleasure (adventure and understanding)", "ru": "Удовольствие (приключение и понимание)", "status": _O},
+        4: {"en": "Belonging (kinship and community)", "ru": "Принадлежность (родство и общность)", "status": _O},
         5: {"en": "Mentoring (role models with integrity)", "ru": "Наставничество (честные ролевые модели)", "status": _O},
-        6: {"en": "Patience (time and space)", "ru": "Терпение (время и пространство)", "status": _S},
+        6: {"en": "Patience (time and space)", "ru": "Терпение (время и пространство)", "status": _O},
     },
     "core": {
-        1: {"en": "Repression / Self-honesty", "ru": "Подавление / Честность с собой", "status": _S},
+        1: {"en": "Repression / Honesty", "ru": "Подавление / Честность", "status": _O},
         2: {"en": "Denial / Ease", "ru": "Отрицание / Лёгкость", "status": _O},
-        3: {"en": "Shame / Humour", "ru": "Стыд / Юмор", "status": _S},
-        4: {"en": "Rejection / Gentleness", "ru": "Отвержение / Мягкость", "status": _S},
+        3: {"en": "Shame / Humour", "ru": "Стыд / Юмор", "status": _O},
+        4: {"en": "Rejection / Gentleness", "ru": "Отвержение / Мягкость", "status": _O},
         5: {"en": "Guilt / Forgiveness", "ru": "Вина / Прощение", "status": _O},
-        6: {"en": "Separation / Self-care", "ru": "Отделённость / Забота о себе", "status": _S},
+        6: {"en": "Isolation / Care", "ru": "Изоляция / Забота", "status": _O},
     },
     "vocation": {
-        1: {"en": "Production", "ru": "Производство", "status": _S},
+        1: {"en": "Production (originality)", "ru": "Производство (оригинальность)", "status": _O},
         2: {"en": "Marketing (value)", "ru": "Маркетинг (ценность)", "status": _O},
-        3: {"en": "Strategy", "ru": "Стратегия", "status": _S},
-        4: {"en": "Sales", "ru": "Продажи", "status": _S},
+        3: {"en": "Strategy (implementation)", "ru": "Стратегия (воплощение)", "status": _O},
+        4: {"en": "Sales (connection)", "ru": "Продажи (связь)", "status": _O},
         5: {"en": "Management (responsibility)", "ru": "Управление (ответственность)", "status": _O},
         6: {"en": "Philanthropy (ethics)", "ru": "Филантропия (этика)", "status": _O},
     },
     "culture": {
         1: {"en": "Individual", "ru": "Индивидуальный формат", "status": _O},
-        2: {"en": None, "ru": None, "status": _U},
-        3: {"en": None, "ru": None, "status": _U},
+        2: {"en": "Partnership", "ru": "Партнёрство", "status": _O},
+        3: {"en": "Unit", "ru": "Малая группа (3–15 человек)", "status": _O},
         4: {"en": "Network", "ru": "Сеть", "status": _O},
-        5: {"en": None, "ru": None, "status": _U},
+        5: {"en": "Society", "ru": "Общество", "status": _O},
         6: {"en": "System", "ru": "Система", "status": _O},
     },
     "brand": {
         1: {"en": "Boldness (security)", "ru": "Смелость (безопасность)", "status": _O},
-        2: {"en": "Passion (image)", "ru": "Страсть (образ)", "status": _S},
-        3: {"en": "Humour (pleasure)", "ru": "Юмор (удовольствие)", "status": _S},
-        4: {"en": "Heart (feelings)", "ru": "Сердце (чувства)", "status": _S},
+        2: {"en": "Passion (image)", "ru": "Страсть (образ)", "status": _O},
+        3: {"en": "Humour (pleasure)", "ru": "Юмор (удовольствие)", "status": _O},
+        4: {"en": "Heart (feelings)", "ru": "Сердце (чувства)", "status": _O},
         5: {"en": "Wisdom (solutions)", "ru": "Мудрость (решения)", "status": _O},
-        6: {"en": "Vision (education)", "ru": "Видение (просвещение)", "status": _S},
+        6: {"en": "Vision (education)", "ru": "Видение (просвещение)", "status": _O},
     },
     "pearl": {
-        1: {"en": "Simplicity", "ru": "Простота", "status": _S},
-        2: {"en": "Recognition", "ru": "Признание", "status": _S},
+        1: {"en": "Simplicity", "ru": "Простота", "status": _O},
+        2: {"en": "Recognition", "ru": "Признание", "status": _O},
         3: {"en": "Celebration", "ru": "Празднование", "status": _O},
         4: {"en": "Charity", "ru": "Благотворительность", "status": _O},
-        5: {"en": "Power", "ru": "Сила (влияние)", "status": _S},
+        5: {"en": "Power", "ru": "Сила (влияние)", "status": _O},
         6: {"en": "Nature", "ru": "Природа", "status": _O},
+    },
+    # --- три сферы Star Pearl (официальный профайлер: lineTeaching.full / starpearl_keywords_snippets) ---
+    "relating": {
+        1: {"en": "Dissonance", "ru": "Диссонанс", "status": _O},
+        2: {"en": "Feedback", "ru": "Обратная связь", "status": _O},
+        3: {"en": "Assimilation", "ru": "Усвоение (ассимиляция)", "status": _O},
+        4: {"en": "Sharing", "ru": "Умение делиться", "status": _O},
+        5: {"en": "Distillation", "ru": "Дистилляция (выделение сути)", "status": _O},
+        6: {"en": "Gratitude", "ru": "Благодарность", "status": _O},
+    },
+    "stability": {
+        1: {"en": "Self Discipline", "ru": "Самодисциплина", "status": _O},
+        2: {"en": "Fearlessness", "ru": "Бесстрашие", "status": _O},
+        3: {"en": "Surrender", "ru": "Сдача (отпускание контроля)", "status": _O},
+        4: {"en": "Service", "ru": "Служение", "status": _O},
+        5: {"en": "Coherence", "ru": "Согласованность (когерентность)", "status": _O},
+        6: {"en": "Grounding", "ru": "Заземлённость", "status": _O},
+    },
+    "creativity": {
+        1: {"en": "Timing", "ru": "Своевременность", "status": _O},
+        2: {"en": "Cultivation", "ru": "Взращивание", "status": _O},
+        3: {"en": "Alchemy", "ru": "Алхимия", "status": _O},
+        4: {"en": "Authenticity", "ru": "Подлинность", "status": _O},
+        5: {"en": "Crystallisation", "ru": "Кристаллизация", "status": _O},
+        6: {"en": "Synchronicity", "ru": "Синхронистичность", "status": _O},
     },
 }
 
@@ -537,7 +594,7 @@ def calculate(b: BirthInput, **options) -> dict:
 
     Опции:
       include_extended (bool, True) — добавить сферы Relating / Stability / Creativity
-                                      (официальная таблица 12.2024, последовательность не опубликована);
+                                      (официальная таблица 12.2024; сферы курса Star Pearl);
       time_uncertainty_min (int, 15) — допуск времени рождения для проверки устойчивости сфер;
       scan_step_min (int, 10) — шаг перебора суток, если время рождения неизвестно.
     """
@@ -662,7 +719,9 @@ def calculate(b: BirthInput, **options) -> dict:
             names = ", ".join(spheres[s]["name_ru"] for s in sensitivity["changes_within_tolerance"])
             warnings.append(f"При сдвиге времени рождения на ±{tol_min:g} мин меняется линия/ключ в сферах: {names}.")
 
-    sequences = {k: {"ru": v["ru"], "en": v["en"], "spheres": list(v["spheres"])} for k, v in SEQUENCES.items()}
+    sequences = {k: {"ru": v["ru"], "en": v["en"], "spheres": list(v["spheres"]),
+                     "pathways": [dict(p, **{"from": list(p["from"])}) for p in v["pathways"]]}
+                 for k, v in SEQUENCES.items()}
 
     result = {
         "method": "gene_keys",

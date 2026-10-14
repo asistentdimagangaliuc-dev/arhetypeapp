@@ -11,8 +11,8 @@ import pytest
 
 from calculators.common.time import BirthInput
 from calculators.gene_keys import (
-    CODON_RINGS, GATE_ORDER, KEYS, LINE_KEYNOTES, SPHERES, calculate, key_line_from_longitude,
-    programming_partner,
+    CODON_RINGS, EXTENDED_SPHERES, GATE_ORDER, KEYS, LINE_KEYNOTES, SEQUENCES, SPHERES, calculate,
+    key_line_from_longitude, programming_partner,
 )
 
 SIDE_SPHERES = ["lifes_work", "evolution", "radiance", "purpose", "attraction", "iq", "eq", "sq",
@@ -223,6 +223,116 @@ def test_t4_lmt():
     assert r["inputs_used"]["offset_source"] == "LMT(longitude)"
     assert r["inputs_used"]["utc"].startswith("1879-03-14T10:50")
     assert r["spheres"]["lifes_work"]["lon_str"] == "23°30′ Рыбы"
+
+
+# ---------------------------------------------------------------------------
+# Повторная проверка (приоритет 2), 14.10.2026: текстовые таблицы против официальных источников
+# ---------------------------------------------------------------------------
+
+# Таблица lineTeaching.full из JS официального профайлера Gene Keys
+# (genekeys.com/free-profile/ → wp-content/themes/buddyboss-theme-child/assets/js/profilerreact.js?ver=1.2.2).
+# Эволюция сверяется отдельно (в модуле — формулировки PDF «Deep-Dive Keynotes» 2020).
+OFFICIAL_PROFILER_LINES = {
+    "lifes_work": ["Creator", "Dancer", "Changer", "Server", "Fixer", "Teacher"],
+    "radiance": ["Solitude", "Marriage", "Interaction", "Friendship", "Impact", "Nurture"],
+    "purpose_activation": ["Physicality (bones)", "Posture (fluids)", "Movement (blood)", "Breath (rhythm)",
+                           "Voice (frequency)", "Intent (cells)"],
+    "purpose_venus": ["The Anchor/Loner", "The Natural/Accuser", "The Adventurer/Escape Artist",
+                      "The Nurturer/Politician", "The Leader/Victim", "The Visionary/Judge"],
+    "attraction": ["Sterility/Fertility", "Lust/Passion", "Promiscuity/Playfulness", "Frigidity/Romance",
+                   "Entrapment/Sensuality", "Disappointment/Innocence"],
+    "iq": ["The Contemplative mind (hidden)", "The Brilliant mind (provocative)", "The Flexible mind (evasive)",
+           "The Influential mind (inflexible)", "The Practical mind (defensive)", "The Objective mind (absent)"],
+    "eq": ["Self-esteem/Self-sabotage", "Courtesy/Aggression", "Sympathy/Apathy", "Kindness/Meanness",
+           "Respect/Disrespect", "Reverence/Alienation"],
+    "sq": ["Certainty (rhythm and routine)", "Freedom (wildness and boundaries)",
+           "Pleasure (adventure and understanding)", "Belonging (kinship and community)",
+           "Mentoring (role models with integrity)", "Patience (time and space)"],
+    "core": ["Repression/Honesty", "Denial/Ease", "Shame/Humour", "Rejection/Gentleness", "Guilt/Forgiveness",
+             "Isolation/Care"],
+    "vocation": ["Production (originality)", "Marketing (value)", "Strategy (implementation)", "Sales (connection)",
+                 "Management (responsibility)", "Philanthropy (ethics)"],
+    "culture": ["Individual", "Partnership", "Unit", "Network", "Society", "System"],
+    "brand": ["Boldness (security)", "Passion (image)", "Humour (pleasure)", "Heart (feelings)",
+              "Wisdom (solutions)", "Vision (education)"],
+    "pearl": ["Simplicity", "Recognition", "Celebration", "Charity", "Power", "Nature"],
+    "relating": ["Dissonance", "Feedback", "Assimilation", "Sharing", "Distillation", "Gratitude"],
+    "stability": ["Self Discipline", "Fearlessness", "Surrender", "Service", "Coherence", "Grounding"],
+    "creativity": ["Timing", "Cultivation", "Alchemy", "Authenticity", "Crystallisation", "Synchronicity"],
+}
+
+
+def _parts(text):
+    parts = (x.strip().lower() for x in text.replace(" / ", "/").split("/"))
+    return frozenset(x[4:] if x.startswith("the ") else x for x in parts)
+
+
+def test_line_keynotes_match_official_profiler():
+    for theme, lines in OFFICIAL_PROFILER_LINES.items():
+        for i, official in enumerate(lines, start=1):
+            ours = LINE_KEYNOTES[theme][i]
+            # порядок частей у «The Loner / Anchor» в справке genekeys.com обратный — сравниваем множества
+            en = ours["en"]
+            if "(" not in official:  # у Attraction 4 в модуле добавлено пояснение из профиля 2012 г.
+                en = en.split(" (")[0]
+            assert _parts(en) == _parts(official), (theme, i, ours["en"], official)
+            assert ours["status"] == "official", (theme, i)
+    # после сверки во всех таблицах нет вторичных / ненайденных ключевых слов
+    assert all(ln["status"] == "official" for lines in LINE_KEYNOTES.values() for ln in lines.values())
+
+
+def test_corrected_keynotes_regression():
+    # было по вторичным источникам → стало по официальному профайлеру
+    assert LINE_KEYNOTES["lifes_work"][2]["en"] == "Dancer"            # было «Natural»
+    assert LINE_KEYNOTES["purpose_activation"][6]["en"] == "Intent (cells)"  # было «Presence»
+    assert LINE_KEYNOTES["core"][6]["en"] == "Isolation / Care"         # было «Separation / Self-care»
+    assert LINE_KEYNOTES["core"][1]["en"] == "Repression / Honesty"     # было «… / Self-honesty»
+    assert [LINE_KEYNOTES["culture"][i]["en"] for i in (2, 3, 5)] == ["Partnership", "Unit", "Society"]
+
+
+def test_star_pearl_spheres_have_official_lines():
+    assert {s["id"]: (s["sequence"], s["lines"]) for s in EXTENDED_SPHERES} == {
+        "relating": ("star_pearl", "relating"), "stability": ("star_pearl", "stability"),
+        "creativity": ("star_pearl", "creativity")}
+    r = calculate(T["T1"][0])
+    for sid in ("relating", "stability", "creativity"):
+        kn = r["spheres"][sid]["line_keynote"]
+        assert kn["status"] == "official" and kn["en"] == OFFICIAL_PROFILER_LINES[sid][r["spheres"][sid]["line"] - 1]
+
+
+def test_pathways_official_sphere_pairs():
+    # pathwayMappings официального профайлера + описания уроков («The Pathway of … connects …»)
+    pairs = {p["en"]: (tuple(p["from"]), p["to"]) for seq in SEQUENCES.values() for p in seq["pathways"]}
+    assert pairs == {
+        "Challenge": (("lifes_work",), "evolution"), "Breakthrough": (("evolution",), "radiance"),
+        "Core Stability": (("radiance",), "purpose"),
+        "Dharma": (("purpose",), "attraction"), "Karma": (("attraction",), "iq"), "Intelligence": (("iq",), "eq"),
+        "Love": (("eq",), "sq"), "Realisation": (("sq",), "core"),
+        "Initiative": (("vocation",), "culture"), "Growth": (("culture",), "brand"),
+        "Service": (("brand",), "vocation"), "Quantum": (("brand", "vocation", "culture"), "pearl"),
+    }
+    assert len(pairs) == 12  # «12 Pathways that link together the 11 Spheres» (официальный профиль 2012)
+    for seq in SEQUENCES.values():
+        for p in seq["pathways"]:
+            assert set(p["from"]) | {p["to"]} <= set(seq["spheres"])
+    r = calculate(T["T1"][0])
+    assert [p["en"] for p in r["sequences"]["venus"]["pathways"]] == ["Dharma", "Karma", "Intelligence", "Love",
+                                                                       "Realisation"]
+
+
+def test_codon_rings_match_official_table():
+    # https://genekeys.com/codon-ring/ (официальная таблица: название, ключи, аминокислота), 14.10.2026
+    official = {
+        "Ring of Alchemy": [6, 40, 47, 64], "Ring of Destiny": [34, 43], "Ring of Divinity": [22, 36, 37, 63],
+        "Ring of Fire": [1, 14], "Ring of Gaia": [19, 60, 61], "Ring of Humanity": [10, 17, 21, 25, 38, 51],
+        "Ring of the Illuminati": [44, 50], "Ring of Illusion": [28, 32],
+        "Ring of Life and Death": [3, 20, 23, 24, 27, 42], "Ring of Light": [5, 9, 11, 26],
+        "Ring of Matter": [18, 46, 48, 57], "Ring of Miracles": [35], "Ring of No Return": [31, 62],
+        "Ring of Origin": [41], "Ring of Prosperity": [16, 45], "Ring of Purification": [13, 30],
+        "Ring of Seeking": [15, 39, 52, 53, 54, 58], "Ring of Trials": [12, 33, 56],
+        "Ring of Union": [4, 7, 29, 59], "Ring of Water": [2, 8], "Ring of the Whirlwind": [49, 55],
+    }
+    assert {r["en"]: sorted(r["keys"]) for r in CODON_RINGS} == official
 
 
 def test_extended_spheres_sources():
