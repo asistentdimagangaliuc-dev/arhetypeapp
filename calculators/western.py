@@ -886,5 +886,5 @@ def calculate(b: BirthInput, hsys: str = "P", node: str = "true", lilith: str = 
 
 
 __all__ = ["calculate", "find_aspects", "allowed_orb", "compute_houses", "sign_rising_hours",
-           "gmst_hours_usno", "asc_from_ramc", "mc_from_ramc", "sun_lon_low_precision",
+           "gmst_hours_usno", "asc_from_ramc", "mc_from_ramc", "vertex_from_ramc", "sun_lon_low_precision",
            "moon_lon_low_precision", "dignities_of", "house_of", "ORB_SCHEMES", "ASPECTS"]
