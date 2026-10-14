@@ -595,6 +595,8 @@ def calculate(b: BirthInput, ayanamsa: str = "lahiri", node: str = "mean",
     if ayanamsa not in eph.AYANAMSAS or ayanamsa not in AYANAMSA_LABELS:
         raise ValueError(f"Аянамша {ayanamsa!r} не поддерживается: "
                          f"{[k for k in eph.AYANAMSAS if k in AYANAMSA_LABELS]}")
+    if isinstance(node, bool):              # CLI: --opt node=true превращается в True
+        node = "true" if node else "mean"
     if node not in ("mean", "true"):
         raise ValueError("node: 'mean' или 'true'")
     if bhava_system not in ("sripati", "placidus", "equal"):

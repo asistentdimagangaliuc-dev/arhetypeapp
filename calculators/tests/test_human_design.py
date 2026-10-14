@@ -25,8 +25,8 @@ from calculators.common.ephemeris import sun_longitude
 from calculators.common.time import BirthInput, julian_day_ut
 from calculators.human_design import (
     CENTERS, CHANNELS, GATE_INDEX, GATE_ORDER, GATES, PLANETS, QUARTERS, RAX_FAMILIES,
-    _quarter_index, calculate, chart_from_jd, design_moment, gate_start_longitude,
-    incarnation_cross, longitude_to_activation,
+    VALID_PROFILES, _quarter_index, analyze_gates, calculate, chart_from_jd, design_moment, gate_start_longitude,
+    incarnation_cross, longitude_to_activation, profile_angle,
 )
 
 # ---------------------------------------------------------------------------
@@ -53,6 +53,9 @@ OFFICIAL_UTC = {
     "e_egoman": "1942-02-06T01:34", "e_egoproj": "1966-08-01T04:40", "e_selfproj": "1940-02-08T04:18",
     "e_mental": "2027-06-04T04:07", "e_triple": "2007-06-29T04:17", "e_quad": "1950-02-25T22:57",
     "e_juxt": "1975-01-09T17:07", "e_manroot": "1959-07-25T04:06",
+    # верификация (волна 2), запрос 2026-10-14: payload {"time": "...Z", "timeInUtc": true, ...};
+    # Сердце→G (25-51) → Горло (1-8, 7-31) без 21-45: Манифестор + Эго-манифестированный
+    "e_egoman_g": "1963-07-26T22:42",
 }
 OFFICIAL = {
     "einstein": {
@@ -174,8 +177,18 @@ OFFICIAL = {
         "profile": "6/2", "variables": "PRL DRL",
         "cross": "Left Angle Cross of Distraction (56/60 | 27/28)",
     },
+    # ответ движка: type=2 (MANIFESTOR), authority=3 (EGO → «Ego Manifested»), definition=1 (SINGLE),
+    # profile=24 («2/4»), variable=10 (PRL_DRL), cross=185 («…The Unexpected (31/41 | 27/28)»),
+    # channels: 1-8, 7-31, 17-62, 25-51 (расшифровка по словарям app.mybodygraph.com/js/app.*.js)
+    "e_egoman_g": {
+        "P": "31.2.2.5.3 41.2.2.5.3 57.1.3.5.4 53.6.4.3.3 54.6.4.3.3 7.5.1.3.2 62.4.2.6.2 46.2.5.2.5 51.5.2.6.3 49.3.2.5.3 59.4.5.3.2 44.6.4.5.1 40.6.1.6.3",
+        "D": "27.4.3.4.2 28.4.3.4.2 16.3.3.1.5 62.4.2.2.4 61.4.2.2.4 8.1.6.6.4 25.5.3.4.5 7.1.2.1.3 17.2.3.1.1 49.4.2.4.4 59.2.2.1.2 1.2.3.3.1 40.5.2.2.4",
+        "type": "manifestor", "authority": "ego_manifested", "definition": "single",
+        "profile": "2/4", "variables": "PRL DRL",
+        "cross": "Right Angle Cross of The Unexpected (31/41 | 27/28)",
+    },
 }
-# Единственное расхождение до уровня базы (18.75″) из 442 активаций: Уран Личности Обамы
+# Единственное расхождение до уровня базы (18.75″) из 468 активаций (18 карт): Уран Личности Обамы
 # лежит в ~0.5″ от границы базы — разница эфемерид Swiss Ephemeris и движка Jovian.
 KNOWN_BASE_DIFF = {("obama", "P", "uranus")}
 
@@ -257,7 +270,7 @@ def test_design_is_88_degrees_of_sun(b):
 
 
 # ---------------------------------------------------------------------------
-# 3. Сверка с официальным движком Jovian Archive / MyBodyGraph (17 карт × 26 активаций)
+# 3. Сверка с официальным движком Jovian Archive / MyBodyGraph (18 карт × 26 активаций)
 # ---------------------------------------------------------------------------
 
 @pytest.mark.parametrize("key", list(OFFICIAL))
@@ -424,3 +437,108 @@ def test_design_moment_function_direct():
     jd = _jd("1990-05-15T10:30")
     jdd = design_moment(jd)
     assert (sun_longitude(jd) - sun_longitude(jdd)) % 360 == pytest.approx(88.0, abs=1e-6)
+
+
+# ---------------------------------------------------------------------------
+# 8. Верификация (волна 2): логика типа/авторитета/определённости на синтетических наборах ворот
+#    (правила сверены с официальным движком — примеры e_* выше — и с открытым кодом
+#    SharpAstrology.HumanDesign, HumanDesignChart.cs: Type/_Authority)
+# ---------------------------------------------------------------------------
+
+def _gates_of(*channels: str) -> set[int]:
+    return {int(g) for ch in channels for g in ch.split("-")}
+
+
+@pytest.mark.parametrize("channels,type_id,auth_id,definition", [
+    # МГ: мотор (Сакрал) → Горло только через G (2-14 + 1-8)
+    (("2-14", "1-8"), "manifesting_generator", "sacral", "single"),
+    # МГ: Сакрал → Селезёнка → Горло (27-50 + 48-16)
+    (("27-50", "16-48"), "manifesting_generator", "sacral", "single"),
+    # Генератор: Сакрал определён, Горло определено, но не связано с мотором
+    (("5-15", "17-62"), "generator", "sacral", "split"),
+    # МГ через Сердце→Горло (21-45) при определённом Сакрале в другой группе
+    (("21-45", "3-60"), "manifesting_generator", "sacral", "split"),
+    # Манифестор: Корень → Селезёнка → Горло (54-32 + 48-16), авторитет селезёночный
+    (("32-54", "16-48"), "manifestor", "splenic", "single"),
+    # Манифестор: Корень → Сол. сплетение → Горло (39-55 + 35-36), эмоциональный
+    (("39-55", "35-36"), "manifestor", "emotional", "single"),
+    # Эго-манифестированный: Сердце → Горло напрямую (21-45)
+    (("21-45",), "manifestor", "ego_manifested", "single"),
+    # Эго-манифестированный: Сердце → G (25-51) → Горло (10-20) — подтверждено движком (e_egoman_g)
+    (("25-51", "10-20"), "manifestor", "ego_manifested", "single"),
+    # Эго-проецированный: Сердце–G без связи с Горлом; Голова–Аджна отдельно → split
+    (("25-51",), "projector", "ego_projected", "single"),
+    (("25-51", "24-61"), "projector", "ego_projected", "split"),
+    # Селезёнка выше Сердца: 26-44 (Сердце–Селезёнка) + 16-48 → Манифестор, но авторитет селезёночный
+    (("26-44", "16-48"), "manifestor", "splenic", "single"),
+    # Самопроецируемый: G → Горло без моторов
+    (("1-8",), "projector", "self_projected", "single"),
+    (("13-33", "47-64"), "projector", "self_projected", "split"),
+    # Ментальный (Sounding Board): только Голова/Аджна/Горло
+    (("24-61", "23-43"), "projector", "mental", "single"),
+    (("4-63",), "projector", "mental", "single"),
+    # Рефлектор
+    ((), "reflector", "lunar", "none"),
+    # тройное и четверное расщепление
+    (("24-61", "9-52", "25-51"), "generator", "sacral", "triple_split"),
+    (("47-64", "12-22", "18-58", "25-51"), "manifestor", "emotional", "quadruple_split"),
+])
+def test_type_authority_definition_synthetic(channels, type_id, auth_id, definition):
+    gates = _gates_of(*channels)
+    an = analyze_gates(gates, set())
+    assert {c["channel"] for c in an["channels"]} == set(channels)
+    assert an["type_id"] == type_id
+    assert an["authority_id"] == auth_id
+    assert an["definition"]["id"] == definition
+    # сторона активации (Личность/Дизайн) не влияет на механику
+    an2 = analyze_gates(set(), gates)
+    assert (an2["type_id"], an2["authority_id"]) == (type_id, auth_id)
+
+
+def test_hanging_gates_do_not_define_centers():
+    an = analyze_gates({1, 2, 3, 4, 5, 6, 7, 9}, {10, 11, 12})   # ни одной пары канала
+    assert an["channels"] == [] and an["type_id"] == "reflector"
+    assert an["centers"]["g"]["state"] == "undefined" and an["centers"]["heart"]["state"] == "open"
+
+
+@pytest.mark.parametrize("p_line,d_line,angle", [
+    (1, 3, "right"), (1, 4, "right"), (2, 4, "right"), (2, 5, "right"), (3, 5, "right"), (3, 6, "right"),
+    (4, 6, "right"), (4, 1, "juxtaposition"), (5, 1, "left"), (5, 2, "left"), (6, 2, "left"), (6, 3, "left"),
+])
+def test_profile_angle_rule(p_line, d_line, angle):
+    assert profile_angle(p_line, d_line) == angle
+    assert f"{p_line}/{d_line}" in VALID_PROFILES
+
+
+def test_only_12_profiles_occur():
+    # 88° = 15,64 ворот → линия Дизайна жёстко связана с линией Личности
+    seen = set()
+    jd = _jd("1990-01-01T00:00")
+    for k in range(0, 366 * 4, 3):
+        ch = chart_from_jd(jd + k * 0.25 + 0.013 * k)
+        seen.add(ch["profile"]["profile"])
+    assert seen <= set(VALID_PROFILES) and len(seen) == 12
+
+
+def test_manual_design_iteration_from_knowledge_base():
+    """Ручная итерация из 04-human-design.md (шаг 3): t₀ = JD − 89,3;
+    t_{k+1} = t_k − Δ/0,9856, где Δ = (λ☉(t_k) − цель), приведённая к −180…+180.
+    За 4 итерации сходится к точному моменту (≤1 с) для T1–T4."""
+    for b in (T1, T2, T3, T4):
+        r = calculate(b)
+        jd, exact = r["inputs_used"]["jd_ut"], r["inputs_used"]["jd_design"]
+        target = (sun_longitude(jd) - 88.0) % 360.0
+        t = jd - 89.3
+        for _ in range(4):
+            delta = (sun_longitude(t) - target + 180.0) % 360.0 - 180.0
+            t -= delta / 0.9856
+        assert abs(t - exact) * 86400 < 1.0
+
+
+def test_t1_moon_gate_boundary_documented():
+    # 04-human-design.md, §6: Луна Личности T1 в 0,0153° от начала ворот 60; на 2 мин раньше — 61.6
+    r = calculate(T1)
+    assert r["personality"]["moon"]["gate_line"] == "60.1"
+    assert r["personality"]["moon"]["deg_in_gate"] == pytest.approx(0.0153, abs=5e-5)
+    earlier = chart_from_jd(r["inputs_used"]["jd_ut"] - 2 / 1440)
+    assert earlier["personality"]["moon"]["gate_line"] == "61.6"

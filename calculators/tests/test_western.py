@@ -181,9 +181,10 @@ def test_external_retrograde_flags(key):
 def test_external_aspects_astrotheme_orbs(key):
     """Набор аспектов (10 планет + ASC + MC) совпадает с Astrotheme.
 
-    Единственное известное расхождение: Astrotheme фактически показывает полусекстили
-    с орбисом до ~1°20′ без светил (Монро, Обама, Елизавета II), хотя на странице орбисов
-    заявлено 1,0°. Калькулятор следует опубликованной таблице (1,0° + 0,3° для светил).
+    Единственное известное расхождение: Astrotheme фактически показывает полусекстили шире
+    заявленного 1,0° (+0,3° со светилом): Луна–Марс 1°37′ у Монро, Луна–Венера 1°34′ у Обамы
+    (оба со светилом, т.е. базовый орбис ≥ 1°20′), Юпитер–ASC 1°06′ у Елизаветы II (без светил).
+    Калькулятор следует опубликованной таблице (1,0° + 0,3° для светил).
     """
     b, *_ = EXTERNAL[key]
     r = calculate(b, aspect_points="planets_angles")
@@ -197,6 +198,42 @@ def test_external_aspects_astrotheme_orbs(key):
     assert len(missing) <= 1
     for k in set(ours) & set(theirs):
         assert abs(ours[k] - theirs[k]) * 60 <= 2.0, (k, ours[k], theirs[k])
+
+
+# Раздел «Planets in Houses» тех же страниц Astrotheme (Lilith там — True Lilith, Fortune — Парс Фортуны).
+# Сайт пишет под списком: «a planet posited within 1 degree of the next house belongs to that house.
+# We allow an orb of 2 degrees for the ASC and the MC». Калькулятор такого сдвига не делает.
+ASTROTHEME_HOUSES = {
+    "einstein": "sun 10 moon 6 mercury 10 venus 10 mars 7 jupiter 9 saturn 10 uranus 3 neptune 11 pluto 11 "
+                "chiron 11 north_node 8 lilith 10 pof 10",
+    "monroe": "sun 11 moon 7 mercury 10 venus 9 mars 8 jupiter 7 saturn 4 uranus 8 neptune 1 pluto 12 "
+              "chiron 9 north_node 12 lilith 1 pof 9",
+    "obama": "sun 6 moon 4 mercury 6 venus 5 mars 7 jupiter 12 saturn 12 uranus 7 neptune 9 pluto 7 "
+             "chiron 1 north_node 7 lilith 6 pof 2",
+    "elizabeth_ii": "sun 3 moon 7 mercury 2 venus 1 mars 1 jupiter 1 saturn 10 uranus 2 neptune 7 pluto 6 "
+                    "chiron 2 north_node 6 lilith 7 pof 8",
+}
+
+
+@pytest.mark.parametrize("key", list(EXTERNAL))
+def test_astrotheme_houses_differ_only_by_site_shift_rule(key):
+    """Дома планет совпадают с Astrotheme, если применить правило сайта «≤1° до следующего куспида
+    (≤2° до ASC/MC) — уже следующий дом». Без сдвига расходятся 5 точек из 56 (Монро: Солнце, Плутон,
+    Лилит; Елизавета II: Солнце, Сатурн)."""
+    t = ASTROTHEME_HOUSES[key].split()
+    theirs = {t[i]: int(t[i + 1]) for i in range(0, len(t), 2)}
+    r = calculate(EXTERNAL[key][0], lilith="true")
+    cusps = [c["lon"] for c in r["houses"]["cusps"]]
+    n_diff = 0
+    for p, h in theirs.items():
+        src = r["part_of_fortune"] if p == "pof" else r["bodies"][p]
+        ours = src["house"]
+        nxt = ours % 12 + 1
+        limit = 2.0 if nxt in (1, 10) else 1.0
+        shifted = nxt if (cusps[nxt - 1] - src["lon"]) % 360 < limit else ours
+        assert shifted == h, (key, p, ours, shifted, h)
+        n_diff += ours != h
+    assert n_diff == {"einstein": 0, "monroe": 3, "obama": 0, "elizabeth_ii": 2}[key]
 
 
 def test_einstein_t4_details():
@@ -333,6 +370,13 @@ def test_unknown_time():
     assert any("Солнце: Телец → Близнецы" in w for w in r["warnings"])
     assert "moon_range" in r["sun_sign"]
     assert not any(a["p1"] in ("asc", "mc") or a["p2"] in ("asc", "mc") for a in r["aspects"])
+    # знак Солнца «по полудню» (Близнецы) нельзя выдавать как ответ: в этот день была ингрессия
+    assert r["sun_sign"]["possible_signs_ru"] == ["Телец", "Близнецы"]
+    assert [c["body"] for c in r["sun_sign"]["sign_changes_during_day"]] == ["sun"]
+    # Луна весь день в Овне — знак однозначен
+    assert all(x.endswith("Овен") for x in r["sun_sign"]["moon_range"])
+    r2 = calculate(BirthInput(1990, 5, 15, place="Москва"))
+    assert r2["sun_sign"]["possible_signs_ru"] == ["Телец"]
 
 
 def test_mean_vs_true_node_and_lilith():
@@ -462,3 +506,76 @@ def test_manual_asc_polar_eastern_rule():
     ramc = (gmst_hours_usno(jd) + b.lon / 15) % 24 * 15
     assert arcmin(asc_from_ramc(ramc, mean_obliquity(jd), b.lat), r["angles"]["asc"]["lon"]) < 2.0
     assert r["angles"]["asc"]["sign"] == "Taurus"
+
+
+# ---------------------------------------------------------------------------
+# Регрессии по итогам проверки (волна 2)
+# ---------------------------------------------------------------------------
+
+def test_rounded_position_never_leaves_sign():
+    """21.05.1990 11:36 MSK: Солнце 29°59′56″ Тельца. Округление до минуты не должно давать
+    «0°00′ Близнецы» в summary/pos_rounded, иначе подпись знака противоречит полю sign."""
+    from calculators.western import dm_rounded, dms
+    r = calculate(BirthInput(1990, 5, 21, 11, 36, place="Москва"))
+    sun = r["bodies"]["sun"]
+    assert sun["sign"] == "Taurus" and sun["pos"].startswith("29°59′")
+    assert sun["pos_rounded"] == "29°59′ Телец" and r["summary"]["sun"] == "Солнце 29°59′ Телец"
+    assert dm_rounded(59.9999) == "29°59′ Телец" and dm_rounded(59.991) == "29°59′ Телец"
+    assert dm_rounded(29.9916) == "29°59′ Овен" and dm_rounded(14.5419) == "14°33′ Овен"
+    assert dm_rounded(359.99999) == "29°59′ Рыбы" and dm_rounded(360.0) == "0°00′ Овен"
+    assert dms(59.99999999999999) == "29°59′59″ Телец"
+    for lon_ in (0.0, 29.99, 30.0, 89.999, 359.9999):  # подпись знака всегда совпадает с sign_index
+        assert dm_rounded(lon_).endswith(eph.SIGNS_RU[int(lon_ // 30)])
+
+
+def test_astrolog_orbs_cap_nodes_at_2_degrees():
+    """Astrolog general.cpp GetOrb: min(rAspOrb, rObjOrb₁, rObjOrb₂) + rObjAdd; rObjOrb узла = 2°
+    (https://github.com/CruiserOne/Astrolog/blob/master/data.cpp)."""
+    assert allowed_orb("astrolog", "square", "mars", "north_node") == pytest.approx(2.0)
+    assert allowed_orb("astrolog", "conjunction", "sun", "north_node") == pytest.approx(3.0)  # 2 + 1 за Солнце
+    assert allowed_orb("astrolog", "quintile", "venus", "north_node") == pytest.approx(2.0)
+    assert allowed_orb("astrolog", "trine", "mars", "chiron") == pytest.approx(7.0)  # у Хирона ограничения нет
+    assert allowed_orb("astrolog", "trine", "mars", "lilith") == pytest.approx(7.0)
+
+
+def test_dates_outside_asteroid_file_skip_chiron():
+    """В calculators/ephe только seas_18.se1 (1800–2399): Хирон для 1750 г. не считается,
+    но карта строится (планеты — по аналитической теории Moshier) и выдаётся предупреждение."""
+    r = calculate(BirthInput(1750, 6, 1, 12, 0, tz="UTC", lat=50.0, lon=10.0))
+    assert "chiron" not in r["bodies"]
+    assert any("Хирон не вычислен" in w for w in r["warnings"])
+    assert not any("chiron" in (a["p1"], a["p2"]) for a in r["aspects"])
+    assert r["bodies"]["sun"]["sign"] == "Gemini"
+
+
+def test_manual_vertex_western_rule_matches_swiss_ephemeris():
+    """Ручной Вертекс (§3.2 п. 7) с правилом «западная половина» совпадает с SE; в тропиках
+    без этого правила формула иногда даёт Антивертекс (+180°)."""
+    import random
+    import swisseph as swe
+    from calculators.western import vertex_from_ramc
+    rnd = random.Random(7)
+    flipped = 0
+    for _ in range(600):
+        jd = 2451545.0 + rnd.uniform(-36500, 36500)
+        lat_, lon_ = rnd.uniform(-23.0, 23.0), rnd.uniform(-180, 180)
+        h = eph.houses(jd, lat_, lon_, "P")
+        eps_true = swe.calc_ut(jd, swe.ECL_NUT)[0][0]
+        vx = vertex_from_ramc(h["armc"], eps_true, lat_)
+        assert arcmin(vx, h["vertex"]) < 1 / 60, (jd, lat_, lon_)
+        r_, e_, f_ = math.radians(h["armc"] + 180), math.radians(eps_true), math.radians(90 - lat_)
+        raw = math.degrees(math.atan2(math.cos(r_), -(math.sin(r_) * math.cos(e_) + math.tan(f_) * math.sin(e_)))) % 360
+        flipped += arcmin(raw, h["vertex"]) > 60
+    assert flipped > 0  # правило действительно нужно
+
+
+def test_t1_direct_pyswisseph():
+    """T1 пересчитан напрямую через pyswisseph (без calculate): UTC 10:30, Плацидус."""
+    import swisseph as swe
+    jd = swe.julday(1990, 5, 15, 10.5)
+    r = calculate(BirthInput(1990, 5, 15, 14, 30, place="Москва"))
+    assert abs(r["inputs_used"]["jd_ut"] - jd) < 1e-6
+    for name, code in (("sun", swe.SUN), ("moon", swe.MOON)):
+        assert arcmin(swe.calc_ut(jd, code, swe.FLG_SWIEPH)[0][0], r["bodies"][name]["lon"]) < 1e-3
+    _c, ascmc = swe.houses_ex(jd, 55.7558, 37.6173, b"P")
+    assert arcmin(ascmc[0], r["angles"]["asc"]["lon"]) < 1e-3 and arcmin(ascmc[1], r["angles"]["mc"]["lon"]) < 1e-3

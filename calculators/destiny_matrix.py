@@ -4,10 +4,11 @@
 
 * личный квадрат (ромб): A — день, B — месяц, C — год, D = A+B+C, центр E = A+B+C+D;
 * родовой квадрат: F = A+B, G = B+C, I = C+D, H = D+A и его центр
-  R = F+G+H+I («аркан силы рода», рисуется справа от центра);
+  R = F+G+H+I («аркан силы рода», рисуется справа от центра; в документации — «Rod»,
+  чтобы не путать с функцией свёртки);
 * внутренние точки линий: A1, A2, A3; B1, B2, B3; C1, C2; D1, D2
-  (X2 = X+E, X1 = X+X2, X3 = X2+E);
-* внутренние точки диагоналей рода: F1, F2 … I1, I2 (X2 = X+R, X1 = X+X2);
+  (для вершины K: K2 = K+E, K1 = K+K2, K3 = K2+E);
+* внутренние точки диагоналей рода: F1, F2 … I1, I2 (для угла K: K2 = K+R, K1 = K+K2);
 * центр линии талантов TAL = A2+B2;
 * денежный канал и канал отношений в двух вариантах школ;
 * кармический хвост D2-D1-D;
@@ -34,6 +35,8 @@ REDUCTION_RULES = ("digits", "minus22")
 SVADHISTHANA_RULES = ("classic", "matrica_sudby")
 ANCESTRAL_INNER_RULES = ("rod_center", "personal_center")
 HEALTH_TOTAL_RULES = ("sum_of_totals", "sum_of_rows")
+#: Все опции, которые понимает ``calculate``; остальные игнорируются с предупреждением.
+KNOWN_OPTIONS = frozenset({"reduction", "svadhisthana", "ancestral_inner", "health_total", "on_date", "age"})
 
 # ---------------------------------------------------------------------------
 # Справочные таблицы
@@ -55,14 +58,14 @@ ARCANA: dict[int, dict[str, str]] = {
         "minus": "нерешительность, зависимость от партнёра, ревность, измены"},
     7: {"name": "Колесница", "plus": "движение, победа, целеустремлённость, путешествия",
         "minus": "агрессия, спешка, конфликты, трудоголизм, неумение остановиться"},
-    8: {"name": "Справедливость", "plus": "честность, закон, баланс, причинно-следственные связи",
-        "minus": "осуждение, судебные тяжбы, двойные стандарты, обвинения"},
+    8: {"name": "Справедливость", "plus": "честность, объективность, закон, баланс, умение предвидеть последствия",
+        "minus": "осуждение, категоричность, жестокость, злопамятность, судебные тяжбы"},
     9: {"name": "Отшельник", "plus": "мудрость, глубина, самопознание, экспертность",
         "minus": "изоляция, замкнутость, депрессия, отказ делиться знаниями"},
     10: {"name": "Колесо Фортуны", "plus": "удача, поток, перемены, доверие жизни",
          "minus": "фатализм, азарт, нестабильность, «колесо» повторяющихся ситуаций"},
-    11: {"name": "Сила", "plus": "энергия, выносливость, сила духа, спорт",
-         "minus": "агрессия, перенапряжение, трудоголизм, подавление"},
+    11: {"name": "Сила", "plus": "сила воли, выносливость, активность, целеустремлённость, работоспособность",
+         "minus": "грубость, вспыльчивость, тирания, упрямство; или апатия и лень"},
     12: {"name": "Повешенный", "plus": "служение, творчество, иной взгляд, способность отпускать",
          "minus": "жертвенность, застой, зависимости, ощущение безысходности"},
     13: {"name": "Смерть (Трансформация)", "plus": "обновление, умение завершать, трансформация",
@@ -123,7 +126,7 @@ POINT_INFO: dict[str, tuple[str, str, str]] = {
     "X": ("Центр денежного канала / канала отношений", "C2+D2", "на диагонали к I, $"),
     "X_money": ("Аркан «под долларом» (классическая схема)", "X+C2", "между X и C2"),
     "X_love": ("Аркан «под сердцем» (классическая схема)", "X+D2", "между X и D2"),
-    "Y": ("Третья энергия канала отношений (схема matrica-sudby.ru)", "C1+D1", "на диагонали к I, ♥"),
+    "Y": ("Третья энергия канала отношений (схема matrica-sudby.ru)", "C1+D1", "на диагонали к I, за X"),
 }
 
 #: Порядок точек кольца по часовой стрелке и возраст главных точек.
@@ -450,6 +453,37 @@ def compute_health(p: dict[str, int], rule: str = "digits", svadhisthana: str = 
     }
 
 
+def self_checks(p: dict[str, int], purposes: dict[str, int], health: dict[str, Any],
+                ring: list[dict[str, Any]], rule: str = "digits") -> dict[str, Any]:
+    """Самопроверки результата (те же, что в разделе 6 документации, для ручного счёта).
+
+    Свёртка сохраняет остаток: сложение цифр — по модулю 9, вычитание 22 — по модулю 22.
+    Поэтому, например, Rod = F+G+H+I = 2·(A+B+C+D) ≡ 2·E, а Социальное ≡ 2·E.
+    """
+    m = 9 if rule == "digits" else 22
+
+    def eq(x: int, y: int) -> bool:
+        return (x - y) % m == 0
+
+    e = p["E"]
+    main_ring = [x["value"] for x in ring if float(x["age"]).is_integer() and int(x["age"]) % 10 == 0]
+    items = [
+        ("все точки в диапазоне 1..22, B = месяц", all(1 <= v <= 22 for v in p.values())),
+        (f"D ≡ A+B+C (mod {m})", eq(p["D"], p["A"] + p["B"] + p["C"])),
+        (f"E ≡ A+B+C+D (mod {m})", eq(e, p["A"] + p["B"] + p["C"] + p["D"])),
+        (f"Rod ≡ 2·E (mod {m})", eq(p["R"], 2 * e)),
+        (f"Личное ≡ E, Социальное ≡ 2·E, Духовное ≡ 3·E, Планетарное ≡ 5·E (mod {m})",
+         eq(purposes["personal"], e) and eq(purposes["social"], 2 * e)
+         and eq(purposes["spiritual"], 3 * e) and eq(purposes["planetary"], 5 * e)),
+        ("Манипура = (E, E, R(2·E))", health["rows"][4]["physics"] == e == health["rows"][4]["energy"]
+         and health["rows"][4]["emotions"] == reduce_arcana(2 * e, rule)),
+        ("кольцо: 64 точки; в 0, 10, …, 70 лет стоят A, F, B, G, C, I, D, H",
+         len(ring) == 64 and main_ring == [p[k] for k, _ in RING_ORDER]),
+    ]
+    return {"modulus": m, "items": [{"check": t, "ok": ok} for t, ok in items],
+            "all_ok": all(ok for _, ok in items)}
+
+
 def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
     """Полный расчёт Матрицы судьбы.
 
@@ -468,6 +502,10 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
         raise ValueError(f"reduction должен быть одним из {REDUCTION_RULES}")
 
     warnings: list[str] = []
+    unknown = sorted(set(options) - KNOWN_OPTIONS)
+    if unknown:
+        warnings.append(f"Неизвестные опции проигнорированы: {', '.join(unknown)}. "
+                        f"Допустимые: {', '.join(sorted(KNOWN_OPTIONS))}.")
     if reduction != "digits":
         warnings.append("Свёртка «минус 22» — не вариант Ладини; результаты не совпадут с популярными калькуляторами.")
     if ancestral_inner != "rod_center":
@@ -547,6 +585,7 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
         "age_ring": ring,
         "current_period": current,
         "arcana": {str(v): ARCANA[v]["name"] for v in sorted(set(pts.values()))},
+        "checks": self_checks(pts, purposes, health, ring, reduction),
         "steps": steps,
     }
     return result
@@ -554,5 +593,5 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
 
 __all__ = [
     "ARCANA", "POINT_INFO", "calculate", "compute_points", "compute_purposes", "compute_health",
-    "compute_age_ring", "age_point", "reduce_arcana", "digit_sum",
+    "compute_age_ring", "age_point", "reduce_arcana", "digit_sum", "self_checks",
 ]

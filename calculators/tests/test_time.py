@@ -155,6 +155,41 @@ class TestMoscowHistory:
     def test_soviet_summer_time_switch_dates(self, date_, expected):
         assert off(*date_, place="Москва") == expected
 
+    # Полная таблица переходов СССР/РФ 1981–2011 (Москва, местное время перевода):
+    # [ASTRO21] — таблица «Переходы на летнее и зимнее время» (проверено 2026-10-14, совпадает
+    # по всем датам и часам) и [TZDB-EU] Rule Russia 1981–2010. Формат: (весна, осень),
+    # каждая — (Y, M, D, час перевода по часам ДО перевода).
+    SOVIET_DST = {
+        1981: ((1981, 4, 1, 0), (1981, 10, 1, 0)), 1982: ((1982, 4, 1, 0), (1982, 10, 1, 0)),
+        1983: ((1983, 4, 1, 0), (1983, 10, 1, 0)), 1984: ((1984, 4, 1, 0), (1984, 9, 30, 3)),
+        1985: ((1985, 3, 31, 2), (1985, 9, 29, 3)), 1986: ((1986, 3, 30, 2), (1986, 9, 28, 3)),
+        1987: ((1987, 3, 29, 2), (1987, 9, 27, 3)), 1988: ((1988, 3, 27, 2), (1988, 9, 25, 3)),
+        1989: ((1989, 3, 26, 2), (1989, 9, 24, 3)), 1990: ((1990, 3, 25, 2), (1990, 9, 30, 3)),
+        1992: ((1992, 3, 29, 2), (1992, 9, 27, 3)), 1993: ((1993, 3, 28, 2), (1993, 9, 26, 3)),
+        1994: ((1994, 3, 27, 2), (1994, 9, 25, 3)), 1995: ((1995, 3, 26, 2), (1995, 9, 24, 3)),
+        1996: ((1996, 3, 31, 2), (1996, 10, 27, 3)), 1997: ((1997, 3, 30, 2), (1997, 10, 26, 3)),
+        1998: ((1998, 3, 29, 2), (1998, 10, 25, 3)), 1999: ((1999, 3, 28, 2), (1999, 10, 31, 3)),
+        2000: ((2000, 3, 26, 2), (2000, 10, 29, 3)), 2001: ((2001, 3, 25, 2), (2001, 10, 28, 3)),
+        2002: ((2002, 3, 31, 2), (2002, 10, 27, 3)), 2003: ((2003, 3, 30, 2), (2003, 10, 26, 3)),
+        2004: ((2004, 3, 28, 2), (2004, 10, 31, 3)), 2005: ((2005, 3, 27, 2), (2005, 10, 30, 3)),
+        2006: ((2006, 3, 26, 2), (2006, 10, 29, 3)), 2007: ((2007, 3, 25, 2), (2007, 10, 28, 3)),
+        2008: ((2008, 3, 30, 2), (2008, 10, 26, 3)), 2009: ((2009, 3, 29, 2), (2009, 10, 25, 3)),
+        2010: ((2010, 3, 28, 2), (2010, 10, 31, 3)),
+    }
+
+    @pytest.mark.parametrize("year", sorted(SOVIET_DST))
+    def test_full_dst_table_1981_2010(self, year):
+        (sy, sm, sd, sh), (ay, am, ad, ah) = self.SOVIET_DST[year]
+        spring = datetime(sy, sm, sd, sh)
+        autumn = datetime(ay, am, ad, ah)
+        moscow = lambda t: off(t.year, t.month, t.day, t.hour, t.minute, place="Москва")
+        # весна: за полчаса до перевода ещё UTC+3, через полтора часа уже UTC+4
+        assert moscow(spring - timedelta(minutes=30)) == 3.0
+        assert moscow(spring + timedelta(minutes=90)) == 4.0
+        # осень: за полтора часа до перевода ещё UTC+4 (вне повторяющегося часа), через полчаса — UTC+3
+        assert moscow(autumn - timedelta(minutes=90)) == 4.0
+        assert moscow(autumn + timedelta(minutes=30)) == 3.0
+
     @pytest.mark.parametrize(
         "date_, expected",
         [
@@ -275,10 +310,22 @@ class TestPostSovietStates:
         assert off(2012, 1, 15, 12, place="Минск") == 3.0
         assert off(2015, 1, 15, 12, place="Минск") == 3.0
 
-    def test_minsk_1990_no_summer_time_tzdb_only(self):
-        # ⚠ Только tzdb (Shanks & Pottenger): в 1990 Минск без летнего времени (UTC+3).
-        # Независимого подтверждения не найдено — тест фиксирует содержимое tzdb.
+    def test_minsk_1990_no_summer_time(self):
+        # В 1990 Минск без летнего времени (UTC+3): tzdb (Shanks & Pottenger) и вторичный
+        # [RUWIKI-DEKRET]: «несколько регионов, в том числе Белоруссия, отказались от
+        # сезонного перевода часов» (1990). Постановления не найдено.
         assert off(1990, 5, 15, 12, place="Минск") == 3.0
+
+    def test_ashgabat_1991_tzdb_vs_wikipedia(self):
+        # ⚠ Расхождение источников. tzdb (Shanks & Pottenger): Туркмения отменила декрет
+        # 31.03.1991 вместе со всеми → зима 1991/92 UTC+4, с 19.01.1992 UTC+5.
+        # [RUWIKI-DEKRET]: декрет отменён «кроме Туркменской ССР и западной части территории
+        # Узбекской ССР» → зима 1991/92 была бы UTC+5. Тест фиксирует tzdb; KB §4.5 велит
+        # считать обе версии.
+        assert off(1991, 12, 1, 12, tz="Asia/Ashgabat") == 4.0
+        assert off(1992, 2, 1, 12, tz="Asia/Ashgabat") == 5.0
+        # Самарканд (запад Узбекистана) в tzdb декрет в 1991 не отменял — совпадает с вики.
+        assert off(1991, 12, 1, 12, tz="Asia/Samarkand") == 5.0
 
     def test_almaty_2024_unification(self):
         # Казахстан перешёл на единый UTC+5 с 01.03.2024
@@ -473,7 +520,10 @@ class TestInputValidation:
 # --------------------------------------------------------------------------- найденные ошибки
 
 
-class TestKnownBugs:
+class TestFixedBugs:
+    """Регрессия для ошибок, найденных при исследовании и исправленных в common/time.py
+    (KB 00, §6.4 и приложение А)."""
+
     def test_fixed_offset_hhmm_without_colon(self):
         assert normalize(BirthInput(2000, 1, 1, 12, 0, tz="UTC+0530")).utc_offset_hours == 5.5
 
@@ -496,3 +546,85 @@ class TestKnownBugs:
         # 2 марта 1879 ст. ст. = 14 марта 1879 н. ст.
         b = BirthInput(1879, 3, 2, 11, 30, tz="LMT", lat=48.4011, lon=9.9876, calendar="julian")  # type: ignore[call-arg]
         assert (b.year, b.month, b.day) == (1879, 3, 14)
+
+    def test_invalid_julian_date_raises(self):
+        # swe.julday() молча перекатывает «30.02» в март — BirthInput обязан отвергнуть такую дату.
+        # 29.02.1900 по ст. ст. существует (1900 — високосный по юлианскому календарю).
+        for bad in [(1900, 2, 30), (1900, 4, 31), (1899, 2, 29), (1900, 13, 1)]:
+            with pytest.raises(ValueError):
+                BirthInput(*bad, calendar="julian")
+        assert BirthInput(1900, 2, 29, calendar="julian").date.isoformat() == "1900-03-13"
+
+    def test_invalid_gregorian_date_raises_early(self):
+        # Методы «по дате» (нумерология) не вызывают normalize(): «30.02» должно падать сразу.
+        with pytest.raises(ValueError):
+            BirthInput(1990, 2, 30)
+
+    def test_calendar_name_case_insensitive(self):
+        assert BirthInput(1799, 5, 26, calendar="Julian").date.isoformat() == "1799-06-06"
+
+    def test_latvia_1922_national_mean_time_warning(self):
+        # Независимая Латвия 1918–1926: RMT (+1:36:34) могло быть законным временем всей страны
+        # (tzdb europe: «Byalokoz 1919 says Latvia was 1:36:34»). Для Даугавпилса (26.53°E)
+        # normalize() берёт LMT места, но обязан предложить вариант по RMT.
+        n = normalize(BirthInput(1922, 6, 1, 12, 0, tz="Europe/Riga", lat=55.87, lon=26.53))
+        assert n.offset_source == "LMT(longitude)"
+        assert any("UTC+01:36:34" in w for w in n.warnings)
+        # до независимости (Российская империя) такого предупреждения нет
+        n = normalize(BirthInput(1910, 6, 1, 12, 0, tz="Europe/Riga", lat=55.87, lon=26.53))
+        assert not any("UTC+01:36:34" in w for w in n.warnings)
+
+
+# --------------------------------------------------------------------------- старый стиль
+
+
+class TestJulianCalendar:
+    @pytest.mark.parametrize(
+        "julian, gregorian",
+        [
+            # Пушкин: «26 мая [6 июня] 1799» — https://ru.wikipedia.org/wiki/Пушкин,_Александр_Сергеевич
+            ((1799, 5, 26), (1799, 6, 6)),
+            # Толстой: «28 августа [9 сентября] 1828» — https://ru.wikipedia.org/wiki/Толстой,_Лев_Николаевич
+            ((1828, 8, 28), (1828, 9, 9)),
+            # Ленин: «10 (22) апреля 1870» — https://ru.wikipedia.org/wiki/Ленин,_Владимир_Ильич
+            ((1870, 4, 10), (1870, 4, 22)),
+            # Шостакович: «12 (25) сентября 1906» — https://ru.wikipedia.org/wiki/Шостакович,_Дмитрий_Дмитриевич
+            ((1906, 9, 12), (1906, 9, 25)),
+            # Королёв: «30 декабря 1906 [12 января 1907]» — смена года при пересчёте.
+            # https://ru.wikipedia.org/wiki/Королёв,_Сергей_Павлович
+            ((1906, 12, 30), (1907, 1, 12)),
+            # Последний день ст. ст. в РСФСР: 31.01.1918 → следующий день 14.02.1918.
+            # Декрет СНК: «Первый день после 31 января сего года считать не 1 февраля, а 14 февраля»
+            # https://ru.wikipedia.org/wiki/Декрет_о_введении_в_Российской_республике_западноевропейского_календаря
+            ((1918, 1, 31), (1918, 2, 13)),
+        ],
+    )
+    def test_famous_old_style_dates(self, julian, gregorian):
+        b = BirthInput(*julian, calendar="julian")
+        assert (b.year, b.month, b.day) == gregorian
+        assert b.julian_date == julian
+
+    @pytest.mark.parametrize(
+        "julian, gregorian",
+        [
+            # Границы Δ (KB §3.1): Δ меняется на юлианском 29 февраля вековых лет,
+            # невисокосных по григорианскому календарю. Проверено swe.julday/revjul.
+            ((1700, 2, 28), (1700, 3, 10)), ((1700, 2, 29), (1700, 3, 11)),   # 10 → 11
+            ((1800, 2, 28), (1800, 3, 11)), ((1800, 2, 29), (1800, 3, 12)),   # 11 → 12
+            ((1900, 2, 28), (1900, 3, 12)), ((1900, 2, 29), (1900, 3, 13)),   # 12 → 13
+            ((2100, 2, 28), (2100, 3, 13)), ((2100, 2, 29), (2100, 3, 14)),   # 13 → 14
+            ((1582, 10, 4), (1582, 10, 14)), ((1582, 10, 5), (1582, 10, 15)),  # 1582: Δ = 10
+        ],
+    )
+    def test_delta_boundaries(self, julian, gregorian):
+        b = BirthInput(*julian, calendar="julian")
+        assert (b.year, b.month, b.day) == gregorian
+
+    def test_julian_input_survives_dataclass_replace(self):
+        # После пересчёта calendar = "gregorian", поэтому replace() не сдвигает дату повторно.
+        import dataclasses
+
+        b = BirthInput(1870, 4, 10, 12, 0, calendar="julian")
+        b2 = dataclasses.replace(b, hour=13)
+        assert (b2.year, b2.month, b2.day) == (1870, 4, 22)
+        assert b2.julian_date == (1870, 4, 10)

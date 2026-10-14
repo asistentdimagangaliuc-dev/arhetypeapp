@@ -142,6 +142,26 @@ def test_sila_roda_chart_A11_B11_C12():
                                       11, 20, 9, 7, 16, 10, 21, 8]
 
 
+def test_upper_arcana_chart_A13_B1_C6():
+    """Схема «верхние арканы» со статьи «Родовой квадрат» matrica-sudby.ru (A=13, B=1, C=6; дата на картинке
+    не указана — берём эквивалентную 13.01.2004, у неё те же A, B, C):
+    https://matrica-sudby.ru/matrix/rodovoj-kvadrat-matricy-sudby.html
+    (картинка https://matrica-sudby.ru/wp-content/uploads/2025/07/verhnie-arkany-1.png)
+    Видна верхняя половина: Rod = 8 = 14+7+8+6 = 35 → 8 (сумма ВСЕХ четырёх углов; F+G = 21 дало бы 21).
+    Значение «3,5–4» частично закрыто стрелкой, видна верхняя часть цифры 4.
+    """
+    r = _calc(13, 1, 2004)
+    p = r["points"]
+    expected = {"A": 13, "B": 1, "C": 6, "E": 4, "F": 14, "G": 7, "R": 8,
+                "F1": 9, "F2": 22, "G1": 22, "G2": 15, "A1": 3, "A2": 17, "A3": 21,
+                "B1": 6, "B2": 5, "B3": 9, "TAL": 22, "C2": 10, "C1": 16}
+    assert {k: p[k] for k in expected} == expected
+    assert _ring_values(r, 0, 40) == [13, 8, 22, 4, 9, 14, 5, 19,
+                                      14, 7, 11, 8, 15, 4, 16, 17,
+                                      1, 10, 9, 17, 8, 5, 15, 22,
+                                      7, 9, 20, 6, 13, 5, 19, 7]
+
+
 def test_calkin_26_08_1980_health_map_matrica_sudby_variant():
     """Маколей Калкин, 26.08.1980 (день 26 → 8) — схема и карта здоровья matrica-sudby.ru:
     https://matrica-sudby.ru/razbor-matric/razbor-detskoj-matricy-sudby-makoleya-kalkina.html
@@ -203,7 +223,7 @@ def test_15_10_1990_channels_classic():
 
 def test_28_11_1987_year_sum_over_22():
     """28.11.1987 (день 28, сумма цифр года 25 > 22) — пример matrixdestiny.io:
-    https://matrixdestiny.io/en/methodology  и  https://matrixdestiny.io/en/matrix-destiny-guide
+    https://matrixdestiny.io/en/methodology  (на .../matrix-destiny-guide этой даты нет, там только 08.08.2020)
     A=10, B=11, C=7, D=10, E=11; углы рода 21, 18, 17, 20 (F, G, I, H по часовой).
     Формулы канала той же страницы: D+E, C+E, K = их сумма, сердце = (D+E)+K, деньги = (C+E)+K.
     """

@@ -273,6 +273,11 @@ def _chain_str(chain: list[int]) -> str:
     return " → ".join(str(x) for x in chain)
 
 
+def _sum_str(digits: list[int], chain: list[int]) -> str:
+    """«1+5+0+5 = 11 → 2»: цифры, их сумма и дальнейшее сведение (chain[0] — сумма цифр)."""
+    return "+".join(str(x) for x in digits) + " = " + _chain_str(chain)
+
+
 # ---------------------------------------------------------------------------
 # Основные числа
 # ---------------------------------------------------------------------------
@@ -522,14 +527,13 @@ def calculate(b: BirthInput, **options) -> dict:
     # 1. Число сознания
     cs = consciousness_number(d)
     cn = cs["number"]
-    steps.append(f"Число сознания: день {d} → {_chain_str(cs['chain'])} = {cn} ({PLANETS[cn]}); "
+    steps.append(f"Число сознания: день {_chain_str(cs['chain'])} ({PLANETS[cn]}); "
                  f"мастер-числа не сохраняются")
 
     # 2. Число миссии
     ms = mission_number(y, m, d)
     mn = ms["number"]
-    steps.append(f"Число миссии: {'+'.join(str(x) for x in ms['digits'])} = {ms['sum']} → "
-                 f"{_chain_str(ms['chain'])} = {mn} ({PLANETS[mn]})")
+    steps.append(f"Число миссии: {_sum_str(ms['digits'], ms['chain'])} ({PLANETS[mn]})")
 
     # 3. Матрица
     mx = build_matrix(y, m, d)
@@ -544,9 +548,10 @@ def calculate(b: BirthInput, **options) -> dict:
     # 4. Годы
     uy = universal_year(target_year)
     py = personal_year(d, m, target_year)
-    steps.append(f"Общий год {target_year}: {_chain_str(uy['chain'])} = {uy['number']}")
-    steps.append(f"Личный год {target_year}: {'+'.join(str(x) for x in py['digits'])} = {py['sum']} → "
-                 f"{_chain_str(py['chain'])} = {py['number']} ({PLANETS[py['number']]})")
+    steps.append(f"Общий год {target_year}: "
+                 f"{_sum_str([int(c) for c in str(target_year)], reduce_chain(digit_sum(target_year)))}")
+    steps.append(f"Личный год {target_year}: {_sum_str(py['digits'], py['chain'])} "
+                 f"({PLANETS[py['number']]})")
     cycle = [{"year": yy, "personal_year": personal_year(d, m, yy)["number"],
               "universal_year": universal_year(yy)["number"]}
              for yy in range(target_year, target_year + max(cycle_years, 0))]
@@ -617,11 +622,11 @@ def calculate(b: BirthInput, **options) -> dict:
         nn = name_number(str(given))
         nn["parsed_as"] = how
         result["name"] = nn
-        steps.append(f"Число имени: {nn['latin']} → {'+'.join(str(v) for _, v in nn['letters'])} = "
-                     f"{nn['sum']} → {_chain_str(nn['chain'])} = {nn['number']} ({nn['meaning']})")
+        steps.append(f"Число имени: {nn['latin']} → "
+                     f"{_sum_str([v for _, v in nn['letters']], nn['chain'])} ({nn['meaning']})")
         if re.search(r"[А-Яа-яЁё]", str(given)):
             warnings.append("Число имени посчитано по транслитерации ICAO; при другом привычном написании "
-                            "(DMITRY/DMITRII) число может измениться — передайте name_latin.")
+                            "(напр. DMITRY вместо DMITRII) число может измениться — передайте name_latin.")
 
     # 7. Справочный «финансовый код»
     if with_fin:

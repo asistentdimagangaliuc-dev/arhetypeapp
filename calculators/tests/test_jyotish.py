@@ -665,3 +665,12 @@ def test_einstein_place_ulm_is_lmt():
     # координаты ADB (48N24, 10E00) меняют Лагну лишь на 3″
     c = calculate(BirthInput(1879, 3, 14, 11, 30, tz="UTC+00:40", lat=48.4, lon=10.0), dasha_levels=1)
     assert arcmin(c["lagna"]["lon"], b["lagna"]["lon"]) < 0.1
+
+
+def test_cli_bool_node_option():
+    """CLI превращает «--opt node=true» в True — калькулятор должен понять это как истинный узел."""
+    a = calculate(T["T4"], node=True, dasha_levels=1)
+    b = calculate(T["T4"], node="true", dasha_levels=1)
+    assert a["grahas"]["rahu"]["lon"] == b["grahas"]["rahu"]["lon"]
+    assert (a["grahas"]["rahu"]["nakshatra"], a["grahas"]["rahu"]["pada"]) == ("Shravana", 1)
+    assert calculate(T["T4"], node=False, dasha_levels=1)["inputs_used"]["options"]["node"] == "mean"
