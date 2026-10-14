@@ -767,7 +767,12 @@ def calculate(b: BirthInput, **options) -> dict:
         if any("А" <= ch <= "я" or ch in "Ёё" for ch in b.name):
             warnings.append("Имя на кириллице транслитерировано по ICAO 9303 (загранпаспорт РФ); "
                             "другая латинская запись даст другое число имени ⚠.")
-        steps.append(f"Имя (халдейская таблица): {name_res['latin']} → {name_res['compound']} → {name_res['number']}.")
+        if name_res["unmapped"]:
+            warnings.append(f"Буквы без значения в халдейской таблице пропущены: {''.join(name_res['unmapped'])} "
+                            f"(таблица определена только для латиницы A–Z; запишите имя латиницей).")
+        steps.append(f"Имя (халдейская таблица): {name_res['latin']} → {name_res['compound']} → {name_res['number']} "
+                     f"(по Хейро — сумма чисел слов: {' + '.join(str(w['single']) for w in name_res['words'])} "
+                     f"= {name_res['compound_cheiro']} → {name_res['number']}).")
     ved["name_number"] = name_res
     ved["relations_table"] = relation_table()
     if name_res and name_res["number"]:
