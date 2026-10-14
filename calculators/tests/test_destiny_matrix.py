@@ -14,6 +14,7 @@ from calculators.destiny_matrix import (
     ARCANA,
     age_point,
     calculate,
+    compute_age_ring,
     compute_points,
     reduce_arcana,
 )
@@ -363,7 +364,11 @@ def test_T1_15_05_1990():
     assert r["purposes"] == {"sky": 17, "earth": 7, "personal": 6, "male": 6, "female": 15,
                              "social": 21, "spiritual": 9, "planetary": 3}
     assert r["health_map"]["total"] == {"physics": 14, "energy": 13, "emotions": 9}
-    assert r["current_period"] == {"age": 36.416, "label": "36–37,5", "value": 15, "arcanum": "Дьявол"}
+    # Возраст в полных месяцах, как у matrica-sudby.ru (current_age = 36.333333333333)
+    assert r["current_period"] == {"age": 36.333, "label": "36–37,5", "period": "36–37,5", "value": 15,
+                                   "arcanum": "Дьявол"}
+    # Прежний дробный возраст «по дням» — опция age_fraction="days"
+    assert _calc(15, 5, 1990, on_date="2026-10-14", age_fraction="days")["current_period"]["age"] == 36.416
 
 
 def test_T2_04_02_1984_year_sum_exactly_22():
@@ -441,18 +446,49 @@ def test_invariants(d, m, y):
 
 
 def test_age_point_boundaries():
+    """Границы по умолчанию — как в поле ``years`` калькулятора matrica-sudby.ru (POST /lk/matrix/get,
+    14.10.2026): 'A': [0, 1], 'YEAR11': [1, 2.5], 'YEAR12': [2.5, 3.5], 'YEAR13': [3.5, 4],
+    'YEAR14': [4, 6], …, 'YEAR17': [8.5, 9], 'F': [9, 11], …, 'YEAR88' (снова A): [79, 81],
+    'YEAR89': [81, 82.5]. На точной границе сайт выбирает следующий период (37,5 и 41 — см.
+    test_matrica_sudby_api_period_lookup)."""
     r = _calc(2, 10, 2000)
     ring = r["age_ring"]
     assert age_point(ring, 0.5)["label"] == "0 лет"
     assert age_point(ring, 1.0)["label"] == "1–2,5"
     assert age_point(ring, 2.49)["label"] == "1–2,5"
     assert age_point(ring, 2.5)["label"] == "2,5–3,5"
+    assert age_point(ring, 3.9)["label"] == "3,5–4"
+    assert age_point(ring, 4.0)["label"] == "5 лет"      # середина действует с a+4 до a+6
+    assert age_point(ring, 5.9)["label"] == "5 лет"
+    assert age_point(ring, 8.9)["label"] == "8,5–9"
+    assert age_point(ring, 9.0)["label"] == "10 лет"     # главная точка действует ±1 год
+    assert age_point(ring, 10.99)["label"] == "10 лет"
+    assert age_point(ring, 44.0)["label"] == "45 лет"
+    assert age_point(ring, 79.5)["label"] == "0 лет"     # 79–81: снова A (второй круг)
+    assert age_point(ring, 80.0)["label"] == "0 лет"
+    assert age_point(ring, 81.0)["label"] == "1–2,5"
+    assert age_point(ring, 89.5)["label"] == "10 лет"
+    assert [x["period"] for x in ring[:9]] == ["0–1", "1–2,5", "2,5–3,5", "3,5–4", "4–6", "6–7,5",
+                                               "7,5–8,5", "8,5–9", "9–11"]
+
+
+def test_age_point_boundaries_label_start_option():
+    """Прежнее прочтение подписей (опция ring_periods="label_start"): период длится от начала
+    своей подписи до начала следующей."""
+    r = _calc(2, 10, 2000, ring_periods="label_start")
+    ring = r["age_ring"]
+    assert age_point(ring, 0.5)["label"] == "0 лет"
     assert age_point(ring, 4.9)["label"] == "3,5–4"
     assert age_point(ring, 5.0)["label"] == "5 лет"
     assert age_point(ring, 9.99)["label"] == "8,5–9"
     assert age_point(ring, 44.0)["label"] == "43,5–44"
     assert age_point(ring, 79.9)["label"] == "78,5–79"
     assert age_point(ring, 80.0)["label"] == "0 лет"     # второй круг
+    assert r["variant"]["ring_periods"] == "label_start"
+    with pytest.raises(ValueError):
+        _calc(2, 10, 2000, ring_periods="bad")
+    with pytest.raises(ValueError):
+        _calc(2, 10, 2000, on_date="2026-01-01", age_fraction="bad")
 
 
 def test_options_validation_and_variants():
@@ -496,3 +532,108 @@ def test_compute_points_direct():
     vals, formulas, steps = compute_points(15, 5, 1990)
     assert formulas["D"] == "A+B+C"
     assert any(s.startswith("C = год 1990") for s in steps)
+
+
+# ---------------------------------------------------------------------------
+# Калькулятор matrica-sudby.ru (повторная проверка 14.10.2026)
+# ---------------------------------------------------------------------------
+# Источник: JSON-ответ публичного калькулятора matrica-sudby.ru — POST https://matrica-sudby.ru/lk/matrix/get
+# с телом {"day", "month", "year", "name", "gender", "dontMakeFull": false} (тот же запрос отправляет форма
+# на https://matrica-sudby.ru/, код формы — /build/assets/v47-show.42fdc28a.js). Ключи сайта переведены
+# в наши обозначения: O, P → A1, B1; J, K → A2, B2; S, T → A3, B3; L, Q → C2, C1; M, N → D2, D1;
+# у сайта H = C+D и I = D+A (у нас I и H); R → X; U → Y; F3 → TAL; YOURF_1..3 — «Итого».
+# Карта здоровья сайта (v47-show.42fdc28a.js): строки ["Свадхистана", "Q", "N"], эмоции строки
+# P(физика, энергия), итог — YOURF_1..3 с сервера.
+
+MATRICA_SUDBY_API = {
+    (15, 5, 1990): {
+        "points": {"A": 15, "B": 5, "C": 19, "D": 12, "E": 6, "F": 20, "G": 6, "I": 4, "H": 9, "A1": 9,
+                   "A2": 21, "A3": 9, "B1": 16, "B2": 11, "B3": 17, "C1": 8, "C2": 7, "D1": 3, "D2": 18,
+                   "F1": 7, "F2": 5, "G1": 6, "G2": 18, "I1": 20, "I2": 16, "H1": 3, "H2": 21, "TAL": 5,
+                   "X": 7, "Y": 11},
+        "purposes": {"sky": 17, "earth": 7, "personal": 6, "male": 6, "female": 15, "social": 21,
+                     "spiritual": 9},
+        "total": (15, 7, 13),
+        "ring": [15, 20, 5, 13, 8, 18, 10, 3, 20, 11, 9, 16, 7, 19, 12, 17, 5, 21, 16, 9, 11, 10, 17, 5,
+                 6, 19, 13, 20, 7, 15, 8, 9, 19, 7, 6, 11, 5, 14, 9, 13, 4, 6, 20, 9, 16, 8, 10, 22,
+                 12, 18, 6, 9, 21, 6, 3, 12, 9, 6, 15, 21, 6, 9, 21, 9],
+    },
+    (28, 11, 1987): {
+        "points": {"A": 10, "B": 11, "C": 7, "D": 10, "E": 11, "F": 21, "G": 18, "I": 17, "H": 20, "A1": 4,
+                   "A2": 21, "A3": 5, "B1": 6, "B2": 22, "B3": 6, "C1": 7, "C2": 18, "D1": 4, "D2": 21,
+                   "F1": 10, "F2": 7, "G1": 22, "G2": 4, "I1": 20, "I2": 3, "H1": 8, "H2": 6, "TAL": 7,
+                   "X": 12, "Y": 11},
+        "purposes": {"sky": 21, "earth": 17, "personal": 11, "male": 11, "female": 11, "social": 22,
+                     "spiritual": 6},
+        "total": (11, 7, 18),
+        "ring": [10, 6, 14, 18, 4, 11, 7, 10, 21, 11, 8, 13, 5, 21, 16, 9, 11, 6, 22, 6, 11, 22, 11, 11,
+                 18, 7, 7, 14, 7, 21, 14, 21, 7, 20, 13, 19, 6, 11, 5, 22, 17, 7, 8, 17, 9, 10, 19, 11,
+                 10, 5, 13, 16, 3, 8, 5, 7, 20, 7, 5, 8, 3, 16, 13, 5],
+    },
+    (14, 3, 1879): {
+        "points": {"A": 14, "B": 3, "C": 7, "D": 6, "E": 3, "F": 17, "G": 10, "I": 13, "H": 20, "A1": 4,
+                   "A2": 17, "A3": 20, "B1": 9, "B2": 6, "B3": 9, "C1": 17, "C2": 10, "D1": 15, "D2": 9,
+                   "F1": 22, "F2": 5, "G1": 8, "G2": 16, "I1": 5, "I2": 19, "H1": 10, "H2": 8, "TAL": 5,
+                   "X": 19, "Y": 5},
+        "purposes": {"sky": 9, "earth": 21, "personal": 3, "male": 3, "female": 3, "social": 6,
+                     "spiritual": 9},
+        "total": (10, 6, 7),
+        "ring": [14, 5, 18, 22, 4, 7, 21, 11, 17, 9, 10, 3, 20, 7, 5, 8, 3, 19, 16, 11, 13, 18, 5, 15,
+                 10, 19, 9, 8, 17, 5, 6, 13, 7, 16, 9, 11, 20, 8, 6, 19, 13, 18, 5, 6, 19, 8, 7, 13,
+                 6, 20, 14, 22, 8, 18, 10, 3, 20, 11, 9, 16, 7, 10, 21, 8],
+    },
+}
+
+
+@pytest.mark.parametrize("dmy", list(MATRICA_SUDBY_API))
+def test_matrica_sudby_api_vectors(dmy):
+    """Все точки, предназначения, кольцо и (вариант svadhisthana="matrica_sudby") итог карты здоровья
+    совпадают с ответом калькулятора matrica-sudby.ru. Итог эмоций у сайта — R(сумма эмоций строк):
+    для 15.05.1990 это 13 (итог физики + итог энергии дал бы 15+7 → 22), для 14.03.1879 — 7 (а не 16)."""
+    exp = MATRICA_SUDBY_API[dmy]
+    r = _calc(*dmy, svadhisthana="matrica_sudby")
+    p = r["points"]
+    assert {k: p[k] for k in exp["points"]} == exp["points"]
+    assert {k: r["purposes"][k] for k in exp["purposes"]} == exp["purposes"]
+    assert [x["value"] for x in r["age_ring"]] == exp["ring"]
+    t = r["health_map"]["total"]
+    assert (t["physics"], t["energy"], t["emotions"]) == exp["total"]
+    assert r["variant"]["health_total"] == "sum_of_rows"      # выбран автоматически для matrica_sudby
+    sv = r["health_map"]["rows"][5]
+    assert (sv["physics_point"], sv["energy_point"]) == ("C1", "D1")
+    # Явно заданный прежний итог для этого варианта по-прежнему доступен
+    old = _calc(*dmy, svadhisthana="matrica_sudby", health_total="sum_of_totals")["health_map"]["total"]
+    assert old["emotions"] == reduce_arcana(old["physics"] + old["energy"])
+
+
+def test_rod_is_sum_of_corners_on_discriminating_date():
+    """28.11.1987 (E = 11): R(F+G+H+I) = 21+18+20+17 = 76 → 13, а R(2E) = 22. На схеме, которую
+    калькулятор matrica-sudby.ru вернул для этой даты (поле svg), справа от центра 11 стоит 13
+    (окружность cx=453.7, cy=370.8), т. е. сумма четырёх углов. Свадхистана на той же схеме — оранжевые
+    точки C1 = 7 и D1 = 4 (fill #F7A648), C2 = 18 и D2 = 21 — белые."""
+    p = _calc(28, 11, 1987)["points"]
+    assert p["R"] == 13 and reduce_arcana(2 * p["E"]) == 22
+
+
+def test_matrica_sudby_api_period_lookup():
+    """Аркан текущего периода и дробный возраст — как у калькулятора matrica-sudby.ru на 14.10.2026:
+    15.05.1990 → current_age 36.333…, age = YEAR45 [36, 37.5]; 28.11.1987 → 38.833…, YEAR47 [38.5, 39];
+    14.04.1989 → 37.5, YEAR46 [37.5, 38.5]; 14.10.1985 → 41, YEAR51 [41, 42.5];
+    15.10.1985 → 40.9166…, C [39, 41]."""
+    # (дата, возраст, подпись, значение аркана из ответа сайта values[age])
+    cases = [((15, 5, 1990), 36.333, "36–37,5", 15), ((28, 11, 1987), 38.833, "38,5–39", 21),
+             ((14, 4, 1989), 37.5, "37,5–38,5", 4), ((14, 10, 1985), 41.0, "41–42,5", 13),
+             ((15, 10, 1985), 40.917, "40 лет", 5)]
+    for dmy, age, label, value in cases:
+        cp = _calc(*dmy, on_date="2026-10-14")["current_period"]
+        assert (cp["age"], cp["label"], cp["value"]) == (age, label, value), dmy
+
+
+def test_compute_age_ring_periods_cover_0_79_without_gaps():
+    for periods, last_end in (("matrica_sudby", 79.0), ("label_start", 80.0)):
+        ring = compute_age_ring(compute_points(15, 5, 1990)[0], periods=periods)
+        assert ring[0]["period_start"] == 0.0
+        for a, b in zip(ring, ring[1:]):
+            assert a["period_end"] == b["period_start"]
+        assert ring[-1]["period_end"] == last_end
+

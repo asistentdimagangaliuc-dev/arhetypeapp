@@ -362,9 +362,19 @@ def test_time_period_table():
         [1, 1, 2, 2, 4, 4, 5, 5, 2, 5]
 
 
-def test_boundary_year_warning():
-    assert any("границе периода" in w for w in calculate(BirthInput(2000, 5, 5))["warnings"])
-    assert not any("границе периода" in w for w in calculate(BirthInput(1990, 5, 15))["warnings"])
+def test_boundary_year_is_first_year_of_period():
+    # Граница периодов подтверждена автором (повторная проверка 14.10.2026):
+    # [K1] гл. 12 (изд. 2011) https://thelib.ru/books/aleksandr_fedorovich_aleksandrov/cifrovoy_analiz_dat_rozhdeniya_i_sobytiy_kniga_1_psihomatrica_i_ee_svoystva-read-4.html
+    #   «от 0 до 199 лет – достаточно одной цифры в линии…»; «1 1 2000 … попадает в первый период (от 0 до 199 лет)».
+    # [TMC] гл. 1: «1-й период — от 0 до 199 года, от 1000 до 1199 года, от 2000 до 2199 года».
+    # [DR] «от 1 до 200 лет» — порядковый счёт: там же 1 1 2000 отнесён к первому периоду.
+    # Поэтому предупреждения больше нет, вместо него — шаг расчёта.
+    r = calculate(BirthInput(2000, 5, 5))
+    assert r["time_intervals"]["period"] == 1
+    assert not any("границе периода" in w for w in r["warnings"])
+    assert any("кратен 200" in s for s in r["steps"])
+    assert time_period(1800) == 5 and time_period(1999) == 5 and time_period(1200) == 2
+    assert not any("кратен 200" in s for s in calculate(BirthInput(1990, 5, 15))["steps"])
 
 
 def test_julian_after_1918_warns_and_bad_option_raises():

@@ -12,7 +12,9 @@
   диагонали 1-5-9 «духовность», 3-5-7 «темперамент»;
 * ключи интерпретации по количеству цифр в каждой ячейке и линии;
 * варианты для рождённых после 2000 года (опция ``post2000_rule``) и вариант
-  «первая цифра дня буквально, даже если 0» (опция ``day_digit``).
+  «первая цифра дня буквально, даже если 0» (опция ``day_digit``);
+* для сравнения — ряд системы «Идеал» Н. Сидоровой (``post2000_rule="sidorova"``: константа
+  −2 до 2000 г. и +19 с 2000 г. вписывается в ряд, 2-го числа нет).
 
 Чего здесь НЕТ: переходов цифр (11↔8, 22↔4, 6↔7, 55→9 и 99→5), «сильных линий» по периодам
 тысячелетия и других доработок А. Ф. Александрова — это отдельный документ 09
@@ -30,7 +32,7 @@ from .common.time import BirthInput
 METHOD = "pythagoras_square"
 
 #: Допустимые значения опций.
-POST2000_RULES = ("none", "plus19", "add_1_9", "year_1999")
+POST2000_RULES = ("none", "plus19", "add_1_9", "year_1999", "sidorova")
 DAY_DIGIT_RULES = ("first_nonzero", "literal")
 
 # ---------------------------------------------------------------------------
@@ -319,10 +321,40 @@ def working_numbers(day: int, month: int, year: int, *, day_digit: str = "first_
     if post2000_rule not in POST2000_RULES:
         raise ValueError(f"post2000_rule должен быть одним из {POST2000_RULES}, получено {post2000_rule!r}")
     steps: list[str] = []
-    applied = post2000_rule != "none" and year >= post2000_from_year
-    rule = post2000_rule if applied else "none"
     dd = date_digits(day, month, year)
     extra: list[int] = []
+
+    if post2000_rule == "sidorova":
+        # Система «Идеал» Н. Сидоровой в пересказе tayniymir.com
+        # (https://tayniymir.com/numerology/prognoz.html): «Сложите цифры: 1+1+1+9+8+4=24. Если дата
+        # рождения до 2000 года, отнимаем 2, если позже, прибавляем 19. Это постоянное значение.
+        # 24-2=22. Складываем: 2+2=4. Выписываем все цифры: 1.1.1984.24.2.22.4». На той же странице
+        # пифагорейский ряд той же даты — «1.1.1984.24.6.22.4»: у Сидоровой на 2-м месте стоит
+        # константа (2), а не сумма цифр 1-го числа, т. е. константа вписывается в ряд.
+        # Правило задано для всех дат (−2 / +19), поэтому применяется при любом годе.
+        first = sum(dd)
+        const = 19 if year >= post2000_from_year else 2
+        third_raw = first + 19 if const == 19 else first - 2
+        third = abs(third_raw)
+        fourth = digit_sum(third)
+        nz = [x for x in dd if x]
+        steps.append(f"Система «Идеал» (Н. Сидорова): 1-е число = сумма цифр даты: "
+                     f"{' + '.join(str(x) for x in nz)} = {first}.")
+        steps.append(f"Постоянное значение: {'+19 (рождение с ' + str(post2000_from_year) + ' г.)' if const == 19 else '−2 (рождение до ' + str(post2000_from_year) + ' г.)'}; "
+                     f"оно вписывается в ряд вторым числом.")
+        steps.append(f"3-е число: {first} {'+ 19' if const == 19 else '− 2'} = {third_raw}"
+                     + (f" → по модулю {third}" if third_raw < 0 else "") + ".")
+        steps.append(f"4-е число: сумма цифр {third} = {fourth} (один проход).")
+        steps.append(f"Ряд: {day}.{month}.{year}.{first}.{const}.{third}.{fourth}")
+        return {
+            "first": first, "second": const, "third": third, "fourth": fourth,
+            "third_raw": third_raw, "multiplier_digit": None,
+            "extra_digits": [], "post2000_applied": True, "rule_applied": "sidorova",
+            "steps": steps,
+        }
+
+    applied = post2000_rule != "none" and year >= post2000_from_year
+    rule = post2000_rule if applied else "none"
 
     # 1-е число
     if rule == "year_1999":
@@ -373,9 +405,14 @@ def working_numbers(day: int, month: int, year: int, *, day_digit: str = "first_
         steps.append(f"4-е число: 3-е однозначное, 4-е совпадает с ним: {fourth}.")
 
     if rule == "add_1_9":
+        # Подтверждено кодом калькулятора web-calculator.ru
+        # (https://web-calculator.ru/js/ezoterika/kvadrat-pifagora.js, 14.10.2026):
+        # «a&&t>=2e3&&(l=l.concat([1,9]),o=!0)» — при включённом режиме и годе >= 2000 к списку цифр
+        # (дата + классические рабочие числа) добавляется ровно одна 1 и одна 9 (флаг addedNineteen),
+        # рабочие числа не меняются.
         extra = [1, 9]
         steps.append("Вариант «+1 и 9» (для рождённых с 2000 г.): в квадрат дополнительно вписываются "
-                     "цифры 1 и 9 (по одной).")
+                     "цифры 1 и 9 (по одной), рабочие числа классические (web-calculator.ru).")
 
     return {
         "first": first, "second": second, "third": third, "fourth": fourth,
@@ -405,9 +442,11 @@ def calculate(b: BirthInput, *, post2000_rule: str = "none", day_digit: str = "f
 
     Параметры:
         post2000_rule: ``none`` (по умолчанию — единый расчёт для любой даты),
-            ``plus19`` (3-е = 1-е + 19), ``add_1_9`` (дописать в квадрат цифры 1 и 9),
-            ``year_1999`` (год записывается как 1999 + N). Варианты применяются только
-            к датам с годом >= ``post2000_from_year``.
+            ``plus19`` (3-е = 1-е + 19, 2-е классическое, константа в квадрат не идёт — реконструкция),
+            ``add_1_9`` (дописать в квадрат цифры 1 и 9), ``year_1999`` (год записывается как 1999 + N),
+            ``sidorova`` (ряд системы «Идеал»: 1-е, константа 2 или 19, 1-е ∓ константа, сумма цифр).
+            Варианты ``plus19``, ``add_1_9``, ``year_1999`` применяются только к датам с годом
+            >= ``post2000_from_year``; ``sidorova`` — к любой дате (−2 до порога, +19 с порога).
         day_digit: ``first_nonzero`` (по умолчанию) или ``literal`` (для дня 05 удваивается 0).
         interpret: добавлять ли текстовые ключи интерпретации.
     Время и место рождения не используются.
@@ -442,10 +481,15 @@ def calculate(b: BirthInput, *, post2000_rule: str = "none", day_digit: str = "f
     if wn["third_raw"] < 0:
         warnings.append(f"3-е число получилось отрицательным ({wn['third_raw']}); взят модуль "
                         f"{wn['third']} (Зорина 2017, Трошин, istashenko.com).")
-    if day < 10 and day_digit == "first_nonzero":
+    if day < 10 and day_digit == "first_nonzero" and wn["rule_applied"] != "sidorova":
         warnings.append("День однозначный: удваивается первая НЕНУЛЕВАЯ цифра дня (Александров пишет дату "
                         "без нулей). Вариант day_digit='literal' (удваивать 0) даёт другое 3-е число.")
-    if year >= post2000_from_year:
+    if wn["rule_applied"] == "sidorova":
+        warnings.append("Ряд посчитан по системе «Идеал» Н. Сидоровой (−2 до 2000 г., +19 с 2000 г.; константа "
+                        "вписана в ряд вместо 2-го числа). Это другая система: значения цифр у неё свои "
+                        "(tayniymir.com), ключи интерпретации ниже относятся к классической психоматрице. "
+                        "Опубликованного разбора даты после 2000 г. по этой системе не найдено.")
+    elif year >= post2000_from_year:
         if wn["post2000_applied"]:
             warnings.append(f"Применён спорный вариант для рождённых после 2000 г.: {wn['rule_applied']} "
                             "(не канон; см. knowledge-base/08-pythagoras-square.md).")
@@ -519,7 +563,8 @@ def calculate(b: BirthInput, *, post2000_rule: str = "none", day_digit: str = "f
         "grid": grid,
         "lines": lines_out,
         "diagonal_balance": balance,
-        "leading_number": wn["second"],
+        # В ряду «Идеал» на 2-м месте стоит константа (2 или 19), а не «ведущее» число.
+        "leading_number": None if wn["rule_applied"] == "sidorova" else wn["second"],
         "destiny_number": reduce_to_digit(wn["first"]),
         "notes": [
             "Ячейки: левый столбец 1-2-3, средний 4-5-6, правый 7-8-9 (строки 1-4-7, 2-5-8, 3-6-9).",

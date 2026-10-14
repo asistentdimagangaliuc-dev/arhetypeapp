@@ -264,6 +264,62 @@ def test_add_1_9_variant():
     assert sum(var.values()) == sum(base.values()) + 2
 
 
+def _web_calculator_js_counts(day: int, month: int, year: int, extended: bool) -> dict[int, int]:
+    """Перенос логики https://web-calculator.ru/js/ezoterika/kvadrat-pifagora.js (скачан 14.10.2026):
+    r(e,n,t): a = s(e)+s(n)+s(t), i = s(a), r = первая цифра String(день), o = a − 2·r,
+    w4 = s(|o|); o(e,n,t,a): l = [].concat(i(e), i(n), i(t), i(w1), i(w2), i(|w3|), i(w4));
+    «a&&t>=2e3&&(l=l.concat([1,9]),o=!0)» — расширенный режим и год >= 2000 добавляют ровно 1 и 9;
+    в ячейки идут цифры 1..9."""
+    def s(n: int) -> int:
+        return sum(int(c) for c in str(abs(n)))
+
+    def i(n: int) -> list[int]:
+        return [int(c) for c in str(abs(n))]
+
+    w1 = s(day) + s(month) + s(year)
+    w2 = s(w1)
+    w3 = w1 - 2 * int(str(day)[0])
+    w4 = s(abs(w3))
+    digits = i(day) + i(month) + i(year) + i(w1) + i(w2) + i(abs(w3)) + i(w4)
+    if extended and year >= 2000:
+        digits += [1, 9]
+    return {d: digits.count(d) for d in range(1, 10)}
+
+
+@pytest.mark.parametrize("d,m,y", [(1, 1, 2000), (29, 2, 2004), (5, 10, 2010), (31, 12, 1999),
+                                   (15, 5, 1990), (9, 1, 2002), (27, 3, 2019), (7, 1, 2000)])
+def test_add_1_9_matches_web_calculator_js(d, m, y):
+    """Вариант «1 и 9» подтверждён кодом web-calculator.ru: ровно одна 1 и одна 9, рабочие числа
+    классические, порог — год >= 2000 (для 31.12.1999 опция не применяется ни там, ни здесь)."""
+    assert counts(d, m, y, post2000_rule="add_1_9") == _web_calculator_js_counts(d, m, y, True)
+    assert counts(d, m, y) == _web_calculator_js_counts(d, m, y, False)
+
+
+def test_sidorova_ideal_row_01_01_1984():
+    # https://tayniymir.com/numerology/prognoz.html (метод Н. Сидоровой «Идеал»): «Сложите цифры:
+    # 1+1+1+9+8+4=24. Если дата рождения до 2000 года, отнимаем 2, если позже, прибавляем 19. Это постоянное
+    # значение. 24-2=22. Складываем: 2+2=4. Выписываем все цифры: 1.1.1984.24.2.22.4».
+    # Пифагорейский ряд той же даты на той же странице: «1.1.1984.24.6.22.4» — константа стоит в ряду
+    # на месте 2-го числа.
+    r = calculate(BirthInput(1984, 1, 1), post2000_rule="sidorova")
+    assert r["working_row"] == "24 2 22 4"
+    assert r["steps"][-4] == "Ряд: 1.1.1984.24.2.22.4"
+    assert r["all_digits"] == [1, 1, 1, 9, 8, 4, 2, 4, 2, 2, 2, 4]
+    assert counts(1, 1, 1984, post2000_rule="sidorova") == {1: 3, 2: 4, 3: 0, 4: 3, 5: 0, 6: 0, 7: 0,
+                                                            8: 1, 9: 1}
+    assert calculate(BirthInput(1984, 1, 1))["working_row"] == "24 6 22 4"
+    assert r["leading_number"] is None and r["warnings"]
+
+
+def test_sidorova_after_2000_constant_19_in_row():
+    # Та же система после 2000 г.: константа 19 вписывается в ряд (по аналогии с «2» в примере 1984 г.;
+    # опубликованного разбора даты после 2000 г. нет ⚠). 29.02.2004: 19, 19, 19+19 = 38, 3+8 = 11.
+    assert wn(29, 2, 2004, post2000_rule="sidorova") == (19, 19, 38, 11)
+    assert wn(29, 2, 2004, post2000_rule="plus19") == (19, 10, 38, 11)   # реконструкция без константы
+    assert grid(29, 2, 2004, post2000_rule="sidorova") == [["1111", "4", ""], ["222", "", "8"],
+                                                           ["3", "", "999"]]
+
+
 def test_post2000_rule_ignored_before_2000():
     r = calculate(BirthInput(1990, 5, 15), post2000_rule="plus19")
     assert r["inputs_used"]["post2000_applied"] is False

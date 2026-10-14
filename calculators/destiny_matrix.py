@@ -20,6 +20,12 @@
 Вариант ``reduction="minus22"`` вычитает 22.
 
 Время и место рождения не нужны.
+
+Сверка с калькулятором matrica-sudby.ru (14.10.2026): его публичный JSON-ответ
+(POST https://matrica-sudby.ru/lk/matrix/get — тот же запрос, что отправляет форма на сайте)
+для 15.05.1990, 28.11.1987 и 14.03.1879 совпал со всеми точками, кольцом и (при
+``svadhisthana="matrica_sudby"``) с картой здоровья; из него же взяты границы периодов кольца
+(поле ``years``) и дробный возраст в полных месяцах (поле ``current_age``).
 """
 from __future__ import annotations
 
@@ -35,8 +41,16 @@ REDUCTION_RULES = ("digits", "minus22")
 SVADHISTHANA_RULES = ("classic", "matrica_sudby")
 ANCESTRAL_INNER_RULES = ("rod_center", "personal_center")
 HEALTH_TOTAL_RULES = ("sum_of_totals", "sum_of_rows")
+#: Границы периодов кольца: ``matrica_sudby`` — как в поле ``years`` ответа калькулятора
+#: matrica-sudby.ru (главная точка действует ±1 год, середина a+5 — с a+4 до a+6);
+#: ``label_start`` — прежнее прочтение «период длится от начала подписи до начала следующей».
+RING_PERIOD_RULES = ("matrica_sudby", "label_start")
+#: Дробный возраст: ``months`` — полные годы + полные месяцы / 12 (как ``current_age`` у
+#: matrica-sudby.ru: 15.05.1990 на 14.10.2026 → 36,333); ``days`` — доля года по дням.
+AGE_FRACTION_RULES = ("months", "days")
 #: Все опции, которые понимает ``calculate``; остальные игнорируются с предупреждением.
-KNOWN_OPTIONS = frozenset({"reduction", "svadhisthana", "ancestral_inner", "health_total", "on_date", "age"})
+KNOWN_OPTIONS = frozenset({"reduction", "svadhisthana", "ancestral_inner", "health_total", "on_date", "age",
+                           "ring_periods", "age_fraction"})
 
 # ---------------------------------------------------------------------------
 # Справочные таблицы
@@ -135,16 +149,21 @@ RING_ORDER: tuple[tuple[str, int], ...] = (
 )
 
 #: Подпись и смещение (в годах от начала десятилетия) восьми точек одного десятилетия.
-#: «age» — условная позиция точки на кольце, «start» — начало периода её действия.
+#: «age» — условная позиция точки на кольце; «start»/«end» — период её действия [start; end)
+#: в схеме ``matrica_sudby`` (поле ``years`` калькулятора matrica-sudby.ru, 14.10.2026:
+#: 'A': [0, 1], 'YEAR11': [1, 2.5], 'YEAR12': [2.5, 3.5], 'YEAR13': [3.5, 4], 'YEAR14': [4, 6],
+#: 'YEAR15': [6, 7.5], 'YEAR16': [7.5, 8.5], 'YEAR17': [8.5, 9], 'F': [9, 11] …; на точной границе
+#: сайт берёт следующий период: 37,5 → [37.5, 38.5], 41 → [41, 42.5]);
+#: «start_label»/«end_label» — прежняя схема ``label_start`` (от начала подписи до начала следующей).
 DECADE_SLOTS: tuple[dict[str, Any], ...] = (
-    {"slot": "start", "age": 0.0, "start": 0.0},
-    {"slot": "e1", "age": 1.25, "start": 1.0},
-    {"slot": "q1", "age": 2.5, "start": 2.5},
-    {"slot": "e2", "age": 3.75, "start": 3.5},
-    {"slot": "mid", "age": 5.0, "start": 5.0},
-    {"slot": "e3", "age": 6.25, "start": 6.0},
-    {"slot": "q3", "age": 7.5, "start": 7.5},
-    {"slot": "e4", "age": 8.75, "start": 8.5},
+    {"slot": "start", "age": 0.0, "start": -1.0, "end": 1.0, "start_label": 0.0, "end_label": 1.0},
+    {"slot": "e1", "age": 1.25, "start": 1.0, "end": 2.5, "start_label": 1.0, "end_label": 2.5},
+    {"slot": "q1", "age": 2.5, "start": 2.5, "end": 3.5, "start_label": 2.5, "end_label": 3.5},
+    {"slot": "e2", "age": 3.75, "start": 3.5, "end": 4.0, "start_label": 3.5, "end_label": 5.0},
+    {"slot": "mid", "age": 5.0, "start": 4.0, "end": 6.0, "start_label": 5.0, "end_label": 6.0},
+    {"slot": "e3", "age": 6.25, "start": 6.0, "end": 7.5, "start_label": 6.0, "end_label": 7.5},
+    {"slot": "q3", "age": 7.5, "start": 7.5, "end": 8.5, "start_label": 7.5, "end_label": 8.5},
+    {"slot": "e4", "age": 8.75, "start": 8.5, "end": 9.0, "start_label": 8.5, "end_label": 10.0},
 )
 
 #: Описание чакр для карты здоровья.
@@ -258,14 +277,29 @@ def _decade_label(base: int, slot: str) -> str:
     return labels[slot]
 
 
+def _fmt_age(x: float) -> str:
+    """15.5 → «15,5», 9.0 → «9»."""
+    return f"{x:g}".replace(".", ",")
+
+
 def compute_age_ring(points: dict[str, int], rule: str = "digits",
-                     steps: list[str] | None = None) -> list[dict[str, Any]]:
+                     steps: list[str] | None = None,
+                     periods: str = "matrica_sudby") -> list[dict[str, Any]]:
     """64 точки внешнего кольца (возрастные точки 0–80 лет).
 
     Между двумя соседними главными точками P0 (возраст a) и P10 (a+10):
     mid(5) = P0+P10; q1(2,5) = P0+mid; q3(7,5) = mid+P10;
     e1(1–2,5) = P0+q1; e2(3,5–4) = q1+mid; e3(6–7,5) = mid+q3; e4(8,5–9) = q3+P10.
+
+    ``periods`` задаёт границы действия точек (поля ``period_start``/``period_end``):
+    ``matrica_sudby`` (по умолчанию) — как в калькуляторе matrica-sudby.ru: главная точка
+    [a−1; a+1), e1 [a+1; a+2,5), q1 [a+2,5; a+3,5), e2 [a+3,5; a+4), mid [a+4; a+6),
+    e3 [a+6; a+7,5), q3 [a+7,5; a+8,5), e4 [a+8,5; a+9); ``label_start`` — прежнее прочтение
+    подписей: [a; a+1), …, e2 [a+3,5; a+5), mid [a+5; a+6), …, e4 [a+8,5; a+10).
     """
+    if periods not in RING_PERIOD_RULES:
+        raise ValueError(f"ring_periods должен быть одним из {RING_PERIOD_RULES}")
+    s_key, e_key = ("start", "end") if periods == "matrica_sudby" else ("start_label", "end_label")
     ring: list[dict[str, Any]] = []
     for idx, (key0, base) in enumerate(RING_ORDER):
         key10 = RING_ORDER[(idx + 1) % len(RING_ORDER)][0]
@@ -298,9 +332,13 @@ def compute_age_ring(points: dict[str, int], rule: str = "digits",
             )
         for slot in DECADE_SLOTS:
             value, formula = vals[slot["slot"]]
+            start = max(base + slot[s_key], 0.0)   # точка A в 0 лет действует с 0
+            end = base + slot[e_key]
             ring.append({
                 "age": base + slot["age"],
-                "period_start": base + slot["start"],
+                "period_start": start,
+                "period_end": end,
+                "period": f"{_fmt_age(start)}–{_fmt_age(end)}",
                 "label": _decade_label(base, slot["slot"]),
                 "value": value,
                 "formula": formula,
@@ -312,24 +350,36 @@ def compute_age_ring(points: dict[str, int], rule: str = "digits",
 def age_point(ring: list[dict[str, Any]], age: float) -> dict[str, Any]:
     """Точка кольца, действующая в возрасте ``age`` (лет, дробное).
 
-    Используются границы периодов по подписям matrica-sudby.ru: [0;1), [1;2,5), [2,5;3,5),
-    [3,5;5), [5;6), [6;7,5), [7,5;8,5), [8,5;10) — и так каждое десятилетие.
-    После 80 лет круг начинается заново (возраст берётся по модулю 80).
+    Период точки — полуинтервал [period_start; period_end) из ``compute_age_ring``
+    (на точной границе берётся следующий период — так отвечает калькулятор matrica-sudby.ru:
+    37,5 → «37,5–38,5», 41 → «41–42,5»). После 80 лет круг начинается заново (возраст по модулю 80):
+    у matrica-sudby.ru 79–81 — снова точка A, 81–82,5 — снова «1–2,5» и т. д.
+    Возраст между концом последнего периода и 80 (в схеме ``matrica_sudby`` — 79–80) уже
+    относится к точке A второго круга.
     """
     if age < 0:
         raise ValueError("Возраст не может быть отрицательным")
     a = age % 80
-    current = ring[0]
+    eps = 1e-9
     for p in ring:
-        if p["period_start"] <= a + 1e-9:
-            current = p
-        else:
-            break
-    return current
+        if p["period_start"] - eps <= a < p["period_end"] - eps:
+            return p
+    return ring[0]
 
 
-def _age_on(birth: date, on: date) -> float:
-    """Полный возраст в годах с дробной частью (по дням от последнего дня рождения)."""
+def _age_on(birth: date, on: date, fraction: str = "months") -> float:
+    """Полный возраст в годах с дробной частью.
+
+    ``months`` (по умолчанию, как ``current_age`` калькулятора matrica-sudby.ru):
+    полные годы + полные месяцы / 12; месяц считается прожитым, когда наступило то же число
+    (15.05.1990 → 14.10.2026: 36 лет 4 мес. = 36,333; 28.11.1987 → 38,833).
+    ``days``: полные годы + доля года по дням от последнего дня рождения (прежнее поведение).
+    """
+    if fraction not in AGE_FRACTION_RULES:
+        raise ValueError(f"age_fraction должен быть одним из {AGE_FRACTION_RULES}")
+    if fraction == "months":
+        months = (on.year - birth.year) * 12 + (on.month - birth.month) - (on.day < birth.day)
+        return months / 12
     years = on.year - birth.year - ((on.month, on.day) < (birth.month, birth.day))
 
     def anniversary(y: int) -> date:
@@ -491,15 +541,29 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
       * ``reduction``: ``digits`` (по умолчанию) | ``minus22``;
       * ``svadhisthana``: ``classic`` (C2, D2 — по умолчанию) | ``matrica_sudby`` (C1, D1);
       * ``ancestral_inner``: ``rod_center`` (F2 = F+R — по умолчанию) | ``personal_center`` (F2 = F+E);
-      * ``health_total``: ``sum_of_totals`` (эмоции итога = итог физики + итог энергии) | ``sum_of_rows``;
-      * ``on_date`` (``YYYY-MM-DD`` или ``date``) или ``age`` (лет) — для аркана текущего периода.
+      * ``health_total``: ``sum_of_totals`` (эмоции итога = итог физики + итог энергии) | ``sum_of_rows``
+        (эмоции итога = R(сумма эмоций строк)). Если не задано: ``sum_of_rows`` при
+        ``svadhisthana="matrica_sudby"`` (так считает калькулятор matrica-sudby.ru: 15.05.1990 → итог
+        15/7/13, 14.03.1879 → 10/6/7), иначе ``sum_of_totals`` (numefy.ru);
+      * ``on_date`` (``YYYY-MM-DD`` или ``date``) или ``age`` (лет) — для аркана текущего периода;
+      * ``ring_periods``: ``matrica_sudby`` (по умолчанию, границы как в калькуляторе matrica-sudby.ru)
+        | ``label_start`` (прежнее прочтение подписей);
+      * ``age_fraction``: ``months`` (по умолчанию, полные месяцы / 12, как у matrica-sudby.ru) | ``days``.
     """
     reduction = options.get("reduction", "digits")
     svadhisthana = options.get("svadhisthana", "classic")
     ancestral_inner = options.get("ancestral_inner", "rod_center")
-    health_total = options.get("health_total", "sum_of_totals")
+    health_total = options.get("health_total")
+    if health_total is None:
+        health_total = "sum_of_rows" if svadhisthana == "matrica_sudby" else "sum_of_totals"
+    ring_periods = options.get("ring_periods", "matrica_sudby")
+    age_fraction = options.get("age_fraction", "months")
     if reduction not in REDUCTION_RULES:
         raise ValueError(f"reduction должен быть одним из {REDUCTION_RULES}")
+    if ring_periods not in RING_PERIOD_RULES:
+        raise ValueError(f"ring_periods должен быть одним из {RING_PERIOD_RULES}")
+    if age_fraction not in AGE_FRACTION_RULES:
+        raise ValueError(f"age_fraction должен быть одним из {AGE_FRACTION_RULES}")
 
     warnings: list[str] = []
     unknown = sorted(set(options) - KNOWN_OPTIONS)
@@ -517,7 +581,7 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
                                           ancestral_inner=ancestral_inner)
     purposes = compute_purposes(pts, reduction, steps)
     health = compute_health(pts, reduction, svadhisthana, health_total, steps)
-    ring = compute_age_ring(pts, reduction, steps)
+    ring = compute_age_ring(pts, reduction, steps, periods=ring_periods)
 
     current = None
     birth = date(b.year, b.month, b.day)
@@ -525,13 +589,18 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
     on_date = options.get("on_date")
     if age is None and on_date is not None:
         on = on_date if isinstance(on_date, date) else date.fromisoformat(str(on_date))
-        age = _age_on(birth, on)
+        age = _age_on(birth, on, age_fraction)
     if age is not None:
         age = float(age)
         if age >= 80:
-            warnings.append("Возраст ≥ 80: кольцо пройдено полностью, берётся второй круг (возраст − 80).")
+            warnings.append("Возраст ≥ 80: кольцо пройдено полностью, берётся второй круг (возраст − 80); "
+                            "так же продолжает кольцо калькулятор matrica-sudby.ru (79–81 — снова A, 89–91 — F).")
+        if age >= 99:
+            warnings.append("Возраст ≥ 99: таблица периодов matrica-sudby.ru здесь нерегулярна (B только 99–100, "
+                            "дальше периоды сдвинуты, после 110 лет данных нет); здесь второй круг продолжается "
+                            "равномерно, результат может не совпасть с сайтом.")
         cp = age_point(ring, age)
-        current = {"age": round(age, 3), "label": cp["label"], "value": cp["value"],
+        current = {"age": round(age, 3), "label": cp["label"], "period": cp["period"], "value": cp["value"],
                    "arcanum": ARCANA[cp["value"]]["name"]}
 
     karmic_tail = [pts["D2"], pts["D1"], pts["D"]]
@@ -543,6 +612,8 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
             "svadhisthana": svadhisthana,
             "ancestral_inner": ancestral_inner,
             "health_total": health_total,
+            "ring_periods": ring_periods,
+            "age_fraction": age_fraction,
         },
         "inputs_used": {"day": b.day, "month": b.month, "year": b.year, "gender": b.gender},
         "warnings": warnings,

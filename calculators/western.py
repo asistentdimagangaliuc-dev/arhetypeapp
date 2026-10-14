@@ -90,9 +90,15 @@ ASPECTS: dict[str, tuple[float, str, bool, int | None]] = {
 MAJOR = [k for k, v in ASPECTS.items() if v[2]]
 
 # Схемы орбисов ------------------------------------------------------------
-# astrotheme: https://www.astrotheme.com/astrology_aspects.php (натальные карты):
-#   орбис по аспекту + 0,3° если участвует Солнце или Луна, + 0,6° для пары Солнце–Луна;
-#   для узлов и Лилит орбис ограничен 3°.
+# astrotheme (по умолчанию) — орбисы, которые сайт Astrotheme ФАКТИЧЕСКИ применяет в картах знаменитостей.
+#   Правило со страницы https://www.astrotheme.com/astrology_aspects.php: орбис по аспекту + 0,3° если
+#   участвует Солнце или Луна, + 0,6° для пары Солнце–Луна; для узлов и Лилит орбис ограничен 3°.
+#   Базовые орбисы мажорных аспектов, полуквадрата и полутораквадрата — как в опубликованной таблице;
+#   квинконс 2,8 (опубл. 2,7), полусекстиль 1,5 (опубл. 1,0), квинтиль и биквинтиль 1,2 (опубл. 0,8)
+#   восстановлены по 88 картам https://www.astrotheme.com/astrology/<Имя> (2802 аспекта, повторная проверка
+#   14.10.2026): с этими значениями 0 пропущенных аспектов и 11 «лишних» — все в пределах 1′ от границы
+#   (округление позиций сайта), с опубликованными — 82 пропущенных. Сводка — 06-western-astrology.md §4.4(а).
+# astrotheme_published — опубликованная таблица той же страницы без поправок (умолчание до 14.10.2026).
 # astrolog: https://github.com/CruiserOne/Astrolog/blob/master/data.cpp (rAspOrb, rObjAdd)
 #   + general.cpp GetOrb(): min(орбис аспекта, rObjOrb каждого объекта) + добавка Солнца (1°) + Луны (1°).
 #   rObjOrb = 2° у узлов (oNod, oSou) и Вертекса, у остальных объектов 360° (без ограничения).
@@ -102,6 +108,12 @@ MAJOR = [k for k, v in ASPECTS.items() if v[2]]
 #   https://astromaya.ru/astroschool/postroenie-goroskopa/hand1/aspectcalculation
 ORB_SCHEMES: dict[str, dict] = {
     "astrotheme": {
+        "base": {"conjunction": 10.5, "opposition": 10.0, "trine": 8.3, "square": 7.8, "sextile": 6.1,
+                 "quincunx": 2.8, "sesquisquare": 2.5, "semisquare": 1.5, "semisextile": 1.5,
+                 "quintile": 1.2, "biquintile": 1.2},
+        "luminary_add": 0.3, "sun_moon_add": 0.6, "point_cap": 3.0,
+    },
+    "astrotheme_published": {
         "base": {"conjunction": 10.5, "opposition": 10.0, "trine": 8.3, "square": 7.8, "sextile": 6.1,
                  "quincunx": 2.7, "sesquisquare": 2.5, "semisquare": 1.5, "semisextile": 1.0,
                  "quintile": 0.8, "biquintile": 0.8},
@@ -381,7 +393,7 @@ def allowed_orb(scheme: str, asp: str, p1: str, p2: str) -> float | None:
     """Допустимый орбис аспекта asp между p1 и p2 по схеме; None — аспект схемой не используется."""
     cfg = ORB_SCHEMES[scheme]
     pair = {p1, p2}
-    if scheme == "astrotheme":
+    if scheme in ("astrotheme", "astrotheme_published"):
         orb = cfg["base"][asp]
         if pair == {"sun", "moon"}:
             orb += cfg["sun_moon_add"]
@@ -566,7 +578,8 @@ def calculate(b: BirthInput, hsys: str = "P", node: str = "true", lilith: str = 
       hsys — система домов: P (Плацидус, по умолчанию), K, E, W, O, R, C, T, B;
       node — 'true' (истинный, по умолчанию) | 'mean';
       lilith — 'mean' (средняя Чёрная Луна, по умолчанию) | 'true' (оскулирующий апогей);
-      orbs — 'astrotheme' (по умолчанию) | 'astrolog' | 'moiety' | 'ru_points';
+      orbs — 'astrotheme' (по умолчанию; фактические орбисы сайта) | 'astrotheme_published'
+             (опубликованная таблица Astrotheme, умолчание до 14.10.2026) | 'astrolog' | 'moiety' | 'ru_points';
       aspect_set — 'all' (мажорные + минорные) | 'major';
       pof — 'sect' (день/ночь, по умолчанию) | 'day' (всегда ASC+Луна−Солнце);
       rulership — 'modern' | 'traditional' (для управителей домов и карты);

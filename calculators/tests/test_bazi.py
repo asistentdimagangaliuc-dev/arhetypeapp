@@ -522,3 +522,60 @@ def test_meeus_low_precision_formula_from_doc():
                 jd += (((deg - lam(jd)) + 180) % 360 - 180) / 0.9856
             worst = max(worst, abs(jd - ref) * 1440)
     assert worst <= 12.5
+
+
+# ---------------------------------------------------------------------------
+# 8. Повторная проверка (приоритет 1): таблицы против классических текстов
+# ---------------------------------------------------------------------------
+
+def _br(s: str) -> list[int]:
+    return [[b[0] for b in bazi.BRANCHES].index(ch) for ch in s]
+
+
+def _st(s: str) -> list[int]:
+    return [[x[0] for x in bazi.STEMS].index(ch) for ch in s]
+
+
+def test_shensha_tables_vs_sanming_tonghui():
+    # 《三命通会》卷三 «论驿马» (https://zh.wikisource.org/wiki/三命通會/卷三):
+    # «寅午戌生人，马在申…申子辰人，马在寅…巳酉丑人，马在亥…亥卯未人，马在巳»
+    for group, horse in (("寅午戌", "申"), ("申子辰", "寅"), ("巳酉丑", "亥"), ("亥卯未", "巳")):
+        for b in _br(group):
+            assert bazi.HORSE[bazi.TRINE_OF[b]] == _br(horse)[0]
+    # 卷三 «总论诸神煞»: «亥卯未在子，巳酉丑在午，寅午戌在卯，申子辰在酉，为桃花煞»
+    for group, peach in (("亥卯未", "子"), ("巳酉丑", "午"), ("寅午戌", "卯"), ("申子辰", "酉")):
+        for b in _br(group):
+            assert bazi.PEACH[bazi.TRINE_OF[b]] == _br(peach)[0]
+    # 卷二 «论咸池»: «五行沐浴之地，名咸池» — 桃花 = 沐浴 Ян-ствола элемента тройки (水 壬, 火 丙, 金 庚, 木 甲)
+    for group, stem in (("申子辰", "壬"), ("寅午戌", "丙"), ("巳酉丑", "庚"), ("亥卯未", "甲")):
+        peach = bazi.PEACH[bazi.TRINE_OF[_br(group)[0]]]
+        assert bazi.life_stage(_st(stem)[0], peach)["cn"] == "沐浴"
+    # 卷二 «论将星华盖»: «以三合底处得库谓之华盖» — последняя ветвь тройки (库)
+    for group in ("申子辰", "寅午戌", "巳酉丑", "亥卯未"):
+        assert bazi.CANOPY[bazi.TRINE_OF[_br(group)[0]]] == _br(group)[2]
+    # 卷三 «论天乙贵人»: «甲阳木、戊阳土、庚阳金，皆喜土位…所以牛羊为贵»; 乙己 «鼠猴为贵»;
+    # 丙丁 «以酉亥阴气和而为贵»; 壬癸 «以巳卯阳气和而为贵»; «六辛…故以马虎为贵»
+    expected = {"甲": "丑未", "戊": "丑未", "庚": "丑未", "乙": "子申", "己": "子申",
+                "丙": "亥酉", "丁": "亥酉", "壬": "卯巳", "癸": "卯巳", "辛": "寅午"}
+    for stem, brs in expected.items():
+        assert set(bazi.NOBLEMAN[_st(stem)[0]]) == set(_br(brs))
+
+
+def test_hidden_stems_vs_yuanhai_ziping_and_sanming():
+    # 《渊海子平》 «又地支藏遁歌» (https://zh.wikisource.org/wiki/淵海子平): «子宫癸水在其中，丑癸辛金己土同；
+    # 寅宫甲木兼丙戊，卯宫乙木独相逢。辰藏乙戊三分癸，巳中庚金丙戊丛；午宫丁火并己土，未宫乙己丁共宗。
+    # 申位庚金壬水戊，酉宫辛金独丰隆；戌宫辛金及丁戊，亥藏壬甲是真踪。» — состав (без порядка)
+    verse = {"子": "癸", "丑": "癸辛己", "寅": "甲丙戊", "卯": "乙", "辰": "乙戊癸", "巳": "庚丙戊",
+             "午": "丁己", "未": "乙己丁", "申": "庚壬戊", "酉": "辛", "戌": "辛丁戊", "亥": "壬甲"}
+    for br, stems in verse.items():
+        assert {s for s, _r, _w in bazi.HIDDEN_STEMS[_br(br)[0]]} == set(_st(stems))
+    # 《三命通会》卷二 «论人元司事» (https://zh.wikisource.org/wiki/三命通會/卷二):
+    # «已中有戊土七日，庚金长生五日，丙火一十八日» — 本气 丙, 中气 (长生) 庚, 余气 戊
+    roles = {s: r for s, r, _w in bazi.HIDDEN_STEMS[_br("巳")[0]]}
+    assert roles == {_st("丙")[0]: "main", _st("庚")[0]: "middle", _st("戊")[0]: "residual"}
+    # 卷二 «论天干阴阳生死»: «阳生阴死，阳死阴生»; «戊土生于寅，寅中有火» (火土同宫), 己 — в 酉
+    assert bazi.life_stage(_st("戊")[0], _br("寅")[0])["cn"] == "长生"
+    assert bazi.life_stage(_st("己")[0], _br("酉")[0])["cn"] == "长生"
+    for yang, yin in ((0, 1), (2, 3), (4, 5), (6, 7), (8, 9)):   # 长生 Инь-ствола = 死 Ян-пары
+        yin_birth = bazi.CHANG_SHENG_START[yin]
+        assert bazi.life_stage(yang, yin_birth)["cn"] == "死"

@@ -179,25 +179,68 @@ def test_external_retrograde_flags(key):
 
 @pytest.mark.parametrize("key", list(EXTERNAL))
 def test_external_aspects_astrotheme_orbs(key):
-    """Набор аспектов (10 планет + ASC + MC) совпадает с Astrotheme.
-
-    Единственное известное расхождение: Astrotheme фактически показывает полусекстили шире
-    заявленного 1,0° (+0,3° со светилом): Луна–Марс 1°37′ у Монро, Луна–Венера 1°34′ у Обамы
-    (оба со светилом, т.е. базовый орбис ≥ 1°20′), Юпитер–ASC 1°06′ у Елизаветы II (без светил).
-    Калькулятор следует опубликованной таблице (1,0° + 0,3° для светил).
-    """
+    """Набор аспектов (10 планет + ASC + MC) совпадает с Astrotheme один в один (схема по умолчанию
+    'astrotheme' = фактические орбисы сайта: квинконс 2,8, полусекстиль 1,5, квинтиль/биквинтиль 1,2)."""
     b, *_ = EXTERNAL[key]
     r = calculate(b, aspect_points="planets_angles")
     ours = {(frozenset((a["p1"], a["p2"])), a["aspect"]): a["orb"] for a in r["aspects"]}
     theirs = parse_aspects(ASTROTHEME_ASPECTS[key])
-    extra = set(ours) - set(theirs)
-    missing = set(theirs) - set(ours)
-    assert not extra, extra
-    for k in missing:  # только полусекстили шире опубликованного орбиса
-        assert k[1] == "semisextile" and theirs[k] > allowed_orb("astrotheme", "semisextile", *k[0]), k
-    assert len(missing) <= 1
+    assert set(ours) == set(theirs), (set(ours) - set(theirs), set(theirs) - set(ours))
     for k in set(ours) & set(theirs):
         assert abs(ours[k] - theirs[k]) * 60 <= 2.0, (k, ours[k], theirs[k])
+
+
+@pytest.mark.parametrize("key", list(EXTERNAL))
+def test_external_aspects_astrotheme_published_table(key):
+    """Старое умолчание (опубликованная таблица, orbs='astrotheme_published') теряет только полусекстили
+    шире 1,0°(+0,3°): Луна–Марс 1°37′ у Монро, Луна–Венера 1°34′ у Обамы, Юпитер–ASC 1°06′ у Елизаветы II."""
+    b, *_ = EXTERNAL[key]
+    r = calculate(b, aspect_points="planets_angles", orbs="astrotheme_published")
+    ours = {(frozenset((a["p1"], a["p2"])), a["aspect"]) for a in r["aspects"]}
+    theirs = parse_aspects(ASTROTHEME_ASPECTS[key])
+    assert not ours - set(theirs)
+    missing = set(theirs) - ours
+    for k in missing:
+        assert k[1] == "semisextile" and theirs[k] > allowed_orb("astrotheme_published", "semisextile", *k[0]), k
+    assert len(missing) <= 1
+
+
+# Пограничные пары из 88 карт Astrotheme (повторная проверка 14.10.2026), по которым восстановлены
+# фактические орбисы минорных аспектов. Долготы — как на страницах https://www.astrotheme.com/astrology/<Имя>
+# (раздел «Positions of Planets», AS/MC в шапке), «listed» — показан ли аспект в списке аспектов страницы.
+#   https://www.astrotheme.com/astrology/Joe_Biden, /Pablo_Picasso, /Bill_Gates, /Emmanuel_Macron,
+#   /Dustin_Hoffman, /George_Clooney, /Steve_Jobs, /Serge_Gainsbourg, /Charles_Aznavour, /Tom_Hanks,
+#   /Grace_Kelly, /Catherine_Deneuve, /Julia_Roberts, /Richard_Nixon
+ASTROTHEME_BOUNDARY = [
+    # (карта, тело1, долгота1, тело2, долгота2, аспект, показан на сайте)
+    ("Joe_Biden", "moon", "0°59' Taurus", "uranus", "2°46' Gemini", "semisextile", True),        # 1°47′ со светилом
+    ("Pablo_Picasso", "sun", "2°43' Scorpio", "venus", "4°32' Libra", "semisextile", False),     # 1°49′
+    ("Bill_Gates", "pluto", "28°21' Leo", "asc", "26°58' Cancer", "semisextile", True),          # 1°23′
+    ("Emmanuel_Macron", "uranus", "14°50' Scorpio", "neptune", "16°22' Sagittarius", "semisextile", False),  # 1°32′
+    ("Dustin_Hoffman", "sun", "16°02' Leo", "moon", "18°06' Virgo", "semisextile", True),        # 2°04′ Солнце–Луна
+    ("Bill_Gates", "mars", "10°07' Libra", "asc", "26°58' Cancer", "quintile", True),            # 1°09′
+    ("George_Clooney", "venus", "13°04' Aries", "saturn", "29°51' Capricorn", "quintile", False),  # 1°13′
+    ("Dustin_Hoffman", "moon", "18°06' Virgo", "venus", "4°43' Cancer", "quintile", True),       # 1°23′ со светилом
+    ("Steve_Jobs", "moon", "7°45' Aries", "mc", "21°19' Gemini", "quintile", False),             # 1°34′
+    ("Serge_Gainsbourg", "uranus", "3°52' Aries", "neptune", "26°43' Leo", "biquintile", True),  # 1°09′
+    ("Tom_Hanks", "moon", "9°52' Leo", "mars", "17°20' Pisces", "biquintile", True),             # 1°28′ со светилом
+    ("George_Clooney", "moon", "27°58' Capricorn", "pluto", "5°34' Virgo", "biquintile", False),  # 1°36′
+    ("Grace_Kelly", "mercury", "10°42' Scorpio", "uranus", "7°57' Aries", "quincunx", True),     # 2°45′
+    ("Catherine_Deneuve", "uranus", "8°16' Gemini", "asc", "11°05' Capricorn", "quincunx", False),  # 2°49′
+    ("Julia_Roberts", "sun", "4°03' Scorpio", "saturn", "7°09' Aries", "quincunx", True),        # 3°06′ со светилом
+    ("Richard_Nixon", "sun", "19°24' Capricorn", "mc", "16°15' Gemini", "quincunx", False),      # 3°09′
+]
+
+
+@pytest.mark.parametrize("case", ASTROTHEME_BOUNDARY, ids=lambda c: f"{c[0]}-{c[1]}-{c[3]}-{c[5]}")
+def test_astrotheme_site_minor_orbs_boundary(case):
+    name, p1, l1, p2, l2, asp, listed = case
+    sep = abs((lon(l1) - lon(l2) + 180.0) % 360.0 - 180.0)
+    dev = abs(sep - ASPECTS[asp][0])
+    assert (dev <= allowed_orb("astrotheme", asp, p1, p2) + 1e-9) == listed, (name, dev)
+    # опубликованная таблица эти случаи не воспроизводит (показанные аспекты шире её орбисов)
+    if listed:
+        assert dev > allowed_orb("astrotheme_published", asp, p1, p2)
 
 
 # Раздел «Planets in Houses» тех же страниц Astrotheme (Lilith там — True Lilith, Fortune — Парс Фортуны).
@@ -450,6 +493,14 @@ def test_aspect_phase_applying_separating():
 
 def test_orb_schemes():
     assert allowed_orb("astrotheme", "conjunction", "sun", "moon") == pytest.approx(11.1)
+    # фактические минорные орбисы сайта (88 карт) и опубликованная таблица
+    assert allowed_orb("astrotheme", "semisextile", "mars", "jupiter") == pytest.approx(1.5)
+    assert allowed_orb("astrotheme", "semisextile", "moon", "mars") == pytest.approx(1.8)
+    assert allowed_orb("astrotheme", "quincunx", "mars", "saturn") == pytest.approx(2.8)
+    assert allowed_orb("astrotheme", "quintile", "mars", "saturn") == pytest.approx(1.2)
+    assert allowed_orb("astrotheme", "biquintile", "mars", "saturn") == pytest.approx(1.2)
+    assert allowed_orb("astrotheme_published", "semisextile", "mars", "jupiter") == pytest.approx(1.0)
+    assert allowed_orb("astrotheme_published", "quincunx", "sun", "saturn") == pytest.approx(3.0)
     assert allowed_orb("astrotheme", "trine", "sun", "mars") == pytest.approx(8.6)
     assert allowed_orb("astrotheme", "square", "north_node", "mars") == pytest.approx(3.0)
     assert allowed_orb("astrolog", "conjunction", "sun", "moon") == pytest.approx(9.0)

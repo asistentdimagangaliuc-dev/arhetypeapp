@@ -316,13 +316,23 @@ class TestPostSovietStates:
         # сезонного перевода часов» (1990). Постановления не найдено.
         assert off(1990, 5, 15, 12, place="Минск") == 3.0
 
-    def test_ashgabat_1991_tzdb_vs_wikipedia(self):
-        # ⚠ Расхождение источников. tzdb (Shanks & Pottenger): Туркмения отменила декрет
-        # 31.03.1991 вместе со всеми → зима 1991/92 UTC+4, с 19.01.1992 UTC+5.
-        # [RUWIKI-DEKRET]: декрет отменён «кроме Туркменской ССР и западной части территории
-        # Узбекской ССР» → зима 1991/92 была бы UTC+5. Тест фиксирует tzdb; KB §4.5 велит
-        # считать обе версии.
-        assert off(1991, 12, 1, 12, tz="Asia/Ashgabat") == 4.0
+    def test_ashgabat_1991_regional_correction(self):
+        # tzdb (Shanks & Pottenger, без документа): зима 1991/92 UTC+4. Опровергнуто первоисточником:
+        # постановление Кабмина СССР № 20 от 04.02.1991, п. 2 — «Принять предложения Правительства
+        # Узбекской ССР и Правительства Туркменской ССР … об установлении на территориях этих республик
+        # времени 5 часового пояса» (http://pravo.gov.ru/proxy/ips/?doc_itself=&nd=102010545);
+        # планы Госкомиссии («Известия» № 68 от 20.03.1991 и «Советская Россия» 29.03.1991, [TZDB-AS],
+        # [RUWIKI-DEKRET]): 29.09.1991 часы назад переводятся «за исключением … Туркмении».
+        # normalize() исправляет на UTC+5 и отдаёт версию tzdb (UTC+4) в alternatives.
+        n = normalize(BirthInput(1991, 12, 1, 12, 0, tz="Asia/Ashgabat"))
+        assert n.utc_offset_hours == 5.0
+        assert n.offset_source == "regional_exception"
+        assert [a["utc_offset_hours"] for a in n.alternatives] == [4.0]
+        # 29.09.1991 02:30: по tzdb час повторялся; по исправлению перевода не было — без «неоднозначно»
+        n = normalize(BirthInput(1991, 9, 29, 2, 30, tz="Asia/Ashgabat", fold=1))
+        assert n.utc_offset_hours == 5.0 and not any("неоднозначно" in w for w in n.warnings)
+        # вне окна — данные tzdb (летом 1991 и после 19.01.1992 tzdb тоже UTC+5)
+        assert off(1991, 7, 1, 12, tz="Asia/Ashgabat") == 5.0
         assert off(1992, 2, 1, 12, tz="Asia/Ashgabat") == 5.0
         # Самарканд (запад Узбекистана) в tzdb декрет в 1991 не отменял — совпадает с вики.
         assert off(1991, 12, 1, 12, tz="Asia/Samarkand") == 5.0
@@ -573,6 +583,161 @@ class TestFixedBugs:
         # до независимости (Российская империя) такого предупреждения нет
         n = normalize(BirthInput(1910, 6, 1, 12, 0, tz="Europe/Riga", lat=55.87, lon=26.53))
         assert not any("UTC+01:36:34" in w for w in n.warnings)
+
+
+# --------------------------------------------------------------------------- региональные исключения
+
+
+def alt_offsets(n) -> list[float]:
+    return [a["utc_offset_hours"] for a in n.alternatives]
+
+
+class TestRegionalExceptions:
+    """Известные расхождения фактического времени с tzdb (KB 00, §3.3, табл. 4.11).
+
+    [NIZH-1981]  «Наука и жизнь», 1981, № 3, В. Бойцов (председатель Госкомиссии единого времени):
+                 http://maps.monetonos.ru/maps/raznoe/Old_Maps/Old_Maps/Articles/022/3_1981.html —
+                 «Исключение составят области — „нарушители времени“. Там 1 октября нынешнего года
+                 стрелки возвращать не будут…»
+    [TRUD-1982]  «Труд», 20.02.1982, «Поправка к поясному времени» (скан):
+                 http://besp.narod.ru/images/trud_1982.jpg (страница http://besp.narod.ru/nauka_1981_3.htm) —
+                 «с 1 апреля с. г. летнее время не будет введено на территории Дагестанской, …, Татарской, …
+                 Тюменской и Ярославской областей, Ненецкого и Эвенкийского автономных округов, Хатангского
+                 района…»; «…за исключением Тюменской области, время в которой будет отличаться от
+                 московского на 2 часа, а также Эвенкийского АО и Хатангского района … — на 4 часа».
+    [RUWIKI-VR]  https://ru.wikipedia.org/wiki/Время_в_России — смещения административных центров по годам.
+    [ACT20-1991] Пост. Кабмина СССР № 20 от 04.02.1991: http://pravo.gov.ru/proxy/ips/?doc_itself=&nd=102010545
+    [RUWIKI-UA]  https://ru.wikipedia.org/wiki/Время_на_Украине
+    [RUWIKI-GE]  https://ru.wikipedia.org/wiki/Время_в_Грузии
+    [GLEBER]     https://regionalia.blb-karlsruhe.de/files/21761/BLB_Gleber_Vereinheitlichung_Zeit_Suedwesten.pdf
+    """
+
+    # --- 1981/82: «нарушители» ------------------------------------------------------------------
+    @pytest.mark.parametrize("place", ["Казань", "Чебоксары", "Горький", "Ростов-на-Дону", "Ставрополь"])
+    def test_violators_winter_1981_82_utc_plus_4(self, place):
+        # [NIZH-1981], [TRUD-1982]; [RUWIKI-VR]: «Казань: … 4 (1981), 3* (1982)», так же Чебоксары,
+        # Нижний Новгород, Ростов-на-Дону, Ставрополь. tzdb (Europe/Moscow) даёт UTC+3.
+        n = normalize(BirthInput(1981, 12, 15, 12, 0, tz="Europe/Moscow", lat=55.0, lon=45.0, place=place))
+        assert n.utc_offset_hours == 4.0
+        assert n.offset_source == "regional_exception"
+        assert alt_offsets(n) == [3.0]
+
+    def test_violators_by_region_field(self):
+        # Регион можно указать явно (BirthInput.region), даже если место задано координатами.
+        n = normalize(BirthInput(1982, 2, 1, 9, 0, lat=56.1, lon=40.4, region="Владимирская область"))
+        assert n.utc_offset_hours == 4.0
+        # Тульской области в перечне нет — tzdb (UTC+3) без исправления
+        n = normalize(BirthInput(1982, 2, 1, 9, 0, lat=54.2, lon=37.6, place="Тула", region="Тульская область"))
+        assert n.utc_offset_hours == 3.0
+
+    def test_violators_no_dst_transitions(self):
+        # У «нарушителей» не было ни повтора 30.09.1981 23:00–24:00, ни «дыры» 01.04.1982 00:00–01:00:
+        # UTC+4 непрерывно с 01.04.1981 по 01.10.1982 [TRUD-1982].
+        n = normalize(BirthInput(1981, 9, 30, 23, 30, place="Казань", fold=1))
+        assert n.utc_offset_hours == 4.0 and not any("неоднозначно" in w for w in n.warnings)
+        n = normalize(BirthInput(1982, 4, 1, 0, 30, place="Казань"))
+        assert n.utc_offset_hours == 4.0 and not any("не существовало" in w for w in n.warnings)
+        # до и после окна — как tzdb
+        assert off(1981, 7, 1, 12, place="Казань") == 4.0
+        assert off(1982, 12, 1, 12, place="Казань") == 3.0
+
+    def test_moscow_itself_unchanged_and_unknown_place_warns(self):
+        # Москва — эталон зоны, не «нарушитель»: ни исправления, ни предупреждения.
+        n = normalize(BirthInput(1981, 12, 15, 12, 0, place="Москва"))
+        assert n.utc_offset_hours == 3.0 and n.alternatives == []
+        # Только координаты (регион не опознан): tzdb + предупреждение с вариантом UTC+4.
+        n = normalize(BirthInput(1981, 12, 15, 12, 0, lat=56.13, lon=47.25))
+        assert n.utc_offset_hours == 3.0 and n.offset_source == "tzdb"
+        assert alt_offsets(n) == [4.0]
+        assert any("UTC+04:00:00" in w for w in n.warnings)
+
+    def test_tyumen_and_evenkia_1981_82(self):
+        # [TRUD-1982]: с 01.04.1982 Тюменская обл. — МСК+2, Эвенкия и Хатанга — МСК+4, т. е. зимой
+        # 1981/82 (без летнего часа Москвы) были МСК+3 = UTC+6 и МСК+5 = UTC+8.
+        # [RUWIKI-VR]: «Тюмень: … 6 (1981), 5* (1982)».
+        n = normalize(BirthInput(1982, 1, 10, 12, 0, lat=57.15, lon=65.53, place="Тюмень"))
+        assert (n.utc_offset_hours, alt_offsets(n)) == (6.0, [5.0])
+        n = normalize(BirthInput(1982, 1, 10, 12, 0, lat=64.27, lon=100.22, region="Эвенкийский АО"))
+        assert (n.utc_offset_hours, alt_offsets(n)) == (8.0, [7.0])
+        assert off(1982, 1, 10, 12, place="Свердловск") == 5.0   # Свердловская обл. — не «нарушитель»
+
+    # --- 1989–1992: Поволжье, Средняя Азия --------------------------------------------------------
+    def test_udmurtia_vs_samara_alternative(self):
+        # Europe/Samara = Самара; Удмуртия по [RUWIKI-VR] («Ижевск: 3 (1924), 4 (1931), 3* (1991)…»)
+        # осталась на UTC+4 зимой 1989–1991; в акте № 227 (1989) её нет (tzdb europe, Golosunov).
+        n = normalize(BirthInput(1990, 1, 15, 12, 0, lat=56.85, lon=53.2))     # Ижевск по координатам
+        assert n.utc_offset_hours == 3.0 and alt_offsets(n) == [4.0]
+        n = normalize(BirthInput(1990, 1, 15, 12, 0, place="Самара"))
+        assert n.utc_offset_hours == 3.0 and n.alternatives == []
+
+    def test_volga_1991_92_alternative(self):
+        # tzdb: Волгоград UTC+4 с 31.03.1991 по 29.03.1992; ru.wikipedia «Декретное время»: вероятнее UTC+3.
+        n = normalize(BirthInput(1991, 12, 15, 12, 0, place="Волгоград"))
+        assert n.utc_offset_hours == 4.0 and alt_offsets(n) == [3.0]
+
+    def test_central_asia_1990_1991_alternatives(self):
+        # ТАСС о 1990 г. (цит. ru.wikipedia «Время в Узбекистане»): «Узбекистан, Таджикистан, Азербайджан
+        # летнее время не вводили» → вариант на 1 ч меньше tzdb летом 1990.
+        n = normalize(BirthInput(1990, 7, 15, 12, 0, place="Ташкент"))
+        assert n.utc_offset_hours == 7.0 and alt_offsets(n) == [6.0]
+        n = normalize(BirthInput(1990, 7, 15, 12, 0, place="Баку"))
+        assert n.utc_offset_hours == 5.0 and alt_offsets(n) == [4.0]
+        # Лето 1991: по плану Госкомиссии Киргизия переводит часы назад 31.03.1991, tzdb — 31.08.1991.
+        n = normalize(BirthInput(1991, 6, 1, 12, 0, tz="Asia/Bishkek"))
+        assert n.utc_offset_hours == 6.0 and alt_offsets(n) == [5.0]
+        # Казахстан: tzdb совпадает с последним опубликованным планом («Советская Россия» 29.03.1991,
+        # [RUWIKI-DEKRET]) — исключений нет.
+        assert normalize(BirthInput(1991, 6, 1, 12, 0, place="Алматы")).alternatives == []
+
+    # --- Крым, Донбасс, Абхазия ---------------------------------------------------------------------
+    def test_crimea_1996_97_alternative(self):
+        # tzdb (IATA SSIM): Крым на московском времени до 30.03.1997; [RUWIKI-UA]: «Весной 1996 года
+        # республика подчинилась решению правительства Украины и перешла на киевское время».
+        n = normalize(BirthInput(1996, 12, 1, 12, 0, tz="Europe/Simferopol", lat=44.95, lon=34.1))
+        assert n.utc_offset_hours == 3.0 and alt_offsets(n) == [2.0]
+
+    def test_dpr_lpr_since_2014(self):
+        # [RUWIKI-UA]: ДНР и ЛНР осенью 2014 г. отказались от перехода на «зимнее» время — UTC+3
+        # без сезонного перевода. tzdb Europe/Kyiv: зимой UTC+2.
+        n = normalize(BirthInput(2015, 1, 15, 12, 0, tz="Europe/Kyiv", lat=48.0, lon=37.8, place="Донецк"))
+        assert n.utc_offset_hours == 3.0 and alt_offsets(n) == [2.0]
+        assert off(2015, 1, 15, 12, place="Киев") == 2.0                      # остальная Украина
+        assert off(2014, 1, 15, 12, tz="Europe/Kyiv", lat=48.0, lon=37.8, place="Донецк") == 2.0
+
+    def test_abkhazia_since_2014(self):
+        # [RUWIKI-GE]: «После того, как в 2014 году Россия вернулась к постоянному зимнему времени,
+        # часовой пояс на их территории стал соответствовать UTC+3»; Asia/Tbilisi — UTC+4.
+        n = normalize(BirthInput(2016, 1, 15, 12, 0, tz="Asia/Tbilisi", lat=43.0, lon=41.0, region="Абхазия"))
+        assert n.utc_offset_hours == 3.0 and alt_offsets(n) == [4.0]
+        assert off(2016, 1, 15, 12, place="Тбилиси") == 4.0
+
+    # --- до 1946 -----------------------------------------------------------------------------------
+    def test_west_germany_1945_alternative(self):
+        # tzdb применяет к Europe/Berlin правило «SovietZone» (CEMT, UTC+3); [PTB]: летнее время в
+        # Германии 02.04–16.09.1945 (UTC+2). Для Ульма (американская зона) — вариант UTC+2.
+        n = normalize(BirthInput(1945, 7, 1, 12, 0, place="Ульм"))
+        assert n.utc_offset_hours == 3.0 and alt_offsets(n) == [2.0]
+        assert normalize(BirthInput(1945, 7, 1, 12, 0, place="Берлин")).alternatives == []
+
+    def test_t4_ulm_stuttgart_time_alternative(self):
+        # T4: по умолчанию LMT Ульма (Astro-Databank, AA); [GLEBER]: «In Württemberg galt die Stuttgarter
+        # Zeit» → вариант по времени Штутгарта +0:36:42 (UT 10:53:18).
+        n = normalize(BirthInput(1879, 3, 14, 11, 30, place="Ульм"))
+        assert n.offset_source == "LMT(longitude)"
+        assert n.utc.replace(microsecond=0) == datetime(1879, 3, 14, 10, 50, 2, tzinfo=timezone.utc)
+        assert [a["tz"] for a in n.alternatives] == ["UTC+00:36:42"]
+        assert n.alternatives[0]["utc"].startswith("1879-03-14T10:53:18")
+
+    def test_transcarpathia_pre_1945_alternative(self):
+        # Ужгород 1935 (ЧСР): tzdb Europe/Kyiv даёт московское UTC+3; данные tzdb 2022c (Zone
+        # Europe/Uzhgorod, https://raw.githubusercontent.com/eggert/tz/2022c/europe) — CET UTC+1.
+        n = normalize(BirthInput(1935, 6, 1, 12, 0, tz="Europe/Kyiv", lat=48.62, lon=22.29, place="Ужгород"))
+        assert n.utc_offset_hours == 3.0 and alt_offsets(n) == [1.0]
+
+    def test_dst_fold_alternative_is_reported(self):
+        # Вторая версия при переводе часов теперь отдаётся в alternatives (KB 00, §6.4 п. 8).
+        n = normalize(BirthInput(1990, 9, 30, 2, 30, place="Москва"))
+        assert n.utc_offset_hours == 4.0 and alt_offsets(n) == [3.0]
 
 
 # --------------------------------------------------------------------------- старый стиль

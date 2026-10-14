@@ -10,7 +10,7 @@
 * 14 главных звёзд (группы Цзы Вэй и Тянь Фу) и 14 основных вспомогательных
   (左辅 右弼 文昌 文曲 天魁 天钺 禄存 擎羊 陀罗 火星 铃星 地空 地劫 天马);
 * четыре трансформации (四化) по стволу года — 4 варианта таблиц школ;
-* яркость (庙旺得利平不陷) по таблице iztro (⚠ различается по школам);
+* яркость (庙旺得利平不陷) по таблице 《紫微斗数全书》卷二 (= таблица iztro 2.6.2);
 * 命主/身主, десятилетние периоды (大限), малые пределы (小限), основы года (流年).
 
 Независимая сверка: npm-пакет iztro 2.6.2 (calculators/tools/iztro_crosscheck.mjs),
@@ -111,12 +111,16 @@ _SIHUA_COMMON = {
 SIHUA_TABLES: dict[str, dict[str, list[str]]] = {
     # 《紫微斗数全集》; так же iztro и большинство современных программ — по умолчанию
     "quanji": dict(_SIHUA_COMMON),
-    # 《紫微斗数全书》 (zh.wikipedia): 庚 阳武同阴, 壬 梁紫府武
+    # 《紫微斗数全书》 по zh.wikipedia и qqqtseng.pixnet («《全書》中只有右弼化科而左輔不化科，而庚干天同化忌
+    # 改為太陰化忌»): 庚 阳武同阴, 壬 梁紫府武. ⚠ Текст 全书 на zh.wikisource (卷二, «安禄权科忌四星变化诀»)
+    # даёт «壬梁紫府武宿是» (совпадает), но «庚日武阴同为首» (= 阳武阴同, как 全集) — расхождение изданий.
     "quanshu": {**_SIHUA_COMMON, "庚": ["太阳", "武曲", "天同", "太阴"], "壬": ["天梁", "紫微", "天府", "武曲"]},
-    # 中州派 (линия Ван Тинчжи) по ncc.com.tw и qqqtseng.pixnet: 戊 贪阴阳机, 庚 阳武府同, 壬 梁紫府武
+    # 中州派 (линия Ван Тинчжи): qqqtseng.pixnet «中州派…強調左輔右弼不加入四化，所以取而代之的是太陽和天府化科»;
+    # ncc.com.tw «戊貪陰陽機，庚陽武府同，壬梁紫府武»; haozh.com «王亭之所得的传授却为[阳武府同]»
     "zhongzhou": {**_SIHUA_COMMON, "戊": ["贪狼", "太阴", "太阳", "天机"],
                   "庚": ["太阳", "武曲", "天府", "天同"], "壬": ["天梁", "紫微", "天府", "武曲"]},
-    # «北派» по qqqtseng.pixnet (и издание 吴师青 по haozh.com): 庚 阳武同相
+    # «北派»: qqqtseng.pixnet «北派沿用《全集》的左輔右弼化科。可是，庚干卻是天同化科和天相化忌»;
+    # то же 庚 «阳武同相» — в 铁版神算 吴师青 (haozh.com)
     "beipai": {**_SIHUA_COMMON, "庚": ["太阳", "武曲", "天同", "天相"]},
 }
 
@@ -124,10 +128,13 @@ SIHUA_TABLES: dict[str, dict[str, list[str]]] = {
 LUCUN = {"甲": 2, "乙": 3, "丙": 5, "丁": 6, "戊": 5, "己": 6, "庚": 8, "辛": 9, "壬": 11, "癸": 0}
 # Тянь Куй / Тянь Юэ по стволу года: (魁, 钺)
 KUIYUE: dict[str, dict[str, tuple[int, int]]] = {
-    # 「甲戊庚牛羊，乙己鼠猴乡，丙丁猪鸡位，壬癸兔蛇藏，六辛逢马虎」 — iztro, ncc.com.tw
+    # 「甲戊庚牛羊，乙己鼠猴乡，丙丁猪鸡位，壬癸兔蛇藏，六辛逢马虎」 — iztro, ncc.com.tw;
+    # 《紫微斗数全书》卷二 «安天魁天钺诀»: «甲戊庚牛羊，乙己鼠猴乡，六辛逢虎马，壬癸免蛇藏，丙丁猪狗位，此是贵人方»
+    # (zh.wikisource; «免»/«狗» — опечатки вместо 兔/鸡)
     "geng_chou_wei": {"甲": (1, 7), "戊": (1, 7), "庚": (1, 7), "乙": (0, 8), "己": (0, 8),
                       "丙": (11, 9), "丁": (11, 9), "壬": (3, 5), "癸": (3, 5), "辛": (6, 2)},
-    # вариант «庚辛逢马虎» (как 天乙贵人 в Бацзы): 庚 -> 午/寅 (⚠ см. базу знаний)
+    # вариант «庚辛逢马虎» (как один из вариантов 天乙贵人 в Бацзы): 庚 -> 午/寅
+    # (⚠ для Цзы Вэй источником не подтверждён: 全书 и ncc.com.tw дают 庚 -> 丑/未; см. базу знаний)
     "geng_wu_yin": {"甲": (1, 7), "戊": (1, 7), "庚": (6, 2), "乙": (0, 8), "己": (0, 8),
                     "丙": (11, 9), "丁": (11, 9), "壬": (3, 5), "癸": (3, 5), "辛": (6, 2)},
 }
@@ -139,11 +146,17 @@ _SANHE = {
     (11, 3, 7): {"tianma": 5, "huo": 9, "ling": 10, "xiaoxian": 1},   # 亥卯未: 马巳, 火酉, 铃戌, 小限丑
 }
 
-# 命主 по ветви (Дворца Судьбы — общепринято; ветви года — 中州派), 身主 по ветви года
+# 命主 по ветви (Дворца Судьбы — общепринято; ветви года — 中州派), 身主 по ветви года.
+# 《紫微斗数全书》卷二 «安命主»: «贪狼子宫，巨门丑亥宫，禄存寅戌宫，文曲卯酉宫，廉真申辰宫，武曲巳未宫，破军午宫。
+# 假如午宫安命寻破军星在何宫即命主也» — т.е. по ветви 命宫. «安身主»: «子午人火玲星，丑未人天相星，寅申人天梁星，
+# 卯酉人天同星，辰戌人文昌星，巳亥人天机星» — для 子/午 названы обе звезды (火/铃, ⚠); здесь 火星, как iztro.
 MING_ZHU = ["贪狼", "巨门", "禄存", "文曲", "廉贞", "武曲", "破军", "武曲", "廉贞", "文曲", "禄存", "巨门"]
 SHEN_ZHU = ["火星", "天相", "天梁", "天同", "文昌", "天机", "火星", "天相", "天梁", "天同", "文昌", "天机"]
 
 # Яркость (iztro 2.6.2, data/stars.js), порядок ветвей ОТ 寅: 寅卯辰巳午未申酉戌亥子丑.
+# Совпадает во всех 240 клетках с таблицей 《紫微斗数全书》卷二 (zh.wikisource, колонки
+# 庙 旺 得地 利益 平和 不得地 落陷; тест test_brightness_matches_quanshu_table). 全书 дополнительно
+# ставит 禄存 «庙» во всех его 8 положениях — калькулятор, как iztro, яркость 禄存 не выводит.
 # Обозначения: 庙 мяо, 旺 ван, 得 дэ, 利 ли, 平 пин, 不 бу, 陷 сянь; "" — нет оценки.
 _BRIGHTNESS_FROM_YIN: dict[str, str] = {
     "紫微": "旺旺得旺庙庙旺旺得旺平庙",
@@ -190,10 +203,11 @@ DEFAULTS: dict[str, Any] = {
     "zi_hour": "next_day",       # 23:00–24:00: "next_day" (隔夜晚子, мейнстрим) | "same_day";
                                  # синонимы как в bazi.py: "early" = next_day, "late" = same_day
     "year_boundary": "lunar_new_year",  # | "lichun"
-    "leap_month": "split_15",    # | "same" | "next"
+    "leap_month": "split_15",    # | "same" | "next" (next — правило 《紫微斗数全书》卷二)
     "sihua": "quanji",           # | "quanshu" | "zhongzhou" | "beipai"
     "kui_yue": "geng_chou_wei",  # | "geng_wu_yin"
     "ming_zhu": "ming_branch",   # | "year_branch" (中州派)
+    "decade_start": "ming",      # | "adjacent": первый 大限 в соседнем дворце — буквально по 全书 «安大限诀»
     "hour_branch": None,         # явная ветвь часа 0..11 / "子".."亥" / "晚子" (перекрывает время)
     "flow_year": None,           # год (григорианский номер лунного года) для блока 流年
 }
@@ -435,7 +449,8 @@ def calculate(b: BirthInput, **options: Any) -> dict:
                          ("leap_month", ("split_15", "same", "next")),
                          ("sihua", tuple(SIHUA_TABLES)),
                          ("kui_yue", tuple(KUIYUE)),
-                         ("ming_zhu", ("ming_branch", "year_branch"))):
+                         ("ming_zhu", ("ming_branch", "year_branch")),
+                         ("decade_start", ("ming", "adjacent"))):
         if opt[key] not in allowed:
             raise ValueError(f"{key}: допустимо {allowed}")
     warnings: list[str] = []
@@ -614,14 +629,19 @@ def calculate(b: BirthInput, **options: Any) -> dict:
     forward = None
     if gender in ("male", "female"):
         forward = decade_forward(y_stem, gender)
+        # decade_start="adjacent": 《紫微斗数全书》卷二 «安大限诀» — «阳男阴女从命前一宫起顺行 是父母宫。
+        # 阴男阳女从命后一宫起逆行 是兄弟宫» (первый 大限 в 父母宫 / 兄弟宫). По умолчанию — от 命宫.
+        off = 1 if opt["decade_start"] == "adjacent" else 0
         for i in range(12):
-            br = (m_br + (i if forward else -i)) % 12
+            br = (m_br + ((i + off) if forward else -(i + off))) % 12
             decades.append({"ages": [bureau + 10 * i, bureau + 10 * i + 9], "branch": BRANCHES[br],
                             "stem_branch": gz(palace_stem(y_stem, br), br),
                             "palace": PALACES[(m_br - br) % 12][0]})
         steps.append(
             f"大限: {'ян' if y_stem % 2 == 0 else 'инь'}ский год, {'мужчина' if gender == 'male' else 'женщина'} -> "
-            f"{'вперёд (順)' if forward else 'назад (逆)'}; первый период {bureau}–{bureau + 9} лет (虚岁) в 命宫."
+            f"{'вперёд (順)' if forward else 'назад (逆)'}; первый период {bureau}–{bureau + 9} лет (虚岁) в "
+            + ("命宫." if not off else
+               f"{PALACES[(m_br - (m_br + (1 if forward else -1))) % 12][0]} (decade_start=adjacent, 全书 «安大限诀»).")
         )
     else:
         warnings.append("Пол не указан: десятилетия (大限) и малые пределы (小限) не рассчитаны.")
@@ -656,8 +676,9 @@ def calculate(b: BirthInput, **options: Any) -> dict:
     mz_branch = m_br if opt["ming_zhu"] == "ming_branch" else y_branch
     result: dict[str, Any] = {
         "method": "ziwei_doushu",
-        "variant": {k: opt[k] for k in ("zi_hour", "year_boundary", "leap_month", "sihua", "kui_yue", "ming_zhu")}
-        | {"time_basis": basis, "brightness_table": "iztro-2.6.2 (⚠ школы расходятся)"},
+        "variant": {k: opt[k] for k in ("zi_hour", "year_boundary", "leap_month", "sihua", "kui_yue", "ming_zhu",
+                                        "decade_start")}
+        | {"time_basis": basis, "brightness_table": "《紫微斗数全书》卷二 = iztro 2.6.2 (без яркости 禄存)"},
         "inputs_used": {
             "local_input": f"{b.year:04d}-{b.month:02d}-{b.day:02d} " + (f"{b.hour:02d}:{(b.minute or 0):02d}" if b.has_time else "—"),
             "tz": b.tz, "lon": b.lon, "gender": gender,

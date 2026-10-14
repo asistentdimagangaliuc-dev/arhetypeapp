@@ -710,3 +710,80 @@ def test_san_fang_si_zheng_and_invariants():
     assert (pos["擎羊"] - pos["禄存"]) % 12 == 1 and (pos["禄存"] - pos["陀罗"]) % 12 == 1
     assert (pos["紫微"] + pos["天府"]) % 12 == 4
     assert (pos["文昌"] + pos["文曲"]) % 12 == 2 and (pos["左辅"] + pos["右弼"]) % 12 == 2
+
+
+# ---------------------------------------------------------------------------
+# Повторная проверка (приоритет 1): правила по тексту 《紫微斗数全书》
+# Источник: https://zh.wikisource.org/wiki/紫微斗數全書/卷二 (oldid 1963110), разделы
+# «安命主», «安身主», «安天魁天钺诀», «安禄权科忌四星变化诀», «安大限诀» и таблица
+# «庙 旺 得地 利益 平和 不得地 落陷» по ветвям (без заголовка, в разделе 安星).
+# ---------------------------------------------------------------------------
+
+# Таблица яркости 全书 卷二, построчно по ветвям; колонки 庙 旺 得地 利益 平和 不得地 落陷.
+# Сокращения 全书: 紫 机 日(太阳) 武 同 廉 府 月(太阴) 贪 巨 相 梁 杀 破 昌 曲 禄(禄存) 羊 陀 火 铃.
+QUANSHU_BRIGHTNESS_ROWS = {
+    "子": ["机府月相梁破禄", "武同贪巨杀", "昌曲", "", "紫廉", "", "日羊火铃"],
+    "丑": ["紫武府月贪相杀昌曲羊陀", "梁破", "火铃", "廉", "", "日同巨", "机"],
+    "寅": ["廉府巨相梁杀禄火铃", "紫日月", "机武破", "同", "贪曲", "", "昌陀"],
+    "卯": ["日巨梁禄", "紫机杀曲", "府", "武贪昌火铃", "同廉", "", "月相破羊"],
+    "辰": ["武府贪梁杀羊陀", "日破", "紫相昌曲", "机廉", "同", "", "月巨火铃"],
+    "巳": ["同昌曲禄", "紫日巨", "府相火铃", "", "机武杀破", "", "廉月贪梁陀"],
+    "午": ["紫机相梁破禄火铃", "日武府贪巨杀", "", "", "廉", "月", "同昌曲羊"],
+    "未": ["紫武府贪杀羊陀", "梁破曲", "日相", "廉昌火铃", "", "同月巨", "机"],
+    "申": ["廉巨相杀禄", "紫同", "机日武府破昌曲", "月", "贪", "", "梁陀火铃"],
+    "酉": ["巨昌曲禄", "紫机府月杀", "梁火铃", "武贪", "日同廉", "", "相破羊"],
+    "戌": ["武府贪梁杀羊陀火铃", "月破", "紫相", "机廉", "同", "日", "巨昌曲"],
+    "亥": ["同月禄", "紫巨曲", "府相", "昌火铃", "机武杀破", "", "日廉贪梁陀"],
+}
+_QS_ABBR = {"紫": "紫微", "机": "天机", "日": "太阳", "武": "武曲", "同": "天同", "廉": "廉贞", "府": "天府",
+            "月": "太阴", "贪": "贪狼", "巨": "巨门", "相": "天相", "梁": "天梁", "杀": "七杀", "破": "破军",
+            "昌": "文昌", "曲": "文曲", "禄": "禄存", "羊": "擎羊", "陀": "陀罗", "火": "火星", "铃": "铃星"}
+
+
+def test_brightness_matches_quanshu_table():
+    """Т13 (= iztro 2.6.2) совпадает с таблицей 全书 卷二 во всех 240 клетках; 全书 ставит 禄存 庙 везде."""
+    from calculators.ziwei import BRIGHTNESS
+    levels = ["庙", "旺", "得", "利", "平", "不", "陷"]
+    qs: dict[tuple[str, str], str] = {}
+    for br, cells in QUANSHU_BRIGHTNESS_ROWS.items():
+        stars = [_QS_ABBR[ch] for cell in cells for ch in cell]
+        assert len(stars) == len(set(stars)), br
+        for lvl, cell in zip(levels, cells):
+            for ch in cell:
+                qs[(_QS_ABBR[ch], br)] = lvl
+    for star, row in BRIGHTNESS.items():
+        for i, v in enumerate(row):
+            assert qs.get((star, BRANCHES[i]), "") == v, (star, BRANCHES[i])
+    assert sum(1 for row in BRIGHTNESS.values() for v in row if v) == 240 - 8  # 擎羊/陀罗: по 4 пустые
+    lucun = {br for (star, br), lvl in qs.items() if star == "禄存"}
+    assert lucun == {"子", "寅", "卯", "巳", "午", "申", "酉", "亥"} and all(
+        qs[("禄存", br)] == "庙" for br in lucun)
+
+
+def test_quanshu_ming_zhu_kui_yue_and_leap_rule():
+    # «安命主»: «…破军午宫。假如午宫安命寻破军星在何宫即命主也» — по ветви 命宫
+    from calculators.ziwei import KUIYUE, MING_ZHU, SHEN_ZHU
+    assert MING_ZHU[B("午")] == "破军" and MING_ZHU[B("子")] == "贪狼" and MING_ZHU[B("申")] == "廉贞"
+    # «安身主»: «丑未人天相星，寅申人天梁星，卯酉人天同星，辰戌人文昌星，巳亥人天机星» (子午 — «火玲星», ⚠)
+    assert [SHEN_ZHU[B(x)] for x in "丑寅卯辰巳"] == ["天相", "天梁", "天同", "文昌", "天机"]
+    assert SHEN_ZHU[B("子")] in ("火星", "铃星") and SHEN_ZHU[B("午")] in ("火星", "铃星")
+    # «安天魁天钺诀»: «甲戊庚牛羊…六辛逢虎马» — 庚 -> 丑(魁)/未(钺), 辛 -> 午/寅
+    assert KUIYUE["geng_chou_wei"]["庚"] == (B("丑"), B("未")) and KUIYUE["geng_chou_wei"]["辛"] == (B("午"), B("寅"))
+    # «又若闰月正月生者要在二月内起安身命，凡有闰月具要依此为例» — весь 闰-месяц = следующий (leap_month="next")
+    b = BirthInput(2020, 5, 23, gender="female")  # 闰四月初一
+    assert calculate(b, hour_branch="酉", leap_month="next")["lunar_date"]["month_used"] == 5
+
+
+def test_decade_start_adjacent_quanshu():
+    """«安大限诀»: «阳男阴女从命前一宫起顺行 是父母宫。阴男阳女从命后一宫起逆行 是兄弟宫»."""
+    r = calculate(T1, decade_start="adjacent")          # 庚 (ян) + женщина -> назад, старт в 兄弟
+    assert r["variant"]["decade_start"] == "adjacent"
+    assert r["decades"][0]["ages"] == [5, 14] and r["decades"][0]["palace"] == "兄弟"
+    ages = {p["name"]: p["decade_ages"] for p in r["palaces"]}
+    assert ages["兄弟"] == [5, 14] and ages["命宫"] == [115, 124]
+    mao = calculate(BirthInput(1893, 12, 26, gender="male"), hour_branch="辰", decade_start="adjacent")
+    assert mao["decade_direction"] == "backward" and mao["decades"][0]["palace"] == "兄弟"
+    m = calculate(BirthInput(1984, 2, 4, gender="male"), hour_branch="亥", decade_start="adjacent")
+    assert m["decade_direction"] == "forward" and m["decades"][0]["palace"] == "父母"
+    # по умолчанию — от 命宫 (ncc.com.tw «大限由命宮起», iztro, карта Мао)
+    assert calculate(T1)["decades"][0]["palace"] == "命宫"
