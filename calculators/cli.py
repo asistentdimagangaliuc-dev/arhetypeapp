@@ -34,6 +34,10 @@ METHODS: dict[str, tuple[str, str]] = {
     "tzolkin":        ("calculators.tzolkin",        "date"),
     "syutsay":        ("calculators.syutsay",        "date"),
     "typology":       ("calculators.typology",       "questionnaire (по дате не вычисляется)"),
+    "qimen":          ("calculators.qimen",          "time+place"),
+    "liuren":         ("calculators.liuren",         "time+place"),
+    "forecast_western": ("calculators.forecast_western", "time+place (+--opt on_date=YYYY-MM-DD)"),
+    "forecast_eastern": ("calculators.forecast_eastern", "date+time+place+gender (+--opt on_date=YYYY-MM-DD)"),
 }
 
 

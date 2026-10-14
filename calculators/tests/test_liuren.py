@@ -873,3 +873,140 @@ def test_biezhe_heaven_variant():
 def test_distinct_lessons():
     p = heaven_plate(Z.index("辰"), Z.index("卯"))
     assert distinct_lessons(four_lessons(S.index("丙"), Z.index("辰"), p)) == 3
+
+
+# ---------------------------------------------------------------------------
+# 10. Независимая проверка (14.10.2026): дополнительные уроки 《六壬大全》, день/ночь, альтернативы школ
+#     https://zh.wikisource.org/wiki/六壬大全/7 , https://zh.wikisource.org/wiki/六壬大全/10
+# ---------------------------------------------------------------------------
+
+# (卷, день, ветвь часа, 月将, три передачи, генералы передач по тексту, дневной ли 贵人 в тексте)
+# Генералы передач напечатаны в тексте рядом с передачами («午龙 / 卯朱 / 子后» и т. п.).
+DAQUAN_PRINTED_GENERALS = [
+    (7, "甲子", "卯", "子", "午卯子", "龙雀后", True),   # «如甲子日卯时子将占…午加酉为用，曰元首课。此必正月仍用子将也»
+    (7, "丁丑", "子", "申", "巳丑酉", "常勾贵", False),  # «如四月丁丑日子时申将占，巳加酉为用，曰元首课»
+    (7, "丙戌", "巳", "申", "申亥寅", "合贵玄", True),   # «如四月丙戌日巳时申将…申加巳一下贼上发用，为重审课»
+    (7, "乙亥", "辰", "酉", "寅未子", "阴龙贵", True),   # «乙亥日辰时酉将占…寅加酉一下克上为用，曰重审课也»
+    (7, "壬辰", "巳", "辰", "戌酉申", "虎常玄", True),   # «如八月壬辰日巳时辰将占…取戌加壬与日比发用，曰知一课»
+    (7, "丁卯", "丑", "亥", "亥酉未", "雀贵阴", False),
+    (7, "庚子", "戌", "申", "午辰寅", "蛇合龙", False),
+    (7, "甲午", "辰", "午", "辰午申", "合龙虎", True),
+    (7, "乙卯", "寅", "子", "亥酉未", "后玄虎", True),   # 寅 — дневной (亥后 酉玄 未虎 = 昼贵 子)
+    (7, "壬辰", "巳", "申", "戌丑辰", "龙常后", True),
+    (7, "壬申", "申", "亥", "巳申亥", "贵合空", True),
+    (7, "戊申", "卯", "辰", "戌酉午", "玄常龙", True),
+    (7, "丁丑", "辰", "丑", "子辰戌", "蛇龙后", True),
+    (7, "丙辰", "卯", "辰", "亥午午", "贵龙龙", True),
+    (7, "甲寅", "辰", "丑", "丑亥亥", "贵阴阴", True),
+    (7, "丁未", "丑", "辰", "亥戌戌", "阴后后", False),
+    (7, "己未", "未", "酉", "酉酉酉", "合合合", True),
+    (7, "癸丑", "午", "午", "丑戌未", "勾虎阴", True),
+    (7, "丙辰", "申", "申", "巳申寅", "空玄合", True),
+    (7, "丁丑", "未", "未", "丑戌未", "雀后常", True),
+    (7, "壬辰", "酉", "酉", "亥辰戌", "空蛇虎", True),   # 酉 — дневной (昼贵 巳)
+    (7, "庚戌", "寅", "申", "寅申寅", "虎蛇虎", False),
+    (7, "辛丑", "巳", "亥", "亥未辰", "龙蛇阴", True),
+    # «假令六月戊寅日午时寅将占»: в 六月 генерал 午 (寅将 невозможен) — читать «寅时午将»; уроки «六白贵勾»
+    (7, "戊寅", "寅", "午", "丑午酉", "贵虎勾", True),   # 寅 — дневной
+    (7, "乙丑", "酉", "戌", "寅卯辰", "雀合勾", True),   # «如乙丑日酉时戌将，天乙子临亥顺行» — 酉, дневной
+    (7, "丙辰", "寅", "未", "寅未子", "龙阴合", False),  # «如丙辰日寅时未将…为六仪课»
+    (7, "戊寅", "戌", "卯", "子巳戌", "龙阴合", False),  # «…戊寅日戌时卯将…初传青龙，末传六合，为时泰课»
+    (7, "癸酉", "酉", "巳", "巳丑酉", "贵勾常", True),   # «…癸酉日酉时巳将，巳为太岁，又为月将，又为日贵加酉» — 酉, дневной
+    (10, "壬申", "丑", "午", "辰酉寅", "后空蛇", False),  # «如壬申日丑时午将…加日发用为鬼墓»
+    (10, "戊子", "申", "午", "丑亥酉", "贵阴常", True),   # «如戊子日申时午将占，昼丑加卯，为励德也»
+    (10, "辛丑", "寅", "丑", "子亥戌", "阴玄常", False),  # «…如辛丑日寅时丑将» (微服格)
+    (10, "辛亥", "申", "巳", "巳寅亥", "蛇勾虎", True),   # «假令七月辛亥日巳将申时…胜光为天乙，立酉逆行»
+    (10, "甲子", "寅", "亥", "午卯子", "蛇勾虎", False),  # «甲子日亥将寅时占»
+]
+# Не включено: «如庚戌日辰时申将占» (辰申子) — генералы напечатаны «玄玄蛇», второй явно опечатка (по пластине 龙).
+
+
+@pytest.mark.parametrize("juan,day,hour,gen,chuan,gens,is_day", DAQUAN_PRINTED_GENERALS)
+def test_daquan_printed_generals(juan, day, hour, gen, chuan, gens, is_day):
+    c = build_chart(di(day), Z.index(hour), Z.index(gen), is_day)
+    assert c["transmissions"]["sanchuan"] == chuan
+    assert "".join(x["general"]["short"] for x in c["transmissions"]["chuan"]) == gens
+
+
+def test_daquan_day_night_tally():
+    # Правило по умолчанию «卯…申 — день» совпадает с текстом для часов 卯…申 и 戌…丑, но не для 酉 и 寅:
+    # при 酉 все 3 примера — дневной 贵人, при 寅 — 2 дневных из 6 (卷十一: «尤宜逐季推寻日出日入之时，极准»).
+    tally = Counter()
+    for _j, _d, hour, _g, _c, _gs, is_day in DAQUAN_PRINTED_GENERALS:
+        h = Z.index(hour)
+        if hour in "寅酉":
+            tally[(hour, is_day)] += 1
+        else:
+            assert is_day == (3 <= h <= 8), (_d, hour)
+    assert tally == Counter({("酉", True): 3, ("寅", True): 2, ("寅", False): 4})
+
+
+def test_lesson4_on_jigong_compared_with_branch():
+    # 卷一 «别责»: «刚三柔六共九课». Если урок 4 стоит там же, где урок 1 (亥 над 戌 = 寄宫 辛), правило
+    # «оценивать его по стволу» дало бы 10-й 别责 (辛酉, 干上 亥) — значит, 《大全》 сравнивает верх урока 4
+    # с ветвью (как калькулятор). Ярлык 《指南》 «重审» у «癸卯日壬子时» (丑亥酉) намекает на другое прочтение (⚠).
+    r = three_transmissions(S.index("辛"), Z.index("酉"), 1, 0)
+    ls = r["lessons"]
+    assert (ls[3]["upper"], ls[3]["lower_pos"]) == (ls[0]["upper"], ls[0]["lower_pos"])
+    assert [l["rel"] for l in ls] == ["sheng_up", "bi", "sheng_down", "zei"]
+    assert r["method"] == "zeike" and "".join(Z[x] for x in r["chuan"]) == "亥子丑"
+
+
+def _alts(r):
+    return {a["what"]: a for a in r["alternatives"]}
+
+
+def test_alternatives_for_school_dependent_results():
+    b = BirthInput(2000, 1, 1)
+    # 伏吟 子卯 (辛卯日, 月将 = час 丑): 《大全》 卯子午 / 《指南》 卯子卯
+    r = calculate(b, on_datetime="2026-01-17T02:30+08:00")
+    assert r["pillars"]["day"] == "辛卯" and r["chart"]["transmissions"]["sanchuan"] == "卯子午"
+    assert _alts(r)["fuyin_zimao='xing'"]["sanchuan"] == "卯子卯"
+    assert any("伏吟 子卯" in w for w in r["warnings"])
+    # 别责 Инь-дня (丁酉, 干上 巳): «支前三合» 丑 / вариант 'heaven' — 亥 над 丑
+    r = calculate(b, on_datetime="2026-03-24T00:30+08:00")
+    assert r["pillars"]["day"] == "丁酉" and r["chart"]["transmissions"]["sanchuan"] == "丑巳巳"
+    assert _alts(r)["biezhe_yin='heaven'"]["sanchuan"] == "亥巳巳"
+    assert any("别责" in w for w in r["warnings"])
+    # таблицы Благородного: T4 (丙, день) — 'daquan' 亥, 'xieji' 酉
+    r = calculate(T4)
+    assert _alts(r)["noble_table='xieji'"]["noble"] == "酉" and "noble_table='cao'" not in _alts(r)
+
+
+def test_alternatives_zi_hour_and_neighbours():
+    # T2 по времени часов (23:30): день зависит от zi_hour → альтернатива 己巳
+    r = calculate(T2, solar_time="clock")
+    a = _alts(r)["zi_hour='early'"]
+    assert a["day"] == "己巳" and a["sanchuan"] == "巳申寅" and a["kind"] == ["伏吟", "自信"]
+    assert any("23:00–24:00" in w for w in r["warnings"])
+    # T1: до границы двухчасовки 4 мин → соседняя ветвь 午 (庚辰, 酉将, Δ=3): 遥克 弹射 寅巳申
+    r = calculate(T1)
+    nb = next(x for x in r["alternatives"] if x["what"].startswith("соседняя ветвь часа"))
+    assert nb["hour_branch"] == "午" and nb["sanchuan"] == "寅巳申" and nb["kind"] == ["弹射"]
+    # у 中气: соседний генерал
+    jd = find_sun_longitude(330.0, swe.julday(2026, 2, 25, 0.0), search_back=True)
+    t = jd_to_utc(jd).replace(microsecond=0) + __import__("datetime").timedelta(minutes=2)
+    r = calculate(BirthInput(2000, 1, 1, place="Москва"), on_datetime=t.isoformat())
+    assert any(x["what"].startswith("соседний 月将 子") for x in r["alternatives"])
+
+
+def test_boundary_hour_noble_warning():
+    # час 酉/寅 при day_night='branch' → предупреждение о спорном дневном/ночном Благородном
+    b = BirthInput(2000, 1, 1, tz="UTC+08:00")
+    r = calculate(b, on_datetime="2026-03-24T18:00")
+    assert r["hour_branch"] == "酉" and any("пограничный" in w for w in r["warnings"])
+    r = calculate(b, on_datetime="2026-03-24T12:00")
+    assert not any("пограничный" in w for w in r["warnings"])
+
+
+def test_on_datetime_aware_without_tz_keeps_local_clock():
+    # Пояс не задан, но строка со смещением: час считается по местным часам консультации, а не по UTC
+    r = calculate(BirthInput(1990, 5, 15), on_datetime="2026-10-14T15:30+03:00")
+    assert r["inputs_used"]["local"] == "2026-10-14T15:30:00" and r["inputs_used"]["utc"] == "2026-10-14T12:30:00Z"
+    assert r["hour_branch"] == "申"
+    assert r["nian_ming"] is None or "xing_nian_heaven_over" in r["nian_ming"]
+
+
+def test_nian_ming_schema_without_gender():
+    r = calculate(BirthInput(1990, 5, 15, 14, 30, place="Москва"))
+    assert r["nian_ming"]["xing_nian"] is None and r["nian_ming"]["xing_nian_heaven_over"] is None

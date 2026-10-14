@@ -22,6 +22,10 @@ SUBJECTS = {
 }
 
 
+# Прогностические модули считаются на фиксированную дату, чтобы сводка была воспроизводимой.
+TARGET_DATE = "2026-10-14"
+FIXED_OPTIONS = {"forecast_western": {"on_date": TARGET_DATE}, "forecast_eastern": {"on_date": TARGET_DATE}}
+
 PLANET_RU = {"sun": "Солнце", "moon": "Луна", "mars": "Марс", "mercury": "Меркурий", "jupiter": "Юпитер",
              "venus": "Венера", "saturn": "Сатурн", "rahu": "Раху", "ketu": "Кету"}
 
@@ -99,6 +103,27 @@ def summarize(r: dict) -> dict[str, str]:
     out["Сюцай (сознание / миссия)"] = (f"{_g(sy, 'consciousness', 'number')} ({_g(sy, 'consciousness', 'planet')}) / "
                                        f"{_g(sy, 'mission', 'number')} ({_g(sy, 'mission', 'planet')})")
     out["Соционика / эннеаграмма"] = "по дате не вычисляются — нужен опросник (модуль 14)"
+    qm = r["qimen"]
+    out["Ци Мэнь Дунь Цзя (拆补)"] = (f"{_g(qm, 'ju', 'label')}; 值符 {_g(qm, 'zhi_fu', 'star')}, "
+                                    f"值使 {_g(qm, 'zhi_shi', 'door')}")
+    lr = r["liuren"]
+    chuan = _g(lr, "chart", "transmissions", "chuan", default=[])
+    out["Да Лю Жэнь"] = (f"день {_g(lr, 'chart', 'day')}, час {_g(lr, 'chart', 'hour_branch')}, месячный генерал "
+                         f"{_g(lr, 'general', 'branch')} {_g(lr, 'general', 'name')}; три передачи "
+                         f"{'-'.join(c.get('branch', '?') for c in chuan) if isinstance(chuan, list) else '—'} "
+                         f"({_g(lr, 'chart', 'transmissions', 'method', 'cn')})")
+    fw = r["forecast_western"]
+    out[f"Западная прогностика на {TARGET_DATE}"] = (
+        f"профекция: {_g(fw, 'profections', 'sign_ru')} (управитель {_g(fw, 'profections', 'lord_ru')}); "
+        f"соляр {str(_g(fw, 'solar_return', 'moment_utc'))[:16]} UTC")
+    fe = r["forecast_eastern"]
+    dd = _g(fe, "jyotish", "dasha", "on_date", default={})
+    out[f"Восточная прогностика на {TARGET_DATE}"] = (
+        f"год {_g(fe, 'bazi_year', 'annual_pillar', 'ganzhi')}, столп удачи {_g(fe, 'bazi_year', 'luck_pillar', 'ganzhi')}; "
+        f"Ки: звезда года {_g(fe, 'ninestar_year', 'year', 'star')}, натальная звезда во дворце "
+        f"{_g(fe, 'ninestar_year', 'year', 'honmei', 'direction_ru')}; даша {_g(dd, 'mahadasha', 'lord_ru')}/"
+        f"{_g(dd, 'antardasha', 'lord_ru')}/{_g(dd, 'pratyantardasha', 'lord_ru')}; "
+        f"Сатурн в {_g(fe, 'jyotish', 'saturn', 'saturn_house_from_moon_now')}-м доме от Луны")
     return out
 
 
@@ -111,7 +136,7 @@ def main() -> None:
         times[tid] = f"UTC {n.utc:%Y-%m-%d %H:%M:%S} ({fmt_offset(n.utc_offset_hours)}, {n.offset_source}); JD {n.jd_ut:.5f}"
         r = {}
         for m in METHODS:
-            r[m] = run_method(m, b, {})
+            r[m] = run_method(m, b, FIXED_OPTIONS.get(m, {}))
         results[tid] = summarize(r)
     rows = list(next(iter(results.values())).keys())
     lines = [
