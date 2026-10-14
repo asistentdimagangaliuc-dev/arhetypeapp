@@ -117,6 +117,9 @@ CLUBS = {"NT": "Исследователи (НТ)", "NF": "Гуманитари�
 #: Соционические темпераменты: экстра/интро × рацио/иррацио. Система и русские названия — по
 #: В. Гуленко (Wikisocion «Temperament»: EP flexible-maneuvering, EJ linear-assertive,
 #: IP receptive-adaptive, IJ balanced-stable). С классическими темпераментами не совпадают.
+#: Д. Лытов, «Проблема темперамента в соционике (обзор)» (Соционическая газета, 2003, № 11;
+#: https://socioniko.net/ru/gazeta/2003-11/index.html): у Гуленко (сер. 1990-х) EP — «гибко-разворотливые»;
+#: «гибко-маневренный» — распространённый поздний вариант (ср. англ. flexible-maneuvering).
 TEMPERAMENTS = {
     "Ej": "линейно-напористый (ЛН)",
     "Ep": "гибко-маневренный (ГМ)",
@@ -340,9 +343,14 @@ TRITYPE_ARCHETYPES_EN: dict[str, str] = {
 HORNEVIAN = {"assertive": (3, 7, 8), "compliant": (1, 2, 6), "withdrawn": (4, 5, 9)}
 HORNEVIAN_RU = {"assertive": "напористые (против людей)", "compliant": "уступчивые/долженствующие (к людям)",
                 "withdrawn": "уходящие (от людей)"}
-HARMONIC = {"positive_outlook": (2, 7, 9), "competency": (1, 3, 5), "emotional_realness": (4, 6, 8)}
-HARMONIC_RU = {"positive_outlook": "позитивный взгляд", "competency": "компетентность",
-               "emotional_realness": "эмоциональная реальность (реактивные)"}
+#: Гармонические группы — Riso & Hudson, «The Wisdom of the Enneagram» (Bantam, 1999; полный текст archive.org
+#: wisdomofenneagra0000riso): «The Positive Outlook Group is composed of types Nine, Two, and Seven», «The Competency
+#: Group is composed of types Three, One, and Five», «The Reactive Group is composed of types Six, Four, and Eight»;
+#: то же в «Understanding the Enneagram» (rev. ed., 2000, с. 278). Название «Emotional Realness» для 4-6-8 — из
+#: вторичного пересказа (typevolution.com), у Ризо–Хадсона группа называется «Reactive».
+HARMONIC = {"positive_outlook": (2, 7, 9), "competency": (1, 3, 5), "reactive": (4, 6, 8)}
+HARMONIC_RU = {"positive_outlook": "позитивный взгляд (Positive Outlook)", "competency": "компетентность (Competency)",
+               "reactive": "реактивная группа (Reactive)"}
 INSTINCTS = {"sp": "самосохранение (self-preservation)", "so": "социальный (social)",
              "sx": "сексуальный / один-на-один (sexual, one-to-one)"}
 LEVELS_OF_DEVELOPMENT = {

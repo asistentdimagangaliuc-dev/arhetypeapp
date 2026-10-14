@@ -76,103 +76,140 @@ _GENDER_IDX = {"m": 0, "f": 1, "n": 2}
 
 #: 20 солнечных печатей (племён). Номер 1–20 (Солнце = 20, в кодах Dreamspell — 0).
 #: power/action/essence — официальные ключевые слова (lawoftime.org, 13 Moon Calendar Tutorial);
-#: русский перевод — по смыслу, в русских изданиях встречаются синонимы.
+#: русский перевод — по смыслу. ru_official — ключевые слова официального русского перевода «Руководства
+#: по календарю 13 Лун» (https://www.law-of-time.ru/13moon/rukovodstvo/, «Название Печати: Сила, Действие
+#: и Свойство»; порядок слов — как в источнике, он там не всегда соответствует заголовку).
 #: block — «Я опечатываю … (ввод/хранение/процесс/вывод/матрицу)» из официального аффирмационного шаблона.
 SEALS: dict[int, dict[str, Any]] = {
     1:  {"ru": "Дракон", "gen": "Дракона", "g": "m", "en": "Dragon", "yucatec": "Imix",
          "power": ("Рождение", "Birth"), "action": ("Питает", "Nurtures"), "essence": ("Бытие", "Being"),
-         "block": ("ввод", "Input")},
+         "block": ("ввод", "Input"),
+         "ru_official": "Рождение, Питание, Бытие"},
     2:  {"ru": "Ветер", "gen": "Ветра", "g": "m", "en": "Wind", "yucatec": "Ik",
          "power": ("Дух", "Spirit"), "action": ("Общается", "Communicates"), "essence": ("Дыхание", "Breath"),
-         "block": ("ввод", "Input")},
+         "block": ("ввод", "Input"),
+         "ru_official": "Дух, Дыхание, Коммуникация"},
     3:  {"ru": "Ночь", "gen": "Ночи", "g": "f", "en": "Night", "yucatec": "Akbal",
          "power": ("Изобилие", "Abundance"), "action": ("Видит сны", "Dreams"), "essence": ("Интуиция", "Intuition"),
-         "block": ("ввод", "Input")},
+         "block": ("ввод", "Input"),
+         "ru_official": "Изобилие, Мечты, Сновидение"},
     4:  {"ru": "Семя", "gen": "Семени", "g": "n", "en": "Seed", "yucatec": "Kan",
          "power": ("Расцвет", "Flowering"), "action": ("Нацеливает", "Targets"), "essence": ("Осознанность", "Awareness"),
-         "block": ("ввод", "Input")},
+         "block": ("ввод", "Input"),
+         "ru_official": "Цветение, Целеустремленность, Осознанность"},
     5:  {"ru": "Змей", "gen": "Змея", "g": "m", "en": "Serpent", "yucatec": "Chicchan",
          "power": ("Жизненная сила", "Life Force"), "action": ("Выживает", "Survives"), "essence": ("Инстинкт", "Instinct"),
-         "block": ("хранение", "Store")},
+         "block": ("хранение", "Store"),
+         "ru_official": "Жизненная Сила, Инстинкт, Выживание"},
     6:  {"ru": "Соединитель Миров", "gen": "Соединителя Миров", "g": "m", "en": "Worldbridger", "yucatec": "Cimi",
          "power": ("Смерть", "Death"), "action": ("Уравнивает", "Equalizes"), "essence": ("Возможность", "Opportunity"),
-         "block": ("хранение", "Store")},
+         "block": ("хранение", "Store"),
+         "ru_official": "Смерть, Благоприятная возможность, Выравнивание"},
     7:  {"ru": "Рука", "gen": "Руки", "g": "f", "en": "Hand", "yucatec": "Manik",
          "power": ("Свершение", "Accomplishment"), "action": ("Знает", "Knows"), "essence": ("Исцеление", "Healing"),
-         "block": ("хранение", "Store")},
+         "block": ("хранение", "Store"),
+         "ru_official": "Свершение, Знание, Исцеление"},
     8:  {"ru": "Звезда", "gen": "Звезды", "g": "f", "en": "Star", "yucatec": "Lamat",
          "power": ("Элегантность", "Elegance"), "action": ("Украшает", "Beautifies"), "essence": ("Искусство", "Art"),
-         "block": ("хранение", "Store")},
+         "block": ("хранение", "Store"),
+         "ru_official": "Изящество, Украшение, Искусство"},
     9:  {"ru": "Луна", "gen": "Луны", "g": "f", "en": "Moon", "yucatec": "Muluc",
          "power": ("Вселенская вода", "Universal Water"), "action": ("Очищает", "Purifies"), "essence": ("Поток", "Flow"),
-         "block": ("процесс", "Process")},
+         "block": ("процесс", "Process"),
+         "ru_official": "Изначальная Вода, Поток, Очищение"},
     10: {"ru": "Собака", "gen": "Собаки", "g": "f", "en": "Dog", "yucatec": "Oc",
          "power": ("Сердце", "Heart"), "action": ("Любит", "Loves"), "essence": ("Верность", "Loyalty"),
-         "block": ("процесс", "Process")},
+         "block": ("процесс", "Process"),
+         "ru_official": "Сердце, Любовь, Преданность"},
     11: {"ru": "Обезьяна", "gen": "Обезьяны", "g": "f", "en": "Monkey", "yucatec": "Chuen",
          "power": ("Магия", "Magic"), "action": ("Играет", "Plays"), "essence": ("Иллюзия", "Illusion"),
-         "block": ("процесс", "Process")},
+         "block": ("процесс", "Process"),
+         "ru_official": "Магия, Игра, Иллюзия"},
     12: {"ru": "Человек", "gen": "Человека", "g": "m", "en": "Human", "yucatec": "Eb",
          "power": ("Свободная воля", "Free Will"), "action": ("Влияет", "Influences"), "essence": ("Мудрость", "Wisdom"),
-         "block": ("процесс", "Process")},
+         "block": ("процесс", "Process"),
+         "ru_official": "Свободная Воля, Мудрость, Влияние"},
     13: {"ru": "Небесный Странник", "gen": "Небесного Странника", "g": "m", "en": "Skywalker", "yucatec": "Ben",
          "power": ("Пространство", "Space"), "action": ("Исследует", "Explores"), "essence": ("Бодрствование", "Wakefulness"),
-         "block": ("вывод", "Output")},
+         "block": ("вывод", "Output"),
+         "ru_official": "Пространство, Исследование Пространства, Пробужденность"},
     14: {"ru": "Волшебник", "gen": "Волшебника", "g": "m", "en": "Wizard", "yucatec": "Ix",
          "power": ("Безвременье", "Timelessness"), "action": ("Совершает волшебство (очаровывает)", "Enchants"),
-         "essence": ("Восприимчивость", "Receptivity"), "block": ("вывод", "Output")},
+         "essence": ("Восприимчивость", "Receptivity"), "block": ("вывод", "Output"),
+         "ru_official": "Вневременность, Восприимчивость, Волшебство"},
     15: {"ru": "Орёл", "gen": "Орла", "g": "m", "en": "Eagle", "yucatec": "Men",
          "power": ("Видение", "Vision"), "action": ("Создаёт", "Creates"), "essence": ("Разум", "Mind"),
-         "block": ("вывод", "Output")},
+         "block": ("вывод", "Output"),
+         "ru_official": "Видение, Созидание, Разум"},
     16: {"ru": "Воин", "gen": "Воина", "g": "m", "en": "Warrior", "yucatec": "Cib",
          "power": ("Интеллект", "Intelligence"), "action": ("Вопрошает", "Questions"), "essence": ("Бесстрашие", "Fearlessness"),
-         "block": ("вывод", "Output")},
+         "block": ("вывод", "Output"),
+         "ru_official": "Интеллект, Бесстрашие, Способность вопрошать"},
     17: {"ru": "Земля", "gen": "Земли", "g": "f", "en": "Earth", "yucatec": "Caban",
          "power": ("Навигация", "Navigation"), "action": ("Развивается (эволюционирует)", "Evolves"),
-         "essence": ("Синхронность", "Synchronicity"), "block": ("матрицу", "Matrix")},
+         "essence": ("Синхронность", "Synchronicity"), "block": ("матрицу", "Matrix"),
+         "ru_official": "Навигация, Эволюция, Синхронность"},
     18: {"ru": "Зеркало", "gen": "Зеркала", "g": "n", "en": "Mirror", "yucatec": "Etznab",
          "power": ("Бесконечность", "Endlessness"), "action": ("Отражает", "Reflects"), "essence": ("Порядок", "Order"),
-         "block": ("матрицу", "Matrix")},
+         "block": ("матрицу", "Matrix"),
+         "ru_official": "Бесконечность, Упорядоченность, Отражение и Медитация"},
     19: {"ru": "Буря", "gen": "Бури", "g": "f", "en": "Storm", "yucatec": "Cauac",
          "power": ("Самопорождение", "Self-generation"), "action": ("Катализирует", "Catalyzes"), "essence": ("Энергия", "Energy"),
-         "block": ("матрицу", "Matrix")},
+         "block": ("матрицу", "Matrix"),
+         "ru_official": "Самопорождение, Катализация, Энергия"},
     20: {"ru": "Солнце", "gen": "Солнца", "g": "n", "en": "Sun", "yucatec": "Ahau",
          "power": ("Вселенский огонь", "Universal Fire"), "action": ("Просветляет", "Enlightens"), "essence": ("Жизнь", "Life"),
-         "block": ("матрицу", "Matrix")},
+         "block": ("матрицу", "Matrix"),
+         "ru_official": "Вселенский Огонь, Просветление и Вознесение, Жизнь"},
 }
 
 #: 13 галактических тонов. ru — формы прилагательного (м, ж, ср). Сила/действие/суть —
 #: официальные Power/Action/Essence (lawoftime.org), русские — по hunab.ru («13 галактических тонов»).
+#: ru_official — официальный русский перевод (law-of-time.ru/13moon/rukovodstvo/: «свойство, сила, действие»;
+#: опечатка источника «Урановешивание» исправлена).
 TONES: dict[int, dict[str, Any]] = {
     1:  {"ru": ("Магнитный", "Магнитная", "Магнитное"), "en": "Magnetic", "maya": "Хун",
-         "power": ("Объединять", "Unify"), "action": ("Привлечение", "Attract"), "essence": ("Цель", "Purpose")},
+         "power": ("Объединять", "Unify"), "action": ("Привлечение", "Attract"), "essence": ("Цель", "Purpose"),
+         "ru_official": "Цель, Объединение, Привлечение"},
     2:  {"ru": ("Лунный", "Лунная", "Лунное"), "en": "Lunar", "maya": "Ка",
-         "power": ("Поляризовать", "Polarize"), "action": ("Стабилизация", "Stabilize"), "essence": ("Вызов", "Challenge")},
+         "power": ("Поляризовать", "Polarize"), "action": ("Стабилизация", "Stabilize"), "essence": ("Вызов", "Challenge"),
+         "ru_official": "Принятие вызова, Поляризация, Стабилизация"},
     3:  {"ru": ("Электрический", "Электрическая", "Электрическое"), "en": "Electric", "maya": "Ош",
-         "power": ("Активировать", "Activate"), "action": ("Связывание", "Bond"), "essence": ("Служение", "Service")},
+         "power": ("Активировать", "Activate"), "action": ("Связывание", "Bond"), "essence": ("Служение", "Service"),
+         "ru_official": "Служение, Активация, Связь"},
     4:  {"ru": ("Самосущный", "Самосущная", "Самосущное"), "en": "Self-Existing", "maya": "Кан",
-         "power": ("Определять", "Define"), "action": ("Измерение", "Measure"), "essence": ("Форма", "Form")},
+         "power": ("Определять", "Define"), "action": ("Измерение", "Measure"), "essence": ("Форма", "Form"),
+         "ru_official": "Форма, Определение, Соизмерение"},
     5:  {"ru": ("Обертонный", "Обертонная", "Обертонное"), "en": "Overtone", "maya": "Хо",
-         "power": ("Наделять силой", "Empower"), "action": ("Управление", "Command"), "essence": ("Сияние", "Radiance")},
+         "power": ("Наделять силой", "Empower"), "action": ("Управление", "Command"), "essence": ("Сияние", "Radiance"),
+         "ru_official": "Сияние, Наделение силой, Управление"},
     6:  {"ru": ("Ритмический", "Ритмическая", "Ритмическое"), "en": "Rhythmic", "maya": "Уак",
-         "power": ("Организовывать", "Organize"), "action": ("Балансировка", "Balance"), "essence": ("Равенство", "Equality")},
+         "power": ("Организовывать", "Organize"), "action": ("Балансировка", "Balance"), "essence": ("Равенство", "Equality"),
+         "ru_official": "Равенство, Организация, Уравновешивание"},
     7:  {"ru": ("Резонансный", "Резонансная", "Резонансное"), "en": "Resonant", "maya": "Ук",
-         "power": ("Проводить через себя", "Channel"), "action": ("Вдохновение", "Inspire"), "essence": ("Сонастройка", "Attunement")},
+         "power": ("Проводить через себя", "Channel"), "action": ("Вдохновение", "Inspire"), "essence": ("Сонастройка", "Attunement"),
+         "ru_official": "Сонастройка, Канал Проведения, Вдохновение"},
     8:  {"ru": ("Галактический", "Галактическая", "Галактическое"), "en": "Galactic", "maya": "Уашак",
          "power": ("Гармонизировать", "Harmonize"), "action": ("Служить эталоном (моделировать)", "Model"),
-         "essence": ("Целостность", "Integrity")},
+         "essence": ("Целостность", "Integrity"),
+         "ru_official": "Целостность, Гармонизация, Моделирование"},
     9:  {"ru": ("Солнечный", "Солнечная", "Солнечное"), "en": "Solar", "maya": "Болон",
-         "power": ("Пульсировать", "Pulse"), "action": ("Реализовывать", "Realize"), "essence": ("Намерение", "Intention")},
+         "power": ("Пульсировать", "Pulse"), "action": ("Реализовывать", "Realize"), "essence": ("Намерение", "Intention"),
+         "ru_official": "Намерение, Пульсация, Осуществление"},
     10: {"ru": ("Планетарный", "Планетарная", "Планетарное"), "en": "Planetary", "maya": "Лахун",
-         "power": ("Совершенствовать", "Perfect"), "action": ("Производить", "Produce"), "essence": ("Проявление", "Manifestation")},
+         "power": ("Совершенствовать", "Perfect"), "action": ("Производить", "Produce"), "essence": ("Проявление", "Manifestation"),
+         "ru_official": "Проявленность, Совершенствование, Создание"},
     11: {"ru": ("Спектральный", "Спектральная", "Спектральное"), "en": "Spectral", "maya": "Хунлахун",
-         "power": ("Растворять", "Dissolve"), "action": ("Отпускать", "Release"), "essence": ("Освобождение", "Liberation")},
+         "power": ("Растворять", "Dissolve"), "action": ("Отпускать", "Release"), "essence": ("Освобождение", "Liberation"),
+         "ru_official": "Освобождение, Растворение, Отпускание"},
     12: {"ru": ("Кристаллический", "Кристаллическая", "Кристаллическое"), "en": "Crystal", "maya": "Калахун",
          "power": ("Посвящать", "Dedicate"), "action": ("Универсализировать", "Universalize"),
-         "essence": ("Сотрудничество", "Cooperation")},
+         "essence": ("Сотрудничество", "Cooperation"),
+         "ru_official": "Сотрудничество, Посвящение, Универсализация"},
     13: {"ru": ("Космический", "Космическая", "Космическое"), "en": "Cosmic", "maya": "Ошлахун",
          "power": ("Выдерживать (переносить)", "Endure"), "action": ("Трансцендировать", "Transcend"),
-         "essence": ("Присутствие", "Presence")},
+         "essence": ("Присутствие", "Presence"),
+         "ru_official": "Присутствие, Стойкость, Трансцендентность"},
 }
 
 #: Правило Ведущего: тон -> (сдвиг печати, описание). Источник: lawoftime.org 13 Moon Calendar Tutorial
@@ -189,33 +226,49 @@ GUIDE_RULE_TEXT: dict[int, str] = {
 #: 5 замков по 52 кина. Источник русских названий и «дворов»: news.law-of-time.ru («Ноосферное письмо»
 #: № 22–27, 2024: «Красный Восточный Замок Поворота: Двор Рождения (Кины 1-52)» и т.д.).
 #: Для Зелёного замка в одном выпуске встречается и «Двор Матрицы».
+#: court_en и action_en — Star Traveler's 13 Moon Almanac of Synchronicity (Foundation for the Law of Time, 2011,
+#: с. 30; полный текст — archive.org isbn_9780978592486): «Red Eastern Castle of Turning: Court of Birth … Initiate
+#: Seed» и т.д. power_ru — «Генезис Дримспелл» (https://www.law-of-time.ru/timeship-earth/genezis-drimspell/):
+#: «Красный Восточный Замок Поворота: Двор Рождения, сила вхождения» и т.д.
 CASTLES: dict[int, dict[str, Any]] = {
     1: {"ru": "Красный Восточный Замок Поворота", "en": "Red Eastern Castle of Turning",
-        "court_ru": "Двор Рождения", "kins": (1, 52)},
+        "court_ru": "Двор Рождения", "court_en": "Court of Birth", "action_en": "Initiate Seed",
+        "power_ru": "сила вхождения", "kins": (1, 52)},
     2: {"ru": "Белый Северный Замок Перехода", "en": "White Northern Castle of Crossing",
-        "court_ru": "Двор Смерти", "kins": (53, 104)},
+        "court_ru": "Двор Смерти", "court_en": "Court of Death", "action_en": "Refine Warrior",
+        "power_ru": "сила нисхождения", "kins": (53, 104)},
     3: {"ru": "Синий Западный Замок Горения", "en": "Blue Western Castle of Burning",
-        "court_ru": "Двор Магии", "kins": (105, 156)},
+        "court_ru": "Двор Магии", "court_en": "Court of Magic", "action_en": "Transform Star",
+        "power_ru": "сила разворота", "kins": (105, 156)},
     4: {"ru": "Жёлтый Южный Замок Даяния", "en": "Yellow Southern Castle of Giving",
-        "court_ru": "Двор Интеллекта", "kins": (157, 208)},
+        "court_ru": "Двор Интеллекта", "court_en": "Court of Intelligence", "action_en": "Ripen Sun",
+        "power_ru": "сила восхождения", "kins": (157, 208)},
     5: {"ru": "Зелёный Центральный Замок Чарования", "en": "Green Central Castle of Enchantment",
-        "court_ru": "Двор Синхронизации", "kins": (209, 260)},
+        "court_ru": "Двор Синхронизации", "court_en": "Court of Synchronization", "action_en": "Synchronize Human",
+        "power_ru": "сила магического полёта", "kins": (209, 260)},
 }
 
 #: 5 земных семей = печати с одинаковым остатком по модулю 5 (Аргуэльес, «28 Meditations on the Law of Time»,
 #: Meditation 5: Polar = Dog, Eagle, Sun, Serpent; Cardinal = Monkey, Warrior, Dragon, World-Bridger;
 #: Core = Hand, Human, Earth, Wind; Signal = Star, Skywalker, Mirror, Night; Gateway = Seed, Moon, Wizard, Storm).
+#: ru — распространённое русское употребление («… семья»); ru_official — официальный русский перевод Фонда
+#: («Закон Времени: Уровень 1», https://www.law-of-time.ru/time/level-1/: «Существует пять земных семейств:
+#: Полярное, Кардинальное, Сердцевинное, Сигнальное и Входное»). function_en — Cosmic History Chronicles, vol. VI
+#: «Book of the Transcendence» (Argüelles, South): «Polar Family … (Sound the Chromatics)», «Cardinal Family …
+#: (Establish the Genesis)», «Core Family … (Mine the Tunnels)», «Signal Family … (Unravel the Mystery)», «Gateway
+#: Family … (Open the Portals)»; для Polar и Gateway то же в Star Traveler's 13 Moon Almanac (2011).
 EARTH_FAMILIES: dict[int, dict[str, Any]] = {
-    0: {"key": "polar", "ru": "Полярная", "en": "Polar", "seals": (5, 10, 15, 20),
-        "center_ru": "корона (макушка)", "zone_ru": "северный полюс"},
-    1: {"key": "cardinal", "ru": "Кардинальная", "en": "Cardinal", "seals": (1, 6, 11, 16),
-        "center_ru": "горло", "zone_ru": "северная умеренная зона"},
-    2: {"key": "core", "ru": "Центральная", "en": "Core", "seals": (2, 7, 12, 17),
-        "center_ru": "сердце", "zone_ru": "экваториальный пояс"},
-    3: {"key": "signal", "ru": "Сигнальная", "en": "Signal", "seals": (3, 8, 13, 18),
-        "center_ru": "солнечное сплетение", "zone_ru": "южная умеренная зона"},
-    4: {"key": "gateway", "ru": "Портальная", "en": "Gateway", "seals": (4, 9, 14, 19),
-        "center_ru": "корень (основание)", "zone_ru": "южный полюс"},
+    0: {"key": "polar", "ru": "Полярная", "ru_official": "Полярное семейство", "en": "Polar", "seals": (5, 10, 15, 20),
+        "center_ru": "корона (макушка)", "zone_ru": "северный полюс", "function_en": "Sound the Chromatics"},
+    1: {"key": "cardinal", "ru": "Кардинальная", "ru_official": "Кардинальное семейство", "en": "Cardinal",
+        "seals": (1, 6, 11, 16), "center_ru": "горло", "zone_ru": "северная умеренная зона",
+        "function_en": "Establish the Genesis"},
+    2: {"key": "core", "ru": "Центральная", "ru_official": "Сердцевинное семейство", "en": "Core", "seals": (2, 7, 12, 17),
+        "center_ru": "сердце", "zone_ru": "экваториальный пояс", "function_en": "Mine the Tunnels"},
+    3: {"key": "signal", "ru": "Сигнальная", "ru_official": "Сигнальное семейство", "en": "Signal", "seals": (3, 8, 13, 18),
+        "center_ru": "солнечное сплетение", "zone_ru": "южная умеренная зона", "function_en": "Unravel the Mystery"},
+    4: {"key": "gateway", "ru": "Портальная", "ru_official": "Входное семейство", "en": "Gateway", "seals": (4, 9, 14, 19),
+        "center_ru": "корень (основание)", "zone_ru": "южный полюс", "function_en": "Open the Portals"},
 }
 
 #: 52 Портала Галактической Активации (ПГА). Источник: официальный виджет lawoftime.org/decode (массив gaps).
@@ -258,13 +311,15 @@ PLASMAS: tuple[tuple[str, str], ...] = (
 
 #: 20 имён дней (индекс 1–20). name — орфография Академии майяских языков Гватемалы (ALMG),
 #: landa — орфография XVI в. (Ланда), kiche — кʼиче (Wikipedia «Maya calendar», по Kaufman 1989),
-#: ru — традиционная русская передача (⚠ написание в русской литературе варьирует).
+#: ru — русская передача (написание в русских источниках варьирует; ru_alt — засвидетельствованные варианты:
+#: ru.wikipedia «Календарь майя» — Чик-Чан, Хиш, Ахау; официальное русское «Руководство по календарю 13 Лун»
+#: law-of-time.ru/13moon/rukovodstvo/ — Бэн, Мэн, Кауак, Ахау).
 DAY_NAMES: dict[int, dict[str, str]] = {
     1:  {"name": "Imix", "landa": "Imix", "kiche": "Imox", "ru": "Имиш"},
     2:  {"name": "Ikʼ", "landa": "Ik", "kiche": "Iqʼ", "ru": "Ик"},
     3:  {"name": "Akʼbʼal", "landa": "Akbal", "kiche": "Aqʼabʼal", "ru": "Акбаль"},
     4:  {"name": "Kʼan", "landa": "Kan", "kiche": "Kʼat", "ru": "Кан"},
-    5:  {"name": "Chikchan", "landa": "Chicchan", "kiche": "Kan", "ru": "Чикчан"},
+    5:  {"name": "Chikchan", "landa": "Chicchan", "kiche": "Kan", "ru": "Чикчан", "ru_alt": "Чик-Чан"},
     6:  {"name": "Kimi", "landa": "Cimi", "kiche": "Kame", "ru": "Кими"},
     7:  {"name": "Manikʼ", "landa": "Manik", "kiche": "Kej", "ru": "Маник"},
     8:  {"name": "Lamat", "landa": "Lamat", "kiche": "Qʼanil", "ru": "Ламат"},
@@ -272,14 +327,14 @@ DAY_NAMES: dict[int, dict[str, str]] = {
     10: {"name": "Ok", "landa": "Oc", "kiche": "Tzʼiʼ", "ru": "Ок"},
     11: {"name": "Chuwen", "landa": "Chuen", "kiche": "Bʼatzʼ", "ru": "Чуэн"},
     12: {"name": "Ebʼ", "landa": "Eb", "kiche": "Eʼ", "ru": "Эб"},
-    13: {"name": "Bʼen", "landa": "Ben", "kiche": "Aj", "ru": "Бен"},
-    14: {"name": "Ix", "landa": "Ix", "kiche": "Iʼx", "ru": "Иш"},
-    15: {"name": "Men", "landa": "Men", "kiche": "Tzʼikin", "ru": "Мен"},
+    13: {"name": "Bʼen", "landa": "Ben", "kiche": "Aj", "ru": "Бен", "ru_alt": "Бэн"},
+    14: {"name": "Ix", "landa": "Ix", "kiche": "Iʼx", "ru": "Иш", "ru_alt": "Хиш"},
+    15: {"name": "Men", "landa": "Men", "kiche": "Tzʼikin", "ru": "Мен", "ru_alt": "Мэн"},
     16: {"name": "Kʼibʼ", "landa": "Cib", "kiche": "Ajmaq", "ru": "Киб"},
     17: {"name": "Kabʼan", "landa": "Caban", "kiche": "Noʼj", "ru": "Кабан"},
     18: {"name": "Etzʼnabʼ", "landa": "Etznab", "kiche": "Tijax", "ru": "Эцнаб"},
-    19: {"name": "Kawak", "landa": "Cauac", "kiche": "Kawoq", "ru": "Кавак"},
-    20: {"name": "Ajaw", "landa": "Ahau", "kiche": "Ajpu", "ru": "Ахав"},
+    19: {"name": "Kawak", "landa": "Cauac", "kiche": "Kawoq", "ru": "Кавак", "ru_alt": "Кауак"},
+    20: {"name": "Ajaw", "landa": "Ahau", "kiche": "Ajpu", "ru": "Ахав", "ru_alt": "Ахау"},
 }
 
 #: 18 месяцев по 20 дней + Wayebʼ (5 дней). Индекс 0–18.
@@ -626,10 +681,11 @@ def dreamspell(y: int, m: int, d: int, kin_date: tuple[int, int] | None = None) 
     return {
         **kin_info(kin),
         "tone_info": {"number": t, "name_ru": tone["ru"][0], "name_en": tone["en"], "maya": tone["maya"],
-                      "power": tone["power"], "action": tone["action"], "essence": tone["essence"]},
+                      "power": tone["power"], "action": tone["action"], "essence": tone["essence"],
+                      "keywords_ru_official": tone["ru_official"]},
         "seal_info": {"number": s, "code": s % 20, "name_ru": seal["ru"], "name_en": seal["en"],
                       "yucatec": seal["yucatec"], "power": seal["power"], "action": seal["action"],
-                      "essence": seal["essence"]},
+                      "essence": seal["essence"], "keywords_ru_official": seal["ru_official"]},
         "color_info": {"key": color, "name_ru": COLORS[color]["ru"][0], "name_en": COLORS[color]["en"],
                        "direction_ru": COLORS[color]["direction_ru"], "action_ru": COLORS[color]["action_ru"]},
         "oracle": oracle(kin),
@@ -677,7 +733,7 @@ def classic_from_jdn(jdn: int, correlation: int = GMT_CORRELATION) -> dict[str, 
         "correlation": correlation, "jdn": jdn, "days_since_era": x,
         "tzolkin": {
             "number": number, "day_index": name_idx, "day_name": dn["name"], "day_name_landa": dn["landa"],
-            "day_name_kiche": dn["kiche"], "day_name_ru": dn["ru"],
+            "day_name_kiche": dn["kiche"], "day_name_ru": dn["ru"], "day_name_ru_alt": dn.get("ru_alt"),
             "index_260": kin_from_tone_seal(number, name_idx),
             "label": f"{number} {dn['name']}", "label_kiche": f"{number} {dn['kiche']}",
         },
@@ -846,7 +902,7 @@ def calculate(b: BirthInput, **options: Any) -> dict[str, Any]:
     steps.append(f"Волновой модуль № {w['number']} (кины {w['first_kin']}–{w['last_kin']}): {w['name_ru']}, "
                  f"позиция {w['position']}; замок № {ds['castle']['number']}: {ds['castle']['ru']} "
                  f"({ds['castle']['court_ru']}); "
-                 f"земная семья: {ds['earth_family']['ru']}; ПГА: {'да' if ds['is_gap'] else 'нет'}.")
+                 f"земная семья: {ds['earth_family']['ru']} (в русском переводе Фонда — {ds['earth_family']['ru_official']}); ПГА: {'да' if ds['is_gap'] else 'нет'}.")
     steps.append(f"Дата 13 Лун: {tm['label_ru']}; год {tm['year_span']} ({tm['ns']}, цикл {tm['ns_cycle_span']}"
                  + (f"; полная запись {tm['ns_date']}" if tm["ns_date"] else "") + ").")
 

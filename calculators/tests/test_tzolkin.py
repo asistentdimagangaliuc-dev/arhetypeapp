@@ -514,3 +514,33 @@ def test_classic_day_boundary_kiche_midnight_and_night_overlap():
     assert early["classic"]["night_overlap"]["other_day_label"] == "12 Ebʼ"
     assert "night_overlap" not in calculate(T1)["classic"]        # 14:30 — день
     assert "night_overlap" not in calculate(BirthInput(1984, 2, 4))["classic"]   # время неизвестно
+
+
+def test_official_russian_terms_and_castle_family_functions():
+    # Официальный русский перевод «Руководства по календарю 13 Лун» (https://www.law-of-time.ru/13moon/rukovodstvo/):
+    # «Желтая Звезда: Изящество, Украшение, Искусство», «Белый Волшебник: Вневременность, Восприимчивость,
+    # Волшебство», «Белая Собака: Сердце, Любовь, Преданность»; тоны: «4. Само-сущный: Форма, Определение, Соизмерение».
+    from calculators.tzolkin import CASTLES, EARTH_FAMILIES, TONES, castle
+    assert all(SEALS[s]["ru_official"] for s in range(1, 21)) and all(TONES[t]["ru_official"] for t in range(1, 14))
+    assert SEALS[8]["ru_official"].startswith("Изящество") and SEALS[14]["ru_official"].startswith("Вневременность")
+    assert SEALS[10]["ru_official"].endswith("Преданность")
+    assert TONES[4]["ru_official"] == "Форма, Определение, Соизмерение"
+    ds = calculate(T1)["dreamspell"]
+    assert ds["seal_info"]["keywords_ru_official"] == "Навигация, Эволюция, Синхронность"   # Кин 17, Красная Земля
+    # «Закон Времени: Уровень 1» (https://www.law-of-time.ru/time/level-1/): «Существует пять земных семейств:
+    # Полярное, Кардинальное, Сердцевинное, Сигнальное и Входное».
+    assert [EARTH_FAMILIES[i]["ru_official"].split()[0] for i in range(5)] == [
+        "Полярное", "Кардинальное", "Сердцевинное", "Сигнальное", "Входное"]
+    assert ds["earth_family"]["ru_official"] == "Сердцевинное семейство"
+    # Cosmic History Chronicles VI (archive.org chc6bookofthetranscendence1): «Gateway Family … (Open the Portals)»;
+    # Star Traveler's 13 Moon Almanac 2011 (archive.org isbn_9780978592486): «Gateway family open the portals».
+    assert EARTH_FAMILIES[4]["function_en"] == "Open the Portals" and EARTH_FAMILIES[2]["function_en"] == "Mine the Tunnels"
+    # Almanac 2011, с. 30: «Red Eastern Castle of Turning: Court of Birth … Initiate Seed … Green Central Castle of
+    # Enchantment: Court of Synchronization, synchronize human»; «Генезис Дримспелл» (law-of-time.ru):
+    # «Жёлтый Южный Замок Даяния: Двор Интеллекта, сила восхождения».
+    assert [CASTLES[c]["court_en"] for c in range(1, 6)] == [
+        "Court of Birth", "Court of Death", "Court of Magic", "Court of Intelligence", "Court of Synchronization"]
+    assert castle(170)["power_ru"] == "сила восхождения" and castle(1)["action_en"] == "Initiate Seed"
+    # Русские варианты имён дней: ru.wikipedia «Календарь майя» (Ахау, Хиш, Чик-Чан).
+    t4 = calculate(T4)["classic"]["tzolkin"]
+    assert t4["day_name_ru"] == "Ахав" and t4["day_name_ru_alt"] == "Ахау"
