@@ -387,3 +387,138 @@ def test_luck_start_bound_and_void_and_nobleman_variant():
     main = calculate(T1)["symbolic_stars"][0]["branches"]
     alt = calculate(T1, nobleman_variant="alt")["symbolic_stars"][0]["branches"]
     assert (main, alt) == ("丑未", "寅午")
+
+
+# ---------------------------------------------------------------------------
+# 7. Добавлено при адверсариальной проверке (волна 2, 14.10.2026)
+# ---------------------------------------------------------------------------
+
+def test_cli_boolean_solar_time_option():
+    # CLI превращает `--opt solar_time=true` в булево True — раньше это падало с ValueError.
+    from calculators.cli import _options
+    opts = _options(["solar_time=true"])
+    assert opts == {"solar_time": True}
+    assert calculate(T2, **opts)["chart"] == calculate(T2)["chart"] == "甲子 丙寅 戊辰 癸亥"
+    assert calculate(T2, solar_time="TRUE", zi_hour="Late")["chart"] == "甲子 丙寅 戊辰 癸亥"
+
+
+def test_day_cycle_julian_eclipse_720bc():
+    # https://zh.wikipedia.org/wiki/干支 : 鲁隐公三年二月己巳日 = 22.02.720 до н. э. (юлианский календарь)
+    # Формула (JDN + 49) mod 60 верна и для юлианского JDN.
+    import swisseph as swe
+    jdn_jul = int(round(swe.julday(-719, 2, 22, 12.0, swe.JUL_CAL)))
+    assert jdn_jul == 1458496
+    assert ganzhi((jdn_jul + 49) % 60) == "己巳"
+
+
+def test_skillon_late_rat_gui_wei_day():
+    # https://www.skillon.com/bazi-feng-shui.cfm/topic/2728/early-vs-late-rat-hour :
+    # «11:00 PM – 11:59 PM GuiWei 癸未 day, 甲子 JiaZi hour… day only changes at midnight»
+    late = calculate(BirthInput(2025, 7, 13, 23, 30, tz="UTC+08:00"), solar_time="clock", zi_hour="late")
+    early = calculate(BirthInput(2025, 7, 13, 23, 30, tz="UTC+08:00"), solar_time="clock", zi_hour="early")
+    assert (late["pillars"]["day"]["ganzhi"], late["pillars"]["hour"]["ganzhi"]) == ("癸未", "甲子")
+    assert (early["pillars"]["day"]["ganzhi"], early["pillars"]["hour"]["ganzhi"]) == ("甲申", "甲子")
+
+
+def test_mao_four_pillars_external():
+    # https://chinadigitaltimes.net/chinese/?p=99537 : «乾：癸巳 甲子 丁酉 甲辰» (час 辰 = 07–09; берём 08:00 LMT)
+    r = calculate(BirthInput(1893, 12, 26, 8, 0, tz="LMT", lat=27.915, lon=112.53, gender="male"))
+    assert r["chart"] == "癸巳 甲子 丁酉 甲辰"
+
+
+@pytest.mark.parametrize("year,deg,hk_date", [
+    # https://www.hko.gov.hk/tc/gts/time/calendar/text/files/T2022c.txt
+    (2022, 285, "2022-01-05"), (2022, 315, "2022-02-04"), (2022, 345, "2022-03-05"), (2022, 15, "2022-04-05"),
+    (2022, 75, "2022-06-06"), (2022, 165, "2022-09-07"), (2022, 195, "2022-10-08"), (2022, 255, "2022-12-07"),
+])
+def test_jie_dates_vs_hko_2022(year, deg, hk_date):
+    import swisseph as swe
+    y, m, d = (int(x) for x in hk_date.split("-"))
+    jd = bazi.find_sun_longitude(deg, swe.julday(y, m, d, 12.0) + 3, search_back=True)
+    assert (bazi.jd_to_utc(jd) + timedelta(hours=8)).strftime("%Y-%m-%d") == hk_date
+
+
+# Векторы вне России (южное полушарие, США, ±1 ч от цзе, 23:00–00:59). Ожидания получены НЕЗАВИСИМО:
+# UT через zoneinfo; год/месяц/удача — lunar-python с пекинским эквивалентом (UT+8);
+# день/час — lunar-python со «временем карты», где LMT = UT + долгота/15, EoT — по формуле Meeus (не Swiss Ephemeris).
+WORLD = [
+    # (вход, пол, год+месяц, {(solar_time, zi_hour): "день час"}, направление, (лет, мес, дн) старта)
+    (BirthInput(2022, 2, 3, 15, 11, tz="America/New_York", lat=40.7128, lon=-74.006, gender="female"),
+     "辛丑 辛丑", {k: "丁亥 戊申" for k in [("clock", "late"), ("clock", "early"), ("mean", "late"),
+                                         ("mean", "early"), ("true", "late"), ("true", "early")]}, "forward", (0, 0, 3)),
+    (BirthInput(2022, 2, 3, 16, 31, tz="America/New_York", lat=40.7128, lon=-74.006, gender="female"),
+     "壬寅 壬寅", {k: "丁亥 戊申" for k in [("clock", "late"), ("clock", "early"), ("mean", "late"),
+                                         ("mean", "early"), ("true", "late"), ("true", "early")]}, "backward", (0, 0, 3)),
+    (BirthInput(1995, 11, 20, 23, 40, tz="Australia/Sydney", lat=-33.8688, lon=151.2093, gender="male"),
+     "乙亥 丁亥", {("clock", "late"): "乙卯 戊子", ("clock", "early"): "丙辰 戊子", ("mean", "late"): "乙卯 丁亥",
+                 ("mean", "early"): "乙卯 丁亥", ("true", "late"): "乙卯 丁亥", ("true", "early"): "乙卯 丁亥"},
+     "backward", (4, 2, 15)),
+    (BirthInput(1986, 6, 29, 0, 30, tz="America/Argentina/Buenos_Aires", lat=-34.6037, lon=-58.3816, gender="female"),
+     "丙寅 甲午", {("clock", "late"): "甲辰 甲子", ("clock", "early"): "甲辰 甲子", ("mean", "late"): "癸卯 甲子",
+                 ("mean", "early"): "甲辰 甲子", ("true", "late"): "癸卯 甲子", ("true", "early"): "甲辰 甲子"},
+     "backward", (7, 8, 18)),
+    (BirthInput(1977, 7, 4, 0, 50, tz="America/Los_Angeles", lat=34.0522, lon=-118.2437, gender="male"),
+     "丁巳 丙午", {("clock", "late"): "壬戌 庚子", ("clock", "early"): "壬戌 庚子", ("mean", "late"): "辛酉 庚子",
+                 ("mean", "early"): "壬戌 庚子", ("true", "late"): "辛酉 庚子", ("true", "early"): "壬戌 庚子"},
+     "backward", (9, 6, 1)),
+]
+
+
+@pytest.mark.parametrize("b,ym,dh,direction,start", WORLD)
+def test_world_vectors_independent(b, ym, dh, direction, start):
+    for (mode, zi), exp in dh.items():
+        r = calculate(b, solar_time=mode, zi_hour=zi)
+        assert r["chart"] == f"{ym} {exp}", (mode, zi)
+        lp = r["luck_pillars"]
+        assert lp["direction"] == direction
+        assert (lp["start"]["years"], lp["start"]["months"]) == start[:2]
+        assert abs(lp["start"]["days"] - start[2]) <= 1
+
+
+def test_no_time_jie_warning_only_on_local_birth_date():
+    # 04.02.1984 — Личунь в 18:18 MSK в этот же день: предупреждение есть
+    r = calculate(BirthInput(1984, 2, 4, place="Москва"))
+    assert any("立春" in w and "неоднозначен" in w for w in r["warnings"])
+    # 03.02.1984 — до Личуня больше суток по местной дате: предупреждения о цзе нет
+    r = calculate(BirthInput(1984, 2, 3, place="Москва"))
+    assert not any("立春" in w for w in r["warnings"])
+
+
+def test_decade_anchor_table_from_doc():
+    # таблица «индекс 01.01» из шага 4 базы знаний + правило +5/+6 за год
+    anchors = {1900: 10, 1910: 2, 1920: 54, 1930: 47, 1940: 39, 1950: 32, 1960: 24, 1970: 17,
+               1980: 9, 1990: 2, 2000: 54, 2010: 47, 2020: 39, 2030: 32, 2040: 24}
+    for y, idx in anchors.items():
+        assert day_index(date(y, 1, 1)) == idx
+    for y in range(1900, 2045):
+        dec = y - y % 10
+        idx = anchors[dec]
+        for yy in range(dec, y):
+            idx += 6 if (yy % 4 == 0 and (yy % 100 != 0 or yy % 400 == 0)) else 5
+        assert idx % 60 == day_index(date(y, 1, 1)), y
+
+
+def test_meeus_low_precision_formula_from_doc():
+    # Формула из шага 1а базы знаний: ошибка момента цзе ≤ 12 мин на 1850–2100 гг.
+    import math
+    import swisseph as swe
+
+    def lam(jd):
+        t = (jd - 2451545.0) / 36525
+        l0 = 280.46646 + 36000.76983 * t + 0.0003032 * t * t
+        m = math.radians(357.52911 + 35999.05029 * t - 0.0001537 * t * t)
+        c = ((1.914602 - 0.004817 * t - 0.000014 * t * t) * math.sin(m)
+             + (0.019993 - 0.000101 * t) * math.sin(2 * m) + 0.000289 * math.sin(3 * m))
+        om = math.radians(125.04 - 1934.136 * t)
+        return (l0 + c - 0.00569 - 0.00478 * math.sin(om)) % 360
+
+    worst = 0.0
+    for y in range(1850, 2101, 10):
+        for k in range(12):
+            deg = (315 + 30 * k) % 360
+            ref = bazi.find_sun_longitude(deg, swe.julday(y, 2, 4, 0.0) + 30.4 * k + 15, search_back=True)
+            jd = ref + 0.5
+            for _ in range(4):
+                jd += (((deg - lam(jd)) + 180) % 360 - 180) / 0.9856
+            worst = max(worst, abs(jd - ref) * 1440)
+    assert worst <= 12.5

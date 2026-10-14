@@ -292,8 +292,70 @@ def test_14_07_1992_minus22_variant():
 # Эталонные персоны T1–T4 (сверены вручную, см. раздел «Примеры» документа)
 # ---------------------------------------------------------------------------
 
+# Полные векторы T1–T4 пересчитаны вручную независимым проверяющим (раздел «Протокол проверки» документа).
+_T_FULL = {
+    (15, 5, 1990): {
+        "points": dict(A=15, B=5, C=19, D=12, E=6, F=20, G=6, I=4, H=9, R=12, A1=9, A2=21, A3=9,
+                       B1=16, B2=11, B3=17, C1=8, C2=7, D1=3, D2=18, F1=7, F2=5, G1=6, G2=18,
+                       I1=20, I2=16, H1=3, H2=21, TAL=5, X=7, X_money=14, X_love=7, Y=11),
+        "purposes": dict(sky=17, earth=7, personal=6, male=6, female=15, social=21, spiritual=9, planetary=3),
+        "health_total": {"physics": 14, "energy": 13, "emotions": 9}, "health_alt": 9,
+        "ring": [15, 20, 5, 13, 8, 18, 10, 3, 20, 11, 9, 16, 7, 19, 12, 17,
+                 5, 21, 16, 9, 11, 10, 17, 5, 6, 19, 13, 20, 7, 15, 8, 9,
+                 19, 7, 6, 11, 5, 14, 9, 13, 4, 6, 20, 9, 16, 8, 10, 22,
+                 12, 18, 6, 9, 21, 6, 3, 12, 9, 6, 15, 21, 6, 9, 21, 9],
+    },
+    (4, 2, 1984): {
+        "points": dict(A=4, B=2, C=22, D=10, E=11, F=6, G=6, I=5, H=14, R=4, A1=19, A2=15, A3=8,
+                       B1=15, B2=13, B3=6, C1=10, C2=6, D1=4, D2=21, F1=16, F2=10, G1=16, G2=10,
+                       I1=14, I2=9, H1=5, H2=18, TAL=10, X=9, X_money=15, X_love=3, Y=14),
+        "purposes": dict(sky=12, earth=8, personal=20, male=11, female=20, social=4, spiritual=6, planetary=10),
+        "health_total": {"physics": 13, "energy": 15, "emotions": 10}, "health_alt": 10,
+        "ring": [4, 18, 14, 6, 10, 8, 16, 22, 6, 20, 14, 22, 8, 18, 10, 12,
+                 2, 12, 10, 18, 8, 22, 14, 20, 6, 22, 16, 8, 10, 15, 5, 9,
+                 22, 8, 4, 13, 9, 5, 14, 19, 5, 7, 20, 8, 15, 22, 7, 17,
+                 10, 8, 16, 22, 6, 8, 20, 7, 14, 19, 5, 5, 18, 4, 22, 8],
+    },
+    (29, 2, 2004): {
+        "points": dict(A=11, B=2, C=6, D=19, E=11, F=13, G=8, I=7, H=3, R=4, A1=6, A2=22, A3=6,
+                       B1=15, B2=13, B3=6, C1=5, C2=17, D1=22, D2=3, F1=3, F2=17, G1=20, G2=12,
+                       I1=18, I2=11, H1=10, H2=7, TAL=8, X=20, X_money=10, X_love=5, Y=9),
+        "purposes": dict(sky=21, earth=17, personal=11, male=20, female=11, social=4, spiritual=15, planetary=19),
+        "health_total": {"physics": 16, "energy": 15, "emotions": 4}, "health_alt": 4,
+        "ring": [11, 10, 17, 5, 6, 7, 19, 5, 13, 5, 10, 7, 15, 5, 17, 19,
+                 2, 14, 12, 22, 10, 10, 18, 8, 8, 3, 22, 9, 14, 7, 20, 8,
+                 6, 7, 19, 5, 13, 6, 20, 9, 7, 22, 15, 5, 8, 17, 9, 10,
+                 19, 6, 5, 9, 22, 11, 7, 10, 3, 20, 17, 4, 14, 21, 7, 18],
+    },
+    (14, 3, 1879): {
+        "points": dict(A=14, B=3, C=7, D=6, E=3, F=17, G=10, I=13, H=20, R=6, A1=4, A2=17, A3=20,
+                       B1=9, B2=6, B3=9, C1=17, C2=10, D1=15, D2=9, F1=22, F2=5, G1=8, G2=16,
+                       I1=5, I2=19, H1=10, H2=8, TAL=5, X=19, X_money=11, X_love=10, Y=5),
+        "purposes": dict(sky=9, earth=21, personal=3, male=3, female=3, social=6, spiritual=9, planetary=15),
+        # Здесь варианты итога эмоций расходятся: 12+9 = 21, а сумма строк 84 → 12
+        "health_total": {"physics": 12, "energy": 9, "emotions": 21}, "health_alt": 12,
+        "ring": [14, 5, 18, 22, 4, 7, 21, 11, 17, 9, 10, 3, 20, 7, 5, 8,
+                 3, 19, 16, 11, 13, 18, 5, 15, 10, 19, 9, 8, 17, 5, 6, 13,
+                 7, 16, 9, 11, 20, 8, 6, 19, 13, 18, 5, 6, 19, 8, 7, 13,
+                 6, 20, 14, 22, 8, 18, 10, 3, 20, 11, 9, 16, 7, 10, 21, 8],
+    },
+}
+
+
+@pytest.mark.parametrize("dmy", list(_T_FULL))
+def test_T1_T4_full_vectors(dmy):
+    exp = _T_FULL[dmy]
+    r = _calc(*dmy)
+    assert r["points"] == exp["points"]
+    assert r["purposes"] == exp["purposes"]
+    assert r["health_map"]["total"] == exp["health_total"]
+    assert r["health_map"]["total_emotions_alt"] == exp["health_alt"]
+    assert [x["value"] for x in r["age_ring"]] == exp["ring"]
+    assert r["checks"]["all_ok"]
+
+
 def test_T1_15_05_1990():
-    r = _calc(15, 5, 1990)
+    r = _calc(15, 5, 1990, on_date="2026-10-14")
     p = r["points"]
     assert r["personal_square"] == {"A": 15, "B": 5, "C": 19, "D": 12, "E": 6}
     assert (p["F"], p["G"], p["I"], p["H"], p["R"]) == (20, 6, 4, 9, 12)
@@ -301,16 +363,20 @@ def test_T1_15_05_1990():
     assert r["purposes"] == {"sky": 17, "earth": 7, "personal": 6, "male": 6, "female": 15,
                              "social": 21, "spiritual": 9, "planetary": 3}
     assert r["health_map"]["total"] == {"physics": 14, "energy": 13, "emotions": 9}
+    assert r["current_period"] == {"age": 36.416, "label": "36–37,5", "value": 15, "arcanum": "Дьявол"}
 
 
 def test_T2_04_02_1984_year_sum_exactly_22():
-    r = _calc(4, 2, 1984)
+    r = _calc(4, 2, 1984, on_date="2026-10-14")
     p = r["points"]
     assert p["C"] == 22                      # 1+9+8+4 = 22 → не сворачивается
     assert r["personal_square"] == {"A": 4, "B": 2, "C": 22, "D": 10, "E": 11}
     assert r["zones"]["karmic_tail_code"] == "21-4-10"
     assert r["channels"]["classic"]["money_line"] == [6, 15, 9]
     assert r["channels"]["classic"]["love_line"] == [21, 3, 9]
+    assert r["channels"]["matrica_sudby_ru"]["relationship_line"] == [4, 10, 14]
+    # 42,69 года → период «42,5–43,5» отрезка C(22) → I(5): q1 = 22 + (22+5 → 9) = 31 → 4
+    assert (r["current_period"]["label"], r["current_period"]["value"]) == ("42,5–43,5", 4)
 
 
 def test_T3_29_02_2004():
@@ -320,6 +386,11 @@ def test_T3_29_02_2004():
     # Хвост 3-22-19 — известная программа (matrica-sudby.ru/programmy/karmicheskij-hvost-3-22-19-programma.html)
     assert r["zones"]["karmic_tail_code"] == "3-22-19"
     assert (p["F"], p["G"], p["I"], p["H"], p["R"]) == (13, 8, 7, 3, 4)
+    # 29 февраля: в невисокосный год день рождения считается 1 марта
+    cp = _calc(29, 2, 2004, on_date="2026-02-28")["current_period"]
+    assert cp["age"] < 22 and cp["label"] == "21–22,5" and cp["value"] == 14
+    assert _calc(29, 2, 2004, on_date="2026-03-01")["current_period"]["age"] == 22.0
+    assert _calc(29, 2, 2004, on_date="2026-10-14")["current_period"]["value"] == 12
 
 
 def test_T4_14_03_1879():
@@ -329,6 +400,11 @@ def test_T4_14_03_1879():
     assert r["personal_square"] == {"A": 14, "B": 3, "C": 7, "D": 6, "E": 3}
     assert r["zones"]["karmic_tail_code"] == "9-15-6"
     assert r["purposes"]["personal"] == 3
+    # 1905 год (26,3 года) → период «26–27,5» отрезка B(3) → G(10): 13 + 5 = 18 (Луна)
+    cp = _calc(14, 3, 1879, on_date="1905-06-30")["current_period"]
+    assert (cp["label"], cp["value"], cp["arcanum"]) == ("26–27,5", 18, "Луна")
+    # Вариант итога «сумма строк» даёт 12 вместо 21
+    assert _calc(14, 3, 1879, health_total="sum_of_rows")["health_map"]["total"]["emotions"] == 12
 
 
 # ---------------------------------------------------------------------------
@@ -394,6 +470,19 @@ def test_options_validation_and_variants():
     r2 = _calc(28, 11, 1987, health_total="sum_of_rows")
     assert r1["health_map"]["total"]["emotions"] == 10
     assert r2["health_map"]["total"]["emotions"] == 1
+    # опечатка в имени опции не теряется молча
+    w = _calc(1, 1, 2000, svadhistana="matrica_sudby")["warnings"]
+    assert any("svadhistana" in x for x in w)
+
+
+@pytest.mark.parametrize("opts", [{}, {"reduction": "minus22"}, {"ancestral_inner": "personal_center"}])
+def test_self_checks_hold(opts):
+    """Самопроверки по модулю 9 (или 22 для minus22) выполняются на произвольных датах."""
+    for d, m, y in [(1, 1, 1800), (22, 12, 1999), (31, 12, 2399), (29, 2, 2004), (28, 11, 1987),
+                    (19, 9, 1999), (30, 4, 2022)]:
+        r = _calc(d, m, y, **opts)
+        assert r["checks"]["all_ok"], r["checks"]
+        assert r["checks"]["modulus"] == (22 if opts.get("reduction") == "minus22" else 9)
 
 
 def test_arcana_table_complete():

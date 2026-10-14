@@ -459,10 +459,17 @@ def calculate(b: BirthInput, **options: Any) -> dict:
 
     late_zi = False
     alt: dict[str, str] = {}
+    basis_label: str | None = None  # подпись опорного времени, если час задан ветвью
     if opt["hour_branch"] is not None:
         hb, late_zi = _parse_hour_branch(opt["hour_branch"])
-        basis_dt = datetime(b.year, b.month, b.day, 23 if late_zi else (b.hour or 12), 30 if late_zi else (b.minute or 0))
+        # Условный момент внутри 时辰 (нужен только для даты и для Личуня без часового пояса):
+        # поздний Цзы — 23:30, иначе середина двухчасового периода (子 00:00, 丑 02:00, …, 亥 22:00).
+        if b.has_time:
+            basis_dt = datetime(b.year, b.month, b.day, b.hour, b.minute or 0)
+        else:
+            basis_dt = datetime(b.year, b.month, b.day, 23 if late_zi else 2 * hb, 30 if late_zi else 0)
         basis = "explicit_hour_branch"
+        basis_label = f"{b.year:04d}-{b.month:02d}-{b.day:02d} {'晚子' if late_zi else BRANCHES[hb]}时 (час задан ветвью)"
         steps.append(f"Час-ветвь задана явно: {BRANCHES[hb]}{'(поздний Цзы)' if late_zi else ''}.")
     else:
         clock_dt = datetime(b.year, b.month, b.day, b.hour, b.minute or 0)
@@ -541,10 +548,15 @@ def calculate(b: BirthInput, **options: Any) -> dict:
             sy = b.year if norm.jd_ut >= lc else b.year - 1
             y_stem, y_branch = (sy - 4) % 10, (sy - 4) % 12
         else:
-            # без часового пояса — приближение lunar-python (Личунь по пекинскому времени)
-            y_stem = STEMS.index(lunar.getYearGanByLiChun())
-            y_branch = BRANCHES.index(lunar.getYearZhiByLiChun())
-            warnings.append("Личунь определён по пекинскому времени (нет часового пояса).")
+            # Без часового пояса: время рождения (или условный момент 时辰) считаем пекинским и
+            # сравниваем с точным моментом Личуня в lunar-python (getYearGanExact). Сравнение по
+            # одной дате (getYearGanByLiChun) отнесло бы к новому году весь день Личуня целиком.
+            lc_lunar = Solar.fromYmdHms(basis_dt.year, basis_dt.month, basis_dt.day,
+                                        basis_dt.hour, basis_dt.minute, 0).getLunar()
+            y_stem = STEMS.index(lc_lunar.getYearGanExact())
+            y_branch = BRANCHES.index(lc_lunar.getYearZhiExact())
+            warnings.append("Часовой пояс неизвестен: момент Личуня сравнён со временем рождения, "
+                            "принятым за пекинское (UTC+8). В день Личуня проверьте год вручную.")
         year_note = "по Личуню (立春, долгота Солнца 315°)"
         if gz(y_stem, y_branch) != gz((l_year - 4) % 10, (l_year - 4) % 12):
             warnings.append(
@@ -646,7 +658,7 @@ def calculate(b: BirthInput, **options: Any) -> dict:
         "inputs_used": {
             "local_input": f"{b.year:04d}-{b.month:02d}-{b.day:02d} " + (f"{b.hour:02d}:{(b.minute or 0):02d}" if b.has_time else "—"),
             "tz": b.tz, "lon": b.lon, "gender": gender,
-            "basis_time": f"{basis_dt:%Y-%m-%d %H:%M}",
+            "basis_time": basis_label or f"{basis_dt:%Y-%m-%d %H:%M}",
             "chart_date": chart_date.isoformat(),
             "time_alternatives": alt,
         },
@@ -713,7 +725,28 @@ def _partial_without_time(b: BirthInput, opt: dict, warnings: list[str]) -> dict
     chart_month = l_month
     if l_raw < 0 and (opt["leap_month"] == "next" or (opt["leap_month"] == "split_15" and l_day > 15)):
         chart_month = l_month % 12 + 1
+    if l_raw < 0:
+        warnings.append(
+            f"Рождение в високосном месяце (闰{l_month}月, день {l_day}). Правило «{opt['leap_month']}»: "
+            f"для карты взят {chart_month}-й месяц. Другие школы: same -> {l_month}, next -> {l_month % 12 + 1}."
+        )
     y_stem, y_branch = (l_year - 4) % 10, (l_year - 4) % 12
+    lunar_gz = gz(y_stem, y_branch)
+    # Год по Личуню без времени: по дате; в сам день Личуня год не определён (зависит от часа).
+    lc_start = Solar.fromYmdHms(d.year, d.month, d.day, 0, 0, 0).getLunar().getYearInGanZhiExact()
+    lc_end = Solar.fromYmdHms(d.year, d.month, d.day, 23, 59, 0).getLunar().getYearInGanZhiExact()
+    if opt["year_boundary"] == "lichun":
+        y_stem, y_branch = STEMS.index(lc_end[0]), BRANCHES.index(lc_end[1])
+        if lc_start != lc_end:
+            warnings.append(f"Дата рождения — день Личуня: без времени год неоднозначен ({lc_start} до момента "
+                            f"Личуня, {lc_end} после; момент — по пекинскому времени). Взят {lc_end}.")
+        if gz(y_stem, y_branch) != lunar_gz:
+            warnings.append(f"Год по Личуню ({gz(y_stem, y_branch)}) отличается от года по лунному Новому году "
+                            f"({lunar_gz}) — школьное расхождение влияет на всю карту.")
+    elif lc_end != lunar_gz or lc_start != lunar_gz:
+        warnings.append(f"Рождение между Личунем и китайским Новым годом: по лунному году {lunar_gz}, по Личуню "
+                        f"{lc_end if lc_end != lunar_gz else lc_start}. В Цзы Вэй по умолчанию берётся лунный год "
+                        "(опция year_boundary=lichun).")
     aux = aux_star_positions(y_stem, y_branch, chart_month, 0, opt["kui_yue"])
     year_month_stars = {k: BRANCHES[v] for k, v in aux.items() if k in ("左辅", "右弼", "天魁", "天钺", "禄存", "擎羊", "陀罗", "天马")}
     cands = []
