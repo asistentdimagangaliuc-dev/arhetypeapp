@@ -435,19 +435,42 @@ def kua_number(year: int, gender: str) -> int:
 
 
 def kua_year(b: BirthInput, boundary: str = "lichun") -> tuple[int, list[str]]:
-    """Год для Куа: с границей Личунь (Солнце 315°) или 1 января."""
+    """Год для Куа: с границей Личунь (Солнце 315°) или 1 января.
+
+    Правило совпадает с модулем 03 (calculators/ninestar.py, boundary_precision='auto'):
+    * есть время и пояс/место → сравнивается точный момент рождения (UT) с моментом Личуня;
+    * времени или пояса нет → сравниваются ДАТЫ: дата рождения против местной даты Личуня
+      (в поясе рождения, если он известен, иначе по UTC+8 — китайский календарь);
+      день Личуня целиком относится к новому году.
+    """
     warns: list[str] = []
     if boundary == "jan1":
         return b.year, warns
+    if boundary != "lichun":
+        raise ValueError(f"Неизвестный kua_boundary: {boundary}")
     jd_lichun = eph.find_sun_longitude(315.0, julian_day_ut(datetime(b.year, 2, 20, tzinfo=timezone.utc)),
                                        search_back=True)
     if b.has_time and b.tz:
         jd_birth = normalize(b).jd_ut
+        if abs(jd_birth - jd_lichun) < 1.0:
+            warns.append("Рождение в пределах суток от момента Личуня: год для Куа чувствителен "
+                         "к точности времени и пояса.")
     else:
-        jd_birth = julian_day_ut(datetime(b.year, b.month, b.day, 12, tzinfo=timezone.utc))
+        # Конец суток рождения по местному времени (или по UTC+8, если пояс неизвестен).
+        if b.tz:
+            end = normalize(BirthInput(b.year, b.month, b.day, 23, 59, tz=b.tz, lat=b.lat, lon=b.lon,
+                                       second=59)).jd_ut + 0.999 / 86400.0
+            zone_label = b.tz
+        else:
+            end = julian_day_ut(datetime(b.year, b.month, b.day, tzinfo=timezone.utc)) + 1.0 - 8.0 / 24.0
+            zone_label = "UTC+8"
+        jd_birth = end - 1e-7
+        if b.has_time:
+            warns.append("Время рождения указано без пояса/места: граница Личуня для Куа определена по дате.")
         if abs(jd_birth - jd_lichun) < 1.5:
-            warns.append("Рождение рядом с Личунь (≈4 февраля), а время/пояс не заданы: год для Куа "
-                         "определён по полудню UTC — уточните время.")
+            warns.append(f"Рождение рядом с Личунь (≈4 февраля), точного момента нет: год для Куа определён "
+                         f"по дате ({zone_label}; день Личуня относится к новому году, как в модуле 03) — "
+                         f"уточните время и место.")
     return (b.year if jd_birth >= jd_lichun else b.year - 1), warns
 
 
@@ -527,19 +550,34 @@ def transliterate(name: str) -> str:
 
 
 def chaldean_name_number(name: str) -> dict:
-    """Число имени по халдейской таблице (Хейро). Кириллица транслитерируется по ICAO."""
+    """Число имени по халдейской таблице (Хейро). Кириллица транслитерируется по ICAO.
+
+    Две «составные» суммы (итоговая однозначная цифра у них всегда одна и та же, mod 9):
+    * ``compound`` — сумма значений всех букв (так считают современные онлайн-калькуляторы);
+    * ``compound_cheiro`` — сумма однозначных чисел отдельных слов, как в примерах самого
+      Хейро (Cheiro's Book of Numbers, гл. XIII–XIV: JOHN 18 → 9, SMITH 17 → 8, 9 + 8 = 17 → 8;
+      LLOYD 18 → 9, GEORGE 25 → 7, 9 + 7 = 16 → 7).
+    Буквы вне латиницы A–Z (после транслитерации) не имеют значения и попадают в ``unmapped``.
+    """
     latin = transliterate(name)
     words = [w for w in "".join(c if c.isalpha() else " " for c in latin).split()]
     parts = []
     total = 0
+    cheiro_total = 0
+    unmapped: list[str] = []
     for w in words:
         vals = [CHALDEAN[c] for c in w if c in CHALDEAN]
+        unmapped.extend(c for c in w if c not in CHALDEAN)
         s = sum(vals)
+        word_single = reduce_to_digit(s)[0] if s else 0
         total += s
-        parts.append({"word": w, "values": vals, "compound": s, "single": reduce_to_digit(s)[0] if s else 0})
+        cheiro_total += word_single
+        parts.append({"word": w, "values": vals, "compound": s, "single": word_single})
     single, chain = reduce_to_digit(total) if total else (0, [0])
+    _single_ch, chain_ch = reduce_to_digit(cheiro_total) if cheiro_total else (0, [0])
     return {"input": name, "latin": " ".join(words), "words": parts, "compound": total,
-            "reduction": chain, "number": single,
+            "reduction": chain, "compound_cheiro": cheiro_total, "reduction_cheiro": chain_ch,
+            "number": single, "unmapped": sorted(set(unmapped)),
             "planet": PLANETS.get(single), "planet_ru": PLANET_RU.get(PLANETS.get(single, ""), None)}
 
 
@@ -644,15 +682,28 @@ def calculate(b: BirthInput, **options) -> dict:
         yc["valid"] = f"с дня рождения {year} г. до дня рождения {year + 1} г."
     else:
         yc["valid"] = f"календарный {year} г."
-    # совпадения карты года с картами рождения (по Грир: «год Учителя/Тени» и т.п.)
+    # совпадения карты года с картами рождения (раздатка J. Vernon по Грир: отметить годы, где карта
+    # года = Личность, Душа, Скрытый фактор или зодиакальная карта; совпадение со Скрытым фактором
+    # Грир называет «Shadow/Teacher Year» — marykgreer.com, ответ от 16.09.2011).
+    # Сравнение ведётся с картами рождения выбранного метода (у Tarot School Скрытого фактора нет).
     yn = yc["card"]["number"]
     flags = []
-    if yn == greer["personality"]["number"]:
-        flags.append("personality")
-    if yn == greer["soul"]["number"]:
-        flags.append("soul")
-    if yn in [c["number"] for c in greer["hidden_factor"]]:
-        flags.append("hidden_factor (год Учителя/Тени)")
+    if tarot_method == "tarot_school":
+        if yn == school["first_card"]["number"]:
+            flags.append("personality")
+        if yn == school["soul_number"]:
+            flags.append("soul")
+        if yn in [c["number"] for c in school["birth_cards"]] and not flags:
+            flags.append("birth_card")
+    else:
+        if yn == greer["personality"]["number"]:
+            flags.append("personality")
+        if yn == greer["soul"]["number"]:
+            flags.append("soul")
+        if yn in [c["number"] for c in greer["birth_cards"]] and not flags:
+            flags.append("birth_card")       # средняя карта тройки 19-10-1 (10) — она же Учитель
+        if yn in [c["number"] for c in greer["hidden_factor"]]:
+            flags.append("hidden_factor (год Учителя/Тени)")
     yc["matches_birth_cards"] = flags
 
     steps.append(f"Грир: {greer['formula']}; приведение {greer['reduction']} → Личность "
