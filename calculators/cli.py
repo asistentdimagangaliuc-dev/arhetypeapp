@@ -42,7 +42,9 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("method", help="метод из списка или 'all' / 'list' / 'time'")
     p.add_argument("--date", help="YYYY-MM-DD (григорианский календарь!)")
-    p.add_argument("--time", help="HH:MM местного гражданского времени")
+    p.add_argument("--time", help="HH:MM или HH:MM:SS местного гражданского времени")
+    p.add_argument("--calendar", choices=["gregorian", "julian"], default="gregorian",
+                   help="julian — дата по старому стилю (Россия до 14.02.1918), будет переведена")
     p.add_argument("--place", help="город из справочника common/places.py")
     p.add_argument("--tz", help="IANA-зона (Europe/Moscow), UTC+03:00 или LMT")
     p.add_argument("--lat", type=float)
@@ -50,7 +52,8 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     p.add_argument("--gender", choices=["male", "female"])
     p.add_argument("--name", help="ФИО для нумерологии")
     p.add_argument("--opt", action="append", default=[],
-                   help="опция метода key=value (можно несколько), напр. --opt zi_hour=early")
+                   help="опция метода key=value (можно несколько), напр. --opt zi_hour=early; "
+                        "для 'all' — с префиксом метода: --opt bazi.solar_time=clock")
     return p.parse_args(argv)
 
 
@@ -76,10 +79,18 @@ def build_input(a: argparse.Namespace) -> BirthInput:
         raise SystemExit("--date обязателен")
     y, m, d = (int(x) for x in a.date.split("-"))
     hh = mm = None
+    ss = 0
     if a.time:
-        hh, mm = (int(x) for x in a.time.split(":")[:2])
-    return BirthInput(y, m, d, hh, mm, tz=a.tz, lat=a.lat, lon=a.lon, place=a.place,
-                      gender=a.gender, name=a.name)
+        parts = [int(x) for x in a.time.split(":")]
+        hh, mm = parts[0], parts[1]
+        ss = parts[2] if len(parts) > 2 else 0
+    b = BirthInput(y, m, d, hh, mm, tz=a.tz, lat=a.lat, lon=a.lon, place=a.place,
+                   gender=a.gender, name=a.name, second=ss, calendar=a.calendar)
+    if a.place and b.lat is None:
+        raise SystemExit(f"Место «{a.place}» нет в справочнике common/places.py — передайте --lat --lon [--tz].")
+    if b.has_time and b.tz is None:
+        raise SystemExit("Время задано, но нет часового пояса: укажите --place, или --lat/--lon, или --tz.")
+    return b
 
 
 def run_method(name: str, b: BirthInput, options: dict | None = None) -> dict:
@@ -102,9 +113,14 @@ def main(argv: list[str] | None = None) -> int:
         result = {"utc": n.utc.isoformat(), "offset": fmt_offset(n.utc_offset_hours),
                   "offset_source": n.offset_source, "jd_ut": n.jd_ut, "warnings": n.warnings}
     elif a.method == "all":
+        per_method: dict[str, dict] = {}
+        for k, v in opts.items():
+            meth, dot, key = k.partition(".")
+            if dot and meth in METHODS:
+                per_method.setdefault(meth, {})[key] = v
         for name in METHODS:
             try:
-                result[name] = run_method(name, b, {})
+                result[name] = run_method(name, b, per_method.get(name, {}))
             except Exception as e:  # метод не применим к этим входным данным
                 result[name] = {"error": f"{type(e).__name__}: {e}"}
     elif a.method in METHODS:

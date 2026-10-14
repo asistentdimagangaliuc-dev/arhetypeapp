@@ -71,6 +71,10 @@ class BirthInput:
                 self.lat = p["lat"] if self.lat is None else self.lat
                 self.lon = p["lon"] if self.lon is None else self.lon
                 self.tz = p["tz"] if self.tz is None else self.tz
+        if self.tz is None and self.lat is not None and self.lon is not None:
+            # зона по координатам (timezonefinder); историческое смещение потом даст tzdb
+            from .places import tz_for_coords
+            self.tz = tz_for_coords(self.lat, self.lon)
 
     @property
     def date(self) -> date:

@@ -5,6 +5,7 @@
 """
 from __future__ import annotations
 
+import math
 import os
 
 import swisseph as swe
@@ -120,8 +121,9 @@ def find_sun_longitude(target_deg: float, jd_near: float, search_back: bool = Tr
 
 
 def format_lon(lon: float, lang: str = "ru") -> str:
-    """Долгота -> «Г°ММ′ Знак» с округлением до минуты (29°59.99′ -> 0°00′ следующего знака)."""
-    total_min = int(round((lon % 360.0) * 60)) % (360 * 60)
+    """Долгота -> «Г°ММ′ Знак», минуты отбрасываются (не округляются): 29°59.99′ остаётся 29°59′ того же
+    знака — как в эфемеридах и западных программах; знак в строке всегда совпадает с sign_of(lon)."""
+    total_min = int(math.floor((lon % 360.0) * 60 + 1e-9)) % (360 * 60)
     sign, rest = divmod(total_min, 30 * 60)
     d, m = divmod(rest, 60)
     names = SIGNS_RU if lang == "ru" else SIGNS_EN

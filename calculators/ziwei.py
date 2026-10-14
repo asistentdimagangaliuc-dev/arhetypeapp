@@ -452,6 +452,9 @@ def calculate(b: BirthInput, **options: Any) -> dict:
     basis = opt["time_basis"]
     if basis is None:
         basis = "true_solar" if (b.lon is not None and norm is not None) else "clock"
+        if basis == "clock" and b.has_time:
+            warnings.append("Долгота/место неизвестны: вместо истинного солнечного времени (умолчание) "
+                            "использовано время часов — час рождения может отличаться.")
     if basis not in ("clock", "true_solar", "mean_solar"):
         raise ValueError("time_basis: clock | true_solar | mean_solar")
     if basis != "clock" and (b.lon is None or norm is None):

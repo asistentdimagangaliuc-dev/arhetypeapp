@@ -22,6 +22,10 @@ SUBJECTS = {
 }
 
 
+PLANET_RU = {"sun": "Солнце", "moon": "Луна", "mars": "Марс", "mercury": "Меркурий", "jupiter": "Юпитер",
+             "venus": "Венера", "saturn": "Сатурн", "rahu": "Раху", "ketu": "Кету"}
+
+
 def _g(d, *path, default="—"):
     for p in path:
         if isinstance(d, dict) and p in d:
@@ -55,14 +59,14 @@ def summarize(r: dict) -> dict[str, str]:
                           f"{_g(hd, 'profile', 'profile')}, {_g(hd, 'definition', 'name_ru')}; "
                           f"{_g(hd, 'incarnation_cross', 'name_ru')}")
     gk = r["gene_keys"]["spheres"]
-    out["Gene Keys (Дело жизни / Эволюция / Сияние / Цель)"] = " / ".join(
+    out["Gene Keys (Дело жизни / Эволюция / Сияние / Предназначение)"] = " / ".join(
         _g(gk, s, "key_line") for s in ("lifes_work", "evolution", "radiance", "purpose"))
     w = r["western"]
     out["Западная астрология"] = ", ".join(str(v) for v in _g(w, "summary", default={}).values())
     jy = r["jyotish"]
     out["Джйотиш (Лахири)"] = (f"Лагна {_g(jy, 'lagna', 'position')}; Луна в {_g(jy, 'moon_sign', 'sign_ru')}, "
                               f"накшатра {_g(jy, 'janma_nakshatra', 'name_ru')} пада {_g(jy, 'janma_nakshatra', 'pada')}; "
-                              f"остаток даши {_g(jy, 'dasha', 'balance', 'lord')} {_g(jy, 'dasha', 'balance', 'ymd')}")
+                              f"остаток даши {PLANET_RU.get(_g(jy, 'dasha', 'balance', 'lord'), '—')} {_g(jy, 'dasha', 'balance', 'ymd')}")
     py = r["pythagoras"]["working_numbers"]
     out["Квадрат Пифагора (рабочие числа)"] = f"{py['first']}, {py['second']}, {py['third']}, {py['fourth']}"
     py_grid = r["pythagoras"].get("grid")
