@@ -773,7 +773,7 @@ while t.year<2027:
 | Источник | URL | Надёжность |
 |---|---|---|
 | IANA tzdb, файл `europe` (данные и комментарии; цитирует декреты СНК 1917–1921, постановления СМ СССР № 925/1980, № 967/1984, № 227/1989, Кабмина СССР № 20/1991, правительства РФ № 23/1992, № 725/2011, законы 2011, 2014, 2016–2020; украинские постановления № 134, 272/1990, 225/1991, 139/1992) | https://raw.githubusercontent.com/eggert/tz/main/europe | первоисточник-агрегатор (ссылки на документы). До 1970 года — в основном Shanks & Pottenger, ⚠ |
-| IANA tzdb, файл `asia` (Казахстан, Кавказ, Средняя Азия; переход Казахстана на UTC+5 с 01.03.2024) | https://raw.githubusercontent.com/eggert/tz/main/asia | то же |
+| IANA tzdb, файл `asia` (Казахстан, Кавказ, Средняя Азия; переход Казахстана на UTC+5 с 01.03.2024; пересказ постановления Кабмина СССР № 20 от 04.02.1991 и «Известий» № 68 от 20.03.1991 о переводе часов в Средней Азии) | https://raw.githubusercontent.com/eggert/tz/main/asia | то же |
 | IANA tzdb, theory.html (границы применимости, «pre-1970 … unreliable», «LMT offsets should not be considered meaningful») | https://raw.githubusercontent.com/eggert/tz/main/theory.html | первоисточник (документация) |
 | IANA tzdb, NEWS, релиз 2022d (слияние Ужгорода и Запорожья с Киевом) | https://raw.githubusercontent.com/eggert/tz/main/NEWS | первоисточник |
 | tzdata 2026c (системная, используется Python zoneinfo) | `/usr/share/zoneinfo/tzdata.zi` | рабочие данные |
@@ -783,6 +783,8 @@ while t.year<2027:
 | PTB: DST and midsummer DST in Germany until 1979 | https://www.ptb.de/cms/en/ptb/fachabteilungen/abt4/fb-44/ag-441/realisation-of-legal-time-in-germany/dst-and-midsummer-dst-in-germany-until-1979.html | первоисточник (национальный метрологический институт) |
 | R. Gleber, «Die Vereinheitlichung der Zeit im Südwesten», Badische Heimat 2/2003 (Stuttgarter Zeit, MEZ 01.04.1893, Baden 1892) | https://regionalia.blb-karlsruhe.de/files/21761/BLB_Gleber_Vereinheitlichung_Zeit_Suedwesten.pdf | вторичный (краеведческий) |
 | Adoption of the Gregorian calendar — Wikipedia | https://en.wikipedia.org/wiki/Adoption_of_the_Gregorian_calendar | вторичный |
+| Декрет о введении в Российской республике западноевропейского календаря — Википедия (текст декрета, п. 1 и п. 10) | https://ru.wikipedia.org/wiki/Декрет_о_введении_в_Российской_республике_западноевропейского_календаря | вторичный (воспроизводит первоисточник) |
+| Даты рождения по ст. и н. ст. для проверки пересчёта: Пушкин, Толстой, Ленин, Шостакович, Королёв — Википедия | https://ru.wikipedia.org/wiki/Пушкин,_Александр_Сергеевич и др. (URL — в тесте `TestJulianCalendar`) | вторичный |
 | Espenak & Meeus, полиномы ΔT | https://eclipse.gsfc.nasa.gov/SEhelp/deltatpoly2004.html | первоисточник (NASA) |
 | J. Meeus, *Astronomical Algorithms*, 2nd ed. (гл. 7 — JD; гл. 28 — уравнение времени) | — | первоисточник |
 | Swiss Ephemeris (`swe_julday`, `swe_revjul`, `swe_deltat`, `swe_time_equ`) | https://www.astro.com/swisseph/swephprg.htm | калькулятор / первоисточник API |
@@ -794,164 +796,71 @@ while t.year<2027:
 
 ---
 
-## Приложение А. Предлагаемый патч `calculators/common/time.py`
+## Приложение А. Исправления в `calculators/common/time.py` (применены)
 
-Патч проверен на копии репозитория: `test_time.py` даёт 90 passed и 5 XPASS (снять `xfail`). Тесты других модулей, существовавшие на момент проверки, не ломаются.
+Патч из первой версии этого документа применён, отметки `xfail` с тестов сняты, `BirthInput` получил поле `second`. При проверке (см. протокол ниже) добавлены проверка дат и предупреждение для Латвии и Эстонии. Публичный API не изменился: `BirthInput`, `normalize()`, `NormalizedTime`, `julian_day_ut`, `jd_to_utc`, `local_mean_time`, `equation_of_time_minutes`, `true_solar_time`, `fmt_offset`; добавлена `fmt_offset_hms()`.
 
-```diff
---- a/calculators/common/time.py
-+++ b/calculators/common/time.py
-@@ -11,6 +11,7 @@
- """
- from __future__ import annotations
- 
-+import re
- from dataclasses import dataclass, field
- from datetime import date, datetime, time, timedelta, timezone
- from zoneinfo import ZoneInfo
-@@ -36,8 +37,18 @@
-     gender: str | None = None      # "male" / "female"
-     name: str | None = None        # ФИО (для нумерологии)
-     fold: int = 0                  # для неоднозначного времени при переводе часов
-+    calendar: str = "gregorian"    # "gregorian" | "julian" (старый стиль: Россия до 14.02.1918)
-+    julian_date: tuple[int, int, int] | None = None  # исходная дата по ст. ст., если была
- 
-     def __post_init__(self) -> None:
-+        if self.calendar not in ("gregorian", "julian"):
-+            raise ValueError("calendar должен быть 'gregorian' или 'julian'")
-+        if self.calendar == "julian":
-+            # Перевод даты старого стиля в григорианскую (+10…+13 дней в зависимости от века).
-+            jd = swe.julday(self.year, self.month, self.day, 12.0, swe.JUL_CAL)
-+            self.julian_date = (self.year, self.month, self.day)
-+            self.year, self.month, self.day, _ = swe.revjul(jd, swe.GREG_CAL)
-+            self.calendar = "gregorian"   # чтобы dataclasses.replace() не перевёл дату повторно
-         if self.place and (self.lat is None or self.lon is None or self.tz is None):
-             p = resolve_place(self.place)
-             if p:
-@@ -68,20 +79,47 @@
-     warnings: list[str] = field(default_factory=list)
- 
- 
-+_FIXED_RE = re.compile(r"^(?:UTC|GMT)?([+-])(\d{1,2})(?::?(\d{2}))?(?::?(\d{2}))?$")
-+
-+
- def _parse_fixed_offset(tz: str) -> timedelta | None:
--    s = tz.strip().upper().replace("GMT", "UTC")
--    if not s.startswith("UTC"):
--        return None
--    rest = s[3:]
--    if not rest:
-+    """'UTC', 'UTC+3', 'UTC+03:00', 'UTC+0300', 'GMT-3:30', '+05:45' -> timedelta; иначе None.
-+
-+    Строки, похожие на смещение, но некорректные (например 'UTC+5:3' или 'UTC+99'), вызывают ValueError,
-+    а не молча превращаются в сотни часов.
-+    """
-+    s = tz.strip().upper().replace(" ", "")
-+    if s in ("UTC", "GMT", "Z", "UT"):
-         return timedelta(0)
--    sign = -1 if rest[0] == "-" else 1
--    rest = rest.lstrip("+-")
--    if ":" in rest:
--        h, m = rest.split(":")
--    else:
--        h, m = rest, "0"
--    return sign * timedelta(hours=int(h), minutes=int(m))
-+    if not (s.startswith(("UTC", "GMT")) or s[:1] in "+-"):
-+        return None
-+    m = _FIXED_RE.match(s)
-+    if not m:
-+        raise ValueError(f"Не удалось разобрать смещение {tz!r}: ожидается вид UTC+03:00, UTC+0300 или UTC+3")
-+    sign = -1 if m.group(1) == "-" else 1
-+    h, mi, se = int(m.group(2)), int(m.group(3) or 0), int(m.group(4) or 0)
-+    if mi >= 60 or se >= 60 or h * 3600 + mi * 60 + se > 14 * 3600:
-+        raise ValueError(f"Смещение {tz!r} вне диапазона UTC−14…UTC+14")
-+    return sign * timedelta(hours=h, minutes=mi, seconds=se)
-+
-+
-+# Зоны бывшей Российской империи. До перехода на поясное время (1919–1924) tzdb хранит для
-+# всей зоны среднее время ГОРОДА-эталона (MMT Москвы, KMT Киева, TBMT Тифлиса …), хотя
-+# единого законного времени не было и в других городах шло своё местное время. Поэтому
-+# для этих аббревиатур подставляем LMT по долготе места рождения (+ летний сдвиг 1917–1919).
-+_RU_EMPIRE_MEAN_TIME: dict[str, set[str]] = {
-+    "Europe/Moscow": {"MMT", "MST", "MDST"},
-+    "Europe/Kyiv": {"KMT"}, "Europe/Kiev": {"KMT"},
-+    "Europe/Minsk": {"MMT"},
-+    "Europe/Simferopol": {"SMT"},
-+    "Europe/Chisinau": {"CMT"},
-+    "Europe/Riga": {"RMT", "LST"},
-+    "Europe/Tallinn": {"TMT"},
-+    "Asia/Tbilisi": {"TBMT"},
-+    "Asia/Irkutsk": {"IMT"},
-+}
-+
-+_DOUBLE_SUMMER = {"CEMT", "BDST", "MDST", "WEMT"}
- 
- 
- def normalize(b: BirthInput) -> NormalizedTime:
-@@ -107,16 +145,32 @@
-         aware = local.replace(tzinfo=z, fold=b.fold)
-         offset = aware.utcoffset()
-         source = "tzdb"
--        if aware.tzname() == "LMT":
-+        abbr = aware.tzname() or ""
-+        dst = aware.dst() or timedelta(0)
-+        mean_time_city = False
-+        if abbr in _RU_EMPIRE_MEAN_TIME.get(b.tz, set()):
-+            # подставляем, только если база tzdb (без летнего сдвига) = LMT города-эталона (±60 с);
-+            # Москва 1916-07-03…1919-07-01 (2:31:19 = Петроград+30 мин) остаётся как в tzdb
-+            zone_lmt = datetime(1800, 1, 1, tzinfo=z).utcoffset()
-+            base = aware.utcoffset() - (dst if dst > timedelta(0) else timedelta(0))
-+            mean_time_city = abs((base - zone_lmt).total_seconds()) <= 60
-+            if not mean_time_city:
-+                warnings.append(
-+                    f"Дореформенное время {abbr} по tzdb относится к городу-эталону зоны; "
-+                    "для другого населённого пункта смещение ⚠ не подтверждено."
-+                )
-+        if abbr == "LMT" or mean_time_city:
-             if b.lon is not None:
--                offset = timedelta(hours=b.lon / 15.0)
-+                # летний сдвиг 1917–1919 (MST/MDST/LST) сохраняем, базу заменяем на LMT места
-+                offset = timedelta(hours=b.lon / 15.0) + (dst if dst > timedelta(0) else timedelta(0))
-                 source = "LMT(longitude)"
-                 warnings.append(
-                     "На дату рождения поясное время ещё не введено: использовано местное "
--                    "среднее время по долготе места рождения."
-+                    "среднее время по долготе места рождения"
-+                    + (f" (tzdb: {abbr} {fmt_offset(aware.utcoffset().total_seconds() / 3600)})." if mean_time_city else ".")
-                 )
-             else:
--                warnings.append("Дата до введения поясного времени, долгота неизвестна: LMT столицы зоны.")
-+                warnings.append(f"Дата до введения поясного времени, долгота неизвестна: LMT столицы зоны ({abbr}).")
-         # проверка на несуществующее/неоднозначное время
-         other = local.replace(tzinfo=z, fold=1 - b.fold)
-         if other.utcoffset() != aware.utcoffset():
-@@ -125,8 +179,14 @@
-                 warnings.append("Указанное время не существовало (весенний перевод часов) — уточните.")
-             else:
-                 warnings.append("Указанное время неоднозначно (осенний перевод часов): взят fold=%d." % b.fold)
--        if aware.dst() and aware.dst() != timedelta(0):
--            warnings.append(f"Действовало летнее время (DST {aware.dst()}).")
-+        if dst > timedelta(0):
-+            # zoneinfo.dst() выводится эвристически: для двойного летнего времени берём 2 ч по аббревиатуре
-+            hours = 2 if abbr in _DOUBLE_SUMMER else dst.total_seconds() / 3600
-+            kind = "двойное летнее" if abbr in _DOUBLE_SUMMER else "летнее"
-+            warnings.append(
-+                f"Действовало {kind} время ({abbr}, {fmt_offset(aware.utcoffset().total_seconds() / 3600)}): "
-+                f"+{hours:g} ч к поясному."
-+            )
- 
-     utc = (local - offset).replace(tzinfo=timezone.utc)
-     jd = julian_day_ut(utc)
-```
+Что теперь делает модуль:
+1. **Фиксированное смещение.** `tz` принимает `UTC`, `UTC+3`, `UTC+03:00`, `UTC+0300`, `GMT-3:30`, `+05:45`, `UTC+01:36:34`. Строка, похожая на смещение, но некорректная (`UTC+5:3`, `UTC+99`), даёт `ValueError`.
+2. **Дореформенное время городов Российской империи.** Для MMT, KMT, TBMT, RMT/LST, TMT, SMT, CMT, IMT, когда база tzdb совпадает с LMT города-эталона (±60 с), подставляется LMT места рождения λ/15 с сохранением летнего сдвига 1917–1919. `offset_source = "LMT(longitude)"`, в предупреждении указано исходное смещение tzdb. Москва 03.07.1916 – 01.07.1919 остаётся как в tzdb, с предупреждением. Для Латвии с 18.11.1918 и Эстонии с 01.07.1919 добавляется ⚠ с вариантом по времени столицы.
+3. **Летнее время.** Предупреждение выдаётся только при положительном DST: «Действовало летнее время (MSD, UTC+04:00): +1 ч к поясному». Для CEMT, BDST, MDST, WEMT: «двойное летнее … +2 ч».
+4. **Старый стиль.** `BirthInput(..., calendar="julian")` (регистр не важен) переводит дату в григорианскую, исходную кладёт в `julian_date`, после перевода ставит `calendar="gregorian"`, чтобы `dataclasses.replace()` не сдвинул дату второй раз. Несуществующая дата ст. ст. даёт `ValueError`.
+5. **Проверка даты.** Несуществующая григорианская дата (30.02) отвергается уже в `BirthInput`, а не только в `normalize()`.
+6. **Секунды.** `BirthInput.second` (по умолчанию 0) учитывается в `normalize()`.
 
-Результат патча на контрольных датах:
+Поведение на контрольных датах (проверено `.venv/bin/python`, tzdata 2026c):
 
-| Вход | Сейчас | С патчем |
+| Вход | До исправления | Сейчас |
 |---|---|---|
 | Петербург, 01.01.1900, 12:00 | +2:30:17 (MMT Москвы) | +2:01:20 (LMT места), предупреждение с исходным MMT |
-| Харьков (Europe/Kyiv), 01.01.1900 | +2:02:04 (KMT Киева) | +2:24:55 (LMT Харькова) |
+| Харьков (Europe/Kyiv, 36.2304° E), 01.01.1900 | +2:02:04 (KMT Киева) | +2:24:55 (LMT Харькова) |
 | Рига, 01.06.1918 (LST) | +2:36:34 | +2:36:25 (LMT Риги по λ = 24.1052 + 1 ч) |
+| Даугавпилс (Europe/Riga, 26.53° E), 01.06.1922 | +1:36:34 (RMT) | +1:46:07 (LMT места) и ⚠ с вариантом `UTC+01:36:34` |
 | Кишинёв, 1925 (BMT, законное румынское) | +1:44:24 | без изменений |
 | Москва, 1917–1919 (MST/MDST) | tzdb | tzdb + предупреждение ⚠ |
 | `UTC+0530` | +530 ч | +5:30 |
 | Киев 1942 / Берлин 1945 | «DST -1 day, 23:00:00» / «DST 1:00:00» | без DST-строки / «двойное летнее … +2 ч» |
+| `BirthInput(1900, 2, 30, calendar="julian")` | 14.03.1900 без ошибки | `ValueError` |
+
+---
+
+## Протокол проверки
+
+Проверка 2026-10-14 (вторая волна, состязательная). Инструменты: исходники tzdb (`europe`, `asia`, `NEWS`, `theory.html` из https://raw.githubusercontent.com/eggert/tz/main/), системная tzdata 2026c через `zoneinfo`, pyswisseph 2.10.03, независимый пересчёт на Python без `normalize()` и без Swiss Ephemeris (Meeus гл. 7 и 28, полиномы NASA, NOAA).
+
+**1. Таблица летнего времени СССР/РФ 1981–2011 (табл. 4.1, 4.2).** Все переходы Europe/Moscow 1916–2014 выгружены из tzdata и сверены со строками `Rule Russia` и `Zone Europe/Moscow` в `europe`. Затем сверены с таблицей astro21.ru (загружена 2026-10-14). Все 31 год совпадают по дате и часу. Неверных строк нет. Таблица целиком закреплена тестом `test_full_dst_table_1981_2010`. Подтверждены:
+- 21.06.1930 00:00 — декретный час: tzdb; ru.wikipedia «Декретное время» (дословно); en.wikipedia «Moscow Time» (постановление от 16.06.1930). Номер «107» для постановления 09.02.1931 не сверен, помечен ⚠.
+- 31.03.1991 без перевода стрелок: tzdb и astro21.
+- 29.09.1991 → UTC+2; 19.01.1992 02:00 → UTC+3: tzdb, astro21, ru.wikipedia, en.wikipedia.
+- 27.03.2011 → «вечное летнее»; 26.10.2014 02:00 → UTC+3: tzdb, en.wikipedia, astro21.
+- Региональные строки табл. 4.4–4.5 сверены с Zone-строками tzdb: Самара, Ульяновск, Саратов, Волгоград, Астрахань, Киров, Калининград, Сибирь, Дальний Восток, Украина, Крым, Беларусь, Молдова, Прибалтика, Кавказ, Средняя Азия, Казахстан. Подтверждены по смещениям.
+
+Неточности, исправлены:
+- Анадырь: не было указано, что в 1930–1982 годах там было +13.
+- Эстония: «1999–2002 без лета» → летнего времени не было с 31.10.1999 по 31.03.2002 (летом 1999 года оно было).
+- Азербайджан: летнее время с 1996 года, а не с 1997-го.
+- Грузия 1992–1997: детали уточнены.
+
+Найдено новое:
+- ⚠ Туркмения 1991/92: tzdb (Shanks) расходится с ru.wikipedia и «Известиями» (через комментарий tzdb `asia`).
+- ⚠ План 1991 года для Средней Азии и Казахстана расходится с данными tzdb. Оба пункта добавлены в §3.3 с правилом «считать обе версии».
+- Вторичное подтверждение Беларуси 1990 года (ru.wikipedia).
+- Риск для Латвии 1918–1926 и Эстонии 1919–1921 (время столицы могло быть общенациональным) → предупреждение в коде.
+
+**2. Старый стиль.** Перевод 31.01.1918 → 14.02.1918 подтверждён en.wikipedia и текстом декрета (ru.wikipedia, п. 1 и п. 10; декрет принят 24.01, подписан 26.01.1918). Границы Δ проверены на 1582, 1700, 1800, 1900 и 2100. В таблицу §3.1 добавлена колонка н. ст.: Δ = 12 действует для н. ст. 12.03.1800 – 12.03.1900, а не с 13.03.1800. `BirthInput(calendar="julian")` проверен на датах из ru.wikipedia: Пушкин 26.05.1799 → 06.06.1799, Толстой 28.08.1828 → 09.09.1828, Ленин 10.04.1870 → 22.04.1870, Шостакович 12.09.1906 → 25.09.1906, Королёв 30.12.1906 → 12.01.1907. Всё ✔. **Дефект:** несуществующая дата ст. ст. молча перекатывалась (30.02.1900 → 14.03.1900). Исправлено, есть тест.
+
+**3. Независимый пересчёт T1–T4 и примеров 5–8** (UTC, JD по Meeus вручную, ΔT по NASA, LMT, E по формуле Смарта, ИСВ). Совпадают JD всех примеров (до 1e-6), ΔT полиномом (57.14, 53.81, 64.55, −4.82 с), LMT, ИСВ (расхождение ≤ 1 с из-за разницы E Смарта и Swiss Ephemeris ≤ 0.02 мин). Asc/MC T1–T4 и примеров 7 и 9 пересчитаны через `common/ephemeris` и совпадают. Таблица 4.9 (E на 2001 г.) совпала со Swiss Ephemeris во всех 48 клетках. Дефекты, исправлены:
+- Пример 1, п. 9: перепутаны знаки ошибки в 1 час. При UTC+3 вместо +4 Asc = 25°23′ Девы, а не 5°25′.
+- То же в §6.2: было «Asc −10°», правильно «+10°».
+- §3.7: в примере NOAA для високосного 1984 года взят делитель 365 вместо 366 (−13.66 → −13.65 мин). Добавлена формула Смарта.
+- §3.5: добавлены полиномы ΔT для 1900–1961 (сверены с NASA). Добавлено примечание, что `swe.deltat` зависит от подключённых файлов эфемерид (T4: −2.86 с с ними, −2.93 с без них).
+
+**4. Опрос и неизвестное время.** В чек-лист §2.1 добавлен вопрос 4б (по какому времени жили в «проблемных» регионах и периодах). В §2.3 добавлена таблица «время известно с точностью ±N мин». Её скорости (Asc, Луна, Солнце) посчитаны по Swiss Ephemeris. Таблица «что недействительно без времени» проверена и оставлена.
+
+**Источники, открытые при проверке:** tzdb europe, asia, NEWS (2022d), theory.html ✔ — цитаты найдены дословно; astro21.ru ✔; ru.wikipedia «Декретное время» ✔; en.wikipedia «Moscow Time» ✔ и «Adoption of the Gregorian calendar» ✔; NASA deltatpoly2004 ✔; PTB ✔ (таблица Германии совпадает; CEMT 1945 у PTB помечен «?», у Munzinger 31.05–23.09.1945); astrotheme (Einstein, Asc 11°38′ Рака, AA) ✔. Не открывались: Astro-Databank и astro-seek (ранее закрыты проверкой браузера), справочник Зайцева и Куталёва, Бялокоз, timeanddate (это производная tzdb, не независимый источник).
+
+**Остающиеся риски:**
+- История до 1970 года вне городов-эталонов tzdb, включая регионы-«нарушители» 1981/82, оккупированные области РСФСР, Закарпатье и Запорожье до 1991 года.
+- Практика 1991–1992 годов в Поволжье, Туркмении и Средней Азии.
+- Законность «времени столицы» в Латвии и Эстонии до 1926 года и пермского времени 1916–1919 годов.
+- `NormalizedTime` всё ещё не отдаёт ΔT, LMT, ИСВ и вторую версию при переводе часов (§6.4 п. 8): агент досчитывает их сам.
