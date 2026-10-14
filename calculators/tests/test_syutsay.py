@@ -330,6 +330,21 @@ def test_given_name_parsing():
     assert extract_given_name("Эйнштейн Альберт / Albert Einstein")[0] == "Albert"
     assert extract_given_name("Петров Дмитрий")[0] == "Дмитрий"
     assert extract_given_name("Мария")[0] == "Мария"
+    # Два слова «Имя Фамилия»: имя на -ина/-ин или короткое не принимается за фамилию
+    # (ошибка, найденная проверкой: «Марина Иванова» → «Иванова», «Лев Толстой» → «Толстой»).
+    for full, given in [("Марина Иванова", "Марина"), ("Иванова Марина", "Марина"),
+                        ("Екатерина Смирнова", "Екатерина"), ("Константин Петров", "Константин"),
+                        ("Лев Толстой", "Лев"), ("Толстой Лев", "Лев"),
+                        ("Сергей Есенин", "Сергей"), ("Есенин Сергей", "Сергей")]:
+        assert extract_given_name(full)[0] == given, full
+
+
+def test_heuristic_name_parse_warns():
+    r = calculate(BirthInput(1990, 5, 15, name="Марина Иванова"), target_year=2026)
+    assert r["name"]["name"] == "Марина"
+    assert any("эвристик" in w for w in r["warnings"])
+    r = calculate(T1, target_year=2026)                     # ФИО с отчеством — без предупреждения
+    assert not any("эвристик" in w for w in r["warnings"])
 
 
 def test_invalid_date():

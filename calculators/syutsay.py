@@ -235,9 +235,27 @@ RELATION_RU = {"good": "благоприятно", "difficult": "сложно", 
                "not_described": "школа не описывает"}
 
 _PATRONYMIC_RE = re.compile(r"(ОВИЧ|ЕВИЧ|ЬИЧ|ИЧ|ОВНА|ЕВНА|ИЧНА|ИНИЧНА|ОГЛЫ|КЫЗЫ|УЛЫ)$")
-_RU_SURNAME_RE = re.compile(
-    r"(ОВ|ЕВ|ЁВ|ИН|ЫН|ОВА|ЕВА|ЁВА|ИНА|ЫНА|СКИЙ|ЦКИЙ|СКАЯ|ЦКАЯ|ОЙ|ИХ|ЫХ|ЕНКО|УК|ЮК|ЧУК|ЕЦ|ЕЙН|ШТЕЙН)$"
-)
+#: «Сильные» окончания фамилий (у личных имён длиной от 5 букв почти не встречаются).
+_RU_SURNAME_STRONG_RE = re.compile(r"(ОВ|ЕВ|ЁВ|ОВА|ЕВА|ЁВА|СКИЙ|ЦКИЙ|СКАЯ|ЦКАЯ|ЕНКО|ШТЕЙН)$")
+#: «Слабые» окончания: бывают и у фамилий (Пушкин, Толстой), и у имён (Марина, Константин).
+_RU_SURNAME_WEAK_RE = re.compile(r"(ИН|ЫН|ИНА|ЫНА|ОЙ|ИХ|ЫХ|УК|ЮК|ЧУК|ЕЦ|ЕЙН)$")
+#: Частые личные имена с «фамильным» окончанием — не считаются фамилией.
+_RU_GIVEN_NAMES_LIKE_SURNAME = frozenset({
+    "МАРИНА", "ИРИНА", "ПОЛИНА", "ЕКАТЕРИНА", "КРИСТИНА", "АЛИНА", "ВАЛЕНТИНА", "ГАЛИНА",
+    "НИНА", "КАРИНА", "АРИНА", "РЕГИНА", "АНГЕЛИНА", "КАРОЛИНА", "ДИНА", "ЯНИНА", "ЗАРИНА",
+    "КОНСТАНТИН", "ВАЛЕНТИН", "ВЕНИАМИН", "ЛЕВ", "ЯКОВ", "ЕВА",
+})
+
+
+def _surname_score(token_upper: str) -> int:
+    """Насколько слово похоже на русскую фамилию: 2 — явно, 1 — возможно, 0 — нет."""
+    if token_upper in _RU_GIVEN_NAMES_LIKE_SURNAME or len(token_upper) < 5:
+        return 0
+    if _RU_SURNAME_STRONG_RE.search(token_upper):
+        return 2
+    if _RU_SURNAME_WEAK_RE.search(token_upper):
+        return 1
+    return 0
 
 # ---------------------------------------------------------------------------
 # Арифметика
@@ -403,7 +421,12 @@ def transliterate_icao(text: str) -> str:
 
 
 def extract_given_name(full_name: str) -> tuple[str, str]:
-    """Выделить личное имя из ФИО. Возвращает (имя, как определено)."""
+    """Выделить личное имя из ФИО. Возвращает (имя, как определено).
+
+    Три слова с отчеством разбираются надёжно. Для двух слов порядок угадывается по окончаниям
+    фамилий (Иванова, Пушкин) и списку имён вроде «Марина», «Константин»; при равенстве признаков
+    способ помечается «⚠», а calculate() добавляет предупреждение.
+    """
     s = full_name.strip()
     if "/" in s:
         parts = [p.strip() for p in s.split("/") if p.strip()]
@@ -421,9 +444,14 @@ def extract_given_name(full_name: str) -> tuple[str, str]:
             return tokens[1], "Фамилия Имя Отчество"
         if len(tokens) >= 3 and _PATRONYMIC_RE.search(up[1]):
             return tokens[0], "Имя Отчество Фамилия"
-        if _RU_SURNAME_RE.search(up[0]):
+        s0, s1 = _surname_score(up[0]), _surname_score(up[1])
+        if s0 > s1:
             return tokens[1], "Фамилия Имя"
-        return tokens[0], "Имя Фамилия (по умолчанию)"
+        if s1 > s0:
+            return tokens[0], "Имя Фамилия"
+        if s0 == 0:
+            return tokens[0], "Имя Фамилия (по умолчанию ⚠)"
+        return tokens[1], "Фамилия Имя (по умолчанию ⚠)"
     return tokens[0], "латиница: Имя Фамилия"
 
 
@@ -573,7 +601,8 @@ def calculate(b: BirthInput, **options) -> dict:
         "mission_reveals": {"ages": [22, 33], "years": [y + 22, y + 33],
                             "source": "t-j.ru: миссия раскрывается с 22 до 33 лет"},
         "mission_full": {"age": 33, "year": y + 33,
-                         "source": "zhanatglobal.com, syutsay.ru: миссия полностью проявляется к 33 годам"},
+                         "source": "syutsay.ru: «миссия полностью проявляется к 33 годам»; zhanatglobal.com: "
+                                   "число миссии «начинает оказывать значительное влияние» после 33 лет"},
     }
 
     result: dict[str, Any] = {
@@ -622,6 +651,9 @@ def calculate(b: BirthInput, **options) -> dict:
         nn = name_number(str(given))
         nn["parsed_as"] = how
         result["name"] = nn
+        if how not in ("опция", "одно слово", "Фамилия Имя Отчество", "Имя Отчество Фамилия"):
+            warnings.append(f"Личное имя для числа имени выбрано по эвристике ({how}): «{given}». "
+                            "Если это не имя, передайте --opt given_name=Имя.")
         steps.append(f"Число имени: {nn['latin']} → "
                      f"{_sum_str([v for _, v in nn['letters']], nn['chain'])} ({nn['meaning']})")
         if re.search(r"[А-Яа-яЁё]", str(given)):
