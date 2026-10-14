@@ -395,7 +395,7 @@ def test_progressed_lunation_boele(who, day, phase):
 
 
 @pytest.mark.parametrize("who,day,phase_article,days_to_boundary", [
-    ("lennon", "1961-11-15", "new", 33),            # Эпштейн впервые увидел группу 09.11.1961
+    ("lennon", "1961-11-15", "new", 33),            # «Brian Epstein met the band in Nov. 1961» (день взят 15.11)
     ("lennon", "1968-11-08", "first_quarter", 25),  # развод с Синтией
 ])
 def test_progressed_lunation_boele_boundary(who, day, phase_article, days_to_boundary):
