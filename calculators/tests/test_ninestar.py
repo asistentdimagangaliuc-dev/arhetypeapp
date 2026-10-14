@@ -141,12 +141,19 @@ def test_year_star_9starki_com(year, star):
 
 
 # https://jobcannon.io/blog/how-nine-star-ki-is-calculated : 15.03.1989 → 2; 22.01.2003 → 7 (год 2002);
-# 04.02.2000 → 9; 1985 → 6, январь 1985 → 7.
-@pytest.mark.parametrize("d,star", [((1989, 3, 15), 2), ((2003, 1, 22), 7), ((2000, 2, 4), 9),
-                                    ((1985, 6, 1), 6), ((1985, 1, 15), 7)])
+# 04.02.2000 → 9. (Проверка 2-й волны: примеров «1985» на странице нет — убраны.)
+@pytest.mark.parametrize("d,star", [((1989, 3, 15), 2), ((2003, 1, 22), 7), ((2000, 2, 4), 9)])
 def test_year_star_jobcannon_examples(d, star):
     r = calculate(BirthInput(*d, tz="Asia/Tokyo"), day_star_method=None)
     assert nsk(r)["principal"]["number"] == star
+
+
+# Та же страница: «A birth on January 15, 1995 is treated as belonging to 1994's cycle …
+# A birth on February 5, 1995 is treated as belonging to 1995's cycle» (звёзды там не названы).
+@pytest.mark.parametrize("d,solar_year", [((1995, 1, 15), 1994), ((1995, 2, 5), 1995)])
+def test_solar_year_jobcannon_1995(d, solar_year):
+    r = calculate(BirthInput(*d, tz="Asia/Tokyo"), day_star_method=None)
+    assert nsk(r)["solar_year"] == solar_year
 
 
 def test_year_star_formula_equivalences():
@@ -308,6 +315,36 @@ def test_boundary_1985_same_moment_different_local_dates():
     assert nsk(ny_after)["principal"]["number"] == 6
 
 
+@pytest.mark.parametrize("hh,mm,year,star", [(0, 10, 1983, 8), (0, 30, 1984, 7)])
+def test_boundary_feb5_tokyo_1984(hh, mm, year, star):
+    # Личунь 1984 = 05.02 00:18:44 JST: 5 февраля до и после момента (проверка 2-й волны, расчёт вручную).
+    r = calculate(BirthInput(1984, 2, 5, hh, mm, tz="Asia/Tokyo", gender="male"), day_star_method=None)
+    assert nsk(r)["solar_year"] == year and nsk(r)["principal"]["number"] == star
+    assert r["gua"]["number"] == star                      # мужское Гуа = звезда года (8 и 7, замены 5 нет)
+    assert r["zodiac"]["ganzhi"] == "甲子"                  # китайский НГ 02.02.1984 уже прошёл
+
+
+def test_1800s_lichun_day_utc():
+    # Личунь 1868: 04.02 11:45:32 UT (Swiss Ephemeris). До момента → 1867 (丁卯, звезда 7); после → 1868 (戊辰, 6).
+    before = calculate(BirthInput(1868, 2, 4, 11, 0, tz="UTC", gender="female"), day_star_method=None)
+    after = calculate(BirthInput(1868, 2, 4, 12, 0, tz="UTC", gender="female"), day_star_method=None)
+    assert (nsk(before)["principal"]["number"], before["zodiac_solar"]["ganzhi"]) == (7, "丁卯")
+    assert (nsk(after)["principal"]["number"], after["zodiac_solar"]["ganzhi"]) == (6, "戊辰")
+    assert before["gua"]["number"] == 8 and after["gua"]["number"] == 9   # ж: (1867+4) mod 9 = 8; (1868+4) mod 9 = 0 → 9
+    assert nsk(after)["notation"] == "6.5.6"
+
+
+def test_cross_module_gua_kua_and_bazi_year():
+    """Гуа = Куа модуля 12 (tarot_loshu), год по Личуню = столп года модуля 01 (bazi), если время известно."""
+    from calculators import bazi, tarot_loshu
+    for hh, g in ((23, "male"), (10, "male"), (20, "male"), (10, "female")):
+        b = BirthInput(1984, 2, 4, hh, 30 if hh == 23 else 0, place="Москва", gender=g)
+        r = calculate(b, day_star_method=None)
+        kua = tarot_loshu.calculate(b)["loshu"]["kua"]
+        assert (kua["number"], kua["year_used"]) == (r["gua"]["number"], r["gua"]["year_used"])
+        assert bazi.calculate(b)["pillars"]["year"]["ganzhi"] == r["zodiac_solar"]["ganzhi"]
+
+
 def test_between_lichun_and_cny_1985():
     # 10.02.1985: Личунь (04.02) прошёл, китайский НГ (20.02) — нет.
     r = calculate(BirthInput(1985, 2, 10, 12, 0, place="Москва", gender="male"))
@@ -377,6 +414,17 @@ def test_eight_mansions_table_self_check():
     # https://www.skillon.com/kua-number-calculator.cfm — таблица для Kua 8
     assert GUA_DIRECTIONS[8] == {"jue_ming": "SE", "huo_hai": "S", "sheng_qi": "SW", "liu_sha": "E",
                                  "yan_nian": "W", "fu_wei": "NE", "wu_gui": "N", "tian_yi": "NW"}
+    # Там же, Kua 7 (POST 01.06.1984, Male). Проверка 2-й волны: все 8 таблиц skillon совпадают с GUA_DIRECTIONS.
+    assert GUA_DIRECTIONS[7] == {"sheng_qi": "NW", "tian_yi": "SW", "yan_nian": "NE", "fu_wei": "W",
+                                 "huo_hai": "N", "wu_gui": "S", "liu_sha": "SE", "jue_ming": "E"}
+    # Взаимность пар (одна и та же пара триграмм в обе стороны): 生气, 天医, 延年, 祸害, 五鬼, 六煞, 绝命.
+    # Ловит перестановку 六煞/绝命 между В и ЮВ, встречающуюся в некоторых веб-таблицах.
+    dir2gua = {d: g for g, d in {1: "N", 2: "SW", 3: "E", 4: "SE", 6: "NW", 7: "W", 8: "NE", 9: "S"}.items()}
+    for g, t in GUA_DIRECTIONS.items():
+        for k, d in t.items():
+            if k != "fu_wei":
+                assert GUA_DIRECTIONS[dir2gua[d]][k] == {1: "N", 2: "SW", 3: "E", 4: "SE", 6: "NW", 7: "W",
+                                                        8: "NE", 9: "S"}[g], (g, k)
 
 
 def test_no_gender_gives_both_gua():
@@ -424,6 +472,41 @@ def test_zodiac_cycle_index():
 ])
 def test_day_star_ja_leap_vs_luft(d, star):
     assert day_star(date.fromisoformat(d), "ja_leap")["number"] == star
+
+
+def _leap_positions(method: str) -> list[str]:
+    """Положения «閏» 1873–2100 в обозначениях ja.wikipedia: «<год солнцестояния>夏/冬»."""
+    out = []
+    for y in range(1873, 2101):
+        for kind, lab in (("summer", "夏"), ("winter", "冬")):
+            sol = (jd_to_utc(solstice(y, kind)) + timedelta(hours=9)).date()   # дата по JST
+            # Сегмент 閏 длится 30 дней и лежит в пределах ±31 дня от солнцестояния: шаг 10 дней его не пропустит.
+            if any(day_star(sol + timedelta(days=k), method)["leap_segment"] for k in range(-35, 36, 10)):
+                out.append(f"{y}{lab}")
+    return sorted(set(out))
+
+
+def test_day_star_leap_list_vs_ja_wikipedia():
+    """ja.wikipedia «九星», раздел 日家九星: базовый список «閏» 1882–2100 (солнцестояние 癸巳 → следующий 甲子)
+    и альтернативы в скобках. https://ja.wikipedia.org/wiki/九星"""
+    wiki_base = ["1882冬", "1894夏", "1905冬", "1916冬", "1928夏", "1939冬", "1951夏", "1962冬", "1974夏", "1985冬",
+                 "1997夏", "2008冬", "2019冬", "2031冬", "2042冬", "2054夏", "2065冬", "2077夏", "2088冬", "2100夏"]
+    assert _leap_positions("ja_leap_wiki") == sorted(wiki_base)
+    # Вариант по умолчанию (癸巳 → предыдущий 甲子, как luft.co.jp) совпадает со «скобочными» альтернативами
+    # ja.wikipedia в 1917 夏, 1928 冬, 1951 冬, 2020 夏, 2054 冬, в остальных годах — с базовым списком.
+    alt = {"1916冬": "1917夏", "1928夏": "1928冬", "1951夏": "1951冬", "2019冬": "2020夏", "2054夏": "2054冬"}
+    assert _leap_positions("ja_leap") == sorted(alt.get(x, x) for x in wiki_base)
+
+
+def test_day_star_school_window_warning():
+    # Зимнее солнцестояние 22.12.2019 (JST) — день 癸巳. ja_leap: Ян-дунь с 甲子 23.11.2019, 15.01.2020 = 53-й день
+    # → 1 + 53 = 54 → 9. ja_leap_wiki: Инь-дунь 27.05.2019–22.01.2020 (240 дн.), 閏 с 甲午 23.12.2019 со звезды 7
+    # по возрастанию → 15.01.2020 = 7 + 23 = 30 → 3. Ручной расчёт проверки 2-й волны.
+    r = calculate(BirthInput(2020, 1, 15, place="Москва"))
+    assert nsk(r)["day"]["number"] == 9
+    assert nsk(r)["day"]["alt_other_school"] == {"method": "ja_leap_wiki", "number": 3}
+    assert any("школы расходятся" in w for w in r["warnings"])
+    assert "alt_other_school" not in nsk(calculate(BirthInput(1990, 5, 15, place="Москва")))["day"]
 
 
 def test_day_star_ja_leap_rule_on_jiazi_solstice():

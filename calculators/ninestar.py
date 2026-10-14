@@ -39,7 +39,7 @@ STARS: dict[int, dict] = {
         "color": "чёрный", "trigram": "☷ 坤 Кунь (Земля)", "trigram_key": "kun", "direction": "Юго-запад", "dir": "SW",
         "family": "мать", "xuan_kong": "巨门 Цзюй Мэнь", "trigram_yin_yang": "инь"},
     3: {"ja": "三碧木星", "ru": "Изумрудное (ярко-зелёное) Дерево", "en": "3 Jade Wood", "element": "Дерево",
-        "element_en": "wood", "color": "изумрудный (碧)", "trigram": "☳ 震 Чжэнь (Гром)", "trigram_key": "zhen",
+        "element_en": "wood", "color": "сине-зелёный (碧; ja.wikipedia: 青)", "trigram": "☳ 震 Чжэнь (Гром)", "trigram_key": "zhen",
         "direction": "Восток", "dir": "E", "family": "старший сын", "xuan_kong": "禄存 Лу Цунь", "trigram_yin_yang": "ян"},
     4: {"ja": "四緑木星", "ru": "Зелёное Дерево", "en": "4 Green Wood", "element": "Дерево", "element_en": "wood",
         "color": "зелёный", "trigram": "☴ 巽 Сюнь (Ветер)", "trigram_key": "xun", "direction": "Юго-восток", "dir": "SE",
@@ -384,10 +384,19 @@ def ganzhi_name(i: int) -> str:
 # Звезда дня (日家九星)
 # ---------------------------------------------------------------------------
 
-def _switch_jiazi(sol_date: date) -> date:
-    """День 甲子, ближайший к дате солнцестояния (индекс ≤ 29 → предыдущий, иначе следующий)."""
+def _switch_jiazi(sol_date: date, guisi_later: bool = False) -> date:
+    """День 甲子, ближайший к дате солнцестояния.
+
+    Индекс дня солнцестояния ≤ 29 → предыдущий 甲子 (или сам день), иначе следующий.
+    guisi_later=True: солнцестояние в день 癸巳 (индекс 29) относится к СЛЕДУЮЩЕМУ 甲子 — так
+    построен базовый список «閏» в ja.wikipedia «九星» (там прямо сказано, что школы расходятся).
+    """
     i = day_ganzhi_index(sol_date)
-    return sol_date - timedelta(days=i) if i <= 29 else sol_date + timedelta(days=60 - i)
+    limit = 28 if guisi_later else 29
+    return sol_date - timedelta(days=i) if i <= limit else sol_date + timedelta(days=60 - i)
+
+
+DAY_STAR_METHODS = ("ja_leap", "ja_leap_wiki", "nearest_no_leap")
 
 
 def day_star(d: date, method: str = "ja_leap", almanac_tz: str | None = None) -> dict:
@@ -398,27 +407,31 @@ def day_star(d: date, method: str = "ja_leap", almanac_tz: str | None = None) ->
         к зимнему солнцестоянию, звезда 1 по возрастанию; Инь-дунь (陰遁) с 甲子, ближайшего к
         летнему, звезда 9 по убыванию. Если между переключениями 240 дней, последние 60 — «閏»:
         в день 甲午 (210-й) начинается следующий дунь со звезды 7 (Ян) или 3 (Инь).
-      * 'nearest_no_leap' — то же без «閏» (так считает lunar-python `getDayNineStar`).
-    almanac_tz — пояс, в котором берётся дата солнцестояния ('ja_leap' → UTC+9 (JST),
+        Солнцестояние в день 癸巳 → предыдущий 甲子 (как luft.co.jp).
+      * 'ja_leap_wiki' — то же, но солнцестояние в день 癸巳 → следующий 甲子; воспроизводит
+        базовый список «閏» ja.wikipedia (1916 冬, 1928 夏, 1951 夏, 2019 冬, 2054 夏 …).
+      * 'nearest_no_leap' — без «閏» (так считает lunar-python `getDayNineStar`).
+    almanac_tz — пояс, в котором берётся дата солнцестояния (японские варианты → UTC+9 (JST),
     'nearest_no_leap' → UTC+8 (как lunar-python) по умолчанию).
     """
-    if method not in ("ja_leap", "nearest_no_leap"):
-        raise ValueError("method: 'ja_leap' или 'nearest_no_leap'")
+    if method not in DAY_STAR_METHODS:
+        raise ValueError("method: 'ja_leap' | 'ja_leap_wiki' | 'nearest_no_leap'")
+    japanese = method in ("ja_leap", "ja_leap_wiki")
     # Альманахи используют поясное время без летнего: Япония UTC+9, КНР UTC+8.
-    tzname = almanac_tz or ("UTC+09:00" if method == "ja_leap" else "UTC+08:00")
+    tzname = almanac_tz or ("UTC+09:00" if japanese else "UTC+08:00")
     zone = _Zone(tzname)
     events: list[tuple[date, str, date]] = []
     for y in range(d.year - 2, d.year + 2):
         for kind, dun in (("summer", "yin"), ("winter", "yang")):
             sol_local = zone.to_local(jd_to_utc(solstice(y, kind))).date()
-            events.append((_switch_jiazi(sol_local), dun, sol_local))
+            events.append((_switch_jiazi(sol_local, method == "ja_leap_wiki"), dun, sol_local))
     events.sort()
     k = max(i for i, e in enumerate(events) if e[0] <= d)
     cur, nxt = events[k], events[k + 1]
     period = (nxt[0] - cur[0]).days
     n = (d - cur[0]).days
     dun, start, seg_start, leap = cur[1], (1 if cur[1] == "yang" else 9), cur[0], False
-    if method == "ja_leap" and period > 200 and n >= 210:
+    if japanese and period > 200 and n >= 210:
         dun, start, leap = nxt[1], (7 if nxt[1] == "yang" else 3), True
         seg_start = cur[0] + timedelta(days=210)
         n -= 210
@@ -457,7 +470,7 @@ def calculate(b: BirthInput, **options) -> dict:
                   'UTC+09:00' воспроизводит японские таблицы, 'UTC+08:00' — китайские.
       gua_boundary: 'li_chun' (по умолчанию, как у Ки) | 'lunar_new_year'
       zodiac_boundary: 'lunar_new_year' (по умолчанию) | 'li_chun'
-      day_star_method: 'ja_leap' (по умолчанию) | 'nearest_no_leap' | None (не считать)
+      day_star_method: 'ja_leap' (по умолчанию) | 'ja_leap_wiki' | 'nearest_no_leap' | None (не считать)
     """
     year_boundary = options.get("year_boundary", "li_chun")
     precision = options.get("boundary_precision", "auto")
@@ -611,6 +624,13 @@ def calculate(b: BirthInput, **options) -> dict:
                      f"(звезда {ds['segment_start_star']}, {ds['dun_ru']}), прошло {ds['days_from_segment_start']} дн. "
                      f"→ {ds['number']}" + (" [сегмент 閏]" if ds["leap_segment"] else "") + ".")
         warnings.append("Звезда дня: правило переключения Ян/Инь-дуня различается по школам (⚠ см. базу знаний).")
+        if day_method in ("ja_leap", "ja_leap_wiki"):
+            other = "ja_leap_wiki" if day_method == "ja_leap" else "ja_leap"
+            ods = day_star(birth_date, other, options.get("day_almanac_tz"))
+            if ods["number"] != ds["number"]:
+                nsk["day"]["alt_other_school"] = {"method": other, "number": ods["number"]}
+                warnings.append(f"Дата в окне, где японские школы расходятся (солнцестояние в день 癸巳): "
+                                f"по варианту {other} звезда дня = {ods['number']}.")
         if b.has_time and (b.hour or 0) >= 23:
             alt = day_star(birth_date + timedelta(days=1), day_method, options.get("day_almanac_tz"))
             nsk["day"]["alt_if_day_starts_23h"] = alt["number"]
