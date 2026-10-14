@@ -701,7 +701,10 @@ def calculate(b: BirthInput, node: str = "true", design_arc: float = DESIGN_ARC,
                    f"узел {'истинный' if node == 'true' else 'средний'}, колесо от 302° (ворота 41)",
         "inputs_used": {
             "date": f"{b.year:04d}-{b.month:02d}-{b.day:02d}",
-            "time": f"{b_calc.hour:02d}:{(b_calc.minute or 0):02d}" + ("" if time_known else " (подставлено)"),
+            "time": f"{b_calc.hour:02d}:{(b_calc.minute or 0):02d}"
+                    + (f":{getattr(b_calc, 'second', 0):02d}" if getattr(b_calc, "second", 0) else "")
+                    + ("" if time_known else " (подставлено)"),
+            "julian_date_input": getattr(b, "julian_date", None),
             "time_known": time_known, "tz": b_calc.tz, "utc_offset": fmt_offset(nt.utc_offset_hours),
             "offset_source": nt.offset_source, "utc": nt.utc.isoformat(), "jd_ut": round(nt.jd_ut, 6),
             "lat": b.lat, "lon": b.lon, "place": b.place, "node": node, "design_arc": design_arc,

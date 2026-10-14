@@ -506,9 +506,10 @@ def human_design(utc_moment, node="true"):
 {
   "method": "human_design",
   "variant": "Jovian Archive (Ra Uru Hu): тропический зодиак, Дизайн = Солнце −88°, узел истинный, колесо от 302° (ворота 41)",
-  "inputs_used": {"date": "YYYY-MM-DD", "time": "HH:MM", "time_known": true, "tz": "...", "utc_offset": "UTC+03:00",
+  "inputs_used": {"date": "YYYY-MM-DD", "time": "HH:MM[:SS]", "time_known": true, "tz": "...", "utc_offset": "UTC+03:00",
                   "offset_source": "tzdb|fixed|LMT(longitude)", "utc": "ISO", "jd_ut": 0.0, "lat": 0.0, "lon": 0.0,
-                  "node": "true|mean", "design_arc": 88.0, "design_utc": "ISO", "jd_design": 0.0},
+                  "node": "true|mean", "design_arc": 88.0, "design_utc": "ISO", "jd_design": 0.0,
+                  "julian_date_input": null},
   "warnings": ["..."],
   "personality_short": {"sun": "36.1", "earth": "6.1", "moon": "5.4", "north_node": "41.1", "...": "..."},
   "design_short": {"sun": "11.4", "...": "..."},
