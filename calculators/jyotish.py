@@ -401,7 +401,8 @@ def vimshottari(moon_lon: float, jd_birth: float, offset_hours: float, year: str
         jd_q = swe.julday(d.year, d.month, d.day, 12.0, swe.GREG_CAL)
         cur: dict = {"date": on_date}
         t = -elapsed
-        for k in range(9 * cycles):
+        # поиск идёт и за пределами выведенного списка: дата может быть позже 120 лет от начала цикла
+        for k in range(9 * max(cycles, 3)):
             md_lord = DASHA_ORDER[(i0 + k) % 9]
             length = DASHA_YEARS[md_lord]
             if clock.jd(t) <= jd_q < clock.jd(t + length):
@@ -419,6 +420,10 @@ def vimshottari(moon_lon: float, jd_birth: float, offset_hours: float, year: str
                         break
                 break
             t += length
+        if "mahadasha" not in cur:
+            cur["note"] = "Дата раньше виртуального начала первой махадаши — периоды не определены."
+        elif jd_q >= clock.jd(-elapsed + DASHA_TOTAL * cycles):
+            cur["note"] = "Дата за пределами выведенного 120-летнего цикла (следующий круг Вимшоттари)."
         result["current"] = cur
     return result
 

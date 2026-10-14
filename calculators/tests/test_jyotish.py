@@ -674,3 +674,12 @@ def test_cli_bool_node_option():
     assert a["grahas"]["rahu"]["lon"] == b["grahas"]["rahu"]["lon"]
     assert (a["grahas"]["rahu"]["nakshatra"], a["grahas"]["rahu"]["pada"]) == ("Shravana", 1)
     assert calculate(T["T4"], node=False, dasha_levels=1)["inputs_used"]["options"]["node"] == "mean"
+
+
+def test_on_date_beyond_first_cycle():
+    """on_date позже 120 лет от виртуального начала (T4: цикл 1871–1991) раньше давал пустой current."""
+    cur = calculate(T["T4"], on_date="2026-10-14", dasha_levels=1)["dasha"]["current"]
+    assert (cur["mahadasha"], cur["antardasha"]) == ("venus", "jupiter") and "note" in cur
+    cur = calculate(T["T4"], on_date="1870-01-01", dasha_levels=1)["dasha"]["current"]
+    assert "mahadasha" not in cur and "note" in cur
+    assert "note" not in calculate(T["T1"], on_date="2026-10-14")["dasha"]["current"]
