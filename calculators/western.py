@@ -663,15 +663,23 @@ def calculate(b: BirthInput, hsys: str = "P", node: str = "true", lilith: str = 
         # диапазон за сутки для Луны и смены знаков
         start = normalize(replace(bb, hour=0, minute=0)).jd_ut
         end = start + 1.0
+        pos0, pos1 = eph.planet_positions(start), eph.planet_positions(end - 1e-6)
         changes = []
+        day_changes = []
         for p in PLANETS10:
-            s0 = sign_index(eph.planet_positions(start)[p]["lon"])
-            s1 = sign_index(eph.planet_positions(end - 1e-6)[p]["lon"])
+            s0 = sign_index(pos0[p]["lon"])
+            s1 = sign_index(pos1[p]["lon"])
             if s0 != s1:
                 changes.append(f"{BODY_RU[p]}: {SIGNS_RU[s0]} → {SIGNS_RU[s1]}")
+                day_changes.append({"body": p, "from": SIGNS_EN[s0], "from_ru": SIGNS_RU[s0],
+                                    "to": SIGNS_EN[s1], "to_ru": SIGNS_RU[s1]})
         if changes:
             warnings.append("В течение суток меняют знак: " + "; ".join(changes) + ". Знак зависит от времени.")
-        moon0 = eph.planet_positions(start)["moon"]["lon"]
+        # структурно: агент не должен сообщать знак «по полудню», если он менялся в этот день
+        sun_info["sign_changes_during_day"] = day_changes
+        sun_info["possible_signs_ru"] = next(([c["from_ru"], c["to_ru"]] for c in day_changes if c["body"] == "sun"),
+                                             [sun_info["sign_ru"]])
+        moon0 = pos0["moon"]["lon"]
         moon1 = eph.planet_positions(end)["moon"]["lon"]
         sun_info["moon_range"] = [dms(moon0), dms(moon1)]
 
@@ -843,7 +851,8 @@ def calculate(b: BirthInput, hsys: str = "P", node: str = "true", lilith: str = 
         "variant": variant,
         "inputs_used": {
             "date": f"{b.year:04d}-{b.month:02d}-{b.day:02d}",
-            "time": f"{b.hour:02d}:{(b.minute or 0):02d}" if time_known else None,
+            "time": (f"{b.hour:02d}:{(b.minute or 0):02d}" + (f":{b.second:02d}" if getattr(b, "second", 0) else ""))
+                    if time_known else None,
             "tz": bb.tz, "lat": b.lat, "lon": b.lon, "place": b.place,
             "utc": n.utc.isoformat(), "utc_offset": fmt_offset(n.utc_offset_hours),
             "offset_source": n.offset_source, "jd_ut": round(jd, 6),
