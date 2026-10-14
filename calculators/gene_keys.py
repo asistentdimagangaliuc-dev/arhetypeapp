@@ -134,7 +134,7 @@ CODON_RINGS: list[dict] = [
     {"en": "Ring of Alchemy", "ru": "Кольцо Алхимии", "amino_en": "Glycine", "amino_ru": "Глицин", "keys": [6, 40, 47, 64]},
     {"en": "Ring of Humanity", "ru": "Кольцо Человечества", "amino_en": "Arginine", "amino_ru": "Аргинин",
      "keys": [10, 17, 21, 25, 38, 51]},
-    {"en": "Ring of Trials", "ru": "Кольцо Испытаний", "amino_en": "Stop codons (none)",
+    {"en": "Ring of Trials", "ru": "Кольцо Испытаний", "amino_en": "none (stop codons)",
      "amino_ru": "нет (стоп-кодоны)", "keys": [12, 33, 56]},
     {"en": "Ring of Purification", "ru": "Кольцо Очищения", "amino_en": "Glutamine", "amino_ru": "Глутамин", "keys": [13, 30]},
     {"en": "Ring of Seeking", "ru": "Кольцо Поиска", "amino_en": "Serine", "amino_ru": "Серин",
