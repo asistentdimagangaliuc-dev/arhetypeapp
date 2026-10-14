@@ -118,9 +118,9 @@ LOSHU_LINES: list[tuple[str, tuple[int, int, int], str, str, str, list[str]]] = 
      ["Practical plane (sheelaa.com)"]),
     ("action", (2, 7, 6), "column", "План действия", "Action plane", ["Spiritual plane (sheelaa.com)"]),
     ("golden_yog", (4, 5, 6), "diagonal", "Золотая (Раджа-) йога", "Golden Yog / Raj Yog",
-     ["Spiritual plane (ganak.app)", "Determination line (astrosight.ai)", "Stability (astromedha.in)"]),
+     ["Spiritual plane (ganak.app)", "Determination line (astrosight.ai ⚠ не найдено при повторной проверке)", "Stability arrow (astromedha.in)"]),
     ("silver_yog", (2, 5, 8), "diagonal", "Серебряная йога", "Silver Yog / Rajat Yog",
-     ["Material plane (ganak.app)", "Compassion line (astrosight.ai)", "Prosperity (astromedha.in)"]),
+     ["Material plane (ganak.app)", "Compassion line (astrosight.ai ⚠ не найдено при повторной проверке)", "Prosperity arrow (astromedha.in; sheelaa.com)"]),
 ]
 
 # Стрелы силы (все три числа присутствуют) — названия разнятся по источникам, см. базу знаний.

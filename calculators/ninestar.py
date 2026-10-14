@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import re
 from datetime import date, datetime, timedelta, timezone
-from typing import Callable
+from functools import lru_cache
 from zoneinfo import ZoneInfo
 
 from .common.ephemeris import find_sun_longitude, sun_longitude
@@ -342,11 +342,13 @@ def _jd(dt_utc: datetime) -> float:
     return julian_day_ut(dt_utc)
 
 
+@lru_cache(maxsize=1024)
 def li_chun(year: int) -> float:
     """Момент Личуня (Солнце 315°) григорианского года `year`, JD UT."""
     return find_sun_longitude(315.0, _jd(datetime(year, 2, 20, tzinfo=UTC)), search_back=True)
 
 
+@lru_cache(maxsize=2048)
 def solstice(year: int, kind: str) -> float:
     """Момент солнцестояния: kind='summer' (90°) или 'winter' (270°), JD UT."""
     if kind == "summer":
@@ -397,12 +399,13 @@ def day_star(d: date, method: str = "ja_leap", almanac_tz: str | None = None) ->
         летнему, звезда 9 по убыванию. Если между переключениями 240 дней, последние 60 — «閏»:
         в день 甲午 (210-й) начинается следующий дунь со звезды 7 (Ян) или 3 (Инь).
       * 'nearest_no_leap' — то же без «閏» (так считает lunar-python `getDayNineStar`).
-    almanac_tz — пояс, в котором берётся дата солнцестояния ('ja_leap' → Asia/Tokyo,
-    'nearest_no_leap' → Asia/Shanghai по умолчанию).
+    almanac_tz — пояс, в котором берётся дата солнцестояния ('ja_leap' → UTC+9 (JST),
+    'nearest_no_leap' → UTC+8 (как lunar-python) по умолчанию).
     """
     if method not in ("ja_leap", "nearest_no_leap"):
         raise ValueError("method: 'ja_leap' или 'nearest_no_leap'")
-    tzname = almanac_tz or ("Asia/Tokyo" if method == "ja_leap" else "Asia/Shanghai")
+    # Альманахи используют поясное время без летнего: Япония UTC+9, КНР UTC+8.
+    tzname = almanac_tz or ("UTC+09:00" if method == "ja_leap" else "UTC+08:00")
     zone = _Zone(tzname)
     events: list[tuple[date, str, date]] = []
     for y in range(d.year - 2, d.year + 2):
@@ -523,7 +526,7 @@ def calculate(b: BirthInput, **options) -> dict:
     if precision == "moment" and abs(nt.jd_ut - lc_jd) < 1.0:
         warnings.append(f"Рождение в пределах суток от момента Личуня ({_fmt(lc_utc)} UT): результат чувствителен "
                         f"к точности времени рождения и пояса.")
-        loc_tables = {"Asia/Shanghai": "КНР", "Asia/Tokyo": "Японии"}
+        loc_tables = {"UTC+08:00": "КНР", "UTC+09:00": "Японии"}
         for tzn, nm in loc_tables.items():
             lc_alm = _Zone(tzn).to_local(lc_utc).date()
             if lc_alm != birth_date and abs((lc_alm - birth_date).days) <= 1:
