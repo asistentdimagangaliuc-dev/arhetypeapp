@@ -143,10 +143,40 @@ def _iso(jd: float) -> str:
     return jd_to_utc(jd).isoformat(timespec="seconds")
 
 
+def _is_fixed_tz(tz: str | None) -> bool:
+    """'LMT', 'UTC'/'GMT' или фиксированное смещение ('UTC+04:00', '+3') — не IANA-зона."""
+    if tz is None:
+        return False
+    t = tz.strip().upper()
+    return t in ("LMT", "UTC", "GMT", "UT", "Z") or bool(_OFFSET_RE.match(t))
+
+
+def _civil_zone(tz: str | None, lat: float | None, lon: float | None) -> tuple[str | None, str | None]:
+    """Пояс для местного времени событий через годы после рождения (соляр, лунар, день рождения)
+    на месте рождения → (зона, предупреждение или None).
+
+    'LMT' или фиксированное смещение верны только для момента рождения: через годы на том же
+    месте действует другое гражданское время (у Эйнштейна, Ульм: LMT +0:39:57 в 1879, CET +1 с 1893;
+    у рождённого летом 1990 в Москве с tz='UTC+04:00' — MSK +3 в 2026). Поэтому берётся IANA-зона
+    по координатам: tzdb даёт смещение на дату самого события."""
+    if not _is_fixed_tz(tz) or lat is None or lon is None:
+        return tz, None
+    iana = tz_for_coords(lat, lon)
+    if not iana:
+        return tz, None
+    return iana, (f"Пояс рождения {tz!r} верен только для момента рождения; местное время соляра/лунара "
+                  f"(и дня рождения для профекций) на месте рождения дано по зоне {iana} (tzdb на дату события).")
+
+
 def _local(jd: float, tz: str | None, lon: float | None) -> dict:
-    """Момент JD UT в местном времени зоны tz (IANA, смещение или LMT)."""
+    """Момент JD UT в местном времени зоны tz (IANA, смещение или LMT).
+
+    Если на дату события IANA-зона ещё не ввела поясное время (tzdb: 'LMT' — среднее время
+    города-эталона зоны), берётся LMT самого места по долготе lon."""
     utc = jd_to_utc(jd)
     loc = utc.astimezone(_tzinfo(tz, lon))
+    if lon is not None and not _is_fixed_tz(tz) and loc.tzname() == "LMT":
+        loc, tz = utc.astimezone(_tzinfo("LMT", lon)), "LMT"
     off = loc.utcoffset().total_seconds() / 3600.0
     sign = "+" if off >= 0 else "-"
     tot = round(abs(off) * 60)
@@ -772,6 +802,8 @@ def calculate(b: BirthInput, on_date=None, on_tz: str = "UTC", period_start=None
                   f"({sa_value:.4f}°), прибавлена ко всем точкам; аспектов к радиксу в орбисе {direction_orb}°: {len(d_aspects)}"})
 
     # --- 6. Соляр (и лунар) -----------------------------------------------------------
+    # гражданский пояс места рождения на даты событий (LMT/фикс. смещение рождения → IANA по координатам)
+    civil_tz, civil_note = _civil_zone(nat["inputs_used"]["tz"], b.lat, b.lon)
     if sr_place or sr_lat is not None or sr_lon is not None:
         p_ = resolve_place(sr_place) if sr_place else None
         if sr_place and p_ is None and (sr_lat is None or sr_lon is None):
@@ -784,7 +816,9 @@ def calculate(b: BirthInput, on_date=None, on_tz: str = "UTC", period_start=None
         s_name = sr_place or (p_["name"] if p_ else f"{s_lat:.4f}, {s_lon:.4f}")
         sr_where = "relocated"
     else:
-        s_lat, s_lon, s_tz, s_name, sr_where = b.lat, b.lon, nat["inputs_used"]["tz"], b.place, "birthplace"
+        s_lat, s_lon, s_tz, s_name, sr_where = b.lat, b.lon, civil_tz, b.place, "birthplace"
+        if civil_note:
+            warnings.append(civil_note)
 
     def sun_return(jd_near: float, back: bool, target: float) -> float:
         return eph.find_sun_longitude(target, jd_near, search_back=back)
@@ -875,7 +909,7 @@ def calculate(b: BirthInput, on_date=None, on_tz: str = "UTC", period_start=None
                         "±12 ч — углы и дома соляра не вычисляются.")
     steps.append({"step": "6. Соляр", "detail":
                   f"Момент, когда видимая тропическая долгота Солнца = натальной {dms(sun_n)}: {sr_chart['moment_utc']} UTC"
-                  + (f" = {sr_chart['local']} ({sr_chart['utc_offset']}, {s_tz})" if "local" in sr_chart else "")
+                  + (f" = {sr_chart['local']} ({sr_chart['utc_offset']}, {sr_chart['tz']})" if "local" in sr_chart else "")
                   + f"; отклонение от годовщины момента рождения {sr_chart['days_from_birth_anniversary_utc']:+.3f} сут; "
                   f"место: {s_name or '—'} ({'место рождения' if sr_where == 'birthplace' else 'релокация'})"
                   + (f"; ASC соляра {sr_chart['angles']['asc']['pos']}, MC {sr_chart['angles']['mc']['pos']}"
@@ -922,7 +956,10 @@ def calculate(b: BirthInput, on_date=None, on_tz: str = "UTC", period_start=None
                 y0 = jd_b
         else:
             loc_b = datetime(b.year, b.month, b.day)
-            on_loc = on_utc.astimezone(_tzinfo(nat["inputs_used"]["tz"], b.lon)).replace(tzinfo=None)
+            bz = _tzinfo(civil_tz, b.lon)          # день рождения — по гражданскому времени года события
+            if civil_note and sr_where != "birthplace":
+                warnings.append(civil_note)
+            on_loc = on_utc.astimezone(bz).replace(tzinfo=None)
             yy = on_loc.year if (on_loc.month, on_loc.day) >= (b.month, b.day) else on_loc.year - 1
 
             def bday(year: int) -> float:
@@ -930,7 +967,7 @@ def calculate(b: BirthInput, on_date=None, on_tz: str = "UTC", period_start=None
                     dt = loc_b.replace(year=year)
                 except ValueError:
                     dt = loc_b.replace(year=year, month=3, day=1)
-                return julian_day_ut(dt.replace(tzinfo=_tzinfo(nat["inputs_used"]["tz"], b.lon)).astimezone(timezone.utc))
+                return julian_day_ut(dt.replace(tzinfo=bz).astimezone(timezone.utc))
             y0, y1 = bday(yy), bday(yy + 1)
             if yy == b.year:
                 y0 = jd_b

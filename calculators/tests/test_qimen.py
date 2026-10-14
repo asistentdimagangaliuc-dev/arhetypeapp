@@ -18,6 +18,7 @@ import random
 from datetime import date, timedelta
 
 import pytest
+import swisseph as swe
 
 from calculators import bazi
 from calculators.common.time import BirthInput
@@ -28,9 +29,11 @@ from calculators.qimen import (
     STARS,
     STEM_ORDER,
     TERMS,
+    _Clock,
     build_chart,
     calculate,
     earth_plate,
+    ju_zhirun,
 )
 from calculators.bazi import STEMS
 
@@ -223,21 +226,22 @@ def test_tongzong_leap_needs_threshold_8():
 
 def test_zhirun_leaps_only_at_mangzhong_daxue_and_no_gaps():
     """1950–2030: блоки по 15 дней без пропусков терминов, 闰 — только 芒种/大雪, 超神 до 二至 в [−7, 8)."""
+    clock = _Clock("UTC+08:00", "fixed", 8.0, None, "clock")
     leaps = 0
     prev = None
     d = date(1950, 1, 1)
     while d < date(2030, 1, 1):
         if bazi.day_index(d) % 15 == 0:                 # верхний 符头: начало блока
-            r = calculate(bj(d.year, d.month, d.day, 12), ju_method="zhirun", **BJ)
-            k = r["ju"]["term_used"]["index"]
-            assert r["ju"]["yuan"] == "upper"
-            if r["ju"]["leap"]:
+            r = ju_zhirun(d, swe.julday(d.year, d.month, d.day, 4.0), clock, 8)
+            k = r["term"]
+            assert r["yuan"] == 0
+            if r["leap"]:
                 leaps += 1
                 assert TERMS[k][0] in ("芒种", "大雪") and k == prev
             elif prev is not None:
                 assert k == (prev + 1) % 24
                 if TERMS[k][0] in ("夏至", "冬至"):
-                    assert -7 <= r["ju"]["zhirun"]["chao_days"] < 8
+                    assert -7 <= r["chao_days"] < 8
             prev = k
         d += timedelta(days=1)
     assert 25 <= leaps <= 30     # ≈ 80 лет / 2,86 года
@@ -476,7 +480,7 @@ def test_t_subjects_equal_chart_time_snapshot(b, clock_equiv, qd):
     r2 = calculate(bj(*clock_equiv), **BJ)
     assert layout(r) == layout(r2) and r["ju"]["label"] == r2["ju"]["label"]
     alt = r["alternatives"]["ju_methods"]
-    assert (int(alt["zhirun"][3]), int(alt["maoshan"][3])) == qd
+    assert (int(alt["zhirun"][2]), int(alt["maoshan"][2])) == qd
 
 
 @pytest.mark.parametrize("b", [T1, T2, T3, T4])

@@ -126,6 +126,32 @@ def test_year_boundary_li_chun_moscow():
     assert r["bazi_year"]["annual_pillar"]["ganzhi"] == "丙午" and r["ninestar_year"]["year"]["star"] == 1
 
 
+def test_edge_warnings_li_chun_birth_and_jie_day():
+    """Граничные случаи для агента: (1) рождение в день Личуня без времени — предупреждение модуля 03 о звезде
+    года доходит до прогноза; (2) день цзе при sections='ninestar' — предупреждение о звезде месяца тоже есть."""
+    r = calculate(BirthInput(1984, 2, 4, place="Москва", gender="male"), on_date=ON, sections="ninestar")
+    assert any(w.startswith("Ки (натал):") and "Личун" in w for w in r["warnings"])
+    r = calculate(T["T1"], on_date="2026-10-08", on_time="08:00", sections="ninestar")
+    assert r["ninestar_year"]["month_on_date"]["star"] == 1                  # до 寒露 09:29 MSK — ещё 酉, звезда 1
+    assert sum("цзе" in w for w in r["warnings"]) == 1
+    r = calculate(T["T1"], on_date="2026-10-08", on_time="10:00")
+    assert r["ninestar_year"]["month_on_date"]["star"] == 9 and r["bazi_year"]["month_on_date"]["ganzhi"] == "戊戌"
+    assert sum("цзе" in w for w in r["warnings"]) == 1                        # одно, хотя считают оба блока
+
+
+def test_luck_vs_year_direction_ditiansui():
+    """https://zh.wikisource.org/wiki/滴天髓/09 : «如子運午年，謂之運沖歲»; «如午運子年，謂之歲沖運»;
+    «如丙運庚年，謂之運伐歲»; «如庚運丙年，謂之歲伐運»; «如庚運辛年…申運酉年…則好»."""
+    from calculators.forecast_eastern import _luck_vs_year
+    gi = bz.ganzhi_index
+    cn = lambda luck, year: {x["cn"] for x in _luck_vs_year(luck, year)}   # noqa: E731
+    assert "沖 (運沖歲)" in cn(gi(0, 0), gi(2, 6))       # 甲子 удача, 丙午 год
+    assert "沖 (歲沖運)" in cn(gi(2, 6), gi(0, 0))       # 丙午 удача, 甲子 год
+    assert "戰 (運伐歲)" in cn(gi(2, 2), gi(6, 8))       # 丙寅 удача, 庚申 год
+    assert "戰 (歲伐運)" in cn(gi(6, 8), gi(2, 2))
+    assert "好" in cn(gi(6, 8), gi(7, 9))                 # 庚申 / 辛酉
+
+
 # lunar-python: моменты цзе 2026 г. (UTC+8), `Lunar.getJieQiTable()`; совпадают до минуты с
 # https://www.masterseanchan.com/fengshui-2026-flying-star-chart/ (колонка «Solar term start, UTC+8»)
 JIE_2026_UTC8 = ["2026-02-04 04:02", "2026-03-05 21:59", "2026-04-05 02:40", "2026-05-05 19:48",

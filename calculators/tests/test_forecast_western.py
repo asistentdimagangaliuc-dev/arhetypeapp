@@ -10,9 +10,9 @@
 * Wikipedia, «Astrological progression» — пример 02.04.1982 → прогрессии на 2007 г. = 27.04.1982:
   https://en.wikipedia.org/wiki/Astrological_progression
 * F. Boele, «The Progressed Lunation Cycle» (The Mountain Astrologer 2006, astro.com) — даты событий
-  и фазы прогрессивной лунации с данными рождения: https://www.astro.com/astrology/in_progmoon_e.htm
+  и фазы прогрессивной лунации с данными рождения: https://www.astro.com/cgi/xa.cgi/astrology/in_progmoon_e.htm
 * C. Brennan, «Introduction to Hellenistic Astrology (2) — Annual Profections…» (TMA, astro.com) —
-  профекции Ф. Ф. Копполы: https://www.astro.com/astrology/tma_article190314_e.htm ;
+  профекции Ф. Ф. Копполы: https://www.astro.com/cgi/xa.cgi/astrology/tma_article190314_e.htm ;
   данные рождения Копполы (AA): https://www.astrotheme.com/astrology/Francis_Ford_Coppola
 * JPL Horizons (DE441), видимая геоцентрическая эклиптическая долгота даты (ObsEcLon) — независимая
   эфемерида для моментов соляров, точных транзитов и стоянок: https://ssd.jpl.nasa.gov/api/horizons.api
@@ -485,6 +485,63 @@ def test_t3_feb29_solar_returns():
     for year, local in [(2026, "2026-02-28T16:17:55"), (2027, "2027-02-28T22:03:16"), (2028, "2028-02-29T03:47:54")]:
         r = calculate(T3(), on_date=ON, sr_year=year, hit_bodies=[])
         assert r["solar_return"]["local"] == local
+
+
+def test_birthplace_return_local_time_uses_civil_zone():
+    """Независимая проверка: пояс рождения 'LMT' / фиксированное смещение не переносится на соляр
+    через годы. Ульм: в 1905 и 2026 гг. — CET (UTC+1, Германия с 1893 г.), в 1880 г. — ещё среднее
+    местное время (LMT по долготе места, а не берлинское LMT из tzdb)."""
+    for on, local, off, lr_off in [("1905-06-30", "1905-03-14T19:13:01", "UTC+01:00", "UTC+01:00"),
+                                   ("2026-10-14", "2026-03-14T03:17:28", "UTC+01:00", "UTC+02:00"),  # лунар 17.09 — CEST
+                                   ("1880-06-01", "1880-03-13T17:11:35", "UTC+00:40", "UTC+00:40")]:
+        r = calculate(T4(), on_date=on, hit_bodies=[])
+        assert (r["solar_return"]["local"], r["solar_return"]["utc_offset"]) == (local, off)
+        assert r["lunar_return"]["utc_offset"] == lr_off
+    # летнее время 1990 задано фиксированным смещением: соляр 2026 в Москве — по MSK (UTC+3), а не UTC+4
+    r = calculate(BirthInput(1990, 5, 15, 14, 30, tz="UTC+04:00", lat=55.7558, lon=37.6173), on_date=ON, hit_bodies=[])
+    assert r["solar_return"]["local"] == "2026-05-15T06:34:26" and r["solar_return"]["tz"] == "Europe/Moscow"
+    assert r["solar_return"]["angles"]["asc"]["pos"] == "3°17′10″ Рак"      # углы от пояса не зависят
+    assert any("верен только для момента рождения" in w for w in r["warnings"])
+    # IANA-зона рождения (T1, place="Москва") — без изменений и без предупреждения
+    assert not any("верен только для момента рождения" in w for w in calculate(T1(), on_date=ON, hit_bodies=[])["warnings"])
+
+
+def _leap_days_between(b: datetime, e: datetime) -> int:
+    """Число дат 29 февраля строго между датами b и e (сам день рождения 29.02 не считается)."""
+    n = 0
+    for y in range(b.year, e.year + 1):
+        try:
+            f29 = datetime(y, 2, 29).date()
+        except ValueError:
+            continue
+        n += b.date() < f29 < e.date()
+    return n
+
+
+@pytest.mark.parametrize("b,year,ann", [
+    (T1(), 2026, None), (T2(), 2026, None), (T4(), 1905, None), (T4(), 2026, None),
+    (T3(), 2026, (2, 28)),          # 29.02: формула даёт отклонение от 28.02 невисокосного года
+])
+def test_solar_return_manual_formula(b, year, ann):
+    """Ручная прикидка (§3.8): Δ = соляр − годовщина момента рождения (UT) ≈ 0,24219·N − L сут,
+    L — число 29 февраля между рождением и годовщиной; точность ±1,5 ч (проверено на 400 случайных
+    рождениях 1900–2010 при возрасте 1–90 лет)."""
+    r = calculate(b, on_date=f"{year}-10-14", sr_year=year, hit_bodies=[], include_lunar_return=False)
+    bu = datetime.fromisoformat(r["inputs_used"]["birth_utc"]).replace(tzinfo=None)
+    an = bu.replace(year=year) if ann is None else bu.replace(year=year, month=ann[0], day=ann[1])
+    n = year - bu.year
+    est = 0.24219 * n - _leap_days_between(bu, an)
+    real = r["solar_return"]["moment_jd"] - julian_day_ut(an.replace(tzinfo=timezone.utc))
+    assert abs(real - est) < 1.5 / 24
+
+
+def test_solar_return_more_than_a_day_near_1900():
+    """Исключение из «соляр ±1 сут от дня рождения»: невисокосные 1900 и 2100 гг. Рождение 01.03.1896
+    12:00 UT → соляр 1903 г. 03.03 04:46 UT, на +1,70 сут от годовщины (8 лет без 29 февраля)."""
+    b = BirthInput(1896, 3, 1, 12, 0, tz="UTC", lat=51.5, lon=0.0)
+    sr = calculate(b, on_date="1906-01-01", sr_year=1903, hit_bodies=[], include_lunar_return=False)["solar_return"]
+    assert sr["moment_utc"].startswith("1903-03-03T04:4") and 1.65 < sr["days_from_birth_anniversary_utc"] < 1.75
+    assert abs(sd(sr["natal_sun"], lon(swe.SUN, sr["moment_jd"]))) < 1e-6
 
 
 def test_relocated_vs_birthplace_same_moment():

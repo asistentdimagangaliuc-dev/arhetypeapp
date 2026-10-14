@@ -31,7 +31,8 @@ import swisseph as swe
 
 from calculators.bazi import BRANCHES, day_index, ganzhi, ganzhi_index, hour_branch, zi_first_stem
 from calculators.common.ephemeris import find_sun_longitude, sun_longitude
-from calculators.common.time import BirthInput, fmt_offset, jd_to_utc, local_mean_time, normalize, true_solar_time
+from calculators.common.time import (BirthInput, fmt_offset, fmt_offset_hms, jd_to_utc, local_mean_time, normalize,
+                                     true_solar_time)
 
 # ---------------------------------------------------------------------------
 # Справочники
@@ -736,7 +737,9 @@ def calculate(b: BirthInput, **options) -> dict:
             lat, lon, tz = p["lat"], p["lon"], options.get("on_tz") or p["tz"]
         if dt.tzinfo is not None:
             if tz is None:
-                tz = "UTC"
+                # пояс не задан ни у рождения, ни у консультации: берём смещение из самой строки
+                # (иначе час считался бы по часам UTC, а не по местным часам консультации)
+                tz = fmt_offset_hms(dt.utcoffset())
             if tz.upper() not in ("LMT",) and not tz.upper().startswith(("UTC", "GMT", "+", "-")):
                 dt = dt.astimezone(ZoneInfo(tz)).replace(tzinfo=None)
             else:
@@ -847,38 +850,91 @@ def calculate(b: BirthInput, **options) -> dict:
         f"{c['branch']} ({c['general']['cn']}, {c['liuqin']['cn']}, 遁干 {c['dun_gan'] or '—'}"
         f"{', 空' if c['kong'] else ''})" for c in ch["transmissions"]["chuan"]) + ".")
 
-    # альтернативы для пограничных случаев
+    # альтернативы: школы и пограничные случаи
     alternatives = []
+    opts_now = {"shehai": shehai, "biezhe_yin": biezhe_yin, "fuyin_zimao": fuyin_zimao}
+
+    def day_hour(ct: datetime, zh: str) -> tuple[int, int]:
+        """(индекс столпа дня, ветвь часа) для времени карты ct при правиле zi_hour = zh."""
+        mm = ct.hour * 60 + ct.minute + ct.second / 60.0
+        dd = ct.date()
+        return (day_index(dd + timedelta(days=1)) if (ct.hour == 23 and zh == "early") else day_index(dd),
+                hour_branch(mm))
+
+    def dn_for(hb_: int) -> bool:
+        return (3 <= hb_ <= 8) if day_night == "branch" else is_day
+
+    def brief(o: dict) -> dict:
+        return {"day": o["day"], "hour_branch": o["hour_branch"], "general": o["general"]["branch"],
+                "sanchuan": o["transmissions"]["sanchuan"], "kind": o["transmissions"]["kind"],
+                "chuan_generals": [c["general"]["cn"] for c in o["transmissions"]["chuan"]]}
+
     other = build_chart(di, hb, general, not is_day, shehai=shehai, **kw)
     if day_night in ("branch", "sun"):
         alternatives.append({"what": "другой Благородный (день↔ночь)", "noble": other["noble"]["branch"],
                              "direction": other["noble"]["direction"],
                              "chuan_generals": [c["general"]["cn"] for c in other["transmissions"]["chuan"]]})
-    for t in ("depth", "mengzhongji"):
-        if t != shehai:
-            o = build_chart(di, hb, general, is_day, shehai=t, **kw)
+    if day_night == "branch" and hb in (2, 9):
+        warnings.append(f"Час {Z[hb]} — пограничный для дневного/ночного Благородного: правило «卯…申 — день» "
+                        f"(по умолчанию) не единственное. В 《六壬大全》 卷七 при часе 酉 во всех трёх примерах взят "
+                        f"дневной 贵人, при часе 寅 — в двух из четырёх; 卷十一 советует считать по восходу и закату "
+                        f"(day_night='sun'). Другой Благородный — в alternatives.")
+    # школы, меняющие три передачи: 涉害, 伏吟 子卯, 别责 Инь-дня
+    for name, values, label in (("shehai", ("depth", "mengzhongji"), "Школы 涉害 расходятся"),
+                                ("fuyin_zimao", ("chong", "xing"), "伏吟 子卯: школы расходятся"),
+                                ("biezhe_yin", ("branch", "heaven"), "别责 Инь-дня: школы расходятся")):
+        for t in values:
+            if t == opts_now[name]:
+                continue
+            o = build_chart(di, hb, general, is_day, noble_table=noble_table, **{**opts_now, name: t})
             if o["transmissions"]["sanchuan"] != ch["transmissions"]["sanchuan"]:
-                alternatives.append({"what": f"shehai='{t}'", "sanchuan": o["transmissions"]["sanchuan"],
+                alternatives.append({"what": f"{name}='{t}'", "sanchuan": o["transmissions"]["sanchuan"],
                                      "kind": o["transmissions"]["kind"]})
-                warnings.append(f"Школы 涉害 расходятся: shehai='{t}' даёт три передачи "
+                warnings.append(f"{label}: {name}='{t}' даёт три передачи "
                                 f"{o['transmissions']['sanchuan']} — см. alternatives.")
+    # другие таблицы Благородного (передачи те же, меняются генералы) — без предупреждения
+    for tbl in NOBLE_TABLES:
+        if tbl == noble_table:
+            continue
+        o = build_chart(di, hb, general, is_day, shehai=shehai, biezhe_yin=biezhe_yin, fuyin_zimao=fuyin_zimao,
+                        noble_table=tbl)
+        if (o["noble"]["branch"], o["noble"]["direction"]) != (ch["noble"]["branch"], ch["noble"]["direction"]):
+            alternatives.append({"what": f"noble_table='{tbl}'", "noble": o["noble"]["branch"],
+                                 "direction": o["noble"]["direction"],
+                                 "chuan_generals": [c["general"]["cn"] for c in o["transmissions"]["chuan"]]})
     for mode in ("clock", "mean", "true"):
         if mode == used_mode or (mode != "clock" and b.lon is None):
             continue
         ct = n.local if mode == "clock" else (local_mean_time(n.utc, b.lon) if mode == "mean"
                                                else true_solar_time(n.utc, b.lon))
-        mm = ct.hour * 60 + ct.minute + ct.second / 60.0
-        hb2 = hour_branch(mm)
-        d2 = ct.date()
-        di2 = day_index(d2 + timedelta(days=1)) if (ct.hour == 23 and zi_hour == "early") else day_index(d2)
+        di2, hb2 = day_hour(ct, zi_hour)
         if (hb2, di2) != (hb, di):
-            o = build_chart(di2, hb2, general, (3 <= hb2 <= 8) if day_night == "branch" else is_day,
-                            shehai=shehai, **kw)
+            o = build_chart(di2, hb2, general, dn_for(hb2), shehai=shehai, **kw)
             alternatives.append({"what": f"solar_time='{mode}'", "chart_time": _iso(ct), "day": o["day"],
                                  "hour_branch": o["hour_branch"], "sanchuan": o["transmissions"]["sanchuan"],
                                  "kind": o["transmissions"]["kind"]})
             warnings.append(f"При solar_time='{mode}' час/день другие ({o['day']}, {o['hour_branch']}) → "
                             f"три передачи {o['transmissions']['sanchuan']} — см. alternatives.")
+    # 23:00–24:00: день зависит от правила zi_hour (для 六壬 классикой не определено)
+    if chart_t.hour == 23:
+        zh2 = "early" if zi_hour == "late" else "late"
+        di2, _ = day_hour(chart_t, zh2)
+        o = build_chart(di2, hb, general, is_day, shehai=shehai, **kw)
+        alternatives.append({"what": f"zi_hour='{zh2}'", **brief(o)})
+        warnings.append(f"Время карты 23:00–24:00: при zi_hour='{zh2}' столп дня {o['day']} → три передачи "
+                        f"{o['transmissions']['sanchuan']} — см. alternatives.")
+    # соседняя ветвь часа (если до границы двухчасовки < 15 мин)
+    if near < 15:
+        shift = -(to_b + 1.0) if to_b < 60 else (120.0 - to_b + 1.0)
+        ct = chart_t + timedelta(minutes=shift)
+        di2, hb2 = day_hour(ct, zi_hour)
+        o = build_chart(di2, hb2, general, dn_for(hb2), shehai=shehai, **kw)
+        alternatives.append({"what": f"соседняя ветвь часа ({Z[hb2]}, время карты {_iso(ct)})", **brief(o)})
+    # соседний месячный генерал (если до 中气 < 1 суток)
+    for jdx, nm, g2 in ((jd_prev, zq_prev[1], (general + 1) % 12), (jd_next, zq_next[1], (general - 1) % 12)):
+        if abs(jd - jdx) < 1.0:
+            o = build_chart(di, hb, g2, is_day, shehai=shehai, **kw)
+            alternatives.append({"what": f"соседний 月将 {Z[g2]} (по другую сторону 中气 {nm})", **brief(o)})
 
     # 本命 / 行年
     gender = _gender(birth.gender)
@@ -900,7 +956,7 @@ def calculate(b: BirthInput, **options) -> dict:
             elif gender == "female":
                 xing = ganzhi((8 - (age - 1)) % 60)
             nian = {"ben_ming": Z[ben], "ben_ming_heaven_over": None,
-                    "age_xusui_by_lichun": age, "xing_nian": xing,
+                    "age_xusui_by_lichun": age, "xing_nian": xing, "xing_nian_heaven_over": None,
                     "note": "本命 — ветвь года рождения (по Личуню); 行年 — мужчина: 1 год = 丙寅 по ходу, "
                             "женщина: 1 год = 壬申 против хода (《六壬大全》 卷八); возраст — по годам Личуня (⚠ "
                             "традиционно — по лунному Новому году)."}
