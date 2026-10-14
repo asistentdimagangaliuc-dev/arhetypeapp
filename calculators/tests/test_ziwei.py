@@ -627,3 +627,17 @@ def test_option_aliases_compatible_with_bazi():
     b = calculate(T2, time_basis="clock", zi_hour="same_day")
     assert signature(a) == signature(b) == IZTRO["T2_zi_current"]
     assert signature(calculate(T2, solar_time="clock", zi_hour="early")) == IZTRO["T2"]
+
+
+def test_san_fang_si_zheng_and_invariants():
+    r = calculate(T1)
+    ming = r["palaces"][0]
+    assert ming["name"] == "命宫" and ming["san_fang_si_zheng"] == ["戌", "辰", "寅", "午"]
+    # 命宫(戌) — 迁移(辰) — 官禄(寅) — 财帛(午)
+    names = {p["branch"]: p["name"] for p in r["palaces"]}
+    assert [names[b] for b in ming["san_fang_si_zheng"]] == ["命宫", "迁移", "官禄", "财帛"]
+    # 擎羊/陀罗 по бокам 禄存; 紫微+天府 ≡ 4 (mod 12)
+    pos = {k: B(v) for k, v in r["star_positions"].items()}
+    assert (pos["擎羊"] - pos["禄存"]) % 12 == 1 and (pos["禄存"] - pos["陀罗"]) % 12 == 1
+    assert (pos["紫微"] + pos["天府"]) % 12 == 4
+    assert (pos["文昌"] + pos["文曲"]) % 12 == 2 and (pos["左辅"] + pos["右弼"]) % 12 == 2

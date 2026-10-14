@@ -630,6 +630,8 @@ def calculate(b: BirthInput, **options: Any) -> dict:
         palaces.append({
             "name": pname, "name_ru": pru, "branch": BRANCHES[br], "stem": STEMS[st], "stem_branch": gz(st, br),
             "is_body_palace": br == s_br, "major_stars": maj, "aux_stars": aux,
+            # 三方四正: сам дворец + противоположный (+6) + два «треугольных» (+4, +8)
+            "san_fang_si_zheng": [BRANCHES[(br + d) % 12] for d in (0, 6, 4, 8)],
             "empty": not maj,
             "opposite_major_stars": [s for s in MAJOR_STARS if majors[s] == (br + 6) % 12] if not maj else [],
             "decade_ages": dec, "minor_limit_ages": minor_ages.get(br),

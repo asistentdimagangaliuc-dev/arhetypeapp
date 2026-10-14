@@ -32,6 +32,8 @@ METHODS: dict[str, tuple[str, str]] = {
     "numerology":     ("calculators.numerology",     "date(+name)"),
     "tarot_loshu":    ("calculators.tarot_loshu",    "date"),
     "tzolkin":        ("calculators.tzolkin",        "date"),
+    "syutsay":        ("calculators.syutsay",        "date"),
+    "typology":       ("calculators.typology",       "questionnaire (по дате не вычисляется)"),
 }
 
 
