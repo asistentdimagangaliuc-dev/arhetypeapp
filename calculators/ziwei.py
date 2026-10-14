@@ -26,7 +26,7 @@ from typing import Any
 
 from lunar_python import LunarMonth, Solar
 
-from .common.time import BirthInput, normalize, true_solar_time, local_mean_time
+from .common.time import BirthInput, fmt_offset, local_mean_time, normalize, true_solar_time
 
 # ---------------------------------------------------------------------------
 # Базовые справочники
@@ -182,7 +182,9 @@ BRIGHTNESS_RU = {"庙": "мяо (храм, максимум)", "旺": "ван (�
 
 DEFAULTS: dict[str, Any] = {
     "time_basis": None,          # None -> "true_solar" при известной долготе, иначе "clock"
-    "zi_hour": "next_day",       # 23:00–24:00: "next_day" (隔夜晚子, мейнстрим) | "same_day"
+    "solar_time": None,          # синоним time_basis в стиле bazi.py: "true" | "mean" | "clock"
+    "zi_hour": "next_day",       # 23:00–24:00: "next_day" (隔夜晚子, мейнстрим) | "same_day";
+                                 # синонимы как в bazi.py: "early" = next_day, "late" = same_day
     "year_boundary": "lunar_new_year",  # | "lichun"
     "leap_month": "split_15",    # | "same" | "next"
     "sihua": "quanji",           # | "quanshu" | "zhongzhou" | "beipai"
@@ -386,7 +388,7 @@ def _check_new_moon_timezone(lunar, chart_date: date, offset_hours: float) -> st
         local = f"лунный день {local_day}"
     return (
         f"Дата рождения у границы лунного месяца: по пекинскому календарю (UTC+8, месяц начался {cn_start}) "
-        f"это день {lunar.getDay()}, а если считать новолуние по местному поясу UTC{offset_hours:+g} — {local}. "
+        f"это день {lunar.getDay()}, а если считать новолуние по местному поясу {fmt_offset(offset_hours)} — {local}. "
         "Расчёт по стандартному китайскому календарю (так делает большинство программ); школы, пересчитывающие "
         "календарь на местный пояс, получат другие 紫微/месяц."
     )
@@ -419,6 +421,13 @@ def calculate(b: BirthInput, **options: Any) -> dict:
     if unknown:
         raise ValueError(f"Неизвестные опции: {sorted(unknown)}")
     opt = {**DEFAULTS, **options}
+    # синонимы опций, совместимые с calculators/bazi.py
+    if opt["solar_time"] is not None and opt["time_basis"] is None:
+        st = {"true": "true_solar", "mean": "mean_solar", "clock": "clock"}
+        if opt["solar_time"] not in st:
+            raise ValueError("solar_time: true | mean | clock")
+        opt["time_basis"] = st[opt["solar_time"]]
+    opt["zi_hour"] = {"early": "next_day", "late": "same_day"}.get(opt["zi_hour"], opt["zi_hour"])
     for key, allowed in (("zi_hour", ("next_day", "same_day")),
                          ("year_boundary", ("lunar_new_year", "lichun")),
                          ("leap_month", ("split_15", "same", "next")),
@@ -465,7 +474,7 @@ def calculate(b: BirthInput, **options: Any) -> dict:
         late_zi = basis_dt.hour == 23
         steps.append(
             f"Опорное время ({basis}): {basis_dt:%Y-%m-%d %H:%M}"
-            + (f" (часы показывали {clock_dt:%H:%M}, UTC{norm.utc_offset_hours:+g})" if norm else "")
+            + (f" (часы показывали {clock_dt:%H:%M}, {fmt_offset(norm.utc_offset_hours)})" if norm else "")
             + f" -> час {BRANCHES[hb]} ({HOUR_RANGES[hb]})" + (", поздний Цзы (晚子)" if late_zi else "") + "."
         )
         # проверка: другая основа времени даёт другой час?

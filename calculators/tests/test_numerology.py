@@ -111,6 +111,15 @@ def test_life_path_galactica_examples():
     assert life_path(1, 4, 1961, "all_digits")["value"] == 22
 
 
+def test_life_path_master_33_lenin_galactica():
+    # https://galactica.ru/numero/lessons/7 : «у Ленина по официальной дате рождения Жизненный Путь 33»
+    # 22.04.1870 (григ.): 4 + 22 + 7 = 33 — мастер-33; сложение всех цифр даёт 24 → 6
+    r = life_path(22, 4, 1870)
+    assert r["chain"] == [33] and r["is_master"] and r["components"]["day"] == [22]
+    assert life_path(22, 4, 1870, "all_digits")["chain"] == [24, 6]
+    assert life_path(22, 4, 1870, masters=(11, 22))["chain"] == [33, 6]   # школа «только 11 и 22»
+
+
 def test_life_path_all_digits_calculator():
     # https://calcforlife.com/?p=2372 : 24.07.1990 → 1+9+9+0+0+7+2+4 = 32 → 5
     assert life_path(24, 7, 1990, "all_digits")["chain"] == [32, 5]

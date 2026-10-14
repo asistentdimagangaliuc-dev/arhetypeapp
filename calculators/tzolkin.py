@@ -452,7 +452,7 @@ def oracle(kin: int) -> dict[str, Any]:
         "guide": {**kin_info(guide), "role_ru": "Ведущий (ведущая сила, высшее «я»)", "role_en": "Guide",
                   "rule": GUIDE_RULE_TEXT[shift], "self_guided": shift == 0},
         "analog": {**kin_info(analog), "role_ru": "Аналог (поддерживающая сила, партнёр)", "role_en": "Analog",
-                   "rule": "тот же тон; печать: сумма номеров печатей = 19 (Солнце считается 20 ↔ 19 по mod 20)"},
+                   "rule": "тот же тон; печать = 19 − печать (mod 20, 0 → 20): Дракон 1 ↔ Зеркало 18, Буря 19 ↔ Солнце 20"},
         "antipode": {**kin_info(antipode), "role_ru": "Антипод (сила вызова, испытания и укрепления)",
                      "role_en": "Antipode", "rule": "тот же тон; печать ±10"},
         "occult": {**kin_info(occult), "role_ru": "Оккультный (скрытый учитель, скрытая сила)", "role_en": "Occult",

@@ -620,3 +620,10 @@ def test_output_is_json_serializable():
 def test_unknown_option_rejected():
     with pytest.raises(ValueError):
         calculate(T1, foo=1)
+
+
+def test_option_aliases_compatible_with_bazi():
+    a = calculate(T2, solar_time="clock", zi_hour="late")
+    b = calculate(T2, time_basis="clock", zi_hour="same_day")
+    assert signature(a) == signature(b) == IZTRO["T2_zi_current"]
+    assert signature(calculate(T2, solar_time="clock", zi_hour="early")) == IZTRO["T2"]
