@@ -551,3 +551,45 @@ def test_definition_groups_order_is_deterministic():
     order = list(CENTERS)
     firsts = [order.index(g[0]) for g in r["definition"]["groups"]]
     assert firsts == sorted(firsts)
+
+
+# ---------------------------------------------------------------------------
+# Мосты расщеплённой определённости: простое (simple) / широкое (wide) расщепление
+# ---------------------------------------------------------------------------
+# Ответы официального движка Jovian Archive / MyBodyGraph, поле chart.bridges
+# (POST https://charts.maiamechanics.com/api/charts/free-chart, 14.10.2026, payload
+# {"time": "...Z", "timeInUtc": true, "autosave": false}). Признак wide — код приложения
+# https://app.mybodygraph.com/js/app.*.js: isWideSplit = bridgingChannels || bridgingFarGates.
+OFFICIAL_BRIDGES = {
+    # 1879-03-14T10:50Z → {"bridgingGates": [2, 34, 15, 29]}
+    "einstein": ("simple", [2, 15, 29, 34], [], []),
+    # 1955-02-25T03:15Z → {"bridgingGates": [], "bridgingChannels": ["34/20", "12/22", "35/36"],
+    #                       "bridgingFarGates": [20, 34, 5, 46, 8, 33, 18, 48, 27]}
+    "jobs": ("wide", [], ["12-22", "20-34", "35-36"], [5, 8, 18, 20, 27, 33, 34, 46, 48]),
+}
+
+
+@pytest.mark.parametrize("key", list(OFFICIAL_BRIDGES))
+def test_split_bridges_match_official_engine(key):
+    from calculators.human_design import split_bridges
+    ref = OFFICIAL[key]
+    gates = {int(x.split(".")[0]) for side in ("P", "D") for x in ref[side].split()}
+    kind, single, channels, far = OFFICIAL_BRIDGES[key]
+    br = split_bridges(gates)
+    assert br["kind"] == kind
+    assert br["bridging_gates"] == single
+    assert sorted(br["bridging_channels"]) == channels
+    assert br["bridging_far_gates"] == far
+
+
+def test_split_bridges_in_calculate_and_none_for_other_definitions():
+    r = calculate(T4)
+    assert r["definition"]["bridges"]["kind"] == "simple"
+    assert "простое расщепление" in r["steps"][10]["detail"]
+    r = calculate(JOBS)
+    assert r["definition"]["bridges"]["kind"] == "wide"
+    from calculators.human_design import split_bridges
+    for key in ("obama", "e_triple", "e_quad", "e_reflector"):  # single / triple / quadruple / none
+        ref = OFFICIAL[key]
+        gates = {int(x.split(".")[0]) for side in ("P", "D") for x in ref[side].split()}
+        assert split_bridges(gates) is None, key

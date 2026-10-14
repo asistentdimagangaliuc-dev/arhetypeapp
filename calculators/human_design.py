@@ -506,6 +506,53 @@ def analyze_gates(personality_gates: set[int], design_gates: set[int]) -> dict:
     }
 
 
+def _n_components(gates: set[int]) -> int:
+    """Число связных групп определённых центров для множества активных ворот."""
+    edges = [(GATES[a]["center"], GATES[b]["center"]) for a, b, *_ in CHANNELS if a in gates and b in gates]
+    return len(_components({c for e in edges for c in e}, edges))
+
+
+def split_bridges(all_gates: set[int]) -> dict | None:
+    """«Мосты» расщеплённой (split) определённости — как поле chart.bridges официального движка
+    Jovian Archive / MyBodyGraph (charts.maiamechanics.com/api/charts/free-chart; проверено 14.10.2026).
+
+    * bridging_gates — ворота, каждые из которых по отдельности соединяют обе группы (простое расщепление,
+      simple split). Пример движка: Эйнштейн → {"bridgingGates": [2, 34, 15, 29]}.
+    * Если таких ворот нет — широкое расщепление (wide split); движок тогда отдаёт
+      bridging_channels — каналы без активных ворот, напрямую соединяющие группы, и
+      bridging_far_gates — ворота из пар, которые соединяют группы через неопределённый центр
+      (каждые ворота пары замыкают канал с уже активными воротами). Пример движка: Джобс →
+      bridgingChannels ["34/20", "12/22", "35/36"], bridgingFarGates [20, 34, 5, 46, 8, 33, 18, 48, 27].
+    * Признак wide в приложении MyBodyGraph (app.mybodygraph.com/js/app.*.js):
+      isWideSplit = bridgingChannels || bridgingFarGates.
+    Для одинарной, тройной и четверной определённости возвращает None (вкладка «Bridges» у движка
+    показывается только при definition = SPLIT).
+    """
+    if _n_components(all_gates) != 2:
+        return None
+    # кандидаты: ворота, замыкающие канал с уже активными воротами
+    candidates = sorted({b if a in all_gates else a for a, b, *_ in CHANNELS
+                         if (a in all_gates) != (b in all_gates)})
+    single = [g for g in candidates if _n_components(all_gates | {g}) == 1]
+    if single:
+        return {"kind": "simple", "name_en": "Simple Split", "name_ru": "простое расщепление",
+                "bridging_gates": single, "bridging_channels": [], "bridging_far_gates": []}
+    channels = [f"{a}-{b}" for a, b, *_ in CHANNELS if a not in all_gates and b not in all_gates
+                and _n_components(all_gates | {a, b}) == 1]
+    pairs_as_channel = {frozenset((a, b)) for a, b, *_ in CHANNELS}
+    far: set[int] = set()
+    for i, g in enumerate(candidates):
+        for h in candidates[i + 1:]:
+            # пара, которая сама образует канал, — это «канал-мост», а не «дальние ворота» (вывод по ответу
+            # движка для Джобса: 12, 22, 35, 36 из каналов-мостов в bridgingFarGates не входят)
+            if (g in far and h in far) or frozenset((g, h)) in pairs_as_channel:
+                continue
+            if _n_components(all_gates | {g, h}) == 1:
+                far.update((g, h))
+    return {"kind": "wide", "name_en": "Wide Split", "name_ru": "широкое расщепление",
+            "bridging_gates": [], "bridging_channels": channels, "bridging_far_gates": sorted(far)}
+
+
 def profile_angle(p_line: int, d_line: int) -> str:
     """Угол креста по профилю: 4/1 — джакстапозиция; линия Личности 5–6 — левый; иначе правый."""
     if p_line == 4 and d_line == 1:
@@ -654,6 +701,7 @@ def calculate(b: BirthInput, node: str = "true", design_arc: float = DESIGN_ARC,
 
     ch = chart_from_jd(nt.jd_ut, node, design_arc)
     jd_d = ch.pop("jd_design")
+    ch["definition"]["bridges"] = split_bridges({int(g) for g in ch["gates"]})
     design_utc = jd_to_utc(jd_d)
     p, d = ch["personality"], ch["design"]
 
@@ -686,8 +734,16 @@ def calculate(b: BirthInput, node: str = "true", design_arc: float = DESIGN_ARC,
     steps.append({"step": "10. Профиль = линия Солнца Личности / линия Солнца Дизайна",
                   "detail": f"{p['sun']['gate_line']} / {d['sun']['gate_line']} → {ch['profile']['profile']} "
                             f"({ch['profile']['name_ru']})"})
+    br = ch["definition"]["bridges"]
+    br_txt = ""
+    if br and br["kind"] == "simple":
+        br_txt = f"; простое расщепление (simple split), мосты-ворота: {', '.join(map(str, br['bridging_gates']))}"
+    elif br:
+        br_txt = (f"; широкое расщепление (wide split): одних ворот мало; каналы-мосты: "
+                  f"{', '.join(br['bridging_channels']) or 'нет'}; дальние ворота (пары через неопределённый центр): "
+                  f"{', '.join(map(str, br['bridging_far_gates'])) or 'нет'}")
     steps.append({"step": "11. Определённость (число связных групп определённых центров)",
-                  "detail": f"{ch['definition']['components']} → {ch['definition']['name_ru']}"})
+                  "detail": f"{ch['definition']['components']} → {ch['definition']['name_ru']}{br_txt}"})
     cr = ch["incarnation_cross"]
     steps.append({"step": "12. Инкарнационный крест (Солнце/Земля Личности | Солнце/Земля Дизайна; угол по профилю)",
                   "detail": f"{cr['name_ru']} — {cr['name_en']}; {cr['quarter_ru']}"})

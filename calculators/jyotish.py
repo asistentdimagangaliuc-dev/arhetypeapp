@@ -593,8 +593,10 @@ def calculate(b: BirthInput, ayanamsa: str = "lahiri", node: str = "mean",
       dasha_start_star: 1 (от накшатры Луны, стандарт) | 4 | 5 | 8 (вариации PVR)
       bhava_system: 'sripati' (Порфирий, Лагна = середина 1-го дома) | 'placidus' (KP,
                   куспид = начало дома) | 'equal' (равные от Лагны как середины)
-      sunrise_method: 'hindu' (центр диска без рефракции, по умолчанию — как JHora/Prokerala) |
-                  'apparent' (верхний край + рефракция, гражданский восход)
+      sunrise_method: 'hindu' (центр диска без рефракции, по умолчанию — как Prokerala; в JHora опция
+                  «true rise of center») | 'apparent' (верхний край + рефракция, гражданский восход; так по
+                  умолчанию считает DrikPanchang: «uses upper edge of sun along with refraction»,
+                  https://www.drikpanchang.com/panchang/sunrise/panchang-sunrise.html, проверено 14.10.2026)
       include_outer: добавить Уран/Нептун/Плутон (в классический анализ не входят)
     """
     if ayanamsa not in eph.AYANAMSAS or ayanamsa not in AYANAMSA_LABELS:

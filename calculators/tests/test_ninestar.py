@@ -15,7 +15,7 @@ from calculators.common.ephemeris import sun_longitude
 from calculators.common.time import BirthInput, jd_to_utc, julian_day_ut
 from calculators.ninestar import (
     EAST_GROUP, GUA_DIRECTIONS, WEST_GROUP, calculate, day_star, eight_mansions_by_line_changes,
-    gua_number, gua_raw, li_chun, lunar_new_year, month_star, sexagenary_year, solstice,
+    gua_number, gua_raw, hour_star, li_chun, lunar_new_year, month_star, sexagenary_year, solstice,
     tendency_palace, year_star,
 )
 
@@ -532,3 +532,171 @@ def test_solstice_dates_vs_hko():
     # HKO T2004e.txt: Summer Solstice 2004-06-21, Winter Solstice 2004-12-21 (UTC+8)
     assert (jd_to_utc(solstice(2004, "summer")) + timedelta(hours=8)).date() == date(2004, 6, 21)
     assert (jd_to_utc(solstice(2004, "winter")) + timedelta(hours=8)).date() == date(2004, 12, 21)
+
+
+# ---------------------------------------------------------------------------
+# Повторная проверка (приоритет 1): варианты «閏», китайское правило, звезда часа, западное третье число
+# ---------------------------------------------------------------------------
+
+def test_day_star_ja_leap_is_sonoda_rule():
+    """園田真次郎『干支九星閏解説』(1930), NDL https://dl.ndl.go.jp/pid/1104437 , с. 28–29: «閏», если день 甲午
+    совпадает с солнцестоянием или раньше него («甲午の日が冬至の日と一致するか亦は冬至の日より手前に這入るを以て
+    置閏歳»). Значит, солнцестояние 癸巳 → предыдущий 甲子 (閏 нет), 甲午 → следующий 甲子 (閏) — это `ja_leap`.
+    Зимнее солнцестояние 22.12.2019 (JST) = 癸巳, 23.12.1939 = 甲午."""
+    assert day_star(date(2019, 12, 22), "ja_leap")["switch_jiazi"] == "2019-11-23"      # 癸巳 → предыдущий 甲子
+    assert day_star(date(2020, 1, 21), "ja_leap")["leap_segment"] is False
+    r = day_star(date(1939, 12, 23), "ja_leap")                                         # 甲午 → «閏»
+    assert r["leap_segment"] and r["number"] == 7 and r["day_ganzhi"] == "甲午"
+    # Сонода, с. 14–15 (зимний «閏»): «癸己の七赤中宮の日の、翌日甲午の日にも、亦七赤が中宮に起つて» — 七赤 два дня
+    assert day_star(date(1939, 12, 22), "ja_leap")["number"] == 7
+
+
+def test_day_star_ja_leap_wiki_vs_nob2018_calendmate():
+    """NOB «日家九星の計算方法（改訂版）» (способ K.Oka / Calend Mate):
+    https://nobml.hatenablog.jp/entry/20180113/1515770790 — «1951年〜2050年の間で「九星の閏」が置かれるのは、
+    1951年夏、1962年冬、1974年夏、1985年冬、1997年夏、2008年冬、2019年冬、2031年冬、2042年冬»; пример: 2008-12-31 = 九紫,
+    переключения 2008-05-24 (九紫), 2008-12-20 (甲午, 七赤), 2009-07-18 (九紫), 2010-01-14 (一白)."""
+    got = [x for x in _leap_positions("ja_leap_wiki") if 1951 <= int(x[:4]) <= 2050]
+    assert got == ["1951夏", "1962冬", "1974夏", "1985冬", "1997夏", "2008冬", "2019冬", "2031冬", "2042冬"]
+    for d, star in [("2008-12-31", 9), ("2008-05-24", 9), ("2008-12-20", 7), ("2009-07-18", 9), ("2010-01-14", 1)]:
+        assert day_star(date.fromisoformat(d), "ja_leap_wiki")["number"] == star, d
+
+
+def test_day_star_ja_jiawu_vs_nob2012_and_wiki_brackets():
+    """Второе правило ja.wikipedia «九星» («冬至または夏至の前後1日以内に甲午がある場合に九星の閏を置く»), источник —
+    NOB 2012: https://nobml.hatenablog.jp/entry/20121231/1356881216 : «1951年〜2050年の間で「九星の閏」が置かれるのは、
+    1951年夏、1962年冬、1974年夏、1985年冬、1997年夏、2008年冬、2020年夏、2031年冬、2043年夏»; примеры таблиц 2019 и 2031
+    (после «調整»). Этот вариант даёт «скобочные» альтернативы ja.wikipedia 1940 夏 и 2043 夏."""
+    got = _leap_positions("ja_jiawu")
+    assert [x for x in got if 1951 <= int(x[:4]) <= 2050] == [
+        "1951夏", "1962冬", "1974夏", "1985冬", "1997夏", "2008冬", "2020夏", "2031冬", "2043夏"]
+    assert "1940夏" in got and "1939冬" not in got and "2043夏" in got and "2042冬" not in got
+    assert "1917夏" in got and "1928夏" in got and "2054夏" in got
+    for d, star in [("2008-12-31", 9), ("2018-06-01", 9), ("2018-11-28", 1), ("2019-05-27", 9), ("2019-11-23", 1),
+                    ("2020-06-20", 3), ("2021-01-16", 1), ("2031-05-24", 9), ("2031-12-20", 7), ("2032-07-17", 9),
+                    ("2033-01-13", 1)]:
+        assert day_star(date.fromisoformat(d), "ja_jiawu")["number"] == star, d
+
+
+def test_day_star_every_wiki_bracket_is_some_variant():
+    """Каждая альтернатива в скобках ja.wikipedia даётся одним из вариантов модуля."""
+    union = set(_leap_positions("ja_leap")) | set(_leap_positions("ja_jiawu"))
+    for x in ["1917夏", "1928冬", "1940夏", "1951冬", "2020夏", "2043夏", "2054冬"]:
+        assert x in union, x
+
+
+# Календарь skillon.com «Daily Feng Shui» (строка «Day Flying Star»), страницы
+# https://www.skillon.com/feng-shui-flying-star.cfm/date/<YYYY-MM-DD> (доступны 2020–2030), запрошены 14.10.2026.
+# Окна вокруг солнцестояний 21.06.2025, 21.12.2025 (день 甲子), 21.06.2026 и случайные даты 2020–2030.
+@pytest.mark.parametrize("d,star", [
+    ("2020-03-13", 7), ("2020-04-06", 4), ("2020-04-20", 9), ("2020-07-11", 9), ("2020-11-09", 5),
+    ("2022-03-17", 3), ("2023-12-17", 6), ("2024-02-01", 5),
+    ("2025-06-20", 6), ("2025-06-21", 3), ("2025-06-22", 2), ("2025-06-23", 1), ("2025-06-24", 9), ("2025-06-25", 8),
+    ("2025-12-19", 2), ("2025-12-20", 1), ("2025-12-21", 4), ("2025-12-22", 5),
+    ("2026-01-24", 2), ("2026-03-21", 4), ("2026-06-19", 4), ("2026-06-20", 5), ("2026-06-21", 4), ("2026-06-22", 3),
+    ("2026-07-01", 3), ("2027-02-08", 4), ("2027-05-26", 3), ("2027-11-12", 8), ("2028-06-10", 6),
+    ("2029-07-27", 6), ("2030-06-27", 4), ("2030-09-21", 8),
+])
+def test_day_star_cn_after_vs_skillon(d, star):
+    assert day_star(date.fromisoformat(d), "cn_after")["number"] == star
+
+
+def test_day_star_cn_after_differs_from_nearest():
+    # 01.07.2026: летнее солнцестояние 21.06 (день 丙寅), ближайший 甲子 — 19.06 (Инь-дунь с 9 → 6),
+    # первый 甲子 после — 18.08 (до него звёзды считаются от него назад: 9 + 48 → 3). skillon: 3.
+    assert day_star(date(2026, 7, 1), "ja_leap")["number"] == 6
+    r = day_star(date(2026, 7, 1), "cn_after")
+    assert r["number"] == 3 and r["switch_jiazi"] == "2026-08-18" and r["dun"] == "yin"
+
+
+def test_hour_star_table_vs_ja_wikipedia():
+    """ja.wikipedia «九星», таблица «時刻と九星の対応» (陽遁/陰遁 × три группы ветвей дня × 12 часов)."""
+    yang = {0: [1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3], 1: [4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6],
+            2: [7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
+    yin = {0: [9, 8, 7, 6, 5, 4, 3, 2, 1, 9, 8, 7], 1: [6, 5, 4, 3, 2, 1, 9, 8, 7, 6, 5, 4],
+           2: [3, 2, 1, 9, 8, 7, 6, 5, 4, 3, 2, 1]}
+    # Дни внутри сегментов ja_leap: Ян-дунь 30.12.1989–27.06.1990, Инь-дунь с 28.06.1990.
+    for base, table in ((date(1990, 1, 29), yang), (date(1990, 7, 10), yin)):
+        for k in range(12):                      # 12 дней подряд покрывают все ветви
+            d = base + timedelta(days=k)
+            br = (d.toordinal() + 1721425 + 49) % 60 % 12
+            grp = 0 if br in (0, 3, 6, 9) else 1 if br in (1, 4, 7, 10) else 2
+            for hi in range(1, 12):              # 丑…亥 (子 в 23:00 относится к следующему дню, см. ниже)
+                h = 2 * hi - 1
+                r = hour_star(datetime(d.year, d.month, d.day, h, 30), "ja")
+                assert r["hour_branch_index"] == hi and r["number"] == table[grp][hi], (d, h)
+            assert hour_star(datetime(d.year, d.month, d.day, 0, 30), "ja")["number"] == table[grp][0]
+
+
+def test_hour_star_ja_takashima_1935():
+    """高島易断所本部神宮館『九星極意八百十通変化奥伝』(1935), NDL https://dl.ndl.go.jp/pid/1137380 , с. 25:
+    «陽遁となりたる甲子の日の子の刻（午後十一時より午前一時迄）に時家九星の一白を配し、丑の刻に二黑、寅の刻に三碧»;
+    陰遁 — «夏至に近き…甲子の日の子の刻に九紫を配し丑の刻に八白…»; таблица: «冬至に最も近き甲子の日より夏至に近き
+    癸亥の日迄用ゆ». 甲子, ближайший к зимнему солнцестоянию 1989 г. (22.12 JST), — 30.12.1989."""
+    assert day_star(date(1989, 12, 30), "ja_leap")["switch_jiazi"] == "1989-12-30"
+    assert hour_star(datetime(1989, 12, 30, 0, 30), "ja")["number"] == 1        # 子 дня 甲子 → 一白
+    assert hour_star(datetime(1989, 12, 30, 1, 30), "ja")["number"] == 2        # 丑 → 二黒
+    assert hour_star(datetime(1989, 12, 30, 3, 30), "ja")["number"] == 3        # 寅 → 三碧
+    r = hour_star(datetime(1989, 12, 29, 23, 30), "ja")                          # 23:30 — уже 子 дня 甲子
+    assert r["day_for_hour"] == "1989-12-30" and r["number"] == 1
+    # Тот же день по lunar-python (дунь по дате солнцестояния, 23:00 — тот же день 癸亥): Ян-дунь с 22.12 → 7.
+    assert hour_star(datetime(1989, 12, 29, 23, 30), "cn_solstice")["number"] == 7
+    # 23.12.1989 (дата после солнцестояния, но до 甲子): ja ещё Инь-дунь, cn_solstice уже Ян-дунь.
+    assert hour_star(datetime(1989, 12, 23, 12, 0), "ja")["dun"] == "yin"
+    assert hour_star(datetime(1989, 12, 23, 12, 0), "cn_solstice")["dun"] == "yang"
+    # Инь-дунь: 甲子, ближайший к летнему солнцестоянию 1990 (21.06 JST), — 28.06.1990 → час 子 = 九紫.
+    assert day_star(date(1990, 6, 28), "ja_leap")["switch_jiazi"] == "1990-06-28"
+    assert hour_star(datetime(1990, 6, 28, 0, 10), "ja")["number"] == 9
+    assert hour_star(datetime(1990, 6, 28, 1, 10), "ja")["number"] == 8
+
+
+def test_hour_star_cn_solstice_vs_lunar_python():
+    """lunar-python `Lunar.getTimeNineStar` — 200 случайных моментов (время считается местным)."""
+    from lunar_python import Solar
+    rnd = random.Random(11)
+    for _ in range(200):
+        d = date(1901, 3, 1) + timedelta(days=rnd.randint(0, 72000))
+        h, mi = rnd.randint(0, 23), rnd.randint(0, 59)
+        lp = CN.index(Solar.fromYmdHms(d.year, d.month, d.day, h, mi, 0).getLunar().getTimeNineStar().getNumber()) + 1
+        assert hour_star(datetime(d.year, d.month, d.day, h, mi), "cn_solstice")["number"] == lp, (d, h, mi)
+
+
+def test_hour_star_in_calculate():
+    r = calculate(BirthInput(1990, 5, 15, 14, 30, place="Москва", gender="female"))      # T1: день 庚辰, час 未
+    h = nsk(r)["hour"]
+    assert h["hour_branch"] == "未" and h["zi_hour_star"] == 4 and h["number"] == 2 and h["dun"] == "yang"
+    r2 = calculate(BirthInput(1984, 2, 4, 23, 30, place="Москва", gender="male"))         # T2: 23:30 → 子 дня 己巳
+    h2 = nsk(r2)["hour"]
+    assert h2["day_for_hour"] == "1984-02-05" and h2["number"] == 7
+    assert h2["alt_other_school"] == {"method": "cn_solstice", "number": 4}
+    assert "hour" not in nsk(calculate(BirthInput(1990, 5, 15, place="Москва")))
+    assert "hour" not in nsk(calculate(BirthInput(1990, 5, 15, 14, 30, place="Москва"), hour_star_method=None))
+
+
+def test_tendency_western_center_rule():
+    """Западная школа: при совпадении звёзд третье число = 5 (звезда года в центре таблицы месяца).
+    Плагин WordPress «Nine Star Ki» 1.1.1 (https://wordpress.org/plugins/nine-star-ki/, changelog «use method of
+    Yoshikawa for the calculation of the third number»): таблицы zoekmaandgetal/zoekuitingsgetal в nine-star-ki.php.
+    9starki.com Lesson 6: «find the position of the first number (the annual number) in the monthly chart»."""
+    zm = {1: [6, 8, 7, 6, 5, 4, 3, 2, 1, 9, 8, 7], 2: [9, 2, 1, 9, 8, 7, 6, 5, 4, 3, 2, 1],
+          3: [3, 5, 4, 3, 2, 1, 9, 8, 7, 6, 5, 4]}
+    zm.update({4: zm[1], 7: zm[1], 5: zm[2], 8: zm[2], 6: zm[3], 9: zm[3]})
+    zu = {1: [9, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8], 2: [7, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6],
+          3: [5, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4], 4: [3, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2],
+          5: [1, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9], 6: [8, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7],
+          7: [6, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5], 8: [4, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3],
+          9: [2, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1]}
+    for p in range(1, 10):
+        for i, mth in enumerate(zm[p]):
+            assert tendency_palace(p, mth, "male", "western")["number"] == zu[p][i], (p, mth)
+        assert tendency_palace(p, p, None, "western")["number"] == 5
+    # Вне диагонали школы совпадают.
+    for p in range(1, 10):
+        for mth in range(1, 10):
+            if p != mth:
+                assert tendency_palace(p, mth, "female", "western")["number"] == tendency_palace(p, mth, "female")["number"]
+    # 01.08.2000: 9.9 → японский 中宮傾斜 1, западная запись 9.9.5.
+    r = calculate(BirthInput(2000, 8, 1, 12, 0, place="Москва", gender="female"))
+    assert nsk(r)["notation"] == "9.9.1" and nsk(r)["tendency"]["alt_western"]["number"] == 5
+    rw = calculate(BirthInput(2000, 8, 1, 12, 0, place="Москва", gender="female"), tendency_method="western")
+    assert nsk(rw)["notation"] == "9.9.5" and nsk(rw)["tendency"]["alt_japanese"]["number"] == 1

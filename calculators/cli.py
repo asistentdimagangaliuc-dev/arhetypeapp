@@ -47,6 +47,8 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
                    help="julian — дата по старому стилю (Россия до 14.02.1918), будет переведена")
     p.add_argument("--place", help="город из справочника common/places.py")
     p.add_argument("--tz", help="IANA-зона (Europe/Moscow), UTC+03:00 или LMT")
+    p.add_argument("--region", help="регион на дату рождения (напр. «Татарская АССР») — для региональных "
+                                    "исключений, которых нет в tzdb (KB 00, табл. 4.11)")
     p.add_argument("--lat", type=float)
     p.add_argument("--lon", type=float, help="восточная долгота положительная")
     p.add_argument("--gender", choices=["male", "female"])
@@ -85,7 +87,7 @@ def build_input(a: argparse.Namespace) -> BirthInput:
         hh, mm = parts[0], parts[1]
         ss = parts[2] if len(parts) > 2 else 0
     b = BirthInput(y, m, d, hh, mm, tz=a.tz, lat=a.lat, lon=a.lon, place=a.place,
-                   gender=a.gender, name=a.name, second=ss, calendar=a.calendar)
+                   gender=a.gender, name=a.name, second=ss, calendar=a.calendar, region=a.region)
     if a.place and b.lat is None:
         raise SystemExit(f"Место «{a.place}» нет в справочнике common/places.py — передайте --lat --lon [--tz].")
     if b.has_time and b.tz is None:
@@ -111,7 +113,8 @@ def main(argv: list[str] | None = None) -> int:
     if a.method == "time":
         n = normalize(b)
         result = {"utc": n.utc.isoformat(), "offset": fmt_offset(n.utc_offset_hours),
-                  "offset_source": n.offset_source, "jd_ut": n.jd_ut, "warnings": n.warnings}
+                  "offset_source": n.offset_source, "jd_ut": n.jd_ut, "warnings": n.warnings,
+                  "alternatives": n.alternatives}
     elif a.method == "all":
         per_method: dict[str, dict] = {}
         for k, v in opts.items():
