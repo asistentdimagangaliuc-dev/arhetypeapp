@@ -468,7 +468,7 @@ def self_checks(p: dict[str, int], purposes: dict[str, int], health: dict[str, A
     e = p["E"]
     main_ring = [x["value"] for x in ring if float(x["age"]).is_integer() and int(x["age"]) % 10 == 0]
     items = [
-        ("все точки в диапазоне 1..22, B = месяц", all(1 <= v <= 22 for v in p.values())),
+        ("все точки в диапазоне 1..22", all(1 <= v <= 22 for v in p.values())),
         (f"D ≡ A+B+C (mod {m})", eq(p["D"], p["A"] + p["B"] + p["C"])),
         (f"E ≡ A+B+C+D (mod {m})", eq(e, p["A"] + p["B"] + p["C"] + p["D"])),
         (f"Rod ≡ 2·E (mod {m})", eq(p["R"], 2 * e)),
