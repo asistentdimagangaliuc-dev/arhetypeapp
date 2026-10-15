@@ -20,7 +20,13 @@
   0,98564733° × возраст (ключ Наибода в прямом восхождении), как в astro.com;
 * дуга дирекций — 'true' (прогрессивное Солнце − натальное), орбис 1°;
 * соляр — тропический, на место рождения (как astro.com по умолчанию), Плацидус;
-* профекции — от знака ASC, целые знаки, традиционные управители, смена года в момент соляра.
+* профекции — от знака ASC, целые знаки, традиционные управители, смена года в момент соляра;
+  месяц — 1/12 года (варианты profection_month: calendar, thirteen, valens).
+
+Опции сверх умолчаний: конверсные вторичные прогрессии (progression_direction='converse', astro.com:
+«negative age»), первичные дирекции планет к углам (primary_directions=True; формулы и ключи по
+B. Makransky, «Primary Directions. A Primer of Calculation»), ε рождения для прогрессивных углов
+(progression_obliquity='natal', как Astrolog «-p1 -pc»), окно поиска точных дат (exact_window_years).
 
 Пример:
     from calculators.common.time import BirthInput
@@ -720,7 +726,7 @@ def calculate(b: BirthInput, on_date=None, on_tz: str = "UTC", period_start=None
     on_utc, on_has_time = _parse_moment(on_date, on_tz)
     jd_on = julian_day_ut(on_utc)
     if jd_on < jd_b:
-        raise ValueError("on_date раньше момента рождения: конверсные методы не поддерживаются.")
+        raise ValueError("on_date раньше момента рождения (конверсные прогрессии — опция progression_direction='converse' с датой после рождения).")
     if not on_has_time:
         warnings.append(f"Для on_date без времени взято 00:00 ({on_tz}); Луна за сутки проходит 12–15°.")
     if period_start is None and period_end is None:

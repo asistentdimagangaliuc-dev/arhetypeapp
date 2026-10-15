@@ -44,7 +44,7 @@
 | `solar_arc_ra` | ARMC_p = ARMC_рожд + (α_Солнца_прогр − α_Солнца_рожд) | «Solar Arc in R.A.» — те же источники (Astracadabra, Solar Fire) |
 | `quotidian` | карта на сам прогрессивный момент: ARMC растёт на ~361° за прогрессивные сутки (= за год жизни) | astro.com: опция «ARMC 361° / prog. Day»; **умолчание Astrolog 8** (`-p`: куспиды строятся на момент `is.Tp = T + (JDp − T)/(rProgDay·rProgCusp)`, `-pC` по умолчанию 1,0 — `calc.cpp`, `charts0.cpp`) |
 
-astro.com подчёркивает: способы через ключ Наибода и солнечную дугу «strictly speaking… are not real secondary progressions, but primary directions» углов. На вопрос «Can I set a progressed chart to use SA (solar arcs) in Longitude method?» FAQ «Other methods» отвечает «No»: на astro.com прогрессивные углы — только ARMC + 3m56s в год. Старый Astrolog (до 7-й версии) прогрессировал MC «using Naibod right ascension» (Astrolog32 Wish List) — это наш `mean_sun`.
+astro.com подчёркивает: способы через ключ Наибода и солнечную дугу «strictly speaking… are not real secondary progressions, but primary directions» углов. На вопрос «Can I set a progressed chart to use SA (solar arcs) in Longitude method?» FAQ «Other methods» отвечает «No»: на astro.com прогрессивные углы — только ARMC + 3m56s в год. «The original Astrolog only progressed the MC in a secondary using Naibod right ascension» (Astrolog32 Wish List) — это наш `mean_sun`; в Astrolog 8 по умолчанию уже `quotidian`.
 
 **Прогрессивные углы — наклон эклиптики ε** (`progression_obliquity`). По умолчанию истинный ε на прогрессивный момент JD_p (`"progressed"`); вариант `"natal"` — ε рождения, как в Astrolog 8 для куспидов от направленного MC (`-p1 -pc`: `SwissHouse(is.Tp, …)` с `is.Tp` = время рождения; `calc.cpp`). Для `quotidian` всегда ε прогрессивного момента (это настоящая карта на этот момент). Разница — секунды дуги (T4: ASC 0,2″), на даты срабатывания не влияет. ⚠ Какой ε берёт astro.com, не опубликовано.
 
@@ -59,7 +59,7 @@ ASC в дирекциях: «All the planets and axes are moved by the same amou
 - Зодиак: тропический соляр — Солнце возвращается к натальной тропической долготе. «Соляр с поправкой на прецессию» (precession-corrected) — к натальной **сидерической** долготе: он наступает позже на ≈ 50,29″ × возраст / 0,9856°/сут ≈ 0,0142 сут × возраст (у Эйнштейна в 26 лет — на 8,6 ч). astro.com такой расчёт не предлагает: «we do not consider the method logical and consistent» (FAQ «Other methods»). Опция `sr_zodiac="sidereal"` (аянамша `sr_ayanamsa`, по умолчанию Fagan/Bradley) — с предупреждением.
 
 **Профекции.**
-- Брennan (TMA, astro.com): «you begin from the sign that contains the Ascendant; the ruler of that sign becomes the "time-lord of the year" for the first year»; «When a person is born, start from zero at the sign that contains the Ascendant, which is the 1st Whole Sign house… Every twelve years, the profection returns to the rising sign… 12… 24, then 36, 48, 60». Управители — **традиционные** («I'm going to be using the traditional rulership scheme»), высшие планеты как управители не берутся, но учитываются, если стоят в знаке года.
+- Brennan (TMA, astro.com): «you begin from the sign that contains the Ascendant; the ruler of that sign becomes the "time-lord of the year" for the first year»; «When a person is born, start from zero at the sign that contains the Ascendant, which is the 1st Whole Sign house… Every twelve years, the profection returns to the rising sign… 12… 24, then 36, 48, 60». Управители — **традиционные** («I'm going to be using the traditional rulership scheme»), высшие планеты как управители не берутся, но учитываются, если стоят в знаке года.
 - Граница года: «In the second year of the native's life, starting on their first solar return» (TMA) и «it jumps suddenly on the day of your birthday» (подкаст, эп. 153). Разница — не больше суток. По умолчанию `profection_boundary="solar_return"`, вариант `"birthday"` (местная полночь дня рождения).
 - Месячные профекции: «profections can actually be done at a yearly rate, at a monthly rate, or even daily» (Brennan, эп. 153); в книге Brennan «Hellenistic Astrology» (2017, гл. 17): «Profections can also be advanced on a monthly, daily, or even hourly level», механика месяца не дана. Источники с механикой (опция `profection_month`):
 
@@ -73,7 +73,7 @@ ASC в дирекциях: «All the planets and axes are moved by the same amou
   Ещё у Валента (V.6 по Riley; у Brennan — 5, 4: 1, «Nechepso»): «distance from the Sun's current position to the Moon's position at birth, then count that distance from the Ascendant»; сам Валент считал действенными месяцы, когда Солнце проходит знаки распределения года, — **не реализованы**.
 - Другие «профекционные» системы (AstroWiki «Profection»): Мюнхенская ритмика (7 лет на дом), школа Глана (8⅓ года), Возрастная точка Хуберов (6 лет на дом Коха), ключ Франкленда (7 лет на знак) — **не реализованы**.
 
-**Первичные дирекции** (`primary_directions=True`, только к углам). astro.com предлагает их отдельной картой («Primary Directions are a complex subject…»; FAQ «Other methods») с опциями `mb=0` «promissors without latitude», `mc=1/2` только прямые/только конверсные, ключи `ms=n` «Naibod/Kühr», `ms=L`/`ms=a` движение Солнца в день рождения по эклиптике/экватору, `ms=k` «Kündig: 1 degree in AR»; какой ключ у astro.com по умолчанию, в FAQ не сказано ⚠. Калькулятор считает только **соединения планет и северного узла с MC, IC, ASC, DSC**: для углов формулы одинаковы в системах Плацидуса и Региомонтана (Makransky, «Primary Directions. A Primer of Calculation», гл. II: «The simplest directions to calculate are those in which the MC or IC is the significator»). Дуга > 0 — прямая (direct), < 0 — конверсная (converse); во времени берётся |дуга| (Makransky, гл. III: «Converse arcs are here treated as direct arcs»). Ключи (`pd_key`): `naibod` (по умолчанию; 0,98564733° = 1 год), `ptolemy` (1° = 1 год), `birthday_ra` (Симмонайт: ход Солнца по RA за дату рождения 0h–24h UT), `true_solar_ra` (Плацидус: «the arc of direction is added to the sun's natal RA… timed by the motion in RA of the secondary progressed sun»; по Makransky — «overwhelmingly the most popular method… by modern practitioners»). Широта промиссора (`pd_latitude`): `with` — in mundo (по умолчанию, как astro.com без `mb=0`), `without` — in zodiaco. Дирекции к планетам, мунданные аспекты и полюса значимых точек (Плацидус/Региомонтан) **не реализованы** ⚠ (у Makransky — гл. IV–VII).
+**Первичные дирекции** (`primary_directions=True`, только к углам). astro.com предлагает их отдельной картой («Primary Directions are a complex subject…»; FAQ «Other methods») с опциями `mb=0` «promissors without latitude», `mc=1/2` только прямые/только конверсные, ключи `ms=n` «Naibod/Kühr», `ms=L`/`ms=a` движение Солнца в день рождения по эклиптике/экватору, `ms=k` «Kündig: 1 degree in AR»; какой ключ у astro.com по умолчанию, в FAQ не сказано ⚠. Калькулятор считает только **соединения планет и северного узла с MC, IC, ASC, DSC**: для углов формулы одинаковы в системах Плацидуса и Региомонтана (Makransky, «Primary Directions. A Primer of Calculation», гл. II: «The simplest directions to calculate are those in which the MC or IC is the significator»; гл. IV и VII: если значимая точка — MC или ASC, общие формулы Региомонтана и Плацидуса сводятся к «Arc = RAp − RAMC» и «Arc = OAp − OAasc»). Дуга > 0 — прямая (direct), < 0 — конверсная (converse); во времени берётся |дуга| (Makransky, гл. III: «Converse arcs are here treated as direct arcs»). Ключи (`pd_key`): `naibod` (по умолчанию; 0,98564733° = 1 год), `ptolemy` (1° = 1 год), `birthday_ra` (Симмонайт: ход Солнца по RA за дату рождения 0h–24h UT), `true_solar_ra` (Плацидус: «the arc of direction is added to the sun's natal RA… timed by the motion in RA of the secondary progressed sun»; по Makransky — «overwhelmingly the most popular method… by modern practitioners»). Широта промиссора (`pd_latitude`): `with` — in mundo (по умолчанию, как astro.com без `mb=0`), `without` — in zodiaco. Дирекции к планетам, мунданные аспекты и полюса значимых точек (Плацидус/Региомонтан) **не реализованы** ⚠ (у Makransky — гл. IV–VII).
 
 ### 1.3. Значения по умолчанию и почему
 
@@ -205,6 +205,11 @@ D = (☉p − ☉0) mod 360 (true) | 0.98564733·A (naibod); dir[p] = λ0[p] + D
 JDsr = last root of λ☉(t) = ☉0 before JD; chart(JDsr, место соляра)
 # профекции
 N = round((JDsr − JD0)/365.24219); S = (sign(ASC) + N) mod 12; lord = ruler_trad[S]
+month = S + m (equal: ⌊12·frac⌋ | calendar: прошедшие «дни рождения» месяцев | thirteen: ⌊13·frac⌋ | valens: ⌊(λ☉/☽ − λ₀)/30⌋)
+# конверсные прогрессии (опция): JDp = JD0 − A; ARMCp = ARMC0 − 0.98564733·A
+# первичные дирекции к углам (опция): AD = asin(tg δ·tg φ)
+arc_MC = α − RAMC; arc_IC = α − RAMC − 180; arc_ASC = (α − AD) − (RAMC + 90); arc_DSC = (α + AD) − (RAMC − 90)
+years = |arc| / 0.98564733 (naibod) | |arc| (ptolemy) | … ; date = JD0 + years·365.24219
 ```
 
 ### 3.8. Ручная прикидка (без программы) и самопроверка
@@ -633,12 +638,13 @@ N = round((JDsr − JD0)/365.24219); S = (sign(ASC) + N) mod 12; lord = ruler_tr
 | Юпитер | рост, поиск смысла в затронутой сфере; с ретроградной петлёй — недели–месяцы |
 | Сатурн | созревание, концентрация на главном; ограничения, разочарования, ответственность; до года |
 | Уран | освобождение и перемены; неожиданные повороты, тревога у тех, кто боится перемен; 2–3 года |
-| Нептун | повышенная чувствительность; разочарование, иллюзии, растворение |
-| Плутон | разрушение изживших себя структур, исцеление и трансформация |
+| Нептун | повышенная чувствительность; разочарование, утрата иллюзий, растворение; с петлёй — до 2–3 лет |
+| Плутон | разрушение изживших себя структур, исцеление и трансформация («greater sense of personal wholeness»); до 2–3 лет |
+| Меркурий, Венера, Марс в ретроградной петле (тройной проход) | «considered to be more significant» |
 | Стоянка в орбисе натальной точки | «very powerful» (AstroWiki) |
 | Ингрессия в натальный дом | тема дома; важнейшие моменты — пересечение куспидов |
 
-Аспекты: соединение важнее всего, затем квадрат и оппозиция, затем секстиль и тригон; у Сатурна…Плутона разница «гармоничный/напряжённый» менее значима (AstroWiki «Transit»). Медленные транзиты (Сатурн…Плутон) — «life-changing events or processes» (AstroWiki «Transit»); быстрые — «opportunities, health, moods and states of mind», медленные — «cycles of development… learning phases, crises, as well as periods of stability and happiness» (astro.com FAQ «Transits»).
+Аспекты: соединение важнее всего, затем квадрат и оппозиция, затем секстиль и тригон; у Сатурна…Плутона разница «гармоничный/напряжённый» менее значима (AstroWiki «Transit»). Фон транзита — роль транзитной планеты в радиксе (дом, знак, аспекты); «спусковые крючки» длительных транзитов — новолуние/полнолуние или затмение на том же градусе, быстрая планета (особенно Марс), транзит через натальное место самой медленной планеты (AstroWiki «Transit», раздел «Trigger»). Медленные транзиты (Сатурн…Плутон) — «life-changing events or processes» (AstroWiki «Transit»); быстрые — «opportunities, health, moods and states of mind», медленные — «cycles of development… learning phases, crises, as well as periods of stability and happiness» (astro.com FAQ «Transits»).
 
 ### 8.2. Прогрессии и дирекции (AstroWiki «Secondary Progression», «Solar Arc», «Direction»)
 
@@ -649,20 +655,26 @@ N = round((JDsr − JD0)/365.24219); S = (sign(ASC) + N) mod 12; lord = ruler_tr
 | Прогрессивная Луна в натальном доме | активирует тему этого дома ~2½ года |
 | Прогрессивная планета меняет направление (R ↔ D) | смена направленности темы планеты (пример AstroWiki: натальный R Меркурий становится прямым — меньше интроверсии) |
 | Прогрессивное Солнце в новом знаке | к натальным качествам добавляются качества нового знака (Овен → Телец: + стабильность, материальность) |
-| Прогрессивные углы | только при времени рождения с точностью до минут |
+| Взаимный аспект двух прогрессивных планет | «mutual exchange of energy» (калькулятор такие аспекты не выводит) |
+| Какие прогрессии главные | обычно личные планеты (Солнце, Луна, Меркурий, Венера, Марс); медленные — у пожилых, особенно у конца знака или дома (AstroWiki) |
+| Прогрессивные углы | только при времени рождения с точностью до минуты («accurate to within a minute»), иначе ошибка ≥ 1 года |
+| Направленная точка (дуга) к натальной | «trigger», орбис до 1° — действует несколько месяцев; вход в знак/дом — новая фаза (AstroWiki «Solar Arc») |
+| Конверсные прогрессии, первичные дирекции | ⚠ отдельных ключей толкования в источниках модуля нет (Makransky: «no interpretations are given») — толковать как аспект/соединение соответствующих планет и углов |
 
-### 8.3. Фазы прогрессивной лунации (AstroWiki «Lunation Cycle»; F. Boele)
+### 8.3. Фазы прогрессивной лунации (F. Boele, «The Progressed Lunation Cycle»)
 
-| Фаза | Ключ |
+| Фаза | Ключ (Boele, прогрессивная фаза) |
 |---|---|
-| Новолуние | конец старого цикла и начало нового: потери, переориентация, «возвращение домой»; новые начинания ещё не видны |
-| Растущий серп | рост в защищённой среде, эксперименты, обучение |
-| Первая четверть | кризис действия: независимость, конкуренция, свадьбы и разводы, выход в мир |
-| Выпуклая | анализ и совершенствование, перегрузки, стремление к цели |
-| Полнолуние | кульминация: результат, признание или провал, «на виду» |
-| Распространяющая | делиться опытом, учить, найти свою нишу и единомышленников |
-| Последняя четверть | кризис убеждений, бунт против коллектива, новая идентичность |
-| Бальзамическая | завершение, итоги, мемуары; «пожинать посеянное»; подготовка к новому циклу |
+| Новолуние | «both the beginning and the end of the cycle»: потери и завершения, траур и переориентация, «movement towards home», переезд/новые корни; начинания малы и почти незаметны |
+| Растущий серп | рискнуть, чтобы начать свою историю: выйти из дома, учёба, свидания, ребёнок; нужна поддержка, человек ещё действует внутри прежней группы |
+| Первая четверть | «a clean break from the past»: независимость, конфронтация с «другим», свадьбы и разводы, выход в мир |
+| Выпуклая | мир расширяется (путешествия, учёба, новые горизонты); «everything grows big» — возможности, проблемы и эмоции; легко переусердствовать |
+| Полнолуние | кульминация: успех или поражение, «a release of energy», ясность и видение, иногда призвание |
+| Распространяющая | вернуться и поделиться результатом, найти свою нишу и единомышленников; порой тихое время «в изгнании» |
+| Последняя четверть | кризис личности: «who we are, what we want», бунт против коллектива/общества, новая идентичность, страх «не успеть» |
+| Бальзамическая | мир сужается: уходят опоры, планы срываются, нужно беречь здоровье; «it's now or never» — отпустить страхи и иллюзии, высказать несказанное, мемуары; образ «ripe and rotten fruit which releases the seed» |
+
+AstroWiki «Lunation Cycle» (по Д. Радьяру) даёт ключи **натальной** фазы (типы личности: 1 — «subjective, impulsive», 6 — «need to teach and communicate» и т. д.) — для прогрессивной фазы их не подставлять.
 
 ### 8.4. Соляр и лунар (AstroWiki «Solar Return Chart», «Lunar Return Chart»)
 
@@ -671,13 +683,14 @@ N = round((JDsr − JD0)/365.24219); S = (sign(ASC) + N) mod 12; lord = ruler_tr
 | ASC соляра | общий подход к жизни в этот год |
 | MC соляра | цель года |
 | Натальные дома, где стоят ASC и MC соляра | активированы |
+| Управитель ASC соляра | активированы натальный дом и дом соляра, где он стоит |
 | Дом соляра с Солнцем; дом с 3+ планетами | акценты года |
 | Планеты в аспекте к углам соляра (особенно ☌ ASC) | особенно значимы |
 | Аспект, повторяющий натальный | натальная тема получает новый импульс |
 | Натальные планеты с множеством аспектов от планет соляра | активированы |
-| Лунар | эмоциональный фон и повседневность на месяц: углы лунара, аспекты к Луне, дома |
+| Лунар | эмоциональный фон и повседневность на месяц: углы лунара (особенно соединения с ними), аспекты к Луне, дом лунара с Луной, натальные дома ASC и MC лунара; из аспектов — прежде всего соединения и оппозиции |
 
-Соляр «only makes sense against the backdrop of the natal chart»; его темы ощущаются за 1–2 месяца до дня рождения (AstroWiki).
+Соляр «only makes sense against the backdrop of the natal chart»; его темы ощущаются за 1–2 месяца до дня рождения; он «more concerned with current events», но это не «prediction of events» (AstroWiki).
 
 ### 8.5. Профекции (C. Brennan)
 
@@ -685,9 +698,11 @@ N = round((JDsr − JD0)/365.24219); S = (sign(ASC) + N) mod 12; lord = ruler_tr
 |---|---|
 | Знак/дом года | тема года — тема этого дома радикса (целые знаки) |
 | Управитель года | активирован «и в натальном положении, и в транзитах»: его натальное состояние (секта, достоинства, дома, аспекты) окрашивает год |
-| Транзиты к управителю года и от него | особенно значимы в этот год |
+| Транзиты к управителю года и от него, транзиты через знак года | особенно значимы в этот год (Brennan, «Hellenistic Astrology», гл. 17, по Гефестиону 2.27: «Transits to the lord of the year in the natal chart; Transits by the lord of the year to natal planets; Transits through the profected sign that year») |
+| Состояние управителя года | «can dictate the quality of the year»: что планета «обещает» в радиксе, то и проявится (там же) |
 | Натальные планеты в знаке года | тоже активированы (в т. ч. высшие планеты, которые управителями не считаются) |
 | 12-летний цикл | годы 12, 24, 36… — снова тема 1-го дома |
+| Месяц, когда месячная профекция приходит в знак с натальным управителем года | «the most important month in the native's life in that particular year» (правило Р. Цоллера, у Brennan, гл. 18, прим. 24); D. George: «it is during that month that the effects of how the time lord is functioning… become fully apparent» |
 
 ---
 
@@ -696,7 +711,7 @@ N = round((JDsr − JD0)/365.24219); S = (sign(ASC) + N) mod 12; lord = ruler_tr
 | Источник | Что взято | Надёжность |
 |---|---|---|
 | astro.com FAQ «Overview chart types»: https://www.astro.com/cgi/xa.cgi/faq/fq_fh_owtype_e.htm | определение вторичных прогрессий, ключ Наибода 0,98564733°, способ углов astro.com (ARMC + Наибод), описание Solar Fire (MC + дуга), опции «MC from solar arc», «ARMC 361° / prog. Day», прогрессивное новолуние ~29,5 лет; дирекции солнечной дуги astro.com — средняя дуга (возраст × 0,98564733°) | первоисточник (сайт-калькулятор, Swiss Ephemeris) |
-| astro.com FAQ «Other methods»: https://www.astro.com/cgi/xa.cgi/faq/fq_fh_methods_e.htm | «1 day = 1 year», ARMC +3 м 56 с в сутки, отказ от поправки на прецессию, конверсные прогрессии отрицательным возрастом | первоисточник |
+| astro.com FAQ «Other methods»: https://www.astro.com/cgi/xa.cgi/faq/fq_fh_methods_e.htm | «1 day = 1 year», ARMC +3 м 56 с в сутки, нет «SA in Longitude» для прогрессивной карты, отказ от поправки на прецессию, конверсные прогрессии отрицательным возрастом, опции первичных дирекций (`mb`, `mc`, `ms`) | первоисточник |
 | astro.com FAQ «Calculations»: https://www.astro.com/cgi/xa.cgi/faq/fq_fh_calc_e.htm | прогрессии на полночь UT | первоисточник |
 | astro.com FAQ «Forecast Horoscopes»: https://www.astro.com/cgi/xa.cgi/faq/fq_sh_fore_e.htm | орбис 1° у Р. Хэнда, орбисы Лиз Грин шире | первоисточник |
 | astro.com FAQ «Duration», «Transits»: https://www.astro.com/cgi/xa.cgi/faq/fq_fh_dura_e.htm , …/fq_fh_transits_e.htm | период действия транзита (первый вход — последний выход vs только в орбисе); надёжна дата точного аспекта | первоисточник |
@@ -709,6 +724,19 @@ N = round((JDsr − JD0)/365.24219); S = (sign(ASC) + N) mod 12; lord = ruler_tr
 | Wikipedia, «Astrological progression»: https://en.wikipedia.org/wiki/Astrological_progression | пример 1982 → 2007; орбис прогрессий 1° | вторичный |
 | Astrolog 8.00, исходники: https://github.com/CruiserOne/Astrolog (`astrolog.h`: `rDayInYear 365.24219`; `calc.cpp`: прогрессии `is.T += (is.JDp − is.T)/us.rProgDay`) | длина года прогрессий | калькулятор (открытый код) |
 | Kerykeion, «Guide: orbs — which to use»: https://kerykeion.net/content/learn-astrology/guide-orbs-which-to-use | транзитные орбисы 1–3° / ≤ 1° | вторичный |
+| B. Makransky, «Primary Directions. A Primer of Calculation» (archive.org): https://archive.org/details/bob-makransky-primary-directions-a-primer-of-calculations-i | формулы дирекций к углам (AD, OA/OD, гл. I–II), ключи Птолемея, Наибода, Симмонайта, Плацидуса (гл. III), спекулум и примеры принца Чарльза | школа (учебник расчёта) |
+| R. Hand, «Planets in Transit» (1976), полнотекстовый поиск archive.org: https://archive.org/details/planetsintransit00hand | Transit Rule 2 (орбис как время), отчёт «enters one degree of orb» | школа (автор отчётов astro.com) |
+| C. Brennan, «Hellenistic Astrology: The Study of Fate and Fortune» (2017), archive.org: https://archive.org/details/chris-brennan-hellenistic-astrology-the-study-of-fate-and-fortune-1 | профекции «monthly, daily, or even hourly», управитель года и транзиты (Гефестион 2.27), правило Цоллера о месяце | школа |
+| Vettius Valens, «Anthologies», пер. M. T. Riley (изд. 2019, archive.org): https://archive.org/details/vettius-valens-anthologies | месяц по Валенту IV.28 (Солнце→Солнце / Луна→Луна от знака года), V.6 («the King») | первоисточник (перевод) |
+| Ptolemy, «Tetrabiblos», пер. J. M. Ashmand (1822), archive.org: https://archive.org/details/ptolemystetrabib00ptol | IV.10: «twenty-eight days per sign» для месяцев, «two days and a third» для дней | первоисточник (перевод) |
+| R. Schmidt (пер.), R. Hand (ред.), «Dorotheus, Orpheus, Anubio & Pseudo-Valens: Teachings on Transits», Project Hindsight IX (1995), предисловие Хэнда: https://archive.org/details/dorotheus-orpheus-anubio-and-valens-transits | 13 знаков месячной профекции в год (≈ 28 сут) | школа (комментарий переводчика) |
+| D. George, «Astrology and the Authentic Self» (2008), archive.org: https://archive.org/details/demetra-george-astrology-and-the-authentic-self-integrating-traditional-and-modern-astrology | календарные месяцы профекции от дня рождения, месяц управителя года | школа |
+| AstroWiki «Profection» (raw): https://www.astro.com/wiki/astrowiki-en/index.php?title=Profection&action=raw | пример Knappich «27 years, 6 months, and 5 days» (месяцы возраста) | школа/энциклопедия |
+| Astracadabra v1, руководство (© 2004–2008 Esoteric Technologies — производитель Solar Fire), archive.org: https://archive.org/details/manualzilla-id-5647155 | пять способов прогрессии MC: S.A. in Long., S.A. in R.A., Naibod in Longitude, Naibod in R.A., Mean Quotidian | калькулятор (документация) |
+| «Astrolog32 Wish List» (Philipeau), archive.org: https://archive.org/details/manualzilla-id-5834499 | «Solar Fire currently has Naibod in longitude and r.a., and solar arc in long. and r.a.»; старый Astrolog — «Naibod right ascension» | вторичный (пользовательский документ) |
+| K. B. Riske, «Llewellyn's Complete Book of Predictive Astrology» (2011), поиск archive.org: https://archive.org/details/llewellynscomple0000risk | предпочтение «Naibod in longitude» | вторичный |
+| Astrolog 8.00, `calc.cpp` (`CastChart`, `SwissHouse`), `charts0.cpp` (справка `-p`, `-p1`, `-pc`, `-pC`): https://github.com/CruiserOne/Astrolog | прогрессивные куспиды по умолчанию — на прогрессивный момент (quotidian); `-p1 -pc` — MC + солнечная дуга, ε рождения | калькулятор (открытый код) |
+| Wikipedia «Annus mirabilis papers», «Albert Einstein», «Einsteinhaus» | 30.06.1905 — поступление статьи о СТО; Берн 1902–1909 | вторичный |
 | JPL Horizons API: https://ssd.jpl.nasa.gov/api/horizons.api (DE441, ObsEcLon) | независимая сверка моментов соляров, прогрессивных положений, точных транзитов и стоянок | первоисточник (астрономическая эфемерида) |
 | Swiss Ephemeris (pyswisseph) — через `common/ephemeris.py` | все положения, `houses_armc`, наклон эклиптики | первоисточник |
 
@@ -724,7 +752,7 @@ N = round((JDsr − JD0)/365.24219); S = (sign(ASC) + N) mod 12; lord = ruler_tr
 4. **Ручные формулы.** Прогрессивные MC/ASC T1 и T4 по формулам §3.3 (`mc_from_ramc`, `asc_from_ramc` из модуля 06) совпали с `swe.houses_armc` до секунды дуги (§7.1, §7.2).
 5. **Граничные случаи:** 29.02 (соляры 2005, 2026–2028, 2100), полярный соляр (Порфирий), неизвестное время, сидерический соляр (+0,37 сут при 26 годах), стоянка до точного аспекта (T2), `on_date` до рождения (ошибка).
 
-**⚠ Не подтверждено / ограничения.**
+**⚠ Не подтверждено / ограничения** (состояние на 14.10.2026; что закрыто 15.10.2026 — в «Повторной проверке» ниже).
 - Умолчание Solar Fire для прогрессивных углов (MC + солнечная дуга) известно только из описания astro.com; первоисточник Solar Fire не открыт.
 - Варианты `naibod` (в долготе) и `solar_arc_ra` реализованы по определению ключа Наибода и солнечной дуги; программ, где они умолчание, в источниках модуля нет.
 - Орбисы Лиз Грин для транзитов не опубликованы.
@@ -750,3 +778,43 @@ N = round((JDsr − JD0)/365.24219); S = (sign(ASC) + N) mod 12; lord = ruler_tr
 - **Ссылки в тестах:** `https://www.astro.com/astrology/…` (Boele, Brennan) отдают curl-у страницу защиты от ботов («One moment…»); заменены на рабочие `https://www.astro.com/cgi/xa.cgi/astrology/…` (как в §9).
 
 **Остаточные риски.** Сверка с готовыми картами прогрессий/дуг astro.com и Solar Fire по-прежнему не выполнена (только описания способов); выбор ε (истинный наклон на JD_p) для прогрессивных углов не подтверждён ни одной программой (влияние ≤ 4″: у T4 ASC сдвигается на 3,6″ при среднем ε вместо истинного, при ε рождения — на 0,2″); окно поиска точной даты прогрессий ±3 года — у медленных прогрессивных планет `exact_utc = null` для аспектов, которые фактически натальные; местное время соляра на месте рождения зависит от timezonefinder и tzdb (для СССР до 1970 г. — см. модуль 00). Бюджет: WebSearch 0, WebFetch 3 (astro.com FAQ, Wikipedia, транскрипт подкаста), curl: astro.com FAQ (7), AstroWiki raw (6), TMA (2), GitHub Astrolog (4 файла). web.archive.org не использовался.
+
+### Повторная проверка (приоритет 1)
+
+**15.10.2026, агент повторного исследования.** Цель — открытые пункты, меняющие числа. Источники: astro.com FAQ через `/cgi/xa.cgi/` (curl, generic User-Agent), полнотекстовый поиск и тексты archive.org, исходники Astrolog 8 (GitHub raw). web.archive.org недоступен, astro-seek — 403, руководство Solar Fire не найдено.
+
+| # | Пункт | Итог | Основание |
+|---|---|---|---|
+| 1 | Орбисы Лиз Грин для транзитов | **не решаемо**, ⚠ оставлен с причиной | astro.com FAQ «Forecast Horoscopes»: «It would be too complex to list all the orbs individually»; «We do not publish the logic behind our calculations»; других публикаций нет |
+| 2 | Орбис 1° Хэнда | **подтверждено** дополнительно | Hand, «Planets in Transit», Transit Rule 2 и отчёт «enters one degree of orb» |
+| 3 | Умолчание Solar Fire для прогрессивных углов (MC + дуга) | **не решаемо**, ⚠ оставлен | руководство Solar Fire не найдено (archive.org — только дистрибутивы программы, их не открывали); подтверждено лишь, что такие способы в Solar Fire есть |
+| 4 | `naibod` (Наибод в долготе) | **подтверждено**, ⚠ снят | Astracadabra v1 (Esoteric Technologies): «Naibod in Longitude»; Astrolog32 Wish List о Solar Fire; Riske 2011 |
+| 5 | `solar_arc_ra` | **подтверждено**, ⚠ снят | Astracadabra v1: «Solar Arc in Right Ascension (S.A. in R.A.)»; Astrolog32 Wish List |
+| 6 | `quotidian` | **подтверждено** дополнительно | Astrolog 8 `calc.cpp`: куспиды `-p` на момент `is.Tp` = прогрессивный момент (`-pC` = 1,0) — это умолчание Astrolog |
+| 7 | ε для прогрессивных углов | **частично**: опция `progression_obliquity` (`natal` — как Astrolog `-p1 -pc`); умолчание не менялось; ⚠ для astro.com остаётся (влияние ≤ 4″) | Astrolog 8 `calc.cpp` (`SwissHouse(is.Tp…)`, `EclToEqu` с ε рождения) |
+| 8 | Месячные профекции | **реализованы 3 источниковых варианта** (`calendar`, `thirteen`, `valens`); умолчание `equal` не менялось, ⚠ «условность» оставлен (прямого источника нет) | D. George 2008; AstroWiki/Knappich; Ptolemy IV.10 (Ashmand); R. Hand (Project Hindsight IX); Valens IV.28 (Riley). Ранее упомянутые «28-дневные» месяцы = Птолемей; «календарные» = George |
+| 9 | Окно поиска точной даты прогрессий/дирекций (±3 г.) | **опция** `exact_window_years` (до 120 лет); умолчание 3 | — (технический параметр); T2: прогр. ♄ △ ☽ найдено на 25.10.2005 |
+| 10 | Конверсные вторичные прогрессии | **реализованы** опцией `progression_direction="converse"` | astro.com FAQ «Other methods»: «use negative age» |
+| 11 | Первичные дирекции | **реализованы только к углам** (`primary_directions=True`; ключи Наибода, Птолемея, Симмонайта, Плацидуса; in mundo / in zodiaco); дирекции к планетам и мунданные аспекты — ⚠ не реализованы | Makransky, гл. I–III; сверка со спекулумом принца Чарльза: 7 дуг Δ ≤ 0,015°, 8 сроков Δ ≤ 0,02 г. |
+| 12 | Сверка с готовыми картами astro.com / astro-seek | **не решаемо**, ⚠ оставлен | astro-seek 403; карты astro.com — только в сессии пользователя |
+
+Итого: 12 пунктов — подтверждено 4 (из них 2 ⚠ сняты), реализовано опциями 5 (умолчания не менялись), не решаемо 3 (⚠ с причиной). Опровергнутых нет.
+
+**Код** (`calculators/forecast_western.py`, умолчания и числа по умолчанию не изменились — сравнение JSON старой и новой версии на T1–T4 и T1 без времени: совпадение, кроме нового текста `method_ru`/`variant` месяца и шага 7): опции `profection_month`, `progression_direction`, `progression_obliquity`, `exact_window_years`, `primary_directions` (+ `pd_key`, `pd_latitude`, `pd_max_age`); функция `primary_directions_to_angles`; новые поля JSON (`progressions.direction`, `exact_search_window_years`, `angles.obliquity`/`obliquity_source`, `profections.month.method`/`months_in_year`, `primary_directions`).
+
+**Тесты:** +21 (`test_primary_directions_makransky_arcs` ×7, `…_speculum_and_keys`, `…_invariants`, `test_converse_progressions_t1`, `test_converse_angles_mirror` ×5, `test_profection_month_variants_t1`, `test_profection_calendar_months_george`, `test_profection_month_valens_night_and_feb29`, `test_exact_window_years_option`, `test_progression_obliquity_option`, `test_new_option_errors`). `.venv/bin/python -m pytest calculators/tests/test_forecast_western.py calculators/tests/test_western.py -q` — 237 тестов, все зелёные.
+
+### Повторная проверка (приоритет 2)
+
+**15.10.2026, тот же агент.** Ключи интерпретации и атрибуции перечитаны по источникам (AstroWiki raw: Transit, Secondary_Progression, Solar_Arc, Direction, Lunation_Cycle, Solar_Return_Chart, Lunar_Return_Chart; astro.com FAQ «Transits»; Boele; Brennan 2017; Wikipedia).
+
+- §8.1 (AstroWiki «Transit»): 12 строк — все подтверждены; добавлены строка о Меркурии/Венере/Марсе в петле («more significant») и абзац о фоне и «спусковых крючках» (раздел «Trigger»); цитаты «life-changing events or processes» (AstroWiki) и «opportunities, health, moods…» (astro.com FAQ «Transits») — атрибуция верна.
+- §8.2 (AstroWiki «Secondary Progression», «Solar Arc»): 6 строк подтверждены; добавлены 4 строки (взаимные аспекты прогрессий, приоритет личных планет, дирекции дуги, отсутствие ключей у конверсных и первичных дирекций — Makransky: «no interpretations are given»).
+- §8.3: **исправлена атрибуция** — AstroWiki «Lunation Cycle» описывает фазы **натальной** Луны (типы личности по Радьяру), а не прогрессивные; ключи таблицы теперь только по Boele. Исправлены 3 строки, не совпадавшие с Boele: Растущий серп («рост в защищённой среде, эксперименты»), Выпуклая («анализ и совершенствование» — у Boele нет), Бальзамическая («пожинать посеянное» — у Boele образ «ripe and rotten fruit which releases the seed»); остальные 5 переформулированы с цитатами.
+- §8.4 (AstroWiki «Solar/Lunar Return Chart»): 7 строк подтверждены; добавлена пропущенная строка «управитель ASC соляра», расширена строка лунара (дом с Луной, приоритет ☌ и ☍), добавлено «more concerned with current events».
+- §8.5 (Brennan): 5 строк подтверждены по книге 2017 г. (гл. 17); строка о транзитах дополнена третьим пунктом Brennan/Гефестиона («Transits through the profected sign»); добавлены строки о состоянии управителя года и о месяце, когда месячная профекция приходит в знак управителя года (Цоллер у Brennan; D. George).
+- §7.1: факты о 30.06.1905 и Берне подтверждены (Wikipedia «Annus mirabilis papers»: «received on 30 June»; «Albert Einstein», «Einsteinhaus»), ⚠ сняты.
+
+Итого: проверено 40 утверждений (38 строк §8 + 2 факта §7.1), подтверждено 37, исправлено 3 строки и 1 атрибуция, добавлено 8 строк и 1 абзац; ничего не выдумано (каждая добавка — с цитатой).
+
+**Бюджет.** WebSearch: 2. WebFetch: 0. curl: astro.com FAQ (5), AstroWiki raw (8), Boele (1), archive.org (метаданные, полнотекстовый поиск ~35 запросов, 9 текстов + архив Considerations 78 файлов), GitHub raw Astrolog (8 файлов), Wikipedia raw (4). web.archive.org не использовался.
