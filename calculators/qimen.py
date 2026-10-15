@@ -205,7 +205,7 @@ JU_METHOD_RU = {
 # 平气 (恒气) по 授时历/大统历. 《元史·历志·授时历经》: «至元十八年岁次辛巳为元…岁实，三百六十五万二千四百二十五分…
 # 气应，五十五万六百分…其日命甲子算外，即所求天正冬至日辰及分» (日周 = 10000 分): 冬至 1280 г. — день 己未
 # (JDN 2188926) + 0,06 сут. 《明史·历志一》: 元统 «取《授时历》，去其岁实消长之说» (大统历), «平节气者，以一岁之实，
-# 二十四平分之». Время — местное среднее 大都/北京 (116,4° в. д.). Проверка: 《明史》 «推壬申冬至，《大统》得己亥寅正
+# 二十四平分之». Время — местное среднее 大都/北京 (116,4° в. д.). Проверка: 《明史》 «推壬申冬至，《大统》得已亥(=己亥)寅正
 # 一刻» → модель: 己亥 04:16; даты терминов 《遁甲演义》 1596–1601 и 黄宗羲 1589 — до 时辰 (тест).
 SHOUSHI_EPOCH_LOCAL_JD = 2188926 - 0.5 + 0.06
 SHOUSHI_YEAR = 365.2425
@@ -485,7 +485,8 @@ def ju_yinpan(jd_t: float, d_chart: date, hour_idx: int, terms: _Terms | None = 
     T = terms or _TERMS_DING
     k = T.index_at(jd_t)
     yang = term_is_yang(k)
-    lun = Solar.fromYmd(d_chart.year, d_chart.month, d_chart.day).getLunar()
+    # через юлианский день: до 1582 г. lunar-python считает даты юлианскими, наши даты — пролептические григорианские
+    lun = Solar.fromJulianDay(_jd_noon(d_chart)).getLunar()
     zhi = [BRANCHES[i][0] for i in range(12)]
     yb = zhi.index(lun.getYearZhi()) + 1
     m = abs(lun.getMonth())
@@ -875,7 +876,7 @@ def calculate(b: BirthInput, **options) -> dict:
             try:
                 from lunar_python import Solar as _S
                 from calculators.ziwei import _check_new_moon_timezone
-                wmsg = _check_new_moon_timezone(_S.fromYmd(d_chart.year, d_chart.month, d_chart.day).getLunar(),
+                wmsg = _check_new_moon_timezone(_S.fromJulianDay(_jd_noon(d_chart)).getLunar(),
                                                 d_chart, n.utc_offset_hours)
                 if wmsg:
                     warnings.append("阴盘: " + wmsg)

@@ -2,7 +2,7 @@
 
 Каждый документ метода содержит раздел «Источники» с оценкой надёжности каждого источника и раздел «Протокол проверки» (что именно было независимо перепроверено). Здесь — сводный индекс всех процитированных URL по модулям (сгенерирован `calculators/tools/build_sources.py`).
 
-Всего уникальных ссылок по модулям: **578**.
+Всего уникальных ссылок по модулям: **604**.
 
 **Шкала надёжности, используемая в документах:**
 
@@ -606,9 +606,10 @@
 
 ## [16-qimen-dunjia.md](16-qimen-dunjia.md) — 16. Ци Мэнь Дунь Цзя (奇门遁甲): карта часа рождения (时家奇门)
 
-Уникальных URL: 13
+Уникальных URL: 17
 
 - <https://zh.wikisource.org/wiki/煙波釣叟歌>
+- <https://archive.org/details/wfl-002.-2009-381>
 - <https://apps.apple.com/us/app/id1635309476>
 - <https://zh.wikisource.org/wiki/易學象數論/超神接氣直指>
 - <https://www.masterseanchan.com/qi-men-dun-jia-calculator/>
@@ -621,10 +622,13 @@
 - <https://www.npmjs.com/package/qimen-dunjia>
 - <https://www.npmjs.com/package/bigfishmarquis-qimen>
 - <https://tianqi.masterseanchan.com/skills/qimen>
+- <https://zh.wikisource.org/wiki/元史/卷054>
+- <https://zh.wikisource.org/wiki/明史/卷31>
+- <https://archive.org/details/07-5_20210924>
 
 ## [17-da-liu-ren.md](17-da-liu-ren.md) — 17. Да Лю Жэнь (大六壬): «урок» (课盘) на момент рождения или консультации
 
-Уникальных URL: 13
+Уникальных URL: 15
 
 - <https://zh.wikisource.org/wiki/六壬大全/7>
 - <https://simplelits.com/books/classical/classical-06985-注解大六壬指南/7>
@@ -638,11 +642,13 @@
 - <https://www.npmjs.com/package/liuren-ts-lib>
 - <https://github.com/look-fate/liuren-ts-lib>
 - <https://registry.npmjs.org/liuren-ts-lib/-/liuren-ts-lib-3.1.0.tgz>
+- <https://simplelits.com/books/classical/classical-08345-景祐六壬神定经/3>
 - <https://blog.udn.com/tsao144/182048738>
+- <https://zh.wikisource.org/wiki/三命通會/卷三>
 
 ## [18-forecast-western.md](18-forecast-western.md) — 18. Западная прогностика: транзиты, прогрессии, дирекции, соляр, профекции
 
-Уникальных URL: 17
+Уникальных URL: 28
 
 - <https://www.astro.com/cgi/xa.cgi/faq/fq_fh_owtype_e.htm>
 - <https://www.astro.com/cgi/xa.cgi/faq/fq_fh_methods_e.htm>
@@ -658,22 +664,43 @@
 - <https://en.wikipedia.org/wiki/Astrological_progression>
 - <https://github.com/CruiserOne/Astrolog>
 - <https://kerykeion.net/content/learn-astrology/guide-orbs-which-to-use>
+- <https://archive.org/details/bob-makransky-primary-directions-a-primer-of-calculations-i>
+- <https://archive.org/details/planetsintransit00hand>
+- <https://archive.org/details/chris-brennan-hellenistic-astrology-the-study-of-fate-and-fortune-1>
+- <https://archive.org/details/vettius-valens-anthologies>
+- <https://archive.org/details/ptolemystetrabib00ptol>
+- <https://archive.org/details/dorotheus-orpheus-anubio-and-valens-transits>
+- <https://archive.org/details/demetra-george-astrology-and-the-authentic-self-integrating-traditional-and-modern-astrology>
+- <https://www.astro.com/wiki/astrowiki-en/index.php?title=Profection&action=raw>
+- <https://archive.org/details/manualzilla-id-5647155>
+- <https://archive.org/details/manualzilla-id-5834499>
+- <https://archive.org/details/llewellynscomple0000risk>
 - <https://ssd.jpl.nasa.gov/api/horizons.api>
 - <https://www.astro.com/astrology/…>
 - <https://www.astro.com/cgi/xa.cgi/astrology/…>
 
 ## [19-forecast-eastern.md](19-forecast-eastern.md) — 19. Восточная прогностика на заданный год или дату (流年 Ба-цзы, 年盤/月盤 Девятизвёздной Ки, гочара и даши Джйотиш)
 
-Уникальных URL: 26
+Уникальных URL: 35
 
+- <https://zh.wikisource.org/wiki/淵海子平>
+- <https://zh.wikisource.org/wiki/三命通會/卷二>
 - <https://www.rong0922.url.tw/File/846.doc>
 - <https://zh.wikisource.org/wiki/滴天髓/09>
 - <https://www.skillon.com/bazi-feng-shui.cfm/topic/2220/BaZi-:-The-story-of-Ah-May-:-Her-BaZi-violates-Fan-Yin-Fu-Yin>
 - <https://www.moneyweekly.com.tw/_Article?AID=97129>
+- <https://zh.wikisource.org/wiki/三命通會/卷一>
 - <https://global.hk01.com/大国小事/60303627/2026运程-犯太岁4生肖马鼠牛兔-命理师教3招化解-附好运3生肖>
 - <https://m.sohu.com/n/485037481/>
+- <https://www.skillon.com/feng-shui-flying-star.cfm/date/2026-10-14>
+- <https://bccks.jp/bcck/120247/epub>
+- <https://event.rakuten.co.jp/incentive/hikkoshi/fortune/special/shibayama/2019_orientation/>
+- <https://www.ne.jp/asahi/tokoro/uranai/down/index01.htm>
 - <https://oggi.jp/6752236>
 - <https://crexgroup.com/ja/hikkoshi/timing-date/moving-lucky-direction-twenty-twenty-five/>
+- <https://archive.org/details/PrasnaMargaBVR>
+- <https://jagannathhora.com/gochara/>
+- <https://archive.org/details/BPHSEnglish>
 - <https://dekhopanchang.com/en/learn/sade-sati>
 - <https://hindutone.com/astrology/sade-sati-2026-which-rashis-saturn-in-meena/>
 - <https://www.skillon.com/bazi-feng-shui.cfm/topic/202/Flying-Star-flight-sequence>
@@ -685,7 +712,6 @@
 - <https://www.onlinejyotish.com/hindi-astrology/shani-sadesathi/mesha-rashi.php>
 - <https://astropatri.com/transits/jupiter>
 - <https://astropatri.com/transits/rahu>
-- <https://zh.wikisource.org/wiki/淵海子平>
 - <https://ja.wikipedia.org/wiki/九星気学>
 - <https://ja.wikipedia.org/wiki/九星>
 - <https://ameblo.jp/ej3/entry-12974149199.html>

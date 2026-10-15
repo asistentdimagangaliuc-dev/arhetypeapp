@@ -705,7 +705,7 @@ def _lmt_day_branch(jd_ut):
 
 
 @pytest.mark.parametrize("k,approx,day,branch", [
-    # 《明史·曆志一》 (https://zh.wikisource.org/wiki/明史/卷31): «乃以推壬申冬至，《大統》得己亥寅正一刻»
+    # 《明史·曆志一》 (https://zh.wikisource.org/wiki/明史/卷31): «乃以推壬申冬至，《大統》得已亥寅正一刻» («已亥» — так в тексте Викитеки, читать 己亥)
     (0, (1631, 12, 21), "己亥", "寅"),
     # 《遁甲演義》 «又引證» (https://zh.wikisource.org/wiki/遁甲演義): «萬曆二十四年丙申，正月初九日丑時立春…
     # 初九丙子日…二十四日辛卯日辰時雨水…初九日丙午日午時驚蟄節…至二十四辛酉日申時止» (春分 — 酉時)
@@ -937,3 +937,14 @@ def test_no_time_candidates_new_methods(b, opts):
         mid = (m0 + m1) // 2
         r = calculate(replace(b, hour=mid // 60, minute=mid % 60), **opts)
         assert (r["pillars"]["day"], r["pillars"]["hour"], r["ju"]["label"]) == (c["day_pillar"], c["hour_pillar"], c["ju"])
+
+
+def test_yinpan_lunar_date_before_1582_and_warnings():
+    # даты калькулятора — пролептические григорианские; lunar-python до 1582 г. считает юлианскими —
+    # лунная дата берётся через юлианский день: 14.06.1346 = 五月十六 甲午 (《演義»: «十六日甲午»)
+    r = calculate(BirthInput(1346, 6, 14, 12, 0, tz="UTC+08:00"), ju_method="yinpan", solar_time="clock")
+    lu = r["ju"]["yinpan"]["lunar"]
+    assert (lu["month"], lu["day"], r["pillars"]["day"]) == (5, 16, "甲午")
+    # между 立春 и 春节 ветви лунного года и года по Личуню различаются — предупреждение с другим 局
+    r = calculate(BirthInput(2024, 2, 5, 12, 0, tz="UTC+08:00"), ju_method="yinpan", solar_time="clock")
+    assert r["ju"]["yinpan"]["ju_lichun_year"] is not None and any("Личуню" in w for w in r["warnings"])
