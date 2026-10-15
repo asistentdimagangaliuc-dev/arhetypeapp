@@ -149,8 +149,17 @@ def _controls(a_el: int, b_el: int) -> bool:
     return (b_el - a_el) % 5 == 2
 
 
-def _pair_relations(e: int, n: int) -> list[dict]:
-    """Отношения внешнего столпа e (流年/流月/大运, индекс 0…59) с натальным столпом n."""
+#: Правила 反吟: 'tian_ke_di_chong' — «天克地冲» (ветви 六冲 + стволы в 克; умолчание модуля, современное
+#: употребление); 'clash' — 《三命通会》: «岁运与日相对，谓之返吟» (卷二 «总论岁运»), любое 六冲 столпов, включая
+#: «天比地冲»; исключение — 戊辰/戊戌: «戊辰、戊戌之土为魁罡相会…不得以为反吟» (卷一).
+FAN_YIN_RULES = ("tian_ke_di_chong", "clash")
+_KUI_GANG_PAIR = frozenset({4, 34})        # 戊辰, 戊戌
+
+
+def _pair_relations(e: int, n: int, fan_yin_rule: str = "tian_ke_di_chong") -> list[dict]:
+    """Отношения внешнего столпа e (流年/流月/大运, индекс 0…59) с натальным столпом n.
+
+    fan_yin_rule — см. FAN_YIN_RULES (по умолчанию «天克地冲»)."""
     se, be, sn, bn = e % 10, e % 12, n % 10, n % 12
     out: list[dict] = []
 
@@ -192,8 +201,17 @@ def _pair_relations(e: int, n: int) -> list[dict]:
         add("fu_yin", bz.ganzhi(e))
     elif clash:
         ee, en = _el_index(se), _el_index(sn)
-        if _controls(ee, en) or _controls(en, ee):
-            add("fan_yin", f"{bz.ganzhi(e)}–{bz.ganzhi(n)}",
+        ctrl = _controls(ee, en) or _controls(en, ee)
+        if fan_yin_rule == "clash":
+            if frozenset({e, n}) != _KUI_GANG_PAIR:
+                extra = {"cn": "反吟 (相对)", "ru": "Фань-инь: ветви столпов сталкиваются («岁运与日相对»)",
+                         "rule": "clash", "rule_ru": "《三命通会》: любое столкновение столпов («相对»)",
+                         "tian_ke_di_chong": ctrl}
+                if ctrl:
+                    extra["controller"] = "external" if _controls(ee, en) else "natal"
+                add("fan_yin", f"{bz.ganzhi(e)}–{bz.ganzhi(n)}", **extra)
+        elif ctrl:
+            add("fan_yin", f"{bz.ganzhi(e)}–{bz.ganzhi(n)}", rule="tian_ke_di_chong",
                 controller="external" if _controls(ee, en) else "natal",
                 controller_ru=("внешний столп подавляет натальный" if _controls(ee, en)
                                else "натальный столп подавляет внешний"))
@@ -217,8 +235,29 @@ def _formations(natal_br: dict[str, int], ext_br: dict[str, int]) -> list[dict]:
     return out
 
 
-def _relations_with_natal(e: int, natal: dict[str, int]) -> dict[str, list[dict]]:
-    return {k: rels for k, v in natal.items() if v is not None and (rels := _pair_relations(e, v))}
+def _relations_with_natal(e: int, natal: dict[str, int],
+                          fan_yin_rule: str = "tian_ke_di_chong") -> dict[str, list[dict]]:
+    return {k: rels for k, v in natal.items() if v is not None and (rels := _pair_relations(e, v, fan_yin_rule))}
+
+
+def xiao_yun(nominal_age: int, hour_idx: int | None, forward: bool | None, gender: str | None) -> dict:
+    """小运 (малая удача, «行年») на номинальный возраст (虚岁) по 《三命通会》 卷二 «论小运».
+
+    * hour_based — «醉醒子以为男女小运皆由时生而行之，逆顺亦以年定。如阳命阳年甲子时生堕地，即行乙丑，二岁丙寅，
+      一位一年»: от столпа часа на 1 шаг за год, направление — как у Столпов удачи (forward). «童限未交大运，
+      专用此法» — до первого Столпа удачи только этот способ. Так же считает lunar-python (XiaoYun).
+    * xing_nian — «古人以男起丙寅顺行，女起壬申逆行»: в 1 суй мужчина — 丙寅 и дальше вперёд, женщина — 壬申 и назад.
+    """
+    out: dict = {"nominal_age": nominal_age}
+    if hour_idx is not None and forward is not None:
+        out["hour_based"] = {"index": (hour_idx + (nominal_age if forward else -nominal_age)) % 60,
+                             "rule": "醉醒子: от столпа часа, 1 суй = следующий столп; направление как у 大运"}
+        out["hour_based"]["ganzhi"] = bz.ganzhi(out["hour_based"]["index"])
+    if gender in ("male", "female"):
+        idx = (2 + (nominal_age - 1)) % 60 if gender == "male" else (8 - (nominal_age - 1)) % 60
+        out["xing_nian"] = {"index": idx, "ganzhi": bz.ganzhi(idx),
+                            "rule": "古法: мужчина — 丙寅 в 1 суй, вперёд; женщина — 壬申 в 1 суй, назад"}
+    return out
 
 
 def _ten_gods_of(idx: int, dm: int) -> dict:
@@ -267,38 +306,50 @@ def tai_sui_table(year: int) -> dict[str, list[str]]:
     return table
 
 
-def _zheng_hui(day_idx: int, year_idx: int, luck_idx: int | None) -> list[dict]:
+def _zheng_hui(day_idx: int, year_idx: int, luck_idx: int | None, hour_idx: int | None = None) -> list[dict]:
     """«征» и «晦» по 《渊海子平》 «论征太岁»: «日干支冲剋太岁曰征，运支干伤冲太岁亦曰征»;
-    «日干支合太岁干支曰晦，岁运合岁干亦然»."""
+    «日干支合太岁干支曰晦，岁运合岁干亦然». Дополнения 《三命通会》 (卷二 «论太岁», «总论岁运», поле source):
+    «太岁干支冲日干支亦曰征» — ствол года, сталкиваясь (天干相冲), подавляет ствол дня («岁伤日干，有祸必轻»);
+    «日干与时干不宜与太岁元天元合，合则名为晦气» — слияние ствола часа со стволом года."""
     out = []
+    yz = "渊海子平"
     ds, db, ys, yb = day_idx % 10, day_idx % 12, year_idx % 10, year_idx % 12
     if _controls(_el_index(ds), _el_index(ys)):
         out.append({"type": "zheng", "cn": "征 (日犯岁君)", "detail": f"ствол дня {bz.STEMS[ds][0]} подавляет "
-                    f"ствол года {bz.STEMS[ys][0]}"})
+                    f"ствол года {bz.STEMS[ys][0]}", "source": yz})
     if (db - yb) % 12 == 6:
         out.append({"type": "zheng", "cn": "征", "detail": f"ветвь дня {bz.BRANCHES[db][0]} сталкивается с ветвью "
-                    f"года {bz.BRANCHES[yb][0]}"})
+                    f"года {bz.BRANCHES[yb][0]}", "source": yz})
+    if frozenset({ds, ys}) in bz.STEM_CLASHES and _controls(_el_index(ys), _el_index(ds)):
+        out.append({"type": "zheng", "cn": "征 (岁伤日干)", "detail": f"ствол года {bz.STEMS[ys][0]} сталкивается со "
+                    f"стволом дня {bz.STEMS[ds][0]} и подавляет его («岁伤日干，有祸必轻» — легче, чем 日犯岁君)",
+                    "source": "三命通会"})
     if frozenset({ds, ys}) in bz.STEM_COMBOS:
+        heavy = ds % 2 == 0          # «甲合己灾重，己合甲灾轻»: ствол дня — Ян-партнёр слияния → тяжелее
         out.append({"type": "hui", "cn": "晦", "detail": f"ствол дня {bz.STEMS[ds][0]} сливается со стволом года "
-                    f"{bz.STEMS[ys][0]}"})
+                    f"{bz.STEMS[ys][0]}", "source": yz,
+                    "severity_sanming": "heavier" if heavy else "lighter"})
     if frozenset({db, yb}) in bz.SIX_COMBOS:
         out.append({"type": "hui", "cn": "晦", "detail": f"ветвь дня {bz.BRANCHES[db][0]} сливается с ветвью года "
-                    f"{bz.BRANCHES[yb][0]}"})
+                    f"{bz.BRANCHES[yb][0]}", "source": yz})
+    if hour_idx is not None and frozenset({hour_idx % 10, ys}) in bz.STEM_COMBOS:
+        out.append({"type": "hui", "cn": "晦", "detail": f"ствол часа {bz.STEMS[hour_idx % 10][0]} сливается со "
+                    f"стволом года {bz.STEMS[ys][0]}", "source": "三命通会"})
     if luck_idx is not None:
         ls, lb = luck_idx % 10, luck_idx % 12
         if _controls(_el_index(ls), _el_index(ys)):
             out.append({"type": "zheng", "cn": "征", "detail": f"ствол удачи {bz.STEMS[ls][0]} подавляет ствол года "
-                        f"{bz.STEMS[ys][0]}"})
+                        f"{bz.STEMS[ys][0]}", "source": yz})
         if (lb - yb) % 12 == 6:
             out.append({"type": "zheng", "cn": "征", "detail": f"ветвь удачи {bz.BRANCHES[lb][0]} сталкивается с "
-                        f"ветвью года {bz.BRANCHES[yb][0]}"})
+                        f"ветвью года {bz.BRANCHES[yb][0]}", "source": yz})
         if frozenset({ls, ys}) in bz.STEM_COMBOS:
             out.append({"type": "hui", "cn": "晦", "detail": f"ствол удачи {bz.STEMS[ls][0]} сливается со стволом "
-                        f"года {bz.STEMS[ys][0]}"})
+                        f"года {bz.STEMS[ys][0]}", "source": yz})
     return out
 
 
-def _luck_vs_year(luck_idx: int, year_idx: int) -> list[dict]:
+def _luck_vs_year(luck_idx: int, year_idx: int, fan_yin_rule: str = "tian_ke_di_chong") -> list[dict]:
     """Удача против года по 《滴天髓》 «歲運»: 戰 (подавление стволов), 沖 (столкновение ветвей),
     和 (слияние), 好 (один элемент, разная полярность). Направление — по подавляющему элементу."""
     out = []
@@ -332,7 +383,7 @@ def _luck_vs_year(luck_idx: int, year_idx: int) -> list[dict]:
         out.append({"type": "hao", "cn": "好", "ru": "ветви одного элемента разной полярности",
                     "detail": bz.BRANCHES[lb][0] + bz.BRANCHES[yb][0]})
     # прочие отношения ветвей (刑/害/破) — как с натальным столпом
-    for r in _pair_relations(year_idx, luck_idx):
+    for r in _pair_relations(year_idx, luck_idx, fan_yin_rule):
         if r["type"] in ("harm", "destruction", "punishment", "self_punishment", "fan_yin", "half_harmony"):
             out.append({"type": r["type"], "cn": r["cn"], "ru": r["ru"], "detail": r["detail"]})
     return out
@@ -363,6 +414,9 @@ def _bazi_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zone: 
     pidx = {k: (natal["pillars"][k]["index"] if natal["pillars"][k] else None) for k in bz.PILLAR_KEYS}
     natal_br = {k: v % 12 for k, v in pidx.items() if v is not None}
     dm = pidx["day"] % 10
+    fy_rule = options.get("fan_yin_rule", "tian_ke_di_chong")
+    if fy_rule not in FAN_YIN_RULES:
+        raise ValueError("fan_yin_rule: " + " | ".join(repr(x) for x in FAN_YIN_RULES))
 
     # --- годовой столп и Личунь
     yi = bz.year_index(year)
@@ -386,8 +440,8 @@ def _bazi_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zone: 
         if not cur:
             first = items[0]
             luck_now = {"status": "before_first", "first_start": first["start_date"][:10],
-                        "note": "Дата раньше начала первого Столпа удачи: действует «детский» период до 交运 "
-                                "(⚠ школы берут 小运 или столп месяца; калькулятор их не считает)."}
+                        "note": "Дата раньше начала первого Столпа удачи (童限): по 《三命通会》 «论小运» до 交运 "
+                                "действует 小运 — см. поле xiao_yun (hour_based — «童限未交大运，专用此法»)."}
         else:
             p = cur[-1]
             nxt = items[p["n"]] if p["n"] < len(items) else None
@@ -398,22 +452,29 @@ def _bazi_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zone: 
                         "start_date": p["start_date"][:10], "end_date": nxt["start_date"][:10] if nxt else None,
                         "years_elapsed": round(elapsed, 2), "years_left": round(10 - elapsed, 2),
                         "half": "stem" if elapsed < 5 else "branch",
-                        "half_ru": ("первые 5 лет — акцент на стволе" if elapsed < 5
-                                    else "вторые 5 лет — акцент на ветви"),
+                        "half_ru": ("первые 5 лет — ствол (вместе с ветвью)" if elapsed < 5
+                                    else "вторые 5 лет — ветвь (ствол уже не учитывается)"),
+                        "half_source": "《渊海子平》 «运行十数载，上下五年分»; 《三命通会》 «论大运»: "
+                                       "«在干兼用地支之神，在支则弃天干之物»",
                         "ten_gods": _ten_gods_of(p["index"], dm),
-                        "relations_with_natal": _relations_with_natal(p["index"], pidx),
+                        "relations_with_natal": _relations_with_natal(p["index"], pidx, fy_rule),
                         "direction": luck["direction"]}
             steps.append(f"Столп удачи на {on_date.isoformat()}: №{p['n']} {p['ganzhi']} с {p['start_date'][:10]} "
-                         f"(прошло {elapsed:.2f} г.; {luck_now['half_ru']} — ⚠ вариант школы).")
+                         f"(прошло {elapsed:.2f} г.; {luck_now['half_ru']} — «上下五年分», 《渊海子平》).")
 
     # --- взаимодействия года
-    rel_year = _relations_with_natal(yi, pidx)
+    rel_year = _relations_with_natal(yi, pidx, fy_rule)
     ext = {"annual": yi % 12}
     if luck_idx is not None:
         ext["luck"] = luck_idx % 12
     formations = _formations(natal_br, ext)
     tai = {"by_year_branch": _tai_sui(pidx["year"] % 12, yi % 12),
            "by_day_branch": _tai_sui(pidx["day"] % 12, yi % 12),
+           "by_day_branch_note": ("по ветви дня классики говорят только о 冲 (= 征, 《渊海子平》/《三命通会》) и "
+                                  "о полном совпадении столпа дня со столпом года (日年相并); 值/刑/害/破 太岁 по "
+                                  "ветви дня — ⚠ без первоисточника"),
+           "zhen_tai_sui": yi == pidx["year"],
+           "ri_nian_xiang_bing": yi == pidx["day"],
            "natal_year_branch": bz.BRANCHES[pidx["year"] % 12][0],
            "year_branch": bz.BRANCHES[yi % 12][0]}
     # популярный «знак» по китайскому Новому году может отличаться от ветви года Ба-цзы (Личунь)
@@ -426,8 +487,33 @@ def _bazi_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zone: 
             warnings.append(f"Знак года рождения по китайскому Новому году ({bz.BRANCHES[lb][0]}) отличается от "
                             f"ветви года Ба-цзы по Личуню ({bz.BRANCHES[pidx['year'] % 12][0]}): популярные списки "
                             f"«犯太岁» считают по Новому году — см. tai_sui.by_lunar_new_year_branch.")
-    zheng_hui = _zheng_hui(pidx["day"], yi, luck_idx)
-    luck_year = _luck_vs_year(luck_idx, yi) if luck_idx is not None else []
+    zheng_hui = _zheng_hui(pidx["day"], yi, luck_idx, pidx["hour"])
+    luck_year = _luck_vs_year(luck_idx, yi, fy_rule) if luck_idx is not None else []
+    if tai["zhen_tai_sui"]:
+        steps.append(f"Столп года {bz.ganzhi(yi)} = столп года рождения: 真太岁 (《三命通会》 «论太岁»).")
+    if tai["ri_nian_xiang_bing"]:
+        steps.append(f"Столп года {bz.ganzhi(yi)} = столп дня: 日年相并 (《三命通会》 «论太岁»).")
+
+    # --- 小运 на год прогноза (номинальный возраст 虚岁 по годам Ба-цзы: год рождения = 1)
+    birth_bz_year = b.year if bz.year_index(b.year) == pidx["year"] else b.year - 1
+    age = year - birth_bz_year + 1
+    small = None
+    if age >= 1:
+        small = xiao_yun(age, pidx["hour"], (luck["direction"] == "forward") if luck else None,
+                         bz._gender(b.gender))
+        for key in ("hour_based", "xing_nian"):
+            if key in small:
+                ix = small[key]["index"]
+                small[key].update({**bz.pillar_brief(ix), "ten_gods": _ten_gods_of(ix, dm),
+                                   "relations_with_natal": _relations_with_natal(ix, pidx, fy_rule),
+                                   "relation_with_annual": [f"{r['cn']} {r['detail']}"
+                                                            for r in _pair_relations(ix, yi, fy_rule)]})
+        small["birth_bazi_year"] = birth_bz_year
+        small["source"] = "《三命通会》 卷二 «论小运»"
+        if "hour_based" in small:
+            steps.append(f"小运 {year} (虚岁 {age}): от столпа часа {bz.ganzhi(pidx['hour'])} "
+                         f"{'вперёд' if luck and luck['direction'] == 'forward' else 'назад'} на {age} → "
+                         f"{small['hour_based']['ganzhi']}.")
     if rel_year:
         steps.append("Год ↔ натал: " + "; ".join(_short(rel_year)) + ".")
     if tai["by_year_branch"]:
@@ -436,14 +522,14 @@ def _bazi_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zone: 
     # --- месяцы
     months = []
     for m in bazi_months(year):
-        rels = _relations_with_natal(m["index"], pidx)
+        rels = _relations_with_natal(m["index"], pidx, fy_rule)
         months.append({
             "n": m["n"], **bz.pillar_brief(m["index"]), "jie": m["jie"],
             "start": _when(m["start_jd"], zone), "end": _when(m["end_jd"], zone),
             "stem_ten_god": bz.ten_god(dm, m["index"] % 10)["cn"],
             "branch_main_ten_god": bz.ten_god(dm, bz.HIDDEN_STEMS[m["index"] % 12][0][0])["cn"],
             "relations_with_natal": _short(rels),
-            "relation_with_annual": [f"{r['cn']} {r['detail']}" for r in _pair_relations(m["index"], yi)],
+            "relation_with_annual": [f"{r['cn']} {r['detail']}" for r in _pair_relations(m["index"], yi, fy_rule)],
         })
 
     # --- месяц и день на дату
@@ -455,12 +541,12 @@ def _bazi_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zone: 
     _jie_on_date_warning(ref_jd, on_date, zone, warnings)
     ext_m = dict(ext, month=mi % 12)
     month_now = {"solar_year": y_ref, **bz.pillar_brief(mi), "start": _when(mstart, zone), "end": _when(mend, zone),
-                 "ten_gods": _ten_gods_of(mi, dm), "relations_with_natal": _relations_with_natal(mi, pidx),
-                 "relations_with_annual": _pair_relations(mi, bz.year_index(y_ref)),
+                 "ten_gods": _ten_gods_of(mi, dm), "relations_with_natal": _relations_with_natal(mi, pidx, fy_rule),
+                 "relations_with_annual": _pair_relations(mi, bz.year_index(y_ref), fy_rule),
                  "formations_with_annual_luck": _formations(natal_br, ext_m)}
     di = bz.day_index(on_date)
     day_now = {"date": on_date.isoformat(), **bz.pillar_brief(di), "stem_ten_god": bz.ten_god(dm, di % 10)["cn"],
-               "relations_with_natal": _short(_relations_with_natal(di, pidx)),
+               "relations_with_natal": _short(_relations_with_natal(di, pidx, fy_rule)),
                "note": "Столп дня — по гражданской дате в поясе прогноза; день меняется в полночь (zi_hour='late')."}
     steps.append(f"Месяц на дату: {bz.ganzhi(mi)} (с {month_now['start']['local']}); день {on_date.isoformat()} — "
                  f"{bz.ganzhi(di)} ((JDN + 49) mod 60).")
@@ -481,6 +567,8 @@ def _bazi_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zone: 
         "zheng_hui": zheng_hui,
         "luck_pillar": luck_now,
         "luck_vs_year": luck_year,
+        "xiao_yun": small,
+        "fan_yin_rule": fy_rule,
         "months": months,
         "month_on_date": month_now,
         "day_on_date": day_now,
@@ -497,6 +585,19 @@ PALACE_HOME = {"C": 5, "NW": 6, "W": 7, "NE": 8, "S": 9, "N": 1, "SW": 2, "E": 3
 PALACE_JA = {"C": "中宮", "NW": "乾宮", "W": "兌宮", "NE": "艮宮", "S": "離宮", "N": "坎宮", "SW": "坤宮",
              "E": "震宮", "SE": "巽宮"}
 STAR_EL = {n: ns.STARS[n]["element_en"] for n in range(1, 10)}
+#: Фаза 9-летнего цикла по дворцу звезды рождения в 年盤 (回座): 江庭俊之 «九星気学入門» (bccks.jp) — «中宮にある
+#: 本命星は、次の年、西北の乾宮に移動します。ここからが一般的に衰運期の始まりです…» (сам автор: «一般論でしかありません»).
+KAIZA_PHASE = {
+    "C": {"ja": "男性は吉、女性は衰運 (+ 八方塞がり)", "ru": "центр: для мужчин благоприятно, для женщин — спад"},
+    "NW": {"ja": "衰運期の始まり", "ru": "начало периода спада"},
+    "W": {"ja": "(衰運期)", "ru": "период спада (отдельной характеристики нет)"},
+    "NE": {"ja": "衰変・人生の変化の時", "ru": "перелом, время перемен"},
+    "S": {"ja": "衰運の中の一休み", "ru": "передышка внутри спада"},
+    "N": {"ja": "衰極・一番悪い時期", "ru": "дно цикла, самое трудное время"},
+    "SW": {"ja": "盛運期の始まり", "ru": "начало подъёма"},
+    "E": {"ja": "盛運期の頂点", "ru": "вершина подъёма"},
+    "SE": {"ja": "盛運期の頂点", "ru": "вершина подъёма"},
+}
 GENERATES = {"wood": "fire", "fire": "earth", "earth": "metal", "metal": "water", "water": "wood"}
 
 
@@ -568,7 +669,10 @@ def chart_directions(chart: dict[str, int], branch: int, kind: str, honmei: int 
     goo = None if five == "C" else five
     out: dict = {"center": c, "center_ja": ns.STARS[c]["ja"],
                  "layout": [_cell(p, chart[p]) for p in PALACE_PATH],
-                 "go_o_satsu": goo, "anken_satsu": OPPOSITE[goo] if goo else None}
+                 "go_o_satsu": goo, "anken_satsu": OPPOSITE[goo] if goo else None,
+                 # 5 в центре: по ja.wikipedia 五黄殺/暗剣殺 нет; у части авторов (江庭俊之, «九星気学入門») — «全方位が
+                 # 五黄殺» (ослабленный). Флаг для агента, в списки unlucky/lucky не влияет.
+                 "go_o_in_center": five == "C"}
     opp_b = (branch + 6) % 12
     out["ha"] = {"name": ha_name, "branch": bz.BRANCHES[opp_b][0], "palace": BRANCH_PALACE[opp_b],
                  "period_branch": bz.BRANCHES[branch][0]}
@@ -613,6 +717,29 @@ def chart_directions(chart: dict[str, int], branch: int, kind: str, honmei: int 
         out["lucky"] = lucky
         out["max_lucky_honmei_getsumei"] = [x["direction"] for x in lucky if x["also_good_for_month_star"]]
     return out
+
+
+#: Ширина секторов направлений (азимут от дома, градусы по часовой от севера; границы [from, to)).
+#: 'cn_45' — 8 × 45° (китайская практика: ne.jp/asahi/tokoro «奇門遁甲は各方位45度»);
+#: 'ja_30_60' — «東西南北各３０度、東北、東南、西南、西北各６０度» (江庭俊之 «九星気学入門», bccks.jp; 柴山和枝,
+#: event.rakuten.co.jp; ne.jp/asahi/tokoro «九星気学は30度、60度»). Стороны: 東北 = 丑寅 и т. д. (по 2 ветви).
+DIRECTION_SECTORS: dict[str, dict[str, tuple[float, float]]] = {
+    "cn_45": {"N": (337.5, 22.5), "NE": (22.5, 67.5), "E": (67.5, 112.5), "SE": (112.5, 157.5),
+              "S": (157.5, 202.5), "SW": (202.5, 247.5), "W": (247.5, 292.5), "NW": (292.5, 337.5)},
+    "ja_30_60": {"N": (345.0, 15.0), "NE": (15.0, 75.0), "E": (75.0, 105.0), "SE": (105.0, 165.0),
+                 "S": (165.0, 195.0), "SW": (195.0, 255.0), "W": (255.0, 285.0), "NW": (285.0, 345.0)},
+}
+
+
+def direction_of_azimuth(azimuth: float, scheme: str = "ja_30_60") -> str:
+    """Сторона света (дворец) для азимута azimuth (0° — север, по часовой) в схеме секторов scheme."""
+    if scheme not in DIRECTION_SECTORS:
+        raise ValueError("scheme: " + " | ".join(repr(x) for x in DIRECTION_SECTORS))
+    a = azimuth % 360.0
+    for d, (lo, hi) in DIRECTION_SECTORS[scheme].items():
+        if (lo <= a < hi) if lo < hi else (a >= lo or a < hi):
+            return d
+    raise AssertionError(a)  # pragma: no cover
 
 
 def ninestar_months(year: int) -> list[dict]:
@@ -681,6 +808,16 @@ def _ninestar_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zo
     mdir["lucky_year_and_month"] = [x["direction"] for x in mdir["lucky"] if x["direction"] in y_good]
     steps.append(f"Месяц на дату ({bz.BRANCHES[mbranch][0]}, год Ки {y_ref}): звезда {ms}; 五黄殺 "
                  f"{mdir['go_o_satsu'] or '—'}, 暗剣殺 {mdir['anken_satsu'] or '—'}, 月破 {mdir['ha']['palace']}.")
+    az_check = None
+    if options.get("azimuth") is not None:
+        az = float(options["azimuth"])
+        az_check = {"azimuth": az % 360.0,
+                    **{k: direction_of_azimuth(az, k) for k in DIRECTION_SECTORS},
+                    "note": "азимут от дома на цель, 0° — север; 気学 по ne.jp/asahi/tokoro — по магнитному "
+                            "северу (偏差), 奇門 — по истинному; школы расходятся"}
+        if az_check["ja_30_60"] != az_check["cn_45"]:
+            warnings.append(f"Азимут {az % 360.0:.1f}° попадает в разные стороны при делении 30°/60° "
+                            f"({az_check['ja_30_60']}) и 8 × 45° ({az_check['cn_45']}).")
     day_method = options.get("day_star_method", "ja_leap")
     day = None
     if day_method:
@@ -688,12 +825,22 @@ def _ninestar_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zo
         db = bz.day_index(on_date) % 12
         day = {"date": on_date.isoformat(), "star": dsr["number"], "star_ja": ns.STARS[dsr["number"]]["ja"],
                "method": day_method, "dun": dsr["dun"], "day_ganzhi": dsr["day_ganzhi"],
-               "nippa": {"branch": bz.BRANCHES[(db + 6) % 12][0], "palace": BRANCH_PALACE[(db + 6) % 12]},
-               "note": "日盤 не строится: в Инь-дунь школы расходятся, лететь ли звёздам дня в обратную сторону "
-                       "(⚠ не подтверждено)."}
+               "nippa": {"branch": bz.BRANCHES[(db + 6) % 12][0], "palace": BRANCH_PALACE[(db + 6) % 12]}}
+        if options.get("day_chart", True):
+            # 日盤: звезда дня в центре, прямой полёт по тому же пути, что 年盤/月盤, и в Ян-, и в Инь-дунь
+            # (skillon.com, ежедневные карты; 江庭俊之 «九星気学入門»: путь 飛泊 один для всех盤). 月命殺 — только в 月盤.
+            dchart = flying_chart(dsr["number"])
+            dd = chart_directions(dchart, db, "day", honmei)
+            day["chart"] = {"flight": "順飛 (прямой) и в 陰遁", **dd,
+                            "layout_compact": "-".join(str(dchart[p]) for p in
+                                                       ("SE", "S", "SW", "E", "C", "W", "NE", "N", "NW"))}
+            steps.append(f"日盤 {on_date.isoformat()}: звезда дня {dsr['number']} в центре (прямой полёт); 五黄殺 "
+                         f"{dd['go_o_satsu'] or '—'}, 暗剣殺 {dd['anken_satsu'] or '—'}, 日破 {dd['ha']['palace']}.")
 
     return {
-        "variant": {"year_boundary": "li_chun", "flight": "順飛 (прямой) для 年盤 и 月盤",
+        "variant": {"year_boundary": "li_chun", "flight": "順飛 (прямой) для 年盤, 月盤 и 日盤",
+                    "direction_sectors": "калькулятор называет дворец; ширина секторов — direction_sectors "
+                                         "(ja_30_60 — японский 気学, cn_45 — китайская практика)",
                     "day_star_method": day_method, "honmei_from": "ninestar.calculate (граница Личунь)"},
         "natal": {"honmei": honmei, "honmei_ja": ns.STARS[honmei]["ja"], "getsumei": getsumei,
                   "getsumei_ja": ns.STARS[getsumei]["ja"], "notation": natal["nine_star_ki"]["notation"],
@@ -701,12 +848,15 @@ def _ninestar_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zo
         "year": {"year": year, "star": ys, "star_ja": ns.STARS[ys]["ja"], **ydir,
                  "honmei_palace_meaning": ("八方塞がり (звезда рождения в центре)" if hp == "C"
                                            else f"{PALACE_JA[hp]}: тема дворца — звезда {PALACE_HOME[hp]} "
-                                                f"{ns.STARS[PALACE_HOME[hp]]['ja']} (⚠ см. KB 19 §8)")},
+                                                f"{ns.STARS[PALACE_HOME[hp]]['ja']} (⚠ см. KB 19 §8)"),
+                 "honmei_palace_phase": KAIZA_PHASE[hp]},
         "chinese_annual_afflictions": cn,
         "months": months,
         "month_on_date": {"solar_year": y_ref, "branch": bz.BRANCHES[mbranch][0], "star": ms,
                           "star_ja": ns.STARS[ms]["ja"], **mdir},
         "day_on_date": day,
+        "direction_sectors": {k: {d: list(v) for d, v in t.items()} for k, t in DIRECTION_SECTORS.items()},
+        **({"azimuth_check": az_check} if az_check else {}),
     }
 
 
@@ -729,12 +879,80 @@ GOCHARA_GOOD: dict[str, dict[int, int | None]] = {
     "rahu": {3: None, 6: None, 10: None, 11: None},
     "ketu": {3: None, 6: None, 10: None, 11: None},
 }
+#: Вариант «Прашна-марги» (пер. B. V. Raman, ч. 2, гл. о гочаре, ст. 51): «The Vedhya positions for Rahu and Ketu are
+#: 3, 6, and 11 as for Saturn and the Vedha positions are 12, 9, 5» — опция node_gochara='prasna_marga'.
+NODE_GOCHARA = {
+    "phaladeepika": {3: None, 6: None, 10: None, 11: None},
+    "prasna_marga": {3: 12, 6: 9, 11: 5},
+}
 #: Пары без ведхи: «no Vedha between the father and son» (Солнце–Сатурн, XXVI.3, 5), Луна–Меркурий (XXVI.4, 6).
 VEDHA_EXEMPT = {"sun": "saturn", "saturn": "sun", "moon": "mercury", "mercury": "moon"}
 #: XXVI.25: в какой части знака транзит «даёт плоды» (градусы внутри знака).
 EFFECT_PORTION = {"sun": (0, 10), "mars": (0, 10), "jupiter": (10, 20), "venus": (10, 20),
                   "moon": (20, 30), "saturn": (20, 30), "mercury": (0, 30), "rahu": (0, 30)}
 SLOW = {"saturn": swe.SATURN, "jupiter": swe.JUPITER}
+
+#: Аштакаварга (अष्टकवर्ग): благоприятные места (bindu/rekha) в карте планеты, считая от знака каждого из 8
+#: «источников» (7 планет и Лагна). «Пхаладипика» XXIII.3–9 (пер. V. Subrahmanya Sastri, 1950).
+AV_CONTRIBUTORS = ("sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn", "lagna")
+AV_PLANETS = AV_CONTRIBUTORS[:7]
+ASHTAKAVARGA_PHALADEEPIKA: dict[str, dict[str, tuple[int, ...]]] = {
+    "sun": {"sun": (1, 2, 4, 7, 8, 9, 10, 11), "moon": (3, 6, 10, 11), "mars": (1, 2, 4, 7, 8, 9, 10, 11),
+            "mercury": (3, 5, 6, 9, 10, 11, 12), "jupiter": (5, 6, 9, 11), "venus": (6, 7, 12),
+            "saturn": (1, 2, 4, 7, 8, 9, 10, 11), "lagna": (3, 4, 6, 10, 11, 12)},
+    "moon": {"sun": (3, 6, 7, 8, 10, 11), "moon": (1, 3, 6, 7, 10, 11), "mars": (2, 3, 5, 6, 9, 10, 11),
+             "mercury": (1, 3, 4, 5, 7, 8, 10, 11), "jupiter": (1, 2, 4, 7, 8, 10, 11),
+             "venus": (3, 4, 5, 7, 9, 10, 11), "saturn": (3, 5, 6, 11), "lagna": (3, 6, 10, 11)},
+    "mars": {"sun": (3, 5, 6, 10, 11), "moon": (3, 6, 11), "mars": (1, 2, 4, 7, 8, 10, 11), "mercury": (3, 5, 6, 11),
+             "jupiter": (6, 10, 11, 12), "venus": (6, 8, 11, 12), "saturn": (1, 4, 7, 8, 9, 10, 11),
+             "lagna": (1, 3, 6, 10, 11)},
+    "mercury": {"sun": (5, 6, 9, 11, 12), "moon": (2, 4, 6, 8, 10, 11), "mars": (1, 2, 4, 7, 8, 9, 10, 11),
+                "mercury": (1, 3, 5, 6, 9, 10, 11, 12), "jupiter": (6, 8, 11, 12),
+                "venus": (1, 2, 3, 4, 5, 8, 9, 11), "saturn": (1, 2, 4, 7, 8, 9, 10, 11),
+                "lagna": (1, 2, 4, 6, 8, 10, 11)},
+    "jupiter": {"sun": (1, 2, 3, 4, 7, 8, 9, 10, 11), "moon": (2, 5, 7, 9, 11), "mars": (1, 2, 4, 7, 8, 10, 11),
+                "mercury": (1, 2, 4, 5, 6, 9, 10, 11), "jupiter": (1, 2, 3, 4, 7, 8, 10, 11),
+                "venus": (2, 5, 6, 9, 10, 11), "saturn": (3, 5, 6, 12), "lagna": (1, 2, 4, 5, 6, 7, 9, 10, 11)},
+    "venus": {"sun": (8, 11, 12), "moon": (1, 2, 3, 4, 5, 8, 9, 11, 12), "mars": (3, 5, 6, 9, 11, 12),
+              "mercury": (3, 5, 6, 9, 11), "jupiter": (5, 8, 9, 10, 11), "venus": (1, 2, 3, 4, 5, 8, 9, 10, 11),
+              "saturn": (3, 4, 5, 8, 9, 10, 11), "lagna": (1, 2, 3, 4, 5, 8, 9, 11)},
+    "saturn": {"sun": (1, 2, 4, 7, 8, 10, 11), "moon": (3, 6, 11), "mars": (3, 5, 6, 10, 11, 12),
+               "mercury": (6, 8, 9, 10, 11, 12), "jupiter": (5, 6, 11, 12), "venus": (6, 11, 12),
+               "saturn": (3, 5, 6, 11), "lagna": (1, 3, 4, 6, 10, 11)},
+}
+#: Вариант «Брихат Парашара Хора Шастры» (пер. R. Santhanam, гл. 66, ст. 46–48 и 56–58): в карте Луны — 9-й от
+#: самой Луны есть, 9-го от Марса нет; в карте Венеры от Марса — 3, 4, 6, 9, 11, 12 (так и сноска «Пхаладипики»
+#: к XXIII.8: «According to Parasara, the 3rd, 4th, 6th, 9th, 11th and 12th places from Mars»). Итоги те же (49, 52).
+ASHTAKAVARGA_BPHS = {**ASHTAKAVARGA_PHALADEEPIKA,
+                     "moon": {**ASHTAKAVARGA_PHALADEEPIKA["moon"], "moon": (1, 3, 6, 7, 9, 10, 11),
+                              "mars": (2, 3, 5, 6, 10, 11)},
+                     "venus": {**ASHTAKAVARGA_PHALADEEPIKA["venus"], "mars": (3, 4, 6, 9, 11, 12)}}
+ASHTAKAVARGA = {"phaladeepika": ASHTAKAVARGA_PHALADEEPIKA, "bphs": ASHTAKAVARGA_BPHS}
+#: «Пхаладипика» XXIII.11: транзит планеты по знаку с 0…8 точками в её собственной аштакаварге.
+AV_TRANSIT_RESULT = {
+    0: "loss of life (угроза жизни)", 1: "destruction or loss (разрушение, потеря)", 2: "expenditure (расходы)",
+    3: "fear (страх)", 4: "fear (страх; так в переводе 1950 г.)", 5: "accomplishment of the desired object (исполнение "
+    "желаемого)", 6: "acquisition of a damsel (обретение спутницы)", 7: "gain of wealth or property (богатство, "
+    "имущество)", 8: "gaining a Kingdom or high Government position (власть, высокий пост)",
+}
+
+
+def ashtakavarga(signs: dict[str, int], school: str = "phaladeepika") -> dict:
+    """Бхинна-аштакаварга 7 планет и сарва-аштакаварга по знакам (0 = Овен … 11 = Рыбы).
+
+    signs — сидерические знаки (0…11) натальных sun…saturn и 'lagna'. Возвращает {'bav': {planet: [12]},
+    'sav': [12], 'totals': {planet: n}}. Без шодханы (трикона/экадхипатья) — как в «Пхаладипике» XXIII.11, 20.
+    """
+    table = ASHTAKAVARGA[school]
+    bav = {}
+    for p in AV_PLANETS:
+        row = [0] * 12
+        for c in AV_CONTRIBUTORS:
+            for h in table[p][c]:
+                row[(signs[c] + h - 1) % 12] += 1
+        bav[p] = row
+    sav = [sum(bav[p][i] for p in AV_PLANETS) for i in range(12)]
+    return {"bav": bav, "sav": sav, "totals": {p: sum(r) for p, r in bav.items()}, "sav_total": sum(sav)}
 
 
 def gochara_house(sign: int, ref_sign: int) -> int:
@@ -922,6 +1140,14 @@ def _jyotish_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zon
         node = "true" if node else "mean"
     dasha_year = options.get("dasha_year", "gregorian")
     vedha_by_nodes = bool(options.get("vedha_by_nodes", False))
+    node_gochara = options.get("node_gochara", "phaladeepika")
+    if node_gochara not in NODE_GOCHARA:
+        raise ValueError("node_gochara: " + " | ".join(repr(x) for x in NODE_GOCHARA))
+    viparita = bool(options.get("viparita_vedha", False))
+    av_school = options.get("ashtakavarga_school", "phaladeepika")
+    if av_school not in ASHTAKAVARGA:
+        raise ValueError("ashtakavarga_school: " + " | ".join(repr(x) for x in ASHTAKAVARGA))
+    gtable = {**GOCHARA_GOOD, "rahu": NODE_GOCHARA[node_gochara], "ketu": NODE_GOCHARA[node_gochara]}
     natal = jy.calculate(b, ayanamsa=ayan, node=node, dasha_year=dasha_year, dasha_levels=1,
                          on_date=on_date.isoformat())
     warnings.extend(f"Джйотиш (натал): {w}" for w in natal["warnings"])
@@ -954,9 +1180,21 @@ def _jyotish_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zon
     signs = {g: int(v // 30) for g, v in lons.items()}
     hm = {g: gochara_house(s, moon_sign) for g, s in signs.items()}
     vedha_sources = [g for g in jy.GRAHAS if g not in ("rahu", "ketu") or vedha_by_nodes]
+
+    def counter(g: str, house: int) -> list[str]:
+        """Грахи (кроме g, пары-исключения и пары узлов), стоящие в доме house от Луны."""
+        return [o for o in vedha_sources if o != g and o != VEDHA_EXEMPT.get(g)
+                and not ({g, o} <= {"rahu", "ketu"}) and hm[o] == house]
+
+    # --- аштакаварга натала (нужна Лагна): «Пхаладипика» XXIII
+    av = None
+    if options.get("ashtakavarga", True) and lagna_sign is not None:
+        nat_signs = {g: int(natal["grahas"][g]["lon"] // 30) for g in AV_PLANETS}
+        nat_signs["lagna"] = lagna_sign
+        av = ashtakavarga(nat_signs, av_school)
     transits = {}
     for g in jy.GRAHAS:
-        good = GOCHARA_GOOD[g]
+        good = gtable[g]
         h = hm[g]
         rec = {"lon": round(lons[g], 4), "position": jy.sign_dms(lons[g]), "sign": signs[g] + 1,
                "sign_ru": eph.SIGNS_RU[signs[g]], "house_from_moon": h,
@@ -965,8 +1203,7 @@ def _jyotish_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zon
                "retrograde": bool(pos["north_node"]["retro"] if g in ("rahu", "ketu") else pos[g]["retro"])}
         if h in good and good[h] is not None:
             v = good[h]
-            blockers = [o for o in vedha_sources if o != g and o != VEDHA_EXEMPT.get(g)
-                        and not ({g, o} <= {"rahu", "ketu"}) and hm[o] == v]
+            blockers = counter(g, v)
             rec["vedha_house"] = v
             rec["vedha_by"] = blockers
             rec["result"] = "favorable_obstructed" if blockers else "favorable"
@@ -975,6 +1212,21 @@ def _jyotish_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zon
             rec["result"] = "favorable"
         else:
             rec["result"] = "unfavorable"
+            # випарита-ведха («Прашна-марга», ст. 35, 43, 53): граха в неблагоприятном доме h, который служит домом
+            # ведхи для её благоприятного дома f; граха в f «встречно» снимает зло
+            f = next((k for k, v in good.items() if v == h), None)
+            if f is not None:
+                rec["viparita_vedha_house"] = f
+                rec["viparita_vedha_by"] = counter(g, f)
+                if viparita and rec["viparita_vedha_by"]:
+                    rec["result"] = "unfavorable_cancelled"
+        if av is not None:
+            sav = av["sav"][signs[g]]
+            rec["ashtakavarga"] = {"sav_bindus": sav,
+                                   "sav_verdict": "good" if sav > 28 else ("bad" if sav < 28 else "neutral")}
+            if g in AV_PLANETS:
+                bb = av["bav"][g][signs[g]]
+                rec["ashtakavarga"].update({"bav_bindus": bb, "bav_result": AV_TRANSIT_RESULT[bb]})
         portion = EFFECT_PORTION.get(g)
         if portion:
             deg = lons[g] % 30
@@ -998,7 +1250,7 @@ def _jyotish_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zon
                 lst.append({"sign": s["sign"] + 1, "sign_ru": eph.SIGNS_RU[s["sign"]],
                             "start": _when(s["start_jd"], zone) if s["start_jd"] else None,
                             "end": _when(s["end_jd"], zone) if s["end_jd"] else None,
-                            "house_from_moon": h, "favorable_house": h in GOCHARA_GOOD[g],
+                            "house_from_moon": h, "favorable_house": h in gtable[g],
                             "house_from_lagna": gochara_house(s["sign"], lagna_sign) if lagna_sign is not None
                             else None})
         year_transits[g] = lst

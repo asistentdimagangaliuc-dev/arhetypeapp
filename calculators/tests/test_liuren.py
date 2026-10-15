@@ -1010,3 +1010,95 @@ def test_on_datetime_aware_without_tz_keeps_local_clock():
 def test_nian_ming_schema_without_gender():
     r = calculate(BirthInput(1990, 5, 15, 14, 30, place="Москва"))
     assert r["nian_ming"]["xing_nian"] is None and r["nian_ming"]["xing_nian_heaven_over"] is None
+
+
+# ---------------------------------------------------------------------------
+# Повторная проверка (15.10.2026): 《观月经》 «先举», 《指南》 день/ночь, граница года для 行年
+# ---------------------------------------------------------------------------
+
+def test_shehai_guanyue_variant():
+    # 《六壬大全》 卷七 «缀瑕格»: «凡课涉害者复相等，以四课中先见者用…如六月甲午日辰时午将占，课得辰加寅，
+    # 历卯木一重…申加午，历丁火一重…乃涉害相等，刚日以日上先见神为用…名曰缀瑕»; 《观月经》 (там же):
+    # «忽然涉害起，先举莫相争…此受下贼俱同丁火，为涉害复等，辰加日为先举，当以辰为用，三传辰午申也».
+    # https://zh.wikisource.org/wiki/六壬大全/7
+    assert sc("甲午", "辰", "午", shehai="guanyue") == "辰午申" == sc("甲午", "辰", "午")
+    assert kind("甲午", "辰", "午", shehai="guanyue") == ["涉害", "缀瑕"]   # метка совпадает с 《大全》
+    assert kind("甲午", "辰", "午") == ["涉害", "见机"]
+    # Перебор 720: три передачи отличаются от 'depth' только в 甲辰 Δ=5 (子 и 寅 — глубина 1 и 1;
+    # 孟仲季 даёт 寅 на 仲 酉, «先举» — 子 из урока 2).
+    diff = {}
+    for d, off, r in _all720():
+        r2 = three_transmissions(d % 10, d % 12, off, 0, shehai="guanyue")
+        if r["chuan"] != r2["chuan"]:
+            diff[(ganzhi(d), off)] = ("".join(Z[x] for x in r["chuan"]), "".join(Z[x] for x in r2["chuan"]))
+    assert diff == {("甲辰", 5): ("寅未子", "子巳戌")}
+    assert sc("甲辰", "子", "巳", shehai="mengzhongji") == "寅未子"
+    # 易无思: «戊辰日亥时午将之课即缀瑕格» объясняется только 孟仲季 (по глубине 子 = 3 > 午 = 2)
+    assert kind("戊辰", "亥", "午", shehai="guanyue") == ["涉害"] == kind("戊辰", "亥", "午")
+    assert kind("戊辰", "亥", "午", shehai="mengzhongji") == ["涉害", "缀瑕"]
+    # в calculate(): 甲辰 (26.11.2026), 月将 寅 (после 小雪), час 酉 → Δ = 5 → альтернатива 'guanyue'
+    r = calculate(BirthInput(2000, 1, 1, tz="UTC+08:00"), on_datetime="2026-11-26T18:00")
+    assert r["pillars"]["day"] == "甲辰" and r["general"]["branch"] == "寅" and r["hour_branch"] == "酉"
+    assert r["chart"]["transmissions"]["sanchuan"] == "寅未子"
+    assert _alts(r)["shehai='guanyue'"]["sanchuan"] == "子巳戌"
+    assert calculate(BirthInput(2000, 1, 1, tz="UTC+08:00"), on_datetime="2026-11-26T18:00",
+                     shehai="guanyue")["chart"]["transmissions"]["sanchuan"] == "子巳戌"
+
+
+# 《大六壬指南》 卷三: уроки в часы 酉…寅 (ночь по правилу «卯…申») — генералы уроков 1→4 из публикации
+# и какой Благородный (по таблице 'daquan') их даёт. https://simplelits.com/books/classical/classical-06985-注解大六壬指南/7
+ZHINAN_NIGHT_HOUR_LESSONS = [
+    ("己巳", "丑", "戌", "常青空六", False), ("甲申", "酉", "子", "阴蛇勾虎", False),
+    ("乙酉", "寅", "未", "六阴阴龙", True),  ("癸丑", "酉", "卯", "常朱常朱", False),
+    ("辛卯", "戌", "戌", "常常蛇蛇", False), ("乙酉", "酉", "酉", "勾勾后后", False),
+    ("辛丑", "亥", "戌", "虎空阴玄", False), ("甲申", "寅", "巳", "常龙朱后", True),
+    ("丙戌", "丑", "申", "蛇常空蛇", True),  ("甲戌", "亥", "未", "六后后白", False),
+    ("丁未", "戌", "丑", "后常后常", False), ("丙申", "酉", "酉", "勾勾蛇蛇", False),
+    ("辛亥", "亥", "卯", "贵常后虎", False), ("癸卯", "子", "戌", "勾空朱勾", False),
+    ("己未", "酉", "寅", "贵虎贵虎", True),  ("丙寅", "亥", "午", "六阴贵白", False),
+    ("丙午", "戌", "卯", "蛇常贵白", True),  ("己未", "戌", "午", "六后六后", True),
+    # «癸酉七月辛卯日庚寅时…（虽寅时，用昼贵…）»
+    ("辛卯", "寅", "午", "常贵蛇龙", True),
+]
+
+
+def test_zhinan_day_night_practice():
+    # 《指南》 не формулирует правила дня/ночи; в примерах при 寅 всегда дневной 贵人 («虽寅时，用昼贵»),
+    # при 丑, 酉, 戌 — то дневной, то ночной; при 亥 и 子 — ночной. Умолчание (卯…申) не меняется.
+    full = {"贵": "贵人", "蛇": "腾蛇", "朱": "朱雀", "六": "六合", "勾": "勾陈", "龙": "青龙", "青": "青龙",
+            "空": "天空", "白": "白虎", "虎": "白虎", "常": "太常", "玄": "玄武", "阴": "太阴", "后": "天后"}
+    tally = Counter()
+    for day, hour, gen, gens, is_day in ZHINAN_NIGHT_HOUR_LESSONS:
+        c = build_chart(di(day), Z.index(hour), Z.index(gen), is_day)
+        assert [l["general"] for l in c["lessons"]] == [full[x] for x in gens], (day, hour)
+        other = build_chart(di(day), Z.index(hour), Z.index(gen), not is_day)
+        assert [l["general"] for l in other["lessons"]] != [full[x] for x in gens], (day, hour)
+        tally[(hour, is_day)] += 1
+    assert tally == Counter({("寅", True): 3, ("丑", True): 1, ("丑", False): 1, ("酉", True): 1, ("酉", False): 4,
+                             ("戌", True): 2, ("戌", False): 2, ("亥", False): 4, ("子", False): 1})
+    # «丙寅四月丙寅日庚寅时…（虽寅时，仍用昼贵）»: в строке генералов уроков опечатки, но пластина —
+    # дневной 贵人 亥 (亥贵 子蛇 … 辰龙, по ходу)
+    c = build_chart(di("丙寅"), Z.index("寅"), Z.index("酉"), True)
+    g = {p["heaven"]: p["general"] for p in c["plates"]}
+    assert (g["亥"], g["子"], g["辰"], g["酉"]) == ("贵人", "腾蛇", "青龙", "太阴")
+
+
+def test_nian_year_lichun_vs_lunar():
+    # 30.01.1990: после китайского Нового года (27.01.1990, 正月初一 庚午), но до Личуня (04.02.1990).
+    b = BirthInput(1990, 1, 30, 12, 0, place="Москва", gender="male")
+    r = calculate(b, on_datetime="2026-10-14T15:30")
+    nm = r["nian_ming"]
+    assert nm["year_rule"] == "lichun" and nm["ben_ming"] == "巳" and nm["age_xusui"] == 38
+    assert nm["xing_nian"] == "癸卯"            # 丙寅 + 37 (男行年一岁起丙寅)
+    assert (nm["age_xusui_by_lichun"], nm["age_xusui_by_lunar_new_year"]) == (38, 37)
+    a = _alts(r)["nian_year='lunar'"]
+    assert (a["ben_ming"], a["age_xusui"], a["xing_nian"]) == ("午", 37, "壬寅")
+    assert any("Граница года" in w for w in r["warnings"])
+    r2 = calculate(b, on_datetime="2026-10-14T15:30", nian_year="lunar")
+    assert (r2["nian_ming"]["ben_ming"], r2["nian_ming"]["xing_nian"]) == ("午", "壬寅")
+    assert _alts(r2)["nian_year='lichun'"]["ben_ming"] == "巳"
+    # T1: обе границы дают одно и то же — альтернативы нет
+    r = calculate(T1)
+    assert "nian_year='lunar'" not in _alts(r) and r["nian_ming"]["age_xusui"] == 1
+    with pytest.raises(ValueError):
+        calculate(T1, nian_year="bad")
