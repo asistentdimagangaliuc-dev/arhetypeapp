@@ -5,6 +5,7 @@
 """
 from __future__ import annotations
 
+import math
 import os
 
 import swisseph as swe
@@ -30,6 +31,9 @@ AYANAMSAS = {
     "raman": swe.SIDM_RAMAN,
     "krishnamurti": swe.SIDM_KRISHNAMURTI,
     "fagan_bradley": swe.SIDM_FAGAN_BRADLEY,
+    "true_citra": swe.SIDM_TRUE_CITRA,
+    "krishnamurti_vp291": swe.SIDM_KRISHNAMURTI_VP291,
+    "yukteshwar": swe.SIDM_YUKTESHWAR,
 }
 
 
@@ -65,8 +69,16 @@ def houses(jd_ut: float, lat: float, lon: float, hsys: str = "P", sidereal: str 
     return {"cusps": list(cusps[:12]), "asc": ascmc[0], "mc": ascmc[1], "armc": ascmc[2], "vertex": ascmc[3]}
 
 
-def ayanamsa(jd_ut: float, mode: str = "lahiri") -> float:
+def ayanamsa(jd_ut: float, mode: str = "lahiri", true: bool = False) -> float:
+    """Аянамша, градусы. true=False — средняя (без нутации), true=True — истинная (с нутацией).
+
+    Сидерические долготы Swiss Ephemeris (FLG_SIDEREAL) соответствуют истинной аянамше.
+    Внимание: функция (как и planet_positions/houses с sidereal=...) глобально выставляет
+    swe.set_sid_mode — это побочный эффект на последующие сидерические вызовы.
+    """
     swe.set_sid_mode(AYANAMSAS[mode])
+    if true:
+        return swe.get_ayanamsa_ex_ut(jd_ut, swe.FLG_SWIEPH)[1]
     return swe.get_ayanamsa_ut(jd_ut)
 
 
@@ -109,13 +121,11 @@ def find_sun_longitude(target_deg: float, jd_near: float, search_back: bool = Tr
 
 
 def format_lon(lon: float, lang: str = "ru") -> str:
-    lon %= 360.0
-    sign = int(lon // 30)
-    deg_in = lon - sign * 30
-    d = int(deg_in)
-    m = int(round((deg_in - d) * 60))
-    if m == 60:
-        d, m = d + 1, 0
+    """Долгота -> «Г°ММ′ Знак», минуты отбрасываются (не округляются): 29°59.99′ остаётся 29°59′ того же
+    знака — как в эфемеридах и западных программах; знак в строке всегда совпадает с sign_of(lon)."""
+    total_min = int(math.floor((lon % 360.0) * 60 + 1e-9)) % (360 * 60)
+    sign, rest = divmod(total_min, 30 * 60)
+    d, m = divmod(rest, 60)
     names = SIGNS_RU if lang == "ru" else SIGNS_EN
     return f"{d}°{m:02d}′ {names[sign]}"
 
