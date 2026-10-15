@@ -18,7 +18,7 @@
 7. Скрытые стволы (遁干), «шесть родственников» (六亲), пустота (空亡).
 
 Варианты школ (options): noble_table, day_night, shehai, biezhe_yin, fuyin_zimao,
-solar_time, zi_hour, on_datetime.
+solar_time, zi_hour, nian_year, on_datetime.
 """
 from __future__ import annotations
 
@@ -289,6 +289,13 @@ def _shehai(cands: list[dict], ds: int, kind: str, variant: str, log: list[str])
     if len(top) == 1:
         log.append(f"Глубже всех {Z[top[0]['upper']]} ({m}) → 涉害.")
         return top[0], "涉害"
+    if variant == "guanyue":
+        # 《观月经》 в 《六壬大全》 卷七: «忽然涉害起，先举莫相争»; там же, «缀瑕格»: «凡课涉害者复相等，
+        # 以四课中先见者用» — при равной глубине сразу 缀瑕, без ступеней 孟仲季.
+        c = _zhuixia(top, ds)
+        log.append(f"Глубина равна ({m}) у {', '.join(Z[x['upper']] for x in top)} → по 《观月经》 "
+                   f"(«先举莫相争») сразу 缀瑕: {'Ян-день — первый в уроках 1–4' if ds % 2 == 0 else 'Инь-день — первый в уроках 3,4,1,2'} → {Z[c['upper']]}.")
+        return c, "缀瑕"
     log.append(f"Глубина равна ({m}) у {', '.join(Z[c['upper']] for c in top)} → 孟仲季.")
     c, lab = _meng_zhong_ji(top, ds, log)
     return c, lab
@@ -299,7 +306,8 @@ def three_transmissions(ds: int, db: int, general: int, hour: int, *, shehai: st
     """Три передачи (三传) по девяти методам. Возвращает dict: method, kind (课体), chuan, lessons, log.
 
     shehai: 'depth' — 《六壬大全》 (глубина 涉害, при равенстве 孟→仲→季, затем 缀瑕);
-            'mengzhongji' — 《大六壬指南》 (сразу 孟→仲→季, затем 缀瑕).
+            'mengzhongji' — 《大六壬指南》 (сразу 孟→仲→季, затем 缀瑕);
+            'guanyue' — 《观月经》 (в 《大全》 卷七): глубина, при равенстве сразу 缀瑕 («先举»).
     biezhe_yin: 'branch' — Инь-день 别责 берёт саму ветвь «支前三合»; 'heaven' — небесную над ней.
     fuyin_zimao: 'chong' — 伏吟 卯→子: третья передача 午 (冲, 《六壬大全》 卷七 «杜传»);
                  'xing' — третья передача 卯 (刑 子→卯, пример 《大六壬指南》 卷三, день 辛卯).
@@ -679,6 +687,26 @@ def _bazi_year(jd: float, year: int) -> int:
     return year if jd >= lc else year - 1
 
 
+def _lunar_year(d) -> int:
+    """Номер года по китайскому лунному календарю (смена на 正月初一; lunar-python, календарь UTC+8)."""
+    from lunar_python import Solar
+    return Solar.fromYmd(d.year, d.month, d.day).getLunar().getYear()
+
+
+def _nian_ming(by: int, cy: int, gender: str | None, plate: list[int]) -> dict:
+    """本命 (ветвь года рождения by) и 行年 по 虚岁 = cy − by + 1 (《六壬大全》 卷八: «男行年一岁起丙寅…
+    妇行年一岁起壬申»), плюс небесные ветви над ними на текущей пластине."""
+    age = cy - by + 1
+    ben = (by - 4) % 12
+    xing = None
+    if gender == "male":
+        xing = ganzhi((2 + age - 1) % 60)
+    elif gender == "female":
+        xing = ganzhi((8 - (age - 1)) % 60)
+    return {"ben_ming": Z[ben], "ben_ming_heaven_over": Z[plate[ben]], "age_xusui": age, "xing_nian": xing,
+            "xing_nian_heaven_over": Z[plate[Z.index(xing[1])]] if xing else None}
+
+
 def calculate(b: BirthInput, **options) -> dict:
     """Построить 课盘 Да Лю Жэнь на момент рождения (по умолчанию) или на момент консультации.
 
@@ -690,9 +718,12 @@ def calculate(b: BirthInput, **options) -> dict:
       zi_hour: 'late' (по умолч.; 23:00–24:00 не меняет день) | 'early' (день меняется в 23:00);
       noble_table: 'daquan' (по умолч.) | 'xieji' | 'cao';
       day_night: 'branch' (по умолч.; 卯…申 — день) | 'sun' (Солнце над горизонтом) | 'day' | 'night';
-      shehai: 'depth' (по умолч., 《六壬大全》) | 'mengzhongji' (《大六壬指南》);
+      shehai: 'depth' (по умолч., 《六壬大全》) | 'mengzhongji' (《大六壬指南》) | 'guanyue' (《观月经》:
+          при равной глубине сразу 缀瑕);
       biezhe_yin: 'branch' (по умолч.) | 'heaven';
-      fuyin_zimao: 'chong' (по умолч., 《六壬大全》: 卯子午) | 'xing' (《大六壬指南》: 卯子卯).
+      fuyin_zimao: 'chong' (по умолч., 《六壬大全》: 卯子午) | 'xing' (《大六壬指南》: 卯子卯);
+      nian_year: 'lichun' (по умолч.; год 本命 и возраст 行年 — по Личуню) | 'lunar' (по китайскому
+          Новому году, 正月初一; lunar-python, дата по местному календарю).
     """
     def opt(name: str, default: str, allowed: tuple[str, ...]) -> str:
         v = options.get(name, default)
@@ -709,9 +740,10 @@ def calculate(b: BirthInput, **options) -> dict:
     zi_hour = opt("zi_hour", "late", ("late", "early"))
     noble_table = opt("noble_table", "daquan", tuple(NOBLE_TABLES))
     day_night = opt("day_night", "branch", ("branch", "sun", "day", "night"))
-    shehai = opt("shehai", "depth", ("depth", "mengzhongji"))
+    shehai = opt("shehai", "depth", ("depth", "mengzhongji", "guanyue"))
     biezhe_yin = opt("biezhe_yin", "branch", ("branch", "heaven"))
     fuyin_zimao = opt("fuyin_zimao", "chong", ("chong", "xing"))
+    nian_year = opt("nian_year", "lichun", ("lichun", "lunar"))
     kw = {"noble_table": noble_table, "biezhe_yin": biezhe_yin, "fuyin_zimao": fuyin_zimao}
 
     warnings: list[str] = []
@@ -880,7 +912,7 @@ def calculate(b: BirthInput, **options) -> dict:
                         f"во всех трёх примерах взят дневной 贵人, при часе 寅 — в двух из шести; 卷十一 советует "
                         f"считать по восходу и закату (day_night='sun'). Другой Благородный — в alternatives.")
     # школы, меняющие три передачи: 涉害, 伏吟 子卯, 别责 Инь-дня
-    for name, values, label in (("shehai", ("depth", "mengzhongji"), "Школы 涉害 расходятся"),
+    for name, values, label in (("shehai", ("depth", "mengzhongji", "guanyue"), "Школы 涉害 расходятся"),
                                 ("fuyin_zimao", ("chong", "xing"), "伏吟 子卯: школы расходятся"),
                                 ("biezhe_yin", ("branch", "heaven"), "别责 Инь-дня: школы расходятся")):
         for t in values:
@@ -946,26 +978,26 @@ def calculate(b: BirthInput, **options) -> dict:
         except Exception:  # pragma: no cover
             nbirth = None
         if nbirth is not None:
-            by = _bazi_year(nbirth.jd_ut, nbirth.utc.year)
-            cy = _bazi_year(jd, n.utc.year)
-            age = cy - by + 1
-            ben = (by - 4) % 12
-            xing = None
-            if gender == "male":
-                xing = ganzhi((2 + age - 1) % 60)
-            elif gender == "female":
-                xing = ganzhi((8 - (age - 1)) % 60)
-            nian = {"ben_ming": Z[ben], "ben_ming_heaven_over": None,
-                    "age_xusui_by_lichun": age, "xing_nian": xing, "xing_nian_heaven_over": None,
-                    "note": "本命 — ветвь года рождения (по Личуню); 行年 — мужчина: 1 год = 丙寅 по ходу, "
-                            "женщина: 1 год = 壬申 против хода (《六壬大全》 卷八); возраст — по годам Личуня (⚠ "
-                            "традиционно — по лунному Новому году)."}
-            nian["ben_ming_heaven_over"] = Z[plate[ben]]
-            if xing:
-                nian["xing_nian_heaven_over"] = Z[plate[Z.index(xing[1])]]
+            # год 本命 и счёт 虚岁 для 行年: по Личуню (умолч.) или по китайскому Новому году (正月初一)
+            years = {"lichun": (_bazi_year(nbirth.jd_ut, nbirth.utc.year), _bazi_year(jd, n.utc.year)),
+                     "lunar": (_lunar_year(nbirth.local.date()), _lunar_year(n.local.date()))}
+            nm = {k: _nian_ming(by_, cy_, gender, plate) for k, (by_, cy_) in years.items()}
+            nian = {**nm[nian_year], "year_rule": nian_year,
+                    "age_xusui_by_lichun": nm["lichun"]["age_xusui"],
+                    "age_xusui_by_lunar_new_year": nm["lunar"]["age_xusui"],
+                    "note": "本命 — ветвь года рождения; 行年 — мужчина: 1 год = 丙寅 по ходу, женщина: 1 год = 壬申 "
+                            "против хода (《六壬大全》 卷八). Граница года — "
+                            + ("Личунь (nian_year='lichun')" if nian_year == "lichun" else
+                               "китайский Новый год (nian_year='lunar')")
+                            + "; классика 六壬 её не оговаривает (⚠), 虚岁 обычно считают от 正月初一."}
+            o = "lunar" if nian_year == "lichun" else "lichun"
+            if (nm[o]["ben_ming"], nm[o]["age_xusui"]) != (nm[nian_year]["ben_ming"], nm[nian_year]["age_xusui"]):
+                alternatives.append({"what": f"nian_year='{o}'", **nm[o]})
+                warnings.append(f"Граница года для 本命/行年: при nian_year='{o}' 本命 {nm[o]['ben_ming']}, "
+                                f"возраст {nm[o]['age_xusui']} (虚岁), 行年 {nm[o]['xing_nian'] or '—'} — см. alternatives.")
 
     variant = (f"《六壬大全》: 月将 по 中气, 贵人 '{noble_table}', день/ночь '{day_night}', 涉害 '{shehai}', "
-               f"solar_time='{used_mode}', zi_hour='{zi_hour}'")
+               f"solar_time='{used_mode}', zi_hour='{zi_hour}', nian_year='{nian_year}'")
     return {
         "method": "da_liu_ren",
         "variant": variant,
@@ -977,7 +1009,7 @@ def calculate(b: BirthInput, **options) -> dict:
             "chart_time": _iso(chart_t), "gender": gender,
             "options": {"solar_time": used_mode, "zi_hour": zi_hour, "noble_table": noble_table,
                         "day_night": day_night, "shehai": shehai, "biezhe_yin": biezhe_yin,
-                        "fuyin_zimao": fuyin_zimao},
+                        "fuyin_zimao": fuyin_zimao, "nian_year": nian_year},
         },
         "warnings": warnings,
         "solar": {"sun_longitude": round(lam, 5),
