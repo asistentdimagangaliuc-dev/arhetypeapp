@@ -979,14 +979,15 @@ def calculate(b: BirthInput, **options) -> dict:
     alt_methods = {}
     for m in JU_METHODS:
         try:
-            alt_methods[m] = _ju_label(_determine(m, jd, d_chart, clock, leap_days))
+            alt_methods[m] = _ju_label(_determine(m, jd, d_chart, clock, leap_days, **dctx))
         except RuntimeError as e:  # pragma: no cover
             alt_methods[m] = f"ошибка: {e}"
     if len(set(alt_methods.values())) > 1:
         warnings.append("局 зависит от метода определения (拆补/置闰/茅山) — см. alternatives.ju_methods.")
-    # Порог 置闰 — школьный: 8 (《统宗》 1718, счёт «включительно») или 9 (黄宗羲 считает разностью дат).
+    alt_extra = {m: _ju_label(_determine(m, jd, d_chart, clock, leap_days, **dctx)) for m in JU_METHODS_EXTRA}
+    # Порог 置闰 — школьный: 8 (《统宗》 1718, 《演義》 1346 — «超九日» включительно) или 9 (黄宗羲 считает разностью).
     other_leap = 9 if leap_days == 8 else 8
-    zr_other = _ju_label(_determine("zhirun", jd, d_chart, clock, other_leap))
+    zr_other = _ju_label(_determine("zhirun", jd, d_chart, clock, other_leap, **dctx))
     zhirun_other = None
     if zr_other != alt_methods["zhirun"]:
         zhirun_other = {"zhirun_leap_days": other_leap, "label": zr_other}
@@ -1002,8 +1003,9 @@ def calculate(b: BirthInput, **options) -> dict:
         ct = ck.chart(n.utc)
         for zh in ("early", "late"):
             dd = chart_day(ct, zh)
-            rr = _determine(method, jd, dd, ck, leap_days)
             hh = hour_pillar(ct)
+            rr = _determine(method, jd, dd, ck, leap_days, terms=terms, chart_t=ct, term_boundary=term_boundary,
+                            hour_idx=hh, year_branch_lichun=yi_idx % 12)
             key = (dd, hh, _ju_label(rr))
             seen.add(key)
             alt_time.append({"solar_time": mode, "zi_hour": zh, "chart_time": _iso(ct), "day": ganzhi(day_index(dd)),
@@ -1017,23 +1019,46 @@ def calculate(b: BirthInput, **options) -> dict:
     if near < 15:
         warnings.append(f"Время карты в {near:.0f} мин от границы двухчасовки: час (и вся карта) чувствителен к "
                         f"точности времени и выбору solar_time.")
-    if b.year < 1645:
-        warnings.append("Дата до 1645 г.: китайские календари того времени считали термины «средними» (平气); "
-                        "здесь — истинные (定气), поэтому 局 может не совпасть с историческими книгами.")
+    qi_other = None
+    if method != "yinpan" and (b.year < 1645 or qi == "ping"):
+        other = "ping" if qi == "ding" else "ding"
+        qi_other = {"qi": other, "label": _ju_label(_determine(method, jd, d_chart, clock, leap_days,
+                                                               **{**dctx, "terms": _Terms(other)}))}
+    if b.year < 1645 and qi == "ding":
+        warnings.append("Дата до 1645 г.: календари Мин (大统历) и Юань (授时历) считали термины «средними» (平气); "
+                        f"здесь — истинные (定气). С qi='ping' (константы 授时历/大统历): {qi_other['label'] if qi_other else '—'}"
+                        " — см. alternatives.qi_other.")
+    if qi == "ping" and b.year >= 1645:
+        warnings.append("qi='ping' для даты после 1645 г.: с календаря 时宪历 (1645) в Китае термины — истинные (定气); "
+                        "平气 здесь неисторичен.")
+    if qi == "ping" and b.year < 1368:
+        warnings.append("qi='ping' до 1368 г.: модель — 大统历 (授时历 без 消长); календари Юань (с 消长) и Сун "
+                        "давали моменты терминов, отличные на часы — дата термина может сдвинуться на сутки ⚠.")
 
     steps.append("Итог: " + " / ".join(_grid_text(ch)))
+    hidden_rule_ru = (
+        "隐干 (王凤麟, 阴盘): ствол часа — во дворец 值使, далее по кругу по часовой стрелке стволы небесного диска в их "
+        "порядке («时干加在值使门上，然后按照天盘的顺序…排列一圈»); у центра скрытого ствола нет; ⚠ в классике не найдено"
+        if hidden_rule == "ring" else
+        "暗干: ствол часа ставится во дворец 值使 (если 值使 и 值符 в одном дворце — в центр), "
+        "далее 戊己庚辛壬癸丁丙乙 вперёд (阳) / назад (阴) по числам Ло Шу; правило kinqimen "
+        "TS 0.3.1, ⚠ в классических текстах не найдено")
 
     return {
         "method": "qimen",
         "variant": (f"时家奇门 转盘; ju_method='{method}' ({JU_METHOD_RU[method]}); solar_time='{used_mode}'; "
                     f"zi_hour='{zi_hour}'; tianqin='{tianqin}'; deities='{deities}'"
-                    + (f"; zhirun_leap_days={leap_days}" if method == "zhirun" else "")),
+                    + (f"; zhirun_leap_days={leap_days}" if method in ("zhirun", "hybrid") else "")
+                    + (f"; qi='{qi}'" if qi != "ding" else "")
+                    + (f"; term_boundary='{term_boundary}'" if term_boundary != "moment" else "")
+                    + (f"; hidden_stems='{hidden_rule}'" if hidden_rule != "luoshu" else "")),
         "inputs_used": {
             "local": _iso(n.local), "tz": b.tz, "utc_offset": fmt_offset(n.utc_offset_hours),
             "offset_source": n.offset_source, "utc": _iso(n.utc).replace("+00:00", "Z"), "jd_ut": round(jd, 6),
             "lat": b.lat, "lon": b.lon, "has_time": True, "chart_time": _iso(chart_t),
             "options": {"ju_method": method, "solar_time": used_mode, "zi_hour": zi_hour, "tianqin": tianqin,
-                        "deities": deities, "zhirun_leap_days": leap_days},
+                        "deities": deities, "zhirun_leap_days": leap_days, "qi": qi,
+                        "term_boundary": term_boundary, "hidden_stems": hidden_rule},
         },
         "warnings": warnings,
         "pillars": {"year": ganzhi(yi_idx), "month": ganzhi(mi), "day": ganzhi(di), "hour": ganzhi(hi),
@@ -1045,16 +1070,21 @@ def calculate(b: BirthInput, **options) -> dict:
             "next": {"cn": TERMS[(k_now + 1) % 24][0], "ru": TERMS[(k_now + 1) % 24][1],
                      "deg": term_deg(k_now + 1), "utc": _jd_iso_utc(t_next)},
             "elapsed_days": round(jd - t_prev, 4),
+            "qi": qi,
         },
         "ju": {
             "method": method, "label": label, "dun": "yang" if yang else "yin", "dun_cn": "阳遁" if yang else "阴遁",
-            "number": ju, "yuan": YUAN[r["yuan"]][0], "yuan_cn": YUAN[r["yuan"]][1],
+            "number": ju, "yuan": YUAN[r["yuan"]][0] if r["yuan"] is not None else None,
+            "yuan_cn": YUAN[r["yuan"]][1] if r["yuan"] is not None else None,
             "term_used": {"index": k, "cn": TERMS[k][0], "ru": TERMS[k][1]},
             "leap": bool(r.get("leap")),
             "fu_tou": {"day": ganzhi(di), "fu_tou": ganzhi(fu)},
             "zhirun": ({kk: r[kk] for kk in ("state", "chao_days", "block_start", "solstice", "solstice_futou",
-                                              "leap_days")} if method == "zhirun" else None),
+                                              "leap_days")} if method in ("zhirun", "hybrid") else None),
             "maoshan_elapsed_days": round(r["elapsed_days"], 4) if method == "maoshan" else None,
+            "hybrid_canju": ({kk: r.get(kk) for kk in ("canju", "canju_term_utc", "canju_block_start")}
+                             if method == "hybrid" else None),
+            "yinpan": ({"lunar": r["lunar"], "ju_lichun_year": r.get("ju_lichun_year")} if method == "yinpan" else None),
         },
         "xun": {"head": ganzhi(xh), "yi": STEMS[ch["xun_yi"]][0], "hour_position": ch["pos"],
                 "kong_hour": [BRANCHES[x][0] for x in kong], "kong_hour_palaces": kong_palaces,
@@ -1073,17 +1103,23 @@ def calculate(b: BirthInput, **options) -> dict:
         "grid": [[p for p in row] for row in GRID],
         "grid_text": _grid_text(ch),
         "patterns": patterns,
-        "hidden_stems_rule": "暗干: ствол часа ставится во дворец 值使 (если 值使 и 值符 в одном дворце — в центр), "
-                             "далее 戊己庚辛壬癸丁丙乙 вперёд (阳) / назад (阴) по числам Ло Шу; правило kinqimen "
-                             "TS 0.3.1, ⚠ в классических текстах не найдено",
+        "hidden_stems_rule": hidden_rule_ru,
         "natal": natal,
-        "alternatives": {"ju_methods": alt_methods, "zhirun_other_threshold": zhirun_other, "time_bases": alt_time},
+        "alternatives": {"ju_methods": alt_methods, "ju_methods_extra": alt_extra,
+                         "zhirun_other_threshold": zhirun_other, "qi_other": qi_other, "time_bases": alt_time},
         "steps": steps,
     }
 
 
+def _year_branch_at(jd: float) -> int:
+    """Ветвь года (по Личуню, как в модуле 01) в момент jd."""
+    y = jd_to_utc(jd).year
+    return year_index(y if jd >= li_chun_jd(y) else y - 1) % 12
+
+
 def _day_level(b: BirthInput, method: str, solar_time: str, zi_hour: str, tianqin: str, deities: str,
-               leap_days: int, warnings: list[str], steps: list[str], add) -> dict:
+               leap_days: int, warnings: list[str], steps: list[str], add, qi: str = "ding",
+               term_boundary: str = "moment", hidden_rule: str = "luoshu", terms: _Terms | None = None) -> dict:
     """Без времени рождения: данные дня и все варианты часа в пределах местных суток.
 
     Местные сутки (00:00–24:00 по часам) просматриваются поминутно: для каждой минуты — время карты
@@ -1123,7 +1159,10 @@ def _day_level(b: BirthInput, method: str, solar_time: str, zi_hour: str, tianqi
 
     def ju_at(i: int, dd: date) -> dict:
         if i not in cache:
-            cache[i] = _determine(method, n0.jd_ut + i / 1440.0, dd, clock, leap_days)
+            jd_i, _, ct_i = moment(i)
+            cache[i] = _determine(method, jd_i, dd, clock, leap_days, terms=terms, chart_t=ct_i,
+                                  term_boundary=term_boundary, hour_idx=hour_pillar(ct_i),
+                                  year_branch_lichun=_year_branch_at(jd_i))
         return cache[i]
 
     segs: list[tuple] = []                                    # (day_date, hour_idx, i_s, i_e, r)
@@ -1152,7 +1191,7 @@ def _day_level(b: BirthInput, method: str, solar_time: str, zi_hour: str, tianqi
     candidates = []
     for dd, hh, i_s, i_e, r in segs:
         k = r["term"]
-        ch = build_chart(term_is_yang(k), JU_TABLE[k][r["yuan"]], hh, tianqin, deities)
+        ch = build_chart(_ju_yang(r), _ju_number(r), hh, tianqin, deities, hidden_rule)
         _, civ_s, ct_s = moment(i_s)
         _, civ_e, ct_e = moment(i_e + 1)
         candidates.append({
@@ -1177,9 +1216,12 @@ def _day_level(b: BirthInput, method: str, solar_time: str, zi_hour: str, tianqi
     if len(variants) > 1:
         warnings.append("В эти сутки 局 меняется: " + "; ".join(f"{v['local_from']}–{v['local_to']} — {v['ju']}"
                                                               for v in variants) + ". Без времени нельзя выбрать.")
-    if b.year < 1645:
-        warnings.append("Дата до 1645 г.: китайские календари того времени считали термины «средними» (平气); "
-                        "здесь — истинные (定气), поэтому 局 может не совпасть с историческими книгами.")
+    if b.year < 1645 and qi == "ding":
+        warnings.append("Дата до 1645 г.: календари Мин (大统历) и Юань (授时历) считали термины «средними» (平气); "
+                        "здесь — истинные (定气), поэтому 局 может не совпасть с историческими книгами "
+                        "(вариант — qi='ping').")
+    if qi == "ping" and b.year >= 1645:
+        warnings.append("qi='ping' для даты после 1645 г.: с календаря 时宪历 (1645) термины — истинные (定气).")
 
     lc = li_chun_jd(n1.utc.year)
     jd_end = n1.jd_ut - 1e-6
@@ -1195,8 +1237,8 @@ def _day_level(b: BirthInput, method: str, solar_time: str, zi_hour: str, tianqi
         f"zi_hour='{zi_hour}'. Вариантов (день, час, 局): {len(candidates)}; поле clock_hours — по часам, "
         f"hours — по времени карты.")
     k = r["term"]
-    yang = term_is_yang(k)
-    ju = JU_TABLE[k][r["yuan"]]
+    yang = _ju_yang(r)
+    ju = _ju_number(r)
     add(f"局 дня {ganzhi(di)} (последняя минута суток с этим столпом дня; {JU_METHOD_RU[method]}): {_ju_label(r)}"
         + ("" if len(variants) == 1 else "; в течение суток: " + ", ".join(v["ju"] for v in variants)) + ".")
     earth = earth_plate(yang, ju)
@@ -1206,15 +1248,19 @@ def _day_level(b: BirthInput, method: str, solar_time: str, zi_hour: str, tianqi
     return {
         "method": "qimen",
         "variant": (f"时家奇门 转盘; ju_method='{method}'; solar_time='{used_mode}'; zi_hour='{zi_hour}'; "
-                    f"без времени — только данные дня"),
+                    + (f"qi='{qi}'; " if qi != "ding" else "")
+                    + (f"term_boundary='{term_boundary}'; " if term_boundary != "moment" else "")
+                    + "без времени — только данные дня"),
         "inputs_used": {"local": b.date.isoformat(), "tz": b.tz, "lat": b.lat, "lon": b.lon, "has_time": False,
                         "options": {"ju_method": method, "solar_time": used_mode, "zi_hour": zi_hour,
-                                    "tianqin": tianqin, "deities": deities, "zhirun_leap_days": leap_days}},
+                                    "tianqin": tianqin, "deities": deities, "zhirun_leap_days": leap_days,
+                                    "qi": qi, "term_boundary": term_boundary, "hidden_stems": hidden_rule}},
         "warnings": warnings,
         "pillars": {"year": ganzhi(yi_idx), "month": ganzhi(mi), "day": ganzhi(di), "hour": None,
                     "day_date": b.date.isoformat()},
         "ju": {"method": method, "label": _ju_label(r), "dun": "yang" if yang else "yin", "number": ju,
-               "yuan": YUAN[r["yuan"]][0], "yuan_cn": YUAN[r["yuan"]][1],
+               "yuan": YUAN[r["yuan"]][0] if r["yuan"] is not None else None,
+               "yuan_cn": YUAN[r["yuan"]][1] if r["yuan"] is not None else None,
                "term_used": {"index": k, "cn": TERMS[k][0], "ru": TERMS[k][1]}, "leap": bool(r.get("leap")),
                "variants_in_day": variants},
         "earth_plate": {str(p): STEMS[s][0] for p, s in sorted(earth.items())},

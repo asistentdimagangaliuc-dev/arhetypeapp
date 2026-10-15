@@ -648,3 +648,222 @@ def test_steps_text_t4(r4):
     assert "26.293645" in s["2. Целевой момент"]
     assert "25.9945" in s["5. Дирекции солнечной дуги"] and "25.9163" in s["5. Дирекции солнечной дуги"]
     assert "Рак + 26 mod 12 = Дева" in s["7. Годовые профекции"]
+
+
+# ---------------------------------------------------------------------------
+# Повторная проверка (приоритет 1): опции, добавленные по источникам
+# ---------------------------------------------------------------------------
+
+# Первичные дирекции к углам — Bob Makransky, «Primary Directions. A Primer of Calculation» (спекулум и
+# примеры для принца Чарльза: 14.11.1948 21:14:39 GMT, 51N30, 0W10; RAMC 12,37 = ST 0h49m28s):
+# https://archive.org/details/bob-makransky-primary-directions-a-primer-of-calculations-i
+PRINCE_CHARLES = BirthInput(1948, 11, 14, 21, 14, tz="UTC", lat=51.5, lon=-10 / 60, second=39)
+
+
+def _pd(r) -> dict:
+    return {(d["promissor"], d["significator"]): d for d in r["primary_directions"]["directions"]}
+
+
+@pytest.mark.parametrize("lat_mode,promissor,sig,arc", [
+    ("with", "moon", "mc", 16.10), ("with", "sun", "ic", 37.64), ("with", "saturn", "ic", -34.74),
+    ("with", "pluto", "asc", 6.75), ("with", "uranus", "asc", -45.84), ("with", "jupiter", "dsc", -45.43),
+    ("without", "jupiter", "dsc", -45.54),
+])
+def test_primary_directions_makransky_arcs(lat_mode, promissor, sig, arc):
+    r = calculate(PRINCE_CHARLES, on_date="1965-01-01", hit_bodies=[], include_lunar_return=False,
+                  primary_directions=True, pd_key="ptolemy", pd_latitude=lat_mode)
+    d = _pd(r)[(promissor, sig)]
+    assert abs(d["arc"] - arc) < 0.03                      # Makransky: 0,01° (эфемерида 1980-х)
+    assert d["type"] == ("direct" if arc > 0 else "converse")
+    assert abs(d["age_years"] - abs(d["arc"])) < 1e-9      # ключ Птолемея: 1° = 1 год
+
+
+def test_primary_directions_makransky_speculum_and_keys():
+    r = calculate(PRINCE_CHARLES, on_date="1965-01-01", hit_bodies=[], include_lunar_return=False,
+                  primary_directions=True)
+    pdx = r["primary_directions"]
+    assert abs(pdx["armc"] - 12.37) < 0.01
+    sp = pdx["speculum"]
+    for body, ra, ad in [("sun", 230.01, -24.70), ("moon", 28.47, 14.46), ("pluto", 141.49, 32.37),
+                         ("uranus", 89.93, 33.40), ("jupiter", 269.87, -32.93), ("saturn", 157.63, 14.03)]:
+        assert abs(sp[body]["ra"] - ra) < 0.02 and abs(sp[body]["ad"] - ad) < 0.02
+    # гл. III: MO ☌ MC mund d (дуга 16,10) и JU ☌ DSC zod c (−45,54) в разных ключах, годы
+    expected = {"ptolemy": (16.10, 45.54), "naibod": (16.335, 46.205), "birthday_ra": (15.707, 44.429),
+                "true_solar_ra": (15.318, 42.043)}
+    for key, (y_mo, y_ju) in expected.items():
+        rm = calculate(PRINCE_CHARLES, on_date="1965-01-01", hit_bodies=[], include_lunar_return=False,
+                       primary_directions=True, pd_key=key)
+        rz = calculate(PRINCE_CHARLES, on_date="1965-01-01", hit_bodies=[], include_lunar_return=False,
+                       primary_directions=True, pd_key=key, pd_latitude="without")
+        assert abs(_pd(rm)[("moon", "mc")]["age_years"] - y_mo) < 0.03, key
+        assert abs(_pd(rz)[("jupiter", "dsc")]["age_years"] - y_ju) < 0.03, key
+        if key == "birthday_ra":     # ход Солнца по RA 14.11.1948 0h → 15.11 0h GMT = 1,025°
+            assert abs(rm["primary_directions"]["birthday_ra_motion"] - 1.025) < 0.001
+
+
+def test_primary_directions_invariants(r1):
+    assert r1["primary_directions"] is None and len(r1["steps"]) == 7     # по умолчанию выключены
+    r = calculate(T1(), on_date=ON, hit_bodies=[], primary_directions=True, pd_key="naibod")
+    pdx, nat = r["primary_directions"], r["natal"]
+    lat = 55.7558
+    for d in pdx["directions"]:
+        sp = pdx["speculum"][d["promissor"]]
+        ra, ad, armc = sp["ra"], sp["ad"], nat["armc"]
+        raw = {"mc": ra - armc, "ic": ra - armc - 180, "asc": ra - ad - armc - 90, "dsc": ra + ad - armc + 90}[d["significator"]]
+        assert abs(sd(0.0, raw) - d["arc"]) < 1e-3
+        assert abs(d["age_years"] - abs(d["arc"]) / NAIBOD) < 1e-3 and d["age_years"] <= 100
+        assert abs(d["jd"] - (r["inputs_used"]["birth_jd"] + d["age_years"] * Y)) < 0.05   # age округлён до 1e-4 г.
+        assert abs(math.degrees(math.asin(math.tan(math.radians(sp["dec"])) * math.tan(math.radians(lat)))) - ad) < 1e-4
+    assert len(r["steps"]) == 8
+    r0 = calculate(BirthInput(1990, 5, 15, place="Москва"), on_date=ON, hit_bodies=[], primary_directions=True)
+    assert r0["primary_directions"] is None and any("Первичные дирекции требуют" in w for w in r0["warnings"])
+
+
+def test_converse_progressions_t1():
+    # astro.com FAQ «Other methods»: «For 'converse' secondary progressions, use negative age»
+    r = calculate(T1(), on_date=ON, hit_bodies=[], progression_direction="converse")
+    rd = calculate(T1(), on_date=ON, hit_bodies=[])
+    p, jd0 = r["progressions"], r["inputs_used"]["birth_jd"]
+    a = r["age_years"]
+    assert abs(p["progressed_jd"] - (jd0 - a)) < 1e-5 and p["direction"] == "converse"
+    for body in ("sun", "moon", "venus"):
+        assert abs(sd(lon(CODES[body], jd0 - a), p["positions"][body]["lon"])) < 1e-4
+        assert abs(p["positions"][body]["speed_per_year"] + speed(CODES[body], jd0 - a)) < 1e-4
+    assert abs(p["angles"]["armc_advance"] + NAIBOD * a) < 1e-5            # ARMC₀ − 0,98564733° × A
+    assert r["solar_arc"] == rd["solar_arc"]                                # дуга остаётся прямой
+    # события Луны: в реальный момент события конверсная Луна стоит на границе и уходит в предыдущий знак
+    m = p["moon"]
+    for e in [m["next_sign_change"]] + m["events_in_period"]:
+        pj = jd0 - (e["jd"] - jd0) / Y
+        lm = lon(swe.MOON, pj)
+        if e["type"] == "sign":
+            assert abs(sd(round(lm / 30) * 30.0, lm)) < 1e-3
+            assert e["to_sign"] == ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio",
+                                    "Sagittarius", "Capricorn", "Aquarius", "Pisces"][(round(lm / 30) - 1) % 12]
+    # лунация в реальном времени: элонгация убывает; фаза началась на верхней границе, кончится на нижней
+    lu = p["lunation"]
+    assert lu["phase_started"]["jd"] <= r["inputs_used"]["on_jd"] <= lu["next_phase"]["jd"]
+    ph = lu["phase_index"] - 1
+    for key, bound in (("phase_started", 45.0 * (ph + 1)), ("next_phase", 45.0 * ph)):
+        pj = jd0 - (lu[key]["jd"] - jd0) / Y
+        el = (lon(swe.MOON, pj) - lon(swe.SUN, pj)) % 360.0
+        assert abs(sd(bound, el)) < 1e-3
+    assert lu["next_phase_name"] == ["new", "crescent", "first_quarter", "gibbous", "full", "disseminating",
+                                     "last_quarter", "balsamic"][(ph - 1) % 8]
+    assert any("Конверсные" in w for w in r["warnings"]) and "конверсные" in r["variant"]
+
+
+@pytest.mark.parametrize("method", ["mean_sun", "naibod", "solar_arc", "solar_arc_ra", "quotidian"])
+def test_converse_angles_mirror(method):
+    # конверсные углы в момент рождения = натальные; для mean_sun/naibod сдвиг ровно −0,98564733° × A
+    r = calculate(T4(), on_date="1905-06-30", hit_bodies=[], progression_angles=method,
+                  progression_direction="converse")
+    pa, nat, a = r["progressions"]["angles"], r["natal"], r["age_years"]
+    if method == "mean_sun":
+        assert abs(sd(nat["armc"] - NAIBOD * a, pa["armc"])) < 1e-5
+    if method == "naibod":
+        assert abs(sd(nat["mc"] - NAIBOD * a, r["progressions"]["positions"]["mc"]["lon"])) < 1e-5
+    if method == "solar_arc":
+        jd0 = r["inputs_used"]["birth_jd"]
+        sarc = sd(lon(swe.SUN, jd0), lon(swe.SUN, jd0 - a))            # отрицательная дуга
+        assert sarc < 0 and abs(sd(nat["mc"] + sarc, r["progressions"]["positions"]["mc"]["lon"])) < 1e-4
+
+
+def test_profection_month_variants_t1():
+    # equal (по умолчанию) не изменился: месяц 5 = Козерог, 13.09–14.10.2026 (§7.2)
+    base = calculate(T1(), on_date=ON, hit_bodies=[])["profections"]
+    assert (base["month"]["method"], base["month"]["index"], base["month"]["sign"]) == ("equal", 5, "Capricorn")
+    y0, y1 = jd_of(base["year_start_utc"]), jd_of(base["year_end_utc"])
+    # calendar: границы — местная полночь 15-го числа (MSK = UTC+3)
+    for on, idx, sign, start in [("2026-10-14", 5, "Capricorn", "2026-09-14T21:00:00+00:00"),
+                                 ("2026-10-15", 6, "Aquarius", "2026-10-14T21:00:00+00:00")]:
+        m = calculate(T1(), on_date=on, hit_bodies=[], profection_month="calendar")["profections"]["month"]
+        assert (m["index"], m["sign"], m["start_utc"]) == (idx, sign, start)
+    # thirteen: 13 равных частей; 13-й месяц снова в знаке года (Дева)
+    m = calculate(T1(), on_date="2027-05-10", hit_bodies=[], profection_month="thirteen")["profections"]["month"]
+    assert (m["index"], m["sign"], m["months_in_year"]) == (13, "Virgo", 13)
+    assert abs(jd_of(m["start_utc"]) - (y0 + 12 * (y1 - y0) / 13)) < 1e-4 and 28.0 < (y1 - y0) / 13 < 28.2
+    # valens: дневное рождение → Солнце; знак = знак года + ⌊(☉ − ☉₀)/30°⌋
+    r = calculate(T1(), on_date=ON, hit_bodies=[], profection_month="valens")
+    m, jd = r["profections"]["month"], r["inputs_used"]["on_jd"]
+    arc = (lon(swe.SUN, jd) - r["natal"]["bodies"]["sun"]["lon"]) % 360.0
+    assert m["luminary"] == "sun" and m["index"] == int(arc // 30) + 1 == 5
+    for key, k in (("start_utc", 4), ("end_utc", 5)):
+        assert abs(sd(r["natal"]["bodies"]["sun"]["lon"] + 30 * k, lon(swe.SUN, jd_of(m[key])))) < 1e-4
+
+
+def test_profection_calendar_months_george():
+    # D. George, «Astrology and the Authentic Self»: 7-й дом года, день рождения 17 ноября; месяц 1 — 17.11–17.12,
+    # «on May 17, the monthly profection reaches the first house… from May 17 to June 16»
+    b = BirthInput(1996, 11, 17, 12, 0, place="Москва")      # 30 лет в 2026 г.: 30 mod 12 = 6 → 7-й дом
+    r = calculate(b, on_date="2027-05-20", hit_bodies=[], profection_month="calendar", include_lunar_return=False)
+    p = r["profections"]
+    assert p["house_whole_sign"] == 7
+    asc_sign = int(r["natal"]["asc"] // 30)
+    assert p["month"]["index"] == 7 and p["month"]["sign"] == ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
+                                                              "Libra", "Scorpio", "Sagittarius", "Capricorn",
+                                                              "Aquarius", "Pisces"][asc_sign]      # 1-й дом
+    assert p["month"]["start_utc"] == "2027-05-16T21:00:00+00:00" and p["month"]["end_utc"] == "2027-06-16T21:00:00+00:00"
+    prev = calculate(b, on_date="2027-05-16", hit_bodies=[], profection_month="calendar",
+                     include_lunar_return=False)["profections"]["month"]
+    assert prev["index"] == 6                                                                   # 12-й дом
+
+
+def test_profection_month_valens_night_and_feb29():
+    r = calculate(T2(), on_date=ON, hit_bodies=[], profection_month="valens")       # ночное рождение → Луна
+    m, jd = r["profections"]["month"], r["inputs_used"]["on_jd"]
+    arc = (lon(swe.MOON, jd) - r["natal"]["bodies"]["moon"]["lon"]) % 360.0
+    assert m["luminary"] == "moon" and m["index"] == int(arc // 30) + 1
+    r3 = calculate(T3(), on_date="2027-01-10", hit_bodies=[], profection_month="calendar")["profections"]["month"]
+    assert r3["start_utc"] == "2026-12-28T21:00:00+00:00" and r3["end_utc"] == "2027-01-28T21:00:00+00:00"
+    # рождение 31 января: в феврале 31-го нет → граница 28.02 (последний день месяца), затем 31.03
+    m3 = calculate(BirthInput(1990, 1, 31, 12, 0, place="Москва"), on_date="2027-03-10", hit_bodies=[],
+                   profection_month="calendar", include_lunar_return=False)["profections"]["month"]
+    assert (m3["index"], m3["start_utc"], m3["end_utc"]) == (2, "2027-02-27T21:00:00+00:00", "2027-03-30T21:00:00+00:00")
+
+
+def test_exact_window_years_option(r2):
+    # по умолчанию ±3 года: у медленных прогрессивных планет точной даты нет; окно 30 лет её находит
+    slow0 = {(a["progressed"], a["aspect"], a["natal"]): a for a in r2["progressions"]["aspects_to_natal"]}
+    assert slow0[("saturn", "trine", "moon")]["exact_utc"] is None
+    r = calculate(T2(), on_date=ON, hit_bodies=[], exact_window_years=30)
+    assert r["progressions"]["exact_search_window_years"] == 30.0
+    jd0 = r["inputs_used"]["birth_jd"]
+    for a in r["progressions"]["aspects_to_natal"]:
+        if a["exact_utc"] is None or a["progressed"] in ("asc", "mc"):
+            continue
+        t = jd_of(a["exact_utc"])
+        pl = lon(CODES[a["progressed"]], jd0 + (t - jd0) / Y)
+        nl = r["natal"]["bodies"][a["natal"]]["lon"] if a["natal"] in r["natal"]["bodies"] else r["natal"][a["natal"]]
+        assert abs(abs(sd(nl, pl)) - a["angle"]) < 1e-3
+    s30 = {(a["progressed"], a["aspect"], a["natal"]): a for a in r["progressions"]["aspects_to_natal"]}
+    assert s30[("saturn", "trine", "moon")]["exact_utc"].startswith("2005-10-25")
+    with pytest.raises(ValueError):
+        calculate(T2(), on_date=ON, hit_bodies=[], exact_window_years=0)
+
+
+def test_progression_obliquity_option(r4):
+    rn = calculate(T4(), on_date="1905-06-30", hit_bodies=[], progression_angles="solar_arc",
+                   progression_obliquity="natal")
+    rp = calculate(T4(), on_date="1905-06-30", hit_bodies=[], progression_angles="solar_arc")
+    an, ap = rn["progressions"]["angles"], rp["progressions"]["angles"]
+    assert an["obliquity_source"] == "natal" and ap["obliquity_source"] == "progressed"
+    eps0 = swe.calc_ut(rn["inputs_used"]["birth_jd"], swe.ECL_NUT)[0][0]
+    assert abs(an["obliquity"] - eps0) < 1e-6
+    # Astrolog «-p1 -pc»: MC + дуга → RA по ε рождения → куспиды по ε рождения (влияние на ASC ≤ 1″ у T4)
+    mc = rn["progressions"]["positions"]["mc"]["lon"]
+    ra = math.degrees(math.atan2(math.sin(math.radians(mc)) * math.cos(math.radians(eps0)), math.cos(math.radians(mc))))
+    cs, ascmc = swe.houses_armc(ra % 360.0, 48.4011, eps0, b"P")
+    assert abs(sd(ascmc[0], rn["progressions"]["positions"]["asc"]["lon"])) < 1e-6
+    assert abs(sd(ap["cusps"][0]["lon"], an["cusps"][0]["lon"])) * 3600 < 5.0
+    rq = calculate(T4(), on_date="1905-06-30", hit_bodies=[], progression_angles="quotidian",
+                   progression_obliquity="natal")
+    assert rq["progressions"]["angles"]["obliquity_source"] == "progressed"
+
+
+def test_new_option_errors():
+    for kw in ({"profection_month": "lunar"}, {"progression_direction": "backward"},
+               {"progression_obliquity": "mean"}, {"pd_key": "kepler"}, {"pd_latitude": "half"},
+               {"pd_max_age": 0}):
+        with pytest.raises(ValueError):
+            calculate(T1(), on_date=ON, hit_bodies=[], **kw)
