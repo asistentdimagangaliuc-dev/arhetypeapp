@@ -679,3 +679,261 @@ def test_steps_and_json():
     assert len(r["steps"]) >= 12 and r["steps"][-1].startswith("Итог")
     s = json.dumps(r, ensure_ascii=False)
     assert "值符" in s and "值使" not in r["warnings"]
+
+
+# ---------------------------------------------------------------------------
+# 9. Повторная проверка (приоритет 1): 平气, «гибрид» 《遁甲演義》/李氏, граница термина по 时辰,
+#    阴盘 王凤麟, 隐干 王凤麟, 三奇入墓
+# ---------------------------------------------------------------------------
+
+from calculators.qimen import _patterns, ju_chaibu, ju_hybrid, term_start  # noqa: E402
+
+BJL = dict(tz="UTC+08:00", lat=39.9, lon=116.4)        # 北京, местное среднее время (как в 授时历/大统历)
+PING = dict(solar_time="mean", qi="ping")
+
+
+def bjl(y, m, d, h, mi=0):
+    return BirthInput(y, m, d, h, mi, **BJL)
+
+
+def _lmt_day_branch(jd_ut):
+    """(день-ганьчжи, ветвь часа, часы) по местному среднему времени Пекина (116,4° в. д.)."""
+    loc = jd_ut + 116.4 / 360.0 + 0.5
+    jdn = int(loc // 1)
+    h = (loc - jdn) * 24
+    return bazi.ganzhi((jdn + 49) % 60), bazi.BRANCHES[int(((h + 1) % 24) // 2)][0], h
+
+
+@pytest.mark.parametrize("k,approx,day,branch", [
+    # 《明史·曆志一》 (https://zh.wikisource.org/wiki/明史/卷31): «乃以推壬申冬至，《大統》得己亥寅正一刻»
+    (0, (1631, 12, 21), "己亥", "寅"),
+    # 《遁甲演義》 «又引證» (https://zh.wikisource.org/wiki/遁甲演義): «萬曆二十四年丙申，正月初九日丑時立春…
+    # 初九丙子日…二十四日辛卯日辰時雨水…初九日丙午日午時驚蟄節…至二十四辛酉日申時止» (春分 — 酉時)
+    (3, (1596, 2, 5), "丙子", "丑"), (4, (1596, 2, 20), "辛卯", "辰"), (5, (1596, 3, 6), "丙午", "午"),
+    (6, (1596, 3, 21), "辛酉", "酉"),
+    # «萬曆二十六年戊戌正月初八甲午日…十五日戌時雨水» (正月十五 = 辛丑)
+    (4, (1598, 2, 19), "辛丑", "戌"),
+    # «萬曆二十七年己亥，五月十七甲子日子時小暑節»; «初四庚辰日丑時秋分»
+    (13, (1599, 7, 7), "甲子", "子"), (18, (1599, 9, 22), "庚辰", "丑"),
+    # «萬曆二十九年辛丑…五月初七甲辰日丑時，交芒種節»
+    (11, (1601, 6, 6), "甲辰", "丑"),
+    # 《演義» 1346: «丙戌年五月初一日己卯，至初九日…芒種» (初九 = 丁亥), «二十四日已交夏至» (壬寅)
+    (11, (1346, 6, 6), "丁亥", None), (12, (1346, 6, 21), "壬寅", None),
+    # 黄宗羲 «超神接氣直指»: «本月初六日交雨水節» (正月初六 = 甲寅 20.02.1589); «冬至…十四日戊午»
+    (4, (1589, 2, 19), "甲寅", None), (0, (1589, 12, 21), "戊午", None),
+])
+def test_pingqi_datong_model_matches_ming_calendar(k, approx, day, branch):
+    jd = swe.julday(*approx, 12.0) + 5.0
+    g, br, h = _lmt_day_branch(term_start(k, jd, "ping"))
+    assert g == day
+    if branch:
+        assert br == branch
+    if approx[0] == 1631:
+        assert abs(h - 4.25) < 0.2                      # «寅正一刻» = 04:15
+    # 定气 в этих случаях часто даёт другой день (平气 и 定气 расходятся до 2 сут)
+    if (k, approx) in ((3, (1596, 2, 5)), (0, (1589, 12, 21))):
+        assert _lmt_day_branch(term_start(k, jd, "ding"))[0] != day
+
+
+@pytest.mark.parametrize("t,label", [
+    # 《遁甲演義» «又引證», 1596: 接气 по 拆补 (殘局/補局) — каждый отрезок текста.
+    ((1596, 2, 6, 0, 30), "阳遁6局 大寒下元"),     # «初九丙子日戊子時還是先年大寒下局»
+    ((1596, 2, 6, 1, 30), "阳遁2局 立春下元"),     # «自丑時至亥…俱借立春下局．陽二遁…此為殘局» (термин 02:28, весь 丑)
+    ((1596, 2, 8, 22, 0), "阳遁2局 立春下元"),
+    ((1596, 2, 8, 23, 30), "阳遁8局 立春上元"),    # «十二己卯日符頭，才到甲子時起…立春上局，陽遁八宮»
+    ((1596, 2, 14, 12), "阳遁5局 立春中元"),        # «十七甲申日換局…立春中局。陽五遁中宮»
+    ((1596, 2, 19, 0, 30), "阳遁2局 立春下元"),    # «二十二日，己丑日甲子時至辛卯日卯時止…補足前立春下局»
+    ((1596, 2, 21, 6, 30), "阳遁2局 立春下元"),
+    ((1596, 2, 21, 7, 30), "阳遁3局 雨水下元"),    # «辛卯日辰時雨水…俱借雨水下局，陽三遁震宮»
+    ((1596, 2, 24, 0, 30), "阳遁9局 雨水上元"),    # «二十七甲午日符頭方到…雨水上局，陽九遁離宮»
+    ((1596, 2, 29, 12), "阳遁6局 雨水中元"),        # «二月初二己亥日…雨水中局，陽六遁乾宮»
+    ((1596, 3, 5, 12), "阳遁3局 雨水下元"),         # «初七甲辰日…補足前雨水下局»
+    ((1596, 3, 7, 11, 20), "阳遁4局 惊蛰下元"),    # «初九日丙午日午時驚蟄節…驚蟄下局，陽四巽宮…此為殘局»
+    ((1596, 3, 10, 12), "阳遁1局 惊蛰上元"),        # «十二己酉日符頭始到…驚蟄上局，陽一遁坎宮»
+    ((1596, 3, 15, 12), "阳遁7局 惊蛰中元"),        # «十七甲寅日…驚蟄中局，陽七遁兑宮»
+    ((1596, 3, 22, 16, 0), "阳遁4局 惊蛰下元"),    # «二十二己未日…至二十四辛酉日申時止…補足前驚蟄所少下局»
+    ((1596, 3, 22, 17, 30), "阳遁6局 春分下元"),   # 春分 в 酉時 辛酉 → 殘局 春分下元
+])
+def test_yanyi_1596_hybrid_hour_by_hour(t, label):
+    # Часы UTC+8 подобраны так, чтобы местное среднее время Пекина попадало в названный 时辰.
+    r = calculate(bjl(*t), ju_method="hybrid", term_boundary="hour", **PING)
+    assert r["ju"]["label"] == label
+    # Чистый 置闰 даёт в окнах 殘局 старый термин («初一至初四仍行大寒下元» — 《統宗»), т.е. 1596 г. у 《演義» — не он:
+    if t in ((1596, 2, 6, 1, 30), (1596, 2, 21, 7, 30)):
+        assert calculate(bjl(*t), ju_method="zhirun", **PING)["ju"]["label"] != label
+        assert r["ju"]["hybrid_canju"]["canju"] is True
+
+
+def test_term_boundary_hour_only_moves_term_inside_its_hour():
+    # 雨水 1596 — 07:43 по местному среднему времени; 07:15 (辰) по моменту — ещё 立春, по 时辰 — уже 雨水
+    b = bjl(1596, 2, 21, 7, 30)
+    assert calculate(b, **PING)["ju"]["term_used"]["cn"] == "立春"
+    assert calculate(b, term_boundary="hour", **PING)["ju"]["term_used"]["cn"] == "雨水"
+    assert calculate(T1, term_boundary="hour")["ju"]["label"] == calculate(T1)["ju"]["label"]
+
+
+@pytest.mark.parametrize("d,label,state,chao", [
+    # 《遁甲演義»: «十一月…十三甲午日疊作大雪節，此名閏奇…至萬曆二十七年己亥五月十七甲子日子時，正交小暑節，
+    # 此名正授奇也…八月初三己卯日，符頭已到，初四秋分，乃符先到而節氣後到，又當超用…四月二十七甲午日，超用芒種，
+    # 五月初七甲辰日丑時，交芒種節，已超過十日…五月十二己酉日，疊起又作芒種節上局，陽六遁，乾宫»
+    (date(1598, 12, 25), "阳遁1局 冬至上元", "jieqi", -3),
+    (date(1599, 7, 8), "阴遁8局 小暑上元", "zhengshou", 0),
+    (date(1599, 9, 21), "阴遁7局 秋分上元", "chaoshen", 1),
+    (date(1601, 5, 28), "阳遁6局 芒种上元", "chaoshen", 10),
+    (date(1601, 6, 12), "阳遁6局 芒种闰上元", "leap", 10),
+    (date(1601, 6, 27), "阴遁9局 夏至上元", "jieqi", -5),
+])
+def test_yanyi_1598_1601_zhirun_pingqi(d, label, state, chao):
+    r = calculate(bjl(d.year, d.month, d.day, 12), ju_method="zhirun", **PING)
+    assert (r["ju"]["label"], r["ju"]["zhirun"]["state"], r["ju"]["zhirun"]["chao_days"]) == (label, state, chao)
+
+
+def test_yanyi_1598_known_divergence():
+    # 《演義» проводит 1598 г. без 闰 у 夏至 (符头 13.06 甲午, 夏至 22.06 — разность 9) и ставит 闰 только у 大雪
+    # («十月二十七己卯日超用大雪…已過十一日，合當置閏»). Порог 8 (и 9) даёт 闰 уже у 夏至 1598 — это противоречит
+    # его же примеру 1346 г. (разность 8 → 闰). Расхождение зафиксировано (§1.3), с 10.12.1598 局 снова совпадают.
+    r = calculate(bjl(1598, 6, 13, 12), ju_method="zhirun", **PING)
+    assert r["ju"]["leap"] and r["ju"]["zhirun"]["chao_days"] == 9
+    assert calculate(bjl(1598, 12, 10, 12), ju_method="zhirun", **PING)["ju"]["number"] == 4   # книга: 大雪閏上 阴4
+
+
+@pytest.mark.parametrize("qi", ["ding", "ping"])
+def test_yanyi_1346_leap(qi):
+    # 《演義»: «丙戌年五月初一日己卯，至初九日…芒種，奇超九日，則當置閏，即用初一日己卯作芒種上超局…以十六日甲午作
+    # 芒種閏奇…二十四日已交夏至…至六月初二己酉，方作夏至上局，初七日甲寅，作夏至中局». 1346 г. (至正六年).
+    opts = dict(ju_method="zhirun", solar_time="mean", qi=qi)
+    assert calculate(bjl(1346, 5, 30, 12), **opts)["ju"]["label"] == "阳遁6局 芒种上元"
+    r = calculate(bjl(1346, 6, 14, 12), **opts)
+    assert r["ju"]["label"] == "阳遁6局 芒种闰上元" and r["ju"]["zhirun"]["chao_days"] == 8
+    assert calculate(bjl(1346, 6, 29, 12), **opts)["ju"]["label"] == "阴遁9局 夏至上元"
+    assert calculate(bjl(1346, 7, 4, 12), **opts)["ju"]["label"] == "阴遁3局 夏至中元"
+    # порог 9 этот 闰 пропускает — ещё один довод за 8
+    assert not calculate(bjl(1346, 6, 14, 12), zhirun_leap_days=9, **opts)["ju"]["leap"]
+
+
+def test_huang_zongxi_counts_with_pingqi():
+    # С 平气 (大统历) и местным временем Пекина: «初六日交雨水» → 超 5 дн. от 符头 己酉 (正月初一);
+    # «不知符已超節九日» → разность 冬至 (十四日戊午) − 符头 (初五日己酉) = 9 — ровно как у автора (с 定气 — 10).
+    r = calculate(bjl(1589, 2, 16, 10), ju_method="zhirun", deities="gouchen", **PING)
+    assert r["ju"]["label"] == "阳遁9局 雨水上元" and r["ju"]["zhirun"]["chao_days"] == 5
+    r = calculate(bjl(1589, 12, 13, 4), ju_method="zhirun", deities="gouchen", **PING)
+    assert r["ju"]["label"] == "阴遁4局 大雪闰上元" and r["ju"]["zhirun"]["chao_days"] == 9
+    assert calculate(bjl(1589, 12, 13, 4), ju_method="zhirun", solar_time="mean")["ju"]["zhirun"]["chao_days"] == 10
+    # предупреждение и альтернатива для дат до 1645 г.
+    r = calculate(bjl(1589, 2, 16, 10), ju_method="zhirun", solar_time="mean")
+    assert r["alternatives"]["qi_other"]["qi"] == "ping" and any("qi='ping'" in w for w in r["warnings"])
+
+
+def test_hybrid_is_zhirun_except_canju_window():
+    """hybrid = 置闰, кроме окна 殘局: там термин — следующий за блоком (= 拆补 по моменту), юань 下."""
+    clock = _Clock("UTC+08:00", "fixed", 8.0, None, "clock")
+    rnd = random.Random(16)
+    n_canju = 0
+    for _ in range(300):
+        d = date(1950, 1, 1) + timedelta(days=rnd.randrange(80 * 365))
+        jd = swe.julday(d.year, d.month, d.day, rnd.uniform(0, 23.9) - 8.0)
+        h = ju_hybrid(jd, d, clock, 8)
+        z = ju_zhirun(d, jd, clock, 8)
+        if not h["canju"]:
+            assert (h["term"], h["yuan"], h["leap"]) == (z["term"], z["yuan"], z["leap"])
+        else:
+            n_canju += 1
+            assert h["term"] == (z["term"] + 1) % 24 and h["yuan"] == 2 and not z["leap"]
+            assert h["term"] == ju_chaibu(jd, bazi.day_index(d))["term"]
+    assert n_canju > 5
+
+
+WFL = "https://archive.org/details/wfl-002.-2009-381"   # 王凤麟, 2009, гл. 2 «阴盘遁甲的定局排盘» и разборы
+
+
+def test_yinpan_wangfenglin_full_chart():
+    # WFL, с. 41–53: «2006年5月23日19时45分，农历:四月廿六日…年支戌序数为11，四月廿六为4+26，时支戌序数为11，
+    # 所以(11+4+26+11)/9余数为7…定为阳局，所以此局为阳7局»; «阳七局，甲辰壬，天芮星为值符，死门为值使»;
+    # «死门落艮八宫后，惊门落震宫，开门落巽宫，休门落离宫，生门落坤宫，伤门落兑宫，杜门落乾宫，景门落坎宫»;
+    # 八神 «值符,腾蛇,太阴,六合,白虎,玄武,九地,九天…阳遁顺时…阴遁逆时»; 隐干 «时干加在值使门上，然后按照天盘的
+    # 顺序…排列一圈».
+    r = calculate(BirthInput(2006, 5, 23, 19, 45, tz="UTC+08:00"), ju_method="yinpan", solar_time="clock")
+    assert r["ju"]["label"] == "阳遁7局 阴盘" and r["ju"]["yinpan"]["lunar"]["sum"] == 52
+    assert (r["zhi_fu"]["star"], r["zhi_shi"]["door"], r["zhi_shi"]["palace"]) == ("天芮", "死门", 8)
+    p = palaces(r)
+    assert {k: v["door"] for k, v in p.items() if k != 5} == {
+        8: "死门", 3: "惊门", 4: "开门", 9: "休门", 2: "生门", 7: "伤门", 6: "杜门", 1: "景门"}
+    assert {k: v["star"] for k, v in p.items() if k != 5} == {
+        4: "天英", 9: "天芮", 2: "天柱", 3: "天辅", 7: "天心", 8: "天冲", 1: "天任", 6: "天蓬"}
+    assert {k: "".join(v["heaven_stems"]) for k, v in p.items() if k != 5} == {
+        4: "庚", 9: "壬丙", 2: "戊", 3: "丁", 7: "乙", 8: "癸", 1: "己", 6: "辛"}
+    assert {k: v["deity"] for k, v in p.items() if k != 5} == {
+        9: "值符", 2: "腾蛇", 7: "太阴", 6: "六合", 1: "白虎", 8: "玄武", 3: "九地", 4: "九天"}
+    # 隐干 на рисунке книги: 巽 戊, 離 乙, 坤 辛, 震 壬丙, 兑 己, 艮 庚, 乾 癸 (坎 — 丁)
+    assert {k: v["hidden_stem"] for k, v in p.items()} == {
+        4: "戊", 9: "乙", 2: "辛", 3: "壬丙", 5: None, 7: "己", 8: "庚", 1: "丁", 6: "癸"}
+
+
+@pytest.mark.parametrize("t,label", [
+    # WFL: «公元:…» и «…阳/阴N局» разобранных случаев (часы — пекинские, UTC+8)
+    ((2007, 5, 16, 17, 48), "阳遁1局 阴盘"), ((2007, 6, 8, 9, 8), "阳遁9局 阴盘"),
+    ((2007, 8, 24, 13, 20), "阴遁3局 阴盘"), ((2007, 9, 17, 11, 14), "阴遁7局 阴盘"),
+    ((2008, 10, 14, 9, 37), "阴遁5局 阴盘"), ((2008, 10, 16, 11, 19), "阴遁8局 阴盘"),
+    ((2008, 8, 1, 12, 10), "阴遁7局 阴盘"), ((2008, 8, 28, 17, 41), "阴遁1局 阴盘"),
+    ((2008, 10, 19, 13, 11), "阴遁3局 阴盘"), ((2006, 1, 18, 12, 57), "阳遁3局 阴盘"),
+    ((2007, 11, 19, 12, 51), "阴遁3局 阴盘"), ((2007, 12, 3, 13, 51), "阴遁9局 阴盘"),
+    ((2008, 6, 6, 21, 40), "阳遁3局 阴盘"), ((2007, 4, 13, 17, 10), "阳遁5局 阴盘"),
+    ((2007, 4, 13, 19, 32), "阳遁6局 阴盘"), ((2007, 12, 14, 15, 29), "阴遁1局 阴盘"),
+    ((2007, 12, 23, 9, 30), "阳遁7局 阴盘"), ((2007, 12, 24, 10, 14), "阳遁8局 阴盘"),
+    ((2008, 9, 8, 8, 39), "阴遁5局 阴盘"), ((2007, 5, 14, 21, 8), "阳遁1局 阴盘"),
+])
+def test_yinpan_wangfenglin_ju(t, label):
+    assert calculate(BirthInput(*t, tz="UTC+08:00"), ju_method="yinpan", solar_time="clock")["ju"]["label"] == label
+
+
+@pytest.mark.parametrize("t,hidden", [
+    # 隐干 на рисунках WFL (читаемые клетки)
+    ((2007, 5, 16, 17, 48), {4: "乙", 3: "辛", 8: "庚", 6: "戊", 9: "己壬", 1: "丙"}),
+    ((2007, 6, 8, 9, 8), {8: "丁", 3: "己", 4: "乙", 9: "辛", 2: "壬", 7: "戊", 6: "庚癸"}),
+    ((2008, 10, 14, 9, 37), {4: "丙", 2: "壬", 3: "辛戊", 8: "癸", 6: "庚", 9: "乙"}),
+])
+def test_hidden_stems_ring_wangfenglin(t, hidden):
+    p = palaces(calculate(BirthInput(*t, tz="UTC+08:00"), ju_method="yinpan", solar_time="clock"))
+    assert {k: p[k]["hidden_stem"] for k in hidden} == hidden
+    # правило kinqimen (luoshu) даёт другое — это разные школы
+    p2 = palaces(calculate(BirthInput(*t, tz="UTC+08:00"), ju_method="yinpan", solar_time="clock",
+                           hidden_stems="luoshu"))
+    assert {k: p2[k]["hidden_stem"] for k in hidden} != hidden
+
+
+def test_san_qi_ru_mu_yanyi_example():
+    # 《遁甲演義»: «假如陰遁四局，丙辛日庚寅時六丙月奇下臨六宮，是謂月奇入墓»
+    hour = next(i for i in range(60) if bazi.ganzhi(i) == "庚寅")
+    pat = _patterns(build_chart(False, 4, hour))
+    assert {"stem": "丙", "palace": 6, "trigram": "乾"} in pat["san_qi_ru_mu"]
+    # T1: 天盘 — 乙 в 艮8, 丙 в 离9, 丁 в 乾6 → по основному правилу入墓 нет, по варианту (丁→乾) есть
+    r = calculate(T1)
+    assert r["patterns"]["san_qi_ru_mu"] == []
+    assert r["patterns"]["san_qi_ru_mu_variant"] == [{"stem": "丁", "palace": 6, "trigram": "乾"}]
+
+
+def test_new_options_keep_defaults():
+    base = calculate(T1)
+    same = calculate(T1, qi="ding", term_boundary="moment", hidden_stems="luoshu")
+    assert layout(base) == layout(same) and base["ju"] == same["ju"]
+    assert set(base["alternatives"]["ju_methods"]) == {"chaibu", "zhirun", "maoshan"}
+    assert set(base["alternatives"]["ju_methods_extra"]) == {"hybrid", "yinpan"}
+    assert base["alternatives"]["qi_other"] is None
+    assert "qi='ping'" not in base["variant"]
+    for opt in ({"qi": "x"}, {"term_boundary": "x"}, {"hidden_stems": "x"}):
+        with pytest.raises(ValueError):
+            calculate(T1, **opt)
+
+
+@pytest.mark.parametrize("b,opts", [
+    (BirthInput(1596, 2, 21, **BJL), {"ju_method": "hybrid", "term_boundary": "hour", **PING}),
+    (BirthInput(2006, 5, 23, tz="UTC+08:00"), {"ju_method": "yinpan", "solar_time": "clock"}),
+])
+def test_no_time_candidates_new_methods(b, opts):
+    for c in calculate(b, **opts)["hour_candidates"]:
+        s, e = c["clock_hours"].split("–")
+        m0 = int(s[:2]) * 60 + int(s[3:])
+        m1 = int(e[:2]) * 60 + int(e[3:])
+        mid = (m0 + m1) // 2
+        r = calculate(replace(b, hour=mid // 60, minute=mid % 60), **opts)
+        assert (r["pillars"]["day"], r["pillars"]["hour"], r["ju"]["label"]) == (c["day_pillar"], c["hour_pillar"], c["ju"])
