@@ -62,11 +62,35 @@ TRANSIT_ORB_SCHEMES: dict[str, float] = {"hand": 1.0}
 
 PROGRESSION_ANGLE_METHODS = {
     "mean_sun": "ARMC рождения + 0,98564733° × возраст (ключ Наибода в прямом восхождении; astro.com)",
-    "naibod": "MC рождения + 0,98564733° × возраст (ключ Наибода в долготе)",
+    "naibod": "MC рождения + 0,98564733° × возраст (ключ Наибода в долготе, «Naibod in Longitude»)",
     "solar_arc": "MC рождения + истинная солнечная дуга в долготе (Solar Fire; astro.com: «MC from solar arc»)",
-    "solar_arc_ra": "ARMC рождения + солнечная дуга в прямом восхождении",
+    "solar_arc_ra": "ARMC рождения + солнечная дуга в прямом восхождении («Solar Arc in R.A.»)",
     "quotidian": "карта на прогрессивный момент: ARMC +361°/прогр. сутки (astro.com: «ARMC 361° / prog. Day»)",
 }
+# Наклон эклиптики для прогрессивных углов: на прогрессивный момент (по умолчанию) или на момент
+# рождения (так Astrolog 8 строит куспиды «-p1 -pc»: SwissHouse(is.Tp, …) с is.Tp = время рождения).
+PROGRESSION_OBLIQUITY = ("progressed", "natal")
+
+# Месяцы профекции (profection_month):
+PROFECTION_MONTHS = {
+    "equal": "месяц = 1/12 года профекции от его начала, знак = знак года + номер месяца (условность калькулятора)",
+    "calendar": "календарные месяцы от дня рождения (тот же день месяца, местная полночь): D. George, "
+                "«Astrology and the Authentic Self»; AstroWiki «Profection» (Knappich: возраст в месяцах)",
+    "thirteen": "Птолемей, Tetrabiblos IV.10: 28 дней на знак; по R. Hand — 13 знаков за год профекции "
+                "(1/13 года, ≈28,1 сут), 13-й месяц снова в знаке года",
+    "valens": "Валент, Anthology IV.28: дуга от натального светила секты до его текущего положения, "
+              "по 30° на знак от знака года (днём — Солнце, ночью — Луна)",
+}
+
+# Первичные дирекции к углам (primary_directions=True). Ключи времени (Makransky, «Primary Directions.
+# A Primer of Calculation», гл. III; astro.com FAQ «Other methods», опции ms=…):
+PD_KEYS = {
+    "naibod": "Наибод: 0,98564733° прямого восхождения = 1 год",
+    "ptolemy": "Птолемей: 1° прямого восхождения = 1 год",
+    "birthday_ra": "Симмонайт: суточный ход Солнца по прямому восхождению в день рождения (0h–24h UT) = 1 год",
+    "true_solar_ra": "Плацидус (истинная солнечная дуга в RA): RA Солнца + дуга → сутки после рождения = годы",
+}
+PD_ANGLES_RU = {"mc": "MC", "ic": "IC", "asc": "ASC", "dsc": "DSC"}
 
 # Фазы лунации по Д. Радьяру (8 × 45°); границы — F. Boele, «The Progressed Lunation Cycle», astro.com.
 LUNATION_PHASES = [
@@ -413,6 +437,159 @@ def _houses_from_armc(armc: float, lat: float, eps: float, hsys: str) -> tuple[l
 
 
 # ---------------------------------------------------------------------------
+# Месяцы профекции
+# ---------------------------------------------------------------------------
+
+def _profection_month(method: str, s: int, y0: float, y1: float, jd: float, n_years: int, b: BirthInput,
+                      natal_lon: dict[str, float], sect: str | None, civil_tz: str | None, node: str) -> dict:
+    """Месяц профекции на момент jd внутри года профекции [y0, y1) со знаком года s.
+
+    equal    — 12 равных частей года (условность калькулятора);
+    calendar — границы в местную полночь того же числа, что день рождения, каждого следующего месяца
+               (D. George: «November 17 to December 17…»; AstroWiki «Profection»/Knappich: возраст в месяцах);
+               если такого числа в месяце нет — последний день месяца;
+    thirteen — 13 равных частей (Птолемей IV.10: «twenty-eight days per sign»; R. Hand: 13 знаков в год);
+    valens   — Валент IV.28: дуга светила секты от натального положения до текущего, по 30° на знак
+               от знака года (днём Солнце, ночью Луна)."""
+    out: dict = {"method": method, "variant": PROFECTION_MONTHS[method]}
+    if method in ("equal", "thirteen"):
+        n = 12 if method == "equal" else 13
+        m = min(n - 1, int((jd - y0) / (y1 - y0) * n))
+        start, end = y0 + (y1 - y0) * m / n, y0 + (y1 - y0) * (m + 1) / n
+        out["months_in_year"] = n
+    elif method == "calendar":
+        bz = _tzinfo(civil_tz, b.lon)
+        ann_year = b.year + n_years
+        bounds = [y0]
+        for k in range(1, 12):
+            idx = b.month - 1 + k
+            yy, mm = ann_year + idx // 12, idx % 12 + 1
+            nd = (date(yy + (mm == 12), mm % 12 + 1, 1) - timedelta(days=1)).day
+            loc = datetime(yy, mm, min(b.day, nd), tzinfo=bz)
+            bounds.append(julian_day_ut(loc.astimezone(timezone.utc)))
+        bounds.append(y1)
+        m = max(0, min(11, sum(1 for t in bounds[1:12] if t <= jd)))
+        start, end = bounds[m], bounds[m + 1]
+        out["months_in_year"] = 12
+    else:  # valens
+        lum = "moon" if sect == "night" else "sun"
+        if sect is None:
+            out["_warning"] = True
+        lon_n = natal_lon[lum]
+        m = int(_arc(lon_n, _lon(lum, jd, node)) // 30.0)
+        t_lo, t_hi = norm360(lon_n + 30.0 * m), norm360(lon_n + 30.0 * (m + 1))
+        if lum == "sun":
+            start = eph.find_sun_longitude(t_lo, jd + 1e-7, search_back=True)
+            end = eph.find_sun_longitude(t_hi, jd, search_back=False)
+        else:
+            prev = crossings("moon", [t_lo], jd - 3.5, jd + 1e-7, node)
+            nxt = crossings("moon", [t_hi], jd, jd + 3.5, node)
+            start, end = prev[-1][0], nxt[0][0]
+        out["luminary"] = lum
+        out["luminary_arc"] = round(_arc(lon_n, _lon(lum, jd, node)), 4)
+        out["months_in_year"] = None
+    ms = (s + m) % 12
+    out.update({"index": m + 1, "sign": SIGNS_EN[ms], "sign_ru": SIGNS_RU[ms], "lord": RULER_TRADITIONAL[ms],
+                "lord_ru": BODY_RU[RULER_TRADITIONAL[ms]], "start_utc": _iso(start), "end_utc": _iso(end)})
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Первичные дирекции к углам (MC, IC, ASC, DSC)
+# ---------------------------------------------------------------------------
+
+def _sym(a: float) -> float:
+    """Угол в (−180°, 180°]."""
+    d = norm360(a)
+    return d - 360.0 if d > 180.0 else d
+
+
+def primary_directions_to_angles(jd_b: float, armc: float, lat: float, key: str = "naibod",
+                                 latitude: str = "with", max_age: float = 100.0, year: float = 365.24219,
+                                 node: str = "true", bodies: list[str] | None = None) -> dict:
+    """Первичные дирекции промиссоров (планеты, сев. узел) в соединение с углами радикса.
+
+    Формулы (Makransky, «Primary Directions. A Primer of Calculation», гл. I–II; одинаковы для систем
+    Плацидуса и Региомонтана, т. к. значимые точки — сами углы):
+      AD = arcsin(tg δ · tg φ) — восходящая разность (Formula I-1);
+      → MC: дуга = RA − RAMC;  → IC: дуга = RA − (RAMC + 180°);
+      → ASC: дуга = (RA − AD) − (RAMC + 90°)  (косое восхождение, Formula II-1);
+      → DSC: дуга = (RA + AD) − (RAMC − 90°)  (косое нисхождение, Formula II-2).
+    Дуга приводится к (−180°, 180°]: > 0 — прямая (direct), < 0 — конверсная (converse); во времени берётся
+    |дуга| (Makransky, гл. III). latitude='with' — промиссор со своей широтой (in mundo), 'without' — точка
+    эклиптики без широты (in zodiaco; astro.com: опция mb=0 «promissors without latitude»)."""
+    if key not in PD_KEYS:
+        raise ValueError(f"pd_key должен быть одним из {tuple(PD_KEYS)}")
+    if latitude not in ("with", "without"):
+        raise ValueError("pd_latitude должен быть 'with' или 'without'")
+    names = bodies or (PLANETS10 + ["north_node"])
+    eps = _true_obliquity(jd_b)
+    tphi = math.tan(math.radians(lat))
+    speculum: dict[str, dict] = {}
+    for p in names:
+        if latitude == "with":
+            x = swe.calc_ut(jd_b, _code(p, node), eph.FLAGS | swe.FLG_EQUATORIAL)[0]
+            ra, dec = x[0] % 360.0, x[1]
+        else:
+            ra, dec = swe.cotrans((_lon(p, jd_b, node), 0.0, 1.0), -eps)[:2]
+            ra %= 360.0
+        q = math.tan(math.radians(dec)) * tphi
+        ad = math.degrees(math.asin(q)) if abs(q) < 1.0 else None
+        speculum[p] = {"ra": round(ra, 6), "dec": round(dec, 6), "ad": round(ad, 6) if ad is not None else None}
+
+    # ключ времени: |дуга| → годы
+    ra_sun0 = swe.calc_ut(jd_b, swe.SUN, eph.FLAGS | swe.FLG_EQUATORIAL)[0][0]
+    if key == "birthday_ra":
+        d0 = math.floor(jd_b - 0.5) + 0.5           # 0h UT даты рождения
+        ra_a = swe.calc_ut(d0, swe.SUN, eph.FLAGS | swe.FLG_EQUATORIAL)[0][0]
+        ra_b = swe.calc_ut(d0 + 1.0, swe.SUN, eph.FLAGS | swe.FLG_EQUATORIAL)[0][0]
+        birthday_motion = (ra_b - ra_a) % 360.0
+    else:
+        birthday_motion = None
+
+    def ra_sun(t: float) -> float:
+        return swe.calc_ut(t, swe.SUN, eph.FLAGS | swe.FLG_EQUATORIAL)[0][0]
+
+    def years_of(arc_abs: float) -> float | None:
+        if key == "ptolemy":
+            return arc_abs
+        if key == "naibod":
+            return arc_abs / NAIBOD
+        if key == "birthday_ra":
+            return arc_abs / birthday_motion
+        # true_solar_ra: прогрессивное Солнце (1 сут = 1 год) доходит до RA☉₀ + |дуга|
+        target = norm360(ra_sun0 + arc_abs)
+        span = arc_abs / 0.9 + 5.0
+        roots = _root_search(lambda t: signed_diff(target, ra_sun(t)), jd_b, jd_b + span, 2.0, 1e-7)
+        return (roots[0] - jd_b) if roots else None
+
+    out = []
+    for p, sp in speculum.items():
+        ra, ad = sp["ra"], sp["ad"]
+        arcs = {"mc": _sym(ra - armc), "ic": _sym(ra - armc - 180.0)}
+        if ad is not None:
+            arcs["asc"] = _sym((ra - ad) - (armc + 90.0))
+            arcs["dsc"] = _sym((ra + ad) - (armc - 90.0))
+        for sig, arc_v in arcs.items():
+            if abs(arc_v) < 1e-9:
+                continue
+            age = years_of(abs(arc_v))
+            if age is None or age > max_age:
+                continue
+            jd = jd_b + age * year
+            out.append({"promissor": p, "promissor_ru": BODY_RU.get(p, p), "aspect": "conjunction",
+                        "aspect_ru": ASPECTS["conjunction"][1], "significator": sig,
+                        "significator_ru": PD_ANGLES_RU[sig], "type": "direct" if arc_v > 0 else "converse",
+                        "type_ru": "прямая" if arc_v > 0 else "конверсная", "arc": round(arc_v, 4),
+                        "arc_dms": ("−" if arc_v < 0 else "") + fmt_orb(arc_v), "age_years": round(age, 4), "jd": round(jd, 6), "utc": _iso(jd)})
+    out.sort(key=lambda x: x["age_years"])
+    return {"key": key, "key_ru": PD_KEYS[key], "latitude": latitude, "armc": round(norm360(armc), 6),
+            "oa_asc": round(norm360(armc + 90.0), 6), "od_dsc": round(norm360(armc - 90.0), 6),
+            "obliquity": round(eps, 6), "birthday_ra_motion": round(birthday_motion, 6) if birthday_motion else None,
+            "max_age": max_age, "speculum": speculum, "directions": out}
+
+
+# ---------------------------------------------------------------------------
 # Основная функция
 # ---------------------------------------------------------------------------
 
@@ -425,7 +602,10 @@ def calculate(b: BirthInput, on_date=None, on_tz: str = "UTC", period_start=None
               sr_tz: str | None = None, sr_year: int | None = None, sr_zodiac: str = "tropical",
               sr_ayanamsa: str = "fagan_bradley", include_lunar_return: bool = True,
               profection_from: str = "asc", profection_boundary: str = "solar_return",
-              hsys: str = "P", node: str = "true") -> dict:
+              profection_month: str = "equal", progression_direction: str = "direct",
+              progression_obliquity: str = "progressed", exact_window_years: float = 3.0,
+              primary_directions: bool = False, pd_key: str = "naibod", pd_latitude: str = "with",
+              pd_max_age: float = 100.0, hsys: str = "P", node: str = "true") -> dict:
     """Прогностика западной астрологии на дату on_date (и период для точных транзитов).
 
     Параметры:
@@ -447,6 +627,16 @@ def calculate(b: BirthInput, on_date=None, on_tz: str = "UTC", period_start=None
       sr_zodiac — 'tropical' (по умолчанию) | 'sidereal' (соляр «с поправкой на прецессию», аянамша sr_ayanamsa);
       profection_from — 'asc' (по умолчанию) | 'sun' | 'moon' | 'mc';
       profection_boundary — 'solar_return' (смена года в момент соляра, по умолчанию) | 'birthday';
+      profection_month — 'equal' (1/12 года, по умолчанию) | 'calendar' (календарные месяцы от дня
+                рождения) | 'thirteen' (Птолемей/Хэнд: 13 знаков за год) | 'valens' (Валент IV.28);
+      progression_direction — 'direct' (по умолчанию) | 'converse' (конверсные вторичные прогрессии:
+                карта на JD₀ − возраст, как «negative age» в astro.com; дирекции дуги остаются прямыми);
+      progression_obliquity — 'progressed' (ε на прогрессивный момент, по умолчанию) | 'natal' (ε рождения,
+                как куспиды Astrolog «-p1 -pc»; к способу 'quotidian' не применяется);
+      exact_window_years — окно поиска точной даты аспектов прогрессий (кроме Луны) и дирекций, ±лет (3);
+      primary_directions — True: первичные дирекции планет к углам (MC, IC, ASC, DSC), прямые и конверсные;
+                pd_key — 'naibod' (по умолчанию) | 'ptolemy' | 'birthday_ra' | 'true_solar_ra';
+                pd_latitude — 'with' (in mundo, по умолчанию) | 'without' (in zodiaco); pd_max_age — лет (100);
       hsys, node — как в western (P; true).
     """
     # --- проверка опций --------------------------------------------------------
@@ -458,12 +648,24 @@ def calculate(b: BirthInput, on_date=None, on_tz: str = "UTC", period_start=None
               "sa_asc": (sa_asc, ("arc", "from_mc")), "sr_zodiac": (sr_zodiac, ("tropical", "sidereal")),
               "profection_from": (profection_from, ("asc", "sun", "moon", "mc")),
               "profection_boundary": (profection_boundary, ("solar_return", "birthday")),
+              "profection_month": (profection_month, tuple(PROFECTION_MONTHS)),
+              "progression_direction": (progression_direction, ("direct", "converse")),
+              "progression_obliquity": (progression_obliquity, PROGRESSION_OBLIQUITY),
+              "pd_key": (pd_key, tuple(PD_KEYS)), "pd_latitude": (pd_latitude, ("with", "without")),
               "node": (node, ("true", "mean"))}
     for opt, (val, ok) in checks.items():
         if val not in ok:
             raise ValueError(f"{opt} должен быть одним из {ok}, получено {val!r}")
     if hsys not in HOUSE_SYSTEMS:
         raise ValueError(f"hsys должен быть одним из {sorted(HOUSE_SYSTEMS)}")
+    exact_window_years = float(exact_window_years)
+    if not 0.0 < exact_window_years <= 120.0:
+        raise ValueError("exact_window_years должен быть в (0, 120]")
+    pd_max_age = float(pd_max_age)
+    if not 0.0 < pd_max_age <= 150.0:
+        raise ValueError("pd_max_age должен быть в (0, 150]")
+    if isinstance(primary_directions, str):
+        primary_directions = primary_directions.strip().lower() in ("1", "true", "yes", "да")
     if isinstance(hit_bodies, str):
         hb = {"slow": SLOW, "all": PLANETS10[:1] + PLANETS10[2:], "all_with_moon": PLANETS10}.get(hit_bodies)
         if hb is None:
@@ -623,11 +825,15 @@ def calculate(b: BirthInput, on_date=None, on_tz: str = "UTC", period_start=None
                 "house_ingresses": house_ingresses}
 
     # --- 4. Вторичные прогрессии -------------------------------------------------------
+    # cv = +1 — прямые прогрессии (JD_p = JD₀ + возраст), −1 — конверсные (JD_p = JD₀ − возраст;
+    # astro.com FAQ «Other methods»: «For 'converse' secondary progressions, use negative age»).
+    cv = 1.0 if progression_direction == "direct" else -1.0
+
     def pjd_of(jd_real: float) -> float:
-        return jd_b + (jd_real - jd_b) / Y
+        return jd_b + cv * (jd_real - jd_b) / Y
 
     def real_of(pjd: float) -> float:
-        return jd_b + (pjd - jd_b) * Y
+        return jd_b + cv * (pjd - jd_b) * Y
 
     pjd = pjd_of(jd_on)
     sun_n = natal_lon["sun"]
@@ -635,26 +841,30 @@ def calculate(b: BirthInput, on_date=None, on_tz: str = "UTC", period_start=None
     for p in PLANETS10 + ["north_node"]:
         lon, spd = _lon_speed(p, pjd, node)
         d = _pt(p, lon, spd)
-        d["speed_per_year"] = d.pop("speed")
+        d["speed_per_year"] = round(cv * d.pop("speed"), 6)   # ход за год реального времени
         if has_houses:
             d["natal_house"] = house_of(lon, cusps)
         ppos[p] = d
+    eps_natal = _true_obliquity(jd_b)
 
     def prog_angles(jd_real: float) -> dict:
         """Прогрессивные ARMC, ASC, MC, куспиды методом progression_angles на реальный момент."""
         a_ = (jd_real - jd_b) / Y
-        pj = jd_b + a_
-        eps = _true_obliquity(pj)
+        pj = pjd_of(jd_real)
+        eps = eps_natal if (progression_obliquity == "natal" and progression_angles != "quotidian") \
+            else _true_obliquity(pj)
         if progression_angles == "mean_sun":
-            armc = armc_n + NAIBOD * a_
+            armc = armc_n + cv * NAIBOD * a_
         elif progression_angles == "naibod":
-            armc = _ra_of_ecliptic(natal_lon["mc"] + NAIBOD * a_, eps)
+            armc = _ra_of_ecliptic(natal_lon["mc"] + cv * NAIBOD * a_, eps)
         elif progression_angles == "solar_arc":
-            armc = _ra_of_ecliptic(natal_lon["mc"] + _arc(sun_n, _lon("sun", pj)), eps)
+            sp = _lon("sun", pj)
+            sarc = _arc(sun_n, sp) if cv > 0 else -_arc(sp, sun_n)
+            armc = _ra_of_ecliptic(natal_lon["mc"] + sarc, eps)
         elif progression_angles == "solar_arc_ra":
             ra_n = swe.calc_ut(jd_b, swe.SUN, swe.FLG_SWIEPH | swe.FLG_EQUATORIAL)[0][0]
             ra_p = swe.calc_ut(pj, swe.SUN, swe.FLG_SWIEPH | swe.FLG_EQUATORIAL)[0][0]
-            armc = armc_n + _arc(ra_n, ra_p)
+            armc = armc_n + (_arc(ra_n, ra_p) if cv > 0 else -_arc(ra_p, ra_n))
         else:  # quotidian: карта на сам прогрессивный момент
             armc = eph.houses(pj, b.lat, b.lon, used_hsys)["armc"]
         cs, asc, mc, used = _houses_from_armc(armc, b.lat, eps, used_hsys)
@@ -673,9 +883,13 @@ def calculate(b: BirthInput, on_date=None, on_tz: str = "UTC", period_start=None
         ppos["mc"]["natal_house"] = house_of(pa["mc"], cusps)
         for p in PLANETS10 + ["north_node"]:
             ppos[p]["progressed_house"] = house_of(ppos[p]["lon"], pa["cusps"])
+        armc_adv = _arc(armc_n, pa["armc"]) if cv > 0 else -_arc(pa["armc"], armc_n)
         prog_houses = {"method": progression_angles, "method_ru": PROGRESSION_ANGLE_METHODS[progression_angles],
                        "armc": round(pa["armc"], 6), "armc_natal": round(armc_n, 6),
-                       "armc_advance": round(_arc(armc_n, pa["armc"]), 6), "system": pa["system"],
+                       "armc_advance": round(armc_adv, 6), "system": pa["system"],
+                       "obliquity": round(pa["eps"], 6),
+                       "obliquity_source": "natal" if (progression_obliquity == "natal"
+                                                       and progression_angles != "quotidian") else "progressed",
                        "cusps": [{"house": i + 1, "lon": round(c, 6), "pos": dms(c)} for i, c in enumerate(pa["cusps"])]}
 
     def prog_lon_fun(name: str):
@@ -687,80 +901,100 @@ def calculate(b: BirthInput, on_date=None, on_tz: str = "UTC", period_start=None
     p_aspects = _aspects_moving_to_fixed({k: v for k, v in pmoving.items() if k != "north_node"},
                                          targets_natal, asp_kinds, lambda m: float(progression_orb),
                                          skip_self_conj_except=("moon",))
+    win_slow = exact_window_years * Y
     for a in p_aspects:
         tau = a.pop("_target")
         fun_lon = prog_lon_fun(a["moving"])
-        win, stp = (120.0, 3.0) if a["moving"] == "moon" else (3 * Y, 20.0)
+        win, stp = (120.0, 3.0) if a["moving"] == "moon" else (win_slow, 20.0)
         roots = _root_search(lambda t: signed_diff(tau, fun_lon(t)), max(jd_b, jd_on - win), jd_on + win, stp, 1e-4)
         best = min(roots, key=lambda r: abs(r - jd_on)) if roots else None
         a["exact_utc"] = _iso(best) if best is not None else None
         a["progressed"], a["progressed_ru"] = a.pop("moving"), a.pop("moving_ru")
 
-    # прогрессивная Луна: смены знаков и натальных домов
+    # прогрессивная Луна: смены знаков и натальных домов (в конверсных прогрессиях Луна «идёт назад»)
     def moon_events(pj0: float, pj1: float) -> list[dict]:
         ev = []
         for jd, k, _s in crossings("moon", [30.0 * i for i in range(12)], pj0, pj1, node, tol=1e-8):
+            to = k if cv > 0 else (k - 1) % 12
             ev.append({"type": "sign", "utc": _iso(real_of(jd)), "jd": round(real_of(jd), 6),
-                       "to_sign": SIGNS_EN[k], "to_sign_ru": SIGNS_RU[k]})
+                       "to_sign": SIGNS_EN[to], "to_sign_ru": SIGNS_RU[to]})
         if has_houses:
             for jd, k, _s in crossings("moon", cusps, pj0, pj1, node, tol=1e-8):
                 ev.append({"type": "natal_house", "utc": _iso(real_of(jd)), "jd": round(real_of(jd), 6),
-                           "to_house": k + 1})
+                           "to_house": k + 1 if cv > 0 else (k - 1) % 12 + 1})
         ev.sort(key=lambda x: x["jd"])
         return ev
 
-    back = moon_events(max(jd_b, pjd - 3.0), pjd)
-    fwd = moon_events(pjd, pjd + 6.0)
+    if cv > 0:
+        back = moon_events(max(jd_b, pjd - 3.0), pjd)
+        fwd = moon_events(pjd, pjd + 6.0)
+        in_period = moon_events(pjd_of(p0), pjd_of(p1))
+    else:
+        back = moon_events(pjd, min(jd_b, pjd + 3.0)) if pjd < jd_b else []
+        fwd = moon_events(pjd - 6.0, pjd)
+        in_period = moon_events(pjd_of(p1), pjd_of(p0))
     pmoon = {**ppos["moon"],
              "entered_sign_utc": next((e["utc"] for e in reversed(back) if e["type"] == "sign"), None),
              "next_sign_change": next((e for e in fwd if e["type"] == "sign"), None),
              "next_natal_house_change": next((e for e in fwd if e["type"] == "natal_house"), None),
-             "events_in_period": moon_events(pjd_of(p0), pjd_of(p1))}
+             "events_in_period": in_period}
 
-    # фаза прогрессивной лунации
+    # фаза прогрессивной лунации (в реальном времени элонгация растёт у прямых и убывает у конверсных)
     def elong(pj: float) -> float:
         return norm360(_lon("moon", pj, node) - _lon("sun", pj, node))
 
     el = elong(pjd)
     ph = int(el // 45.0)
-    starts = _root_search(lambda t: signed_diff(45.0 * ph, elong(t)), pjd - 4.5, pjd, 0.25, 1e-8)
-    ends = _root_search(lambda t: signed_diff(45.0 * ((ph + 1) % 8), elong(t)), pjd, pjd + 4.5, 0.25, 1e-8)
-    nm_prev = _root_search(lambda t: signed_diff(0.0, elong(t)), pjd - 31.0, pjd, 0.5, 1e-8)
-    nm_next = _root_search(lambda t: signed_diff(0.0, elong(t)), pjd, pjd + 31.0, 0.5, 1e-8)
-    fm_next = _root_search(lambda t: signed_diff(180.0, elong(t)), pjd, pjd + 31.0, 0.5, 1e-8)
 
-    def _ev(roots: list[float], last: bool) -> dict | None:
+    def roots_of(target: float, past: bool, span: float, step: float) -> list[float]:
+        """Корни элонгации = target по ту сторону от pjd, что соответствует реальному прошлому (past)."""
+        lo, hi = (pjd - span, pjd) if (past == (cv > 0)) else (pjd, pjd + span)
+        return _root_search(lambda t: signed_diff(target, elong(t)), lo, hi, step, 1e-8)
+
+    def _ev(roots: list[float], past: bool) -> dict | None:
         if not roots:
             return None
-        r = roots[-1] if last else roots[0]
+        r = (roots[-1] if past else roots[0]) if cv > 0 else (roots[0] if past else roots[-1])
         jr = real_of(r)
         return {"utc": _iso(jr), "jd": round(jr, 6), "before_birth": jr < jd_b,
                 "age_years": round((jr - jd_b) / Y, 3)}
 
+    ph_enter, ph_exit, ph_next = (45.0 * ph, 45.0 * ((ph + 1) % 8), (ph + 1) % 8) if cv > 0 \
+        else (45.0 * ((ph + 1) % 8), 45.0 * ph, (ph - 1) % 8)
     lunation = {"elongation": round(el, 4), "phase": LUNATION_PHASES[ph][0], "phase_ru": LUNATION_PHASES[ph][1],
                 "phase_index": ph + 1, "phase_range": f"{45 * ph}°–{45 * ph + 44}°",
-                "phase_started": _ev(starts, True), "next_phase": _ev(ends, False),
-                "next_phase_name": LUNATION_PHASES[(ph + 1) % 8][0],
-                "last_new_moon": _ev(nm_prev, True), "next_new_moon": _ev(nm_next, False),
-                "next_full_moon": _ev(fm_next, False)}
-    progressions = {"progressed_jd": round(pjd, 6), "progressed_utc": _iso(pjd), "age_years": round(age, 6),
-                    "year_length_days": Y, "positions": ppos, "angles": prog_houses, "aspects_to_natal": p_aspects,
+                "phase_started": _ev(roots_of(ph_enter, True, 4.5, 0.25), True),
+                "next_phase": _ev(roots_of(ph_exit, False, 4.5, 0.25), False),
+                "next_phase_name": LUNATION_PHASES[ph_next][0],
+                "last_new_moon": _ev(roots_of(0.0, True, 31.0, 0.5), True),
+                "next_new_moon": _ev(roots_of(0.0, False, 31.0, 0.5), False),
+                "next_full_moon": _ev(roots_of(180.0, False, 31.0, 0.5), False)}
+    progressions = {"direction": progression_direction, "progressed_jd": round(pjd, 6), "progressed_utc": _iso(pjd),
+                    "age_years": round(age, 6), "year_length_days": Y, "positions": ppos, "angles": prog_houses,
+                    "aspects_to_natal": p_aspects, "exact_search_window_years": exact_window_years,
                     "moon": pmoon, "lunation": lunation}
+    if cv < 0:
+        warnings.append("Конверсные вторичные прогрессии: карта на JD₀ − возраст (astro.com: «negative age»); "
+                        "прогрессивная Луна и элонгация в реальном времени движутся назад; дирекции солнечной "
+                        "дуги остаются прямыми.")
     steps.append({"step": "4. Вторичные прогрессии", "detail":
-                  f"Прогрессивный момент = JD₀ + возраст = {jd_b:.6f} + {age:.6f} = {pjd:.6f} ({_iso(pjd)} UTC); "
+                  (f"Прогрессивный момент = JD₀ + возраст = {jd_b:.6f} + {age:.6f} = {pjd:.6f}" if cv > 0 else
+                   f"Конверсный прогрессивный момент = JD₀ − возраст = {jd_b:.6f} − {age:.6f} = {pjd:.6f}")
+                  + f" ({_iso(pjd)} UTC); "
                   f"прогр. Солнце {dms(ppos['sun']['lon'])}, Луна {dms(ppos['moon']['lon'])}"
                   + (f"; углы ({progression_angles}): ARMC {prog_houses['armc']:.4f}° (натал {armc_n:.4f}°), "
                      f"MC {dms(ppos['mc']['lon'])}, ASC {dms(ppos['asc']['lon'])}" if prog_houses else "")
                   + f"; элонгация Луны {el:.2f}° → фаза {LUNATION_PHASES[ph][1]}"})
 
     # --- 5. Дирекции солнечной дуги --------------------------------------------------
-    arc_true = _arc(sun_n, _lon("sun", pjd, node))
+    # дуга всегда по прямым прогрессиям (JD₀ + возраст), даже при progression_direction='converse'
+    arc_true = _arc(sun_n, _lon("sun", jd_b + age, node))
     arc_naibod = NAIBOD * age
 
     def arc_at(jd_real: float) -> float:
         if arc == "naibod":
             return NAIBOD * (jd_real - jd_b) / Y
-        return _arc(sun_n, _lon("sun", pjd_of(jd_real), node))
+        return _arc(sun_n, _lon("sun", jd_b + (jd_real - jd_b) / Y, node))
 
     def directed_fun(name: str):
         if name == "asc" and sa_asc == "from_mc":
@@ -781,21 +1015,22 @@ def calculate(b: BirthInput, on_date=None, on_tz: str = "UTC", period_start=None
         if has_houses:
             d["natal_house"] = house_of(lon, cusps)
         directed[p] = d
-    rate = NAIBOD if arc == "naibod" else max(1e-6, ppos["sun"]["speed_per_year"])
+    rate = NAIBOD if arc == "naibod" else max(1e-6, _lon_speed("sun", jd_b + age, node)[1])
     dmoving = {p: {"lon": directed[p]["lon"], "rate": rate} for p in dir_names if p != "north_node"}
     d_aspects = _aspects_moving_to_fixed(dmoving, targets_natal, dir_kinds, lambda m: float(direction_orb),
                                          skip_same=True)
     for a in d_aspects:
         tau = a.pop("_target")
         f = directed_fun(a["moving"])
-        roots = _root_search(lambda t: signed_diff(tau, f(t)), max(jd_b, jd_on - 3 * Y), jd_on + 3 * Y, 20.0, 1e-4)
+        roots = _root_search(lambda t: signed_diff(tau, f(t)), max(jd_b, jd_on - win_slow), jd_on + win_slow, 20.0, 1e-4)
         best = min(roots, key=lambda r: abs(r - jd_on)) if roots else None
         a["exact_utc"] = _iso(best) if best is not None else None
         a["exact_age_years"] = round((best - jd_b) / Y, 3) if best is not None else None
         a["directed"], a["directed_ru"] = a.pop("moving"), a.pop("moving_ru")
     solar_arc = {"arc_method": arc, "arc": round(sa_value, 6), "arc_dms": fmt_orb(sa_value),
                  "arc_true": round(arc_true, 6), "arc_naibod": round(arc_naibod, 6),
-                 "asc_method": sa_asc, "directed": directed, "aspects_to_natal": d_aspects}
+                 "asc_method": sa_asc, "directed": directed, "aspects_to_natal": d_aspects,
+                 "exact_search_window_years": exact_window_years}
     steps.append({"step": "5. Дирекции солнечной дуги", "detail":
                   f"Истинная дуга = прогр. Солнце − натальное = {arc_true:.4f}°; дуга Наибода = 0,98564733 × "
                   f"{age:.4f} = {arc_naibod:.4f}°; принята {'истинная' if arc == 'true' else 'Наибода'} "
@@ -977,9 +1212,11 @@ def calculate(b: BirthInput, on_date=None, on_tz: str = "UTC", period_start=None
         lord = RULER_TRADITIONAL[s]
         asc_s = sign_index(natal_lon["asc"]) if has_houses else None
         in_sign = [p for p in PLANETS10 if sign_index(natal_lon[p]) == s]
-        frac = (jd_on - y0) / (y1 - y0)
-        m = min(11, int(frac * 12))
-        ms = (s + m) % 12
+        month = _profection_month(profection_month, s, y0, y1, jd_on, n_years, b, natal_lon, nat.get("sect"),
+                                  civil_tz, node)
+        if month.pop("_warning", None):
+            warnings.append("Месяц профекции 'valens': секта не определена (нет времени рождения) — взято Солнце.")
+        m, ms = month["index"] - 1, SIGNS_EN.index(month["sign"])
         profections = {
             "from": profection_from, "age_completed": n_years, "house_whole_sign": n_years % 12 + 1,
             "sign": SIGNS_EN[s], "sign_ru": SIGNS_RU[s], "lord": lord, "lord_ru": BODY_RU[lord],
@@ -993,10 +1230,7 @@ def calculate(b: BirthInput, on_date=None, on_tz: str = "UTC", period_start=None
                              "retrograde": tpos[lord]["retrograde"],
                              "natal_house": tpos[lord].get("natal_house"),
                              "house_whole_sign": ((tpos[lord]["sign_index"] - asc_s) % 12 + 1) if asc_s is not None else None},
-            "month": {"index": m + 1, "sign": SIGNS_EN[ms], "sign_ru": SIGNS_RU[ms], "lord": RULER_TRADITIONAL[ms],
-                      "lord_ru": BODY_RU[RULER_TRADITIONAL[ms]],
-                      "start_utc": _iso(y0 + (y1 - y0) * m / 12.0), "end_utc": _iso(y0 + (y1 - y0) * (m + 1) / 12.0),
-                      "variant": "месяц = 1/12 года профекции, от знака года (⚠ одна из версий)"},
+            "month": month,
         }
         if profection_from != "asc":
             profections["house_whole_sign"] = None
@@ -1006,12 +1240,35 @@ def calculate(b: BirthInput, on_date=None, on_tz: str = "UTC", period_start=None
         steps.append({"step": "7. Годовые профекции", "detail":
                       f"Полных лет {n_years} (граница — {'соляр' if profection_boundary == 'solar_return' else 'день рождения'}); "
                       f"знак = {SIGNS_RU[s0]} + {n_years} mod 12 = {SIGNS_RU[s]} ({n_years % 12 + 1}-й от исходного); "
-                      f"управитель года (трад.) {BODY_RU[lord]}; месяц {m + 1}: {SIGNS_RU[ms]}"})
+                      f"управитель года (трад.) {BODY_RU[lord]}; месяц {m + 1} ({profection_month}): {SIGNS_RU[ms]}"})
+
+    # --- 8. Первичные дирекции к углам (по запросу) -------------------------------------
+    pdirs = None
+    if primary_directions:
+        if has_houses:
+            pdirs = primary_directions_to_angles(jd_b, armc_n, b.lat, pd_key, pd_latitude, pd_max_age, Y, node)
+            pdirs["near_on_date"] = [d for d in pdirs["directions"] if abs(d["jd"] - jd_on) <= Y]
+            circ = [p for p, sp in pdirs["speculum"].items() if sp["ad"] is None]
+            if circ:
+                warnings.append("Первичные дирекции: незаходящие/невосходящие на широте рождения тела "
+                                f"({', '.join(circ)}) — дирекции к ASC/DSC для них не определены.")
+            warnings.append("Первичные дирекции: только соединения с углами (MC, IC, ASC, DSC); дирекции к планетам "
+                            "и мунданные аспекты (Плацидус/Региомонтан) не реализованы.")
+            steps.append({"step": "8. Первичные дирекции к углам", "detail":
+                          f"RAMC {armc_n:.4f}°, OA ASC = RAMC + 90° = {norm360(armc_n + 90):.4f}°; "
+                          f"дуга → MC = RA − RAMC, → ASC = (RA − AD) − (RAMC + 90°), AD = arcsin(tg δ·tg φ); "
+                          f"промиссоры {'со своей широтой (in mundo)' if pd_latitude == 'with' else 'без широты (in zodiaco)'}; "
+                          f"ключ {PD_KEYS[pd_key]}; дирекций до {pd_max_age:g} лет: {len(pdirs['directions'])}, "
+                          f"в пределах ±1 года от on_date: {len(pdirs['near_on_date'])}"})
+        else:
+            warnings.append("Первичные дирекции требуют времени и места рождения — не вычислены.")
 
     variant = (f"тропический зодиак; транзитные орбисы {transit_orbs!r}; прогрессии 1 сут = 1 год "
-               f"({Y} сут); углы {progression_angles}; дуга {arc}; соляр {sr_zodiac}, "
+               f"({Y} сут){', конверсные' if progression_direction == 'converse' else ''}; углы {progression_angles}; "
+               f"дуга {arc}; соляр {sr_zodiac}, "
                f"{'место рождения' if sr_where == 'birthplace' else 'релокация'}; дома {HOUSE_SYSTEMS[used_hsys]}; "
-               f"профекции от {profection_from}, целые знаки, трад. управители")
+               f"профекции от {profection_from}, целые знаки, трад. управители"
+               + (f"; первичные дирекции к углам, ключ {pd_key}" if pdirs else ""))
     return {
         "method": "western_forecast",
         "variant": variant,
@@ -1027,7 +1284,11 @@ def calculate(b: BirthInput, on_date=None, on_tz: str = "UTC", period_start=None
                         "direction_orb": direction_orb, "direction_aspects": direction_aspects,
                         "sr_place": sr_place, "sr_lat": sr_lat, "sr_lon": sr_lon, "sr_tz": sr_tz, "sr_year": sr_year,
                         "sr_zodiac": sr_zodiac, "profection_from": profection_from,
-                        "profection_boundary": profection_boundary, "hsys": hsys, "node": node},
+                        "profection_boundary": profection_boundary, "profection_month": profection_month,
+                        "progression_direction": progression_direction,
+                        "progression_obliquity": progression_obliquity, "exact_window_years": exact_window_years,
+                        "primary_directions": bool(primary_directions), "pd_key": pd_key,
+                        "pd_latitude": pd_latitude, "pd_max_age": pd_max_age, "hsys": hsys, "node": node},
         },
         "warnings": warnings,
         "natal": {"bodies": {p: {"lon": natal_lon[p], "pos": dms(natal_lon[p]),
@@ -1041,6 +1302,7 @@ def calculate(b: BirthInput, on_date=None, on_tz: str = "UTC", period_start=None
         "solar_return": sr_chart,
         "lunar_return": lunar_return,
         "profections": profections,
+        "primary_directions": pdirs,
         "steps": steps,
     }
 
@@ -1057,8 +1319,8 @@ def _main(argv: list[str] | None = None) -> int:
     return 0
 
 
-__all__ = ["calculate", "stations", "crossings", "NAIBOD", "YEAR_LENGTHS", "TRANSIT_ORB_SCHEMES",
-           "PROGRESSION_ANGLE_METHODS", "LUNATION_PHASES"]
+__all__ = ["calculate", "stations", "crossings", "primary_directions_to_angles", "NAIBOD", "YEAR_LENGTHS",
+           "TRANSIT_ORB_SCHEMES", "PROGRESSION_ANGLE_METHODS", "PROFECTION_MONTHS", "PD_KEYS", "LUNATION_PHASES"]
 
 if __name__ == "__main__":
     raise SystemExit(_main())

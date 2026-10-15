@@ -18,7 +18,7 @@
 7. Скрытые стволы (遁干), «шесть родственников» (六亲), пустота (空亡).
 
 Варианты школ (options): noble_table, day_night, shehai, biezhe_yin, fuyin_zimao,
-solar_time, zi_hour, nian_year, on_datetime.
+solar_time, zi_hour, nian_year, yuejiang, on_datetime.
 """
 from __future__ import annotations
 
@@ -158,6 +158,51 @@ def monthly_general(sun_lon: float) -> int:
     """Ветвь месячного генерала по долготе Солнца (смена на 中气): 330°→亥, 0°→戌, … 300°→子."""
     k = int(((sun_lon - 330.0) % 360.0) // 30.0)
     return (11 - k) % 12
+
+
+# 太阳过宫 по 《景祐六壬神定经》 (北宋, 杨惟德, 1034–1038), 卷下 «释日度»: «臣等今依大宋《崇天历》，起自景[祐]
+# 甲戌岁，二十四气、日宿次合、分璧度数，以定月将…假令十一月十五日冬至，在南斗六度。至二十一日，在南斗十二度。
+# 于辰在丑方，用大吉为月将。若二十日以前用式占事，犹用功曹为月将». Начала 次 — по «释璧度» (《三统历》:
+# 大吉 «自斗宿十二度», 神后 «自女宿八度» …), положение Солнца на 中气 — по таблице «释日度» (冬至 斗6.26,
+# 大寒 女6.77 …). Разность — запаздывание смены генерала после 中气 в эпоху 1034 г., в китайских 度.
+GUOGONG_LAG_DU_1034 = {
+    0: 8 - 6.77,      # 神后: 女8 − 大寒 女6.77
+    1: 12 - 6.26,     # 大吉: 斗12 − 冬至 斗6.26
+    2: 10 - 1.48,     # 功曹: 尾10 − 小雪 尾1.48
+    3: 15.219 - 6.05,  # 太冲: 氐5 = 立冬 (氐11.05) − 6.05 度; 立冬 − 霜降 = 15° = 15.219 度
+    4: 12 - 6.01,     # 天罡: 轸12 − 秋分 轸6.01
+    5: 17 - 13.86,    # 太乙: 张17 − 处暑 张13.86
+    6: 9 - 5.40,      # 胜光: 柳9 − 大暑 柳5.40
+    7: 16 - 9.13,     # 小吉: 井16 − 夏至 井9.13
+    8: 12 - 6.28,     # 传送: 毕12 − 小满 毕6.28
+    9: 7 - 2.40,      # 从魁: 胃7 − 谷雨 胃2.40
+    10: 5 - 2.50,     # 河魁: 奎5 − 春分 奎2.50
+    11: 16 - 16.53,   # 登明: 危16 − 雨水 危16.53 (граница чуть раньше 中气)
+}
+DU = 360.0 / 365.25          # один китайский 度 в градусах
+JD_JINGYOU = 2098907.5       # 1034-07-01 (юлианский календарь), эпоха 崇天历 «景[祐]甲戌»
+
+
+def precession_deg(jd_from: float, jd_to: float) -> float:
+    """Общая прецессия по долготе между датами, градусы (IAU 2006: 5028.796195″·T + 1.1054348″·T²)."""
+    def p(jd: float) -> float:
+        t = (jd - 2451545.0) / 36525.0
+        return (5028.796195 * t + 1.1054348 * t * t) / 3600.0
+    return p(jd_to) - p(jd_from)
+
+
+def guogong_boundaries(jd: float) -> list[tuple[float, int, str]]:
+    """Долготы начала 12 «дворцов» (太阳过宫) на дату jd: (долгота, ветвь генерала, 中气-ориентир).
+
+    Граница = долгота 中气 + запаздывание эпохи 1034 г. (《景祐》) + прецессия с 1034 г. Приближение:
+    китайские 度 переведены в градусы долготы равномерно; точность ±1 сут."""
+    pr = precession_deg(JD_JINGYOU, jd)
+    return [((lon + GUOGONG_LAG_DU_1034[g] * DU + pr) % 360.0, g, name) for lon, name, _ru, g in ZHONGQI]
+
+
+def monthly_general_guogong(sun_lon: float, jd: float) -> int:
+    """Месячный генерал по 太阳过宫 (《景祐六壬神定经》): последняя пройденная Солнцем граница «дворца»."""
+    return min(guogong_boundaries(jd), key=lambda x: (sun_lon - x[0]) % 360.0)[1]
 
 
 def heaven_plate(general: int, hour: int) -> list[int]:
@@ -725,7 +770,9 @@ def calculate(b: BirthInput, **options) -> dict:
       biezhe_yin: 'branch' (по умолч.) | 'heaven';
       fuyin_zimao: 'chong' (по умолч., 《六壬大全》: 卯子午) | 'xing' (《大六壬指南》: 卯子卯);
       nian_year: 'lichun' (по умолч.; год 本命 и возраст 行年 — по Личуню) | 'lunar' (по китайскому
-          Новому году, 正月初一; lunar-python, дата по местному календарю).
+          Новому году, 正月初一; lunar-python, дата по местному календарю);
+      yuejiang: 'zhongqi' (по умолч.; 月将 меняется на 中气, 《六壬大全》) | 'guogong' (太阳过宫 по
+          《景祐六壬神定经》: по звёздным «дворцам» с прецессией; приближение ±1 сут.).
     """
     def opt(name: str, default: str, allowed: tuple[str, ...]) -> str:
         v = options.get(name, default)
@@ -746,6 +793,7 @@ def calculate(b: BirthInput, **options) -> dict:
     biezhe_yin = opt("biezhe_yin", "branch", ("branch", "heaven"))
     fuyin_zimao = opt("fuyin_zimao", "chong", ("chong", "xing"))
     nian_year = opt("nian_year", "lichun", ("lichun", "lunar"))
+    yuejiang = opt("yuejiang", "zhongqi", ("zhongqi", "guogong"))
     kw = {"noble_table": noble_table, "biezhe_yin": biezhe_yin, "fuyin_zimao": fuyin_zimao}
 
     warnings: list[str] = []
@@ -803,18 +851,43 @@ def calculate(b: BirthInput, **options) -> dict:
 
     # --- 月将 ---
     lam = sun_longitude(jd)
-    general = monthly_general(lam)
     k = int(((lam - 330.0) % 360.0) // 30.0)
     zq_prev = ZHONGQI[k]
     zq_next = ZHONGQI[(k + 1) % 12]
-    jd_prev = find_sun_longitude(zq_prev[0], jd, search_back=True)
-    jd_next = find_sun_longitude(zq_next[0], jd, search_back=False)
-    add(f"Долгота Солнца λ = {lam:.4f}°. Последний 中气: {zq_prev[1]} ({zq_prev[0]}°) {_jd_iso(jd_prev)} UT; "
-        f"следующий: {zq_next[1]} ({zq_next[0]}°) {_jd_iso(jd_next)} UT. Месячный генерал (月将) = "
-        f"{Z[general]} {GENERAL_NAMES[general][0]}.")
-    for jdx, nm in ((jd_prev, zq_prev[1]), (jd_next, zq_next[1])):
+    jd_zq_prev = find_sun_longitude(zq_prev[0], jd, search_back=True)
+    jd_zq_next = find_sun_longitude(zq_next[0], jd, search_back=False)
+    general_zq = monthly_general(lam)
+    general_gg = monthly_general_guogong(lam, jd)
+    gg_info = None
+    if yuejiang == "guogong":
+        general = general_gg
+        bds = guogong_boundaries(jd)
+        bprev = min(bds, key=lambda x: (lam - x[0]) % 360.0)
+        bnext = min(bds, key=lambda x: (x[0] - lam) % 360.0)
+        jd_prev = find_sun_longitude(bprev[0], jd, search_back=True)
+        jd_next = find_sun_longitude(bnext[0], jd, search_back=False)
+        nm_prev, nm_next = f"太阳过宫 {Z[bprev[1]]}", f"太阳过宫 {Z[bnext[1]]}"
+        gg_info = {"prev": {"general": Z[bprev[1]], "deg": round(bprev[0], 3), "after_zhongqi": bprev[2],
+                            "utc": _jd_iso(jd_prev)},
+                   "next": {"general": Z[bnext[1]], "deg": round(bnext[0], 3), "after_zhongqi": bnext[2],
+                            "utc": _jd_iso(jd_next)}}
+        add(f"Долгота Солнца λ = {lam:.4f}°. 月将 по 太阳过宫 (《景祐六壬神定经》: граница «дворца» = 中气 + "
+            f"запаздывание эпохи 1034 г. + прецессия {precession_deg(JD_JINGYOU, jd):.2f}°): последний переход — "
+            f"{Z[bprev[1]]} на {bprev[0]:.2f}° ({_jd_iso(jd_prev)} UT, после 中气 {bprev[2]}), следующий — "
+            f"{Z[bnext[1]]} на {bnext[0]:.2f}° ({_jd_iso(jd_next)} UT). Месячный генерал (月将) = "
+            f"{Z[general]} {GENERAL_NAMES[general][0]} (по 中气 был бы {Z[general_zq]}).")
+        warnings.append("yuejiang='guogong': 月将 по 太阳过宫 (《景祐六壬神定经》) — приближённая модель (±1 сут.); "
+                        "《六壬大全》 и 《指南》 берут генерала по 中气.")
+    else:
+        general = general_zq
+        jd_prev, jd_next = jd_zq_prev, jd_zq_next
+        nm_prev, nm_next = f"中气 {zq_prev[1]}", f"中气 {zq_next[1]}"
+        add(f"Долгота Солнца λ = {lam:.4f}°. Последний 中气: {zq_prev[1]} ({zq_prev[0]}°) {_jd_iso(jd_prev)} UT; "
+            f"следующий: {zq_next[1]} ({zq_next[0]}°) {_jd_iso(jd_next)} UT. Месячный генерал (月将) = "
+            f"{Z[general]} {GENERAL_NAMES[general][0]}.")
+    for jdx, nm in ((jd_prev, nm_prev), (jd_next, nm_next)):
         if abs(jd - jdx) < 1.0:
-            warnings.append(f"Момент в пределах {abs(jd - jdx) * 24:.1f} ч от 中气 {nm}: при ошибке времени "
+            warnings.append(f"Момент в пределах {abs(jd - jdx) * 24:.1f} ч от {nm}: при ошибке времени "
                             f"месячный генерал (月将) может смениться — сравните с соседним.")
 
     # --- время карты, день, час ---
@@ -964,11 +1037,16 @@ def calculate(b: BirthInput, **options) -> dict:
         di2, hb2 = day_hour(ct, zi_hour)
         o = build_chart(di2, hb2, general, dn_for(hb2), shehai=shehai, **kw)
         alternatives.append({"what": f"соседняя ветвь часа ({Z[hb2]}, время карты {_iso(ct)})", **brief(o)})
-    # соседний месячный генерал (если до 中气 < 1 суток)
-    for jdx, nm, g2 in ((jd_prev, zq_prev[1], (general + 1) % 12), (jd_next, zq_next[1], (general - 1) % 12)):
+    # соседний месячный генерал (если до границы < 1 суток)
+    for jdx, nm, g2 in ((jd_prev, nm_prev, (general + 1) % 12), (jd_next, nm_next, (general - 1) % 12)):
         if abs(jd - jdx) < 1.0:
             o = build_chart(di, hb, g2, is_day, shehai=shehai, **kw)
-            alternatives.append({"what": f"соседний 月将 {Z[g2]} (по другую сторону 中气 {nm})", **brief(o)})
+            alternatives.append({"what": f"соседний 月将 {Z[g2]} (по другую сторону {nm})", **brief(o)})
+    # другое правило месячного генерала (中气 ↔ 太阳过宫) — без предупреждения, как другие таблицы 贵人
+    g_other, y_other = (general_gg, "guogong") if yuejiang == "zhongqi" else (general_zq, "zhongqi")
+    if g_other != general:
+        o = build_chart(di, hb, g_other, is_day, shehai=shehai, **kw)
+        alternatives.append({"what": f"yuejiang='{y_other}'", **brief(o)})
 
     # 本命 / 行年
     gender = _gender(birth.gender)
@@ -999,7 +1077,7 @@ def calculate(b: BirthInput, **options) -> dict:
                                 f"возраст {nm[o]['age_xusui']} (虚岁), 行年 {nm[o]['xing_nian'] or '—'} — см. alternatives.")
 
     variant = (f"《六壬大全》: 月将 по 中气, 贵人 '{noble_table}', день/ночь '{day_night}', 涉害 '{shehai}', "
-               f"solar_time='{used_mode}', zi_hour='{zi_hour}', nian_year='{nian_year}'")
+               f"solar_time='{used_mode}', zi_hour='{zi_hour}', nian_year='{nian_year}', yuejiang='{yuejiang}'")
     return {
         "method": "da_liu_ren",
         "variant": variant,
@@ -1011,12 +1089,13 @@ def calculate(b: BirthInput, **options) -> dict:
             "chart_time": _iso(chart_t), "gender": gender,
             "options": {"solar_time": used_mode, "zi_hour": zi_hour, "noble_table": noble_table,
                         "day_night": day_night, "shehai": shehai, "biezhe_yin": biezhe_yin,
-                        "fuyin_zimao": fuyin_zimao, "nian_year": nian_year},
+                        "fuyin_zimao": fuyin_zimao, "nian_year": nian_year, "yuejiang": yuejiang},
         },
         "warnings": warnings,
         "solar": {"sun_longitude": round(lam, 5),
-                  "zhongqi_prev": {"cn": zq_prev[1], "ru": zq_prev[2], "deg": zq_prev[0], "utc": _jd_iso(jd_prev)},
-                  "zhongqi_next": {"cn": zq_next[1], "ru": zq_next[2], "deg": zq_next[0], "utc": _jd_iso(jd_next)},
+                  "zhongqi_prev": {"cn": zq_prev[1], "ru": zq_prev[2], "deg": zq_prev[0], "utc": _jd_iso(jd_zq_prev)},
+                  "zhongqi_next": {"cn": zq_next[1], "ru": zq_next[2], "deg": zq_next[0], "utc": _jd_iso(jd_zq_next)},
+                  "yuejiang_rule": yuejiang, "guogong": gg_info,
                   "sun_altitude": round(alt, 3) if alt is not None else None},
         "pillars": {"day": ganzhi(di), "hour": ganzhi(hi)},
         "general": {"branch": Z[general], "name": GENERAL_NAMES[general][0], "pinyin": GENERAL_NAMES[general][1],

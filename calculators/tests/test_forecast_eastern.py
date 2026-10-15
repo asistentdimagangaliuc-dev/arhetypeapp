@@ -18,6 +18,16 @@
 * hindutone.com — Саде-сати 2026: Кумбха (последняя фаза), Мина (пик), Меша (начало); Аштама — Симха;
   Ардхаштама/Кантака — Дхану.
 * «Пхаладипика» XXVI.2–8 (пер. V. Subrahmanya Sastri, 2-е изд. 1950, archive.org) — таблица гочары и ведхи.
+
+Повторная проверка (приоритет 1):
+* zh.wikisource «三命通會/卷二» («论大运», «论小运», «论太岁», «总论岁运»), «三命通會/卷一» (戊辰/戊戌 не 反吟);
+  «淵海子平» («五言独步»: «运行十数载，上下五年分»).
+* lunar-python XiaoYun — 小运 T1–T4 и ребёнка до первого Столпа удачи.
+* skillon.com/feng-shui-flying-star.cfm/date/2026-10-14 — 日盤 (центр 6 по cn_after, прямой полёт).
+* bccks.jp/bcck/120247 (江庭俊之 «九星気学入門»), event.rakuten.co.jp (柴山和枝), ne.jp/asahi/tokoro — 30°/60°.
+* «Пхаладипика» XXIII.3–11, 20 (аштакаварга); БПХШ гл. 66 (пер. R. Santhanam, archive.org BPHSEnglish) — 46–48, 56–58;
+  PyJHora 4.8.7 (jhora/const.py ashtaka_varga_dict) — независимая таблица (= БПХШ).
+* «Прашна-марга» (пер. B. V. Raman, ч. 2, archive.org PrasnaMargaBVR), ст. 35, 43, 51, 53 — випарита-ведха, узлы.
 """
 from __future__ import annotations
 
@@ -31,9 +41,11 @@ from calculators import bazi as bz
 from calculators import jyotish as jy
 from calculators import ninestar as ns
 from calculators.common.time import BirthInput, jd_to_utc, julian_day_ut
-from calculators.forecast_eastern import (GOCHARA_GOOD, PALACE_PATH, VEDHA_EXEMPT, _pair_relations, bazi_months,
-                                          calculate, chart_directions, flying_chart, lucky_stars, ninestar_months,
-                                          saturn_periods, sign_segments, tai_sui_table)
+from calculators.forecast_eastern import (ASHTAKAVARGA, AV_CONTRIBUTORS, DIRECTION_SECTORS, GOCHARA_GOOD,
+                                          NODE_GOCHARA, PALACE_PATH, VEDHA_EXEMPT, _pair_relations, _zheng_hui,
+                                          ashtakavarga, bazi_months, calculate, chart_directions,
+                                          direction_of_azimuth, flying_chart, lucky_stars, ninestar_months,
+                                          saturn_periods, sign_segments, tai_sui_table, xiao_yun)
 
 ON = "2026-10-14"
 UTC8 = timezone(timedelta(hours=8))
@@ -547,3 +559,241 @@ def test_dasha_periods_in_year_are_contiguous(R):
     for a, b in zip(pds, pds[1:]):
         assert a["end"] == b["start"]
     assert pds[0]["start"] <= "2026-01-01 00:00" and pds[-1]["end"] >= "2027-01-01 00:00"
+
+
+# ---------------------------------------------------------------------------
+# Повторная проверка (приоритет 1): первоисточники и новые опции
+# ---------------------------------------------------------------------------
+
+def gz(stem: int, branch: int) -> int:
+    return bz.ganzhi_index(stem, branch)
+
+
+def test_luck_half_rule_is_classical(R):
+    """《渊海子平·五言独步》 «运行十数载，上下五年分»; 《三命通会·论大运》 «在干兼用地支之神，在支则弃天干之物»."""
+    lp = R["T1"]["bazi_year"]["luck_pillar"]
+    assert lp["half"] == "stem" and "上下五年分" in lp["half_source"]
+    assert not any("⚠ вариант школы" in s for s in R["T1"]["steps"])
+
+
+def test_xiao_yun_rules_unit():
+    """《三命通会·论小运》: «阳命阳年甲子时生堕地，即行乙丑，二岁丙寅»; «男起丙寅顺行，女起壬申逆行»."""
+    x = xiao_yun(1, gz(0, 0), True, "male")
+    assert x["hour_based"]["ganzhi"] == "乙丑" and x["xing_nian"]["ganzhi"] == "丙寅"
+    x = xiao_yun(2, gz(0, 0), True, "female")
+    assert x["hour_based"]["ganzhi"] == "丙寅" and x["xing_nian"]["ganzhi"] == "辛未"
+    assert xiao_yun(2, gz(0, 0), False, "male")["hour_based"]["ganzhi"] == "壬戌"
+    assert "hour_based" not in xiao_yun(5, None, True, "male")
+    assert xiao_yun(5, gz(0, 0), None, None) == {"nominal_age": 5}
+
+
+def test_xiao_yun_vs_lunar_python(R):
+    """lunar-python XiaoYun (6tail): столп часа ± возраст (虚岁). T2 родился после Личуня по Москве, но до него по
+    Пекину, поэтому для lunar-python берётся 14.02.1984 (день 戊寅: тот же столп часа 癸亥, год 甲子)."""
+    exp = {"T1": (37, "丙午"), "T2": (43, "丙午"), "T3": (23, "癸巳"), "T4": (148, "丙寅")}
+    probe = {"T1": (1990, 5, 15, 14, 0), "T2": (1984, 2, 14, 22, 0), "T3": (2004, 2, 29, 8, 0),
+             "T4": (1879, 3, 14, 12, 0)}
+    for k, (age, g) in exp.items():
+        xy = R[k]["bazi_year"]["xiao_yun"]
+        assert (xy["nominal_age"], xy["hour_based"]["ganzhi"]) == (age, g), k
+        ec = Solar.fromYmdHms(*probe[k], 0).getLunar().getEightChar()
+        assert (ec.getYear(), ec.getTime()) == (R[k]["bazi_year"]["natal"]["pillars"]["year"],
+                                                R[k]["bazi_year"]["natal"]["pillars"]["hour"]), k
+        got = [(x.getAge(), x.getGanZhi()) for dy in ec.getYun(1 if T[k].gender == "male" else 0).getDaYun(20)
+               for x in dy.getXiaoYun() if x.getYear() == 2026]
+        assert got == [(age, g)], k
+    assert R["T1"]["bazi_year"]["xiao_yun"]["xing_nian"]["ganzhi"] == "丙申"    # женщина: 壬申 − 36
+
+
+def test_xiao_yun_before_first_luck_pillar():
+    """Ребёнок 10.05.2024 10:00 MSK, м.: первый Столп удачи с 2032 г.; 2026 — 童限, 小运 3-го года 壬申
+    (lunar-python: DaYun[0].getXiaoYun → 3, 壬申; натал 甲辰 己巳 甲戌 己巳 совпадает)."""
+    b = BirthInput(2024, 5, 10, 10, 0, place="Москва", gender="male")
+    r = calculate(b, on_date=ON, year=2026, sections="bazi")["bazi_year"]
+    assert r["natal"]["chart"] == "甲辰 己巳 甲戌 己巳"
+    assert r["luck_pillar"]["status"] == "before_first" and "xiao_yun" in r["luck_pillar"]["note"]
+    assert r["xiao_yun"]["nominal_age"] == 3 and r["xiao_yun"]["hour_based"]["ganzhi"] == "壬申"
+    ec = Solar.fromYmdHms(2024, 5, 10, 10, 0, 0).getLunar().getEightChar()
+    assert [(x.getAge(), x.getGanZhi()) for x in ec.getYun(1).getDaYun(1)[0].getXiaoYun() if x.getYear() == 2026] \
+        == [(3, "壬申")]
+
+
+def test_fan_yin_rule_sanming():
+    """《三命通会》 卷二: «岁运与日相对，谓之返吟» — любое 冲 столпов; 卷一: «戊辰、戊戌…不得以为反吟»."""
+    r = {x["type"]: x for x in _pair_relations(gz(2, 6), gz(0, 0), "clash")}       # 丙午 / 甲子: 天比地冲-подобный
+    assert r["fan_yin"]["rule"] == "clash" and r["fan_yin"]["tian_ke_di_chong"] is False
+    assert "fan_yin" not in {x["type"] for x in _pair_relations(gz(2, 6), gz(0, 0))}   # умолчание — 天克地冲
+    assert "fan_yin" not in {x["type"] for x in _pair_relations(gz(4, 4), gz(4, 10), "clash")}   # 戊辰 / 戊戌
+    assert "fan_yin" in {x["type"] for x in _pair_relations(gz(2, 6), gz(2, 0), "clash")}       # 丙午 / 丙子
+    r3 = calculate(T["T3"], on_date=ON, year=2026, sections="bazi", fan_yin_rule="clash")["bazi_year"]
+    assert [x["cn"] for x in r3["luck_vs_year"] if x["type"] == "fan_yin"] == ["反吟 (相对)"]   # 甲子 / 丙午
+    bad = calculate(T["T3"], on_date=ON, year=2026, sections="bazi", fan_yin_rule="x")
+    assert bad["bazi_year"] is None and any("fan_yin_rule" in w for w in bad["warnings"])
+
+
+def test_zheng_hui_sanming_additions():
+    """《三命通会·论太岁》: «太岁干支冲日干支亦曰征»; «总论岁运»: «日干与时干不宜与太岁元天元合»,
+    «甲合己灾重，己合甲灾轻»."""
+    z = _zheng_hui(gz(0, 2), gz(6, 6), None)              # день 甲寅, год 庚午: 庚 冲 и 克 甲
+    assert [(x["cn"], x["source"]) for x in z] == [("征 (岁伤日干)", "三命通会")]
+    z = _zheng_hui(gz(6, 2), gz(0, 6), None)              # день 庚, год 甲: 日犯岁君 (渊海子平), не 岁伤日干
+    assert [(x["cn"], x["source"]) for x in z] == [("征 (日犯岁君)", "渊海子平")]
+    z = _zheng_hui(gz(0, 2), gz(5, 5), None, hour_idx=gz(0, 0))   # день 甲, год 己 (甲 ещё и 克 己); час 甲 — 合
+    assert [(x["type"], x["source"], x.get("severity_sanming")) for x in z] == [
+        ("zheng", "渊海子平", None), ("hui", "渊海子平", "heavier"), ("hui", "三命通会", None)]
+    assert _zheng_hui(gz(5, 1), gz(0, 6), None)[0]["severity_sanming"] == "lighter"   # 己日甲年
+
+
+def test_tai_sui_classical_flags():
+    """《三命通会·论太岁》: «甲子生人又见甲子年，谓之真太岁»; «甲子日见甲子太岁，谓之日年相并»."""
+    r = calculate(BirthInput(1966, 6, 15, 12, 0, place="Москва", gender="male"), on_date=ON, year=2026,
+                  sections="bazi")["bazi_year"]
+    assert r["natal"]["pillars"]["year"] == "丙午" and r["tai_sui"]["zhen_tai_sui"] is True
+    r = calculate(BirthInput(1990, 2, 10, 12, 0, place="Москва", gender="male"), on_date=ON, year=2026,
+                  sections="bazi")["bazi_year"]
+    assert r["natal"]["pillars"]["day"] == "丙午" and r["tai_sui"]["ri_nian_xiang_bing"] is True
+    assert r["tai_sui"]["zhen_tai_sui"] is False
+
+
+def test_day_chart_forward_vs_skillon():
+    """https://www.skillon.com/feng-shui-flying-star.cfm/date/2026-10-14 — дневная карта: центр 6, СЗ 7, С 2,
+    СВ 9, З 8, В 4, ЮЗ 3, Ю 1, ЮВ 5 (прямой полёт в Инь-дунь; звезда дня по правилу cn_after модуля 03)."""
+    r = calculate(T["T1"], on_date=ON, year=2026, sections="ninestar", day_star_method="cn_after")
+    d = r["ninestar_year"]["day_on_date"]
+    assert d["star"] == 6 and d["dun"] == "yin"
+    lay = {c["palace"]: c["star"] for c in d["chart"]["layout"]}
+    assert lay == {"C": 6, "NW": 7, "N": 2, "NE": 9, "W": 8, "E": 4, "SW": 3, "S": 1, "SE": 5}
+    # японское правило (ja_leap, умолчание): звезда 9; 五黄殺 С, 暗剣殺 Ю, 日破 В (день 辛酉 → 卯)
+    d = calculate(T["T1"], on_date=ON, year=2026, sections="ninestar")["ninestar_year"]["day_on_date"]
+    assert (d["chart"]["center"], d["chart"]["go_o_satsu"], d["chart"]["anken_satsu"], d["chart"]["ha"]["palace"]) \
+        == (9, "N", "S", "E")
+    assert d["chart"]["layout_compact"] == "8-4-6-7-9-2-3-5-1"
+    assert not {x["direction"] for x in d["chart"]["lucky"]} & {x["direction"] for x in d["chart"]["unlucky"]}
+    d = calculate(T["T1"], on_date=ON, year=2026, sections="ninestar", day_chart=False)
+    assert "chart" not in d["ninestar_year"]["day_on_date"]
+
+
+def test_direction_sectors_ja_30_60():
+    """«東西南北各３０度、東北、東南、西南、西北各６０度» (江庭俊之, bccks.jp/bcck/120247; 柴山和枝,
+    event.rakuten.co.jp …/shibayama/2019_orientation/; ne.jp/asahi/tokoro «九星気学は30度、60度»)."""
+    for scheme, t in DIRECTION_SECTORS.items():
+        widths = {d: (hi - lo) % 360 for d, (lo, hi) in t.items()}
+        assert sum(widths.values()) == 360, scheme
+        if scheme == "ja_30_60":
+            assert {widths[d] for d in ("N", "E", "S", "W")} == {30} and {widths[d] for d in ("NE", "SE", "SW", "NW")} == {60}
+        else:
+            assert set(widths.values()) == {45}
+    assert [direction_of_azimuth(a) for a in (0, 14.9, 15, 74.9, 75, 105, 165, 195, 255, 285, 344.9, 345)] == [
+        "N", "N", "NE", "NE", "E", "SE", "S", "SW", "W", "NW", "NW", "N"]
+    assert [direction_of_azimuth(a, "cn_45") for a in (22.4, 22.5, 337.5, 359)] == ["N", "NE", "N", "N"]
+    r = calculate(T["T1"], on_date=ON, year=2026, sections="ninestar", azimuth=20)
+    assert (r["ninestar_year"]["azimuth_check"]["ja_30_60"], r["ninestar_year"]["azimuth_check"]["cn_45"]) == ("NE", "N")
+    assert any("30°/60°" in w for w in r["warnings"])
+
+
+# «Пхаладипика» XXIII.3–9 (пер. V. Subrahmanya Sastri, 1950; archive.org Phaladeepika2ndEd.1950…, djvu-текст):
+# благоприятные места каждой планеты, считая от 8 источников.
+PHALADEEPIKA_XXIII_SUN = {"sun": (1, 2, 4, 7, 8, 9, 10, 11), "mars": (1, 2, 4, 7, 8, 9, 10, 11),
+                          "saturn": (1, 2, 4, 7, 8, 9, 10, 11), "jupiter": (5, 6, 9, 11), "venus": (6, 7, 12),
+                          "mercury": (3, 5, 6, 9, 10, 11, 12), "moon": (3, 6, 10, 11), "lagna": (3, 4, 6, 10, 11, 12)}
+# БПХШ гл. 66 (пер. R. Santhanam; archive.org BPHSEnglish): «рекха»-места по домам → источники.
+BPHS_66_SUN = {1: "sun mars saturn", 2: "sun mars saturn", 3: "mercury moon lagna", 4: "lagna sun saturn mars",
+               5: "jupiter mercury", 6: "lagna venus mercury jupiter moon", 7: "sun mars saturn venus",
+               8: "sun mars saturn", 9: "sun mars saturn mercury jupiter",
+               10: "lagna sun saturn mars mercury moon", 11: "sun moon mars mercury jupiter saturn lagna",
+               12: "lagna venus mercury"}                                                      # 66.43–45
+BPHS_66_MOON = {1: "mercury moon jupiter", 2: "jupiter mars", 3: "mercury sun moon mars saturn venus lagna",
+                4: "jupiter venus mercury", 5: "mars mercury venus saturn", 6: "sun moon mars saturn lagna",
+                7: "sun moon jupiter mercury venus", 8: "sun mercury jupiter", 9: "venus moon",
+                10: "sun mercury jupiter venus moon lagna mars", 11: " ".join(AV_CONTRIBUTORS), 12: ""}  # 66.46–48
+BPHS_66_VENUS = {1: "lagna venus moon", 2: "lagna venus moon", 3: "lagna venus moon mercury saturn mars",
+                 4: "lagna venus moon saturn mars", 5: "lagna mercury moon jupiter saturn venus", 6: "mercury mars",
+                 7: "", 8: "venus sun moon jupiter lagna saturn",
+                 9: "moon mars mercury jupiter venus saturn lagna", 10: "venus jupiter saturn",
+                 11: " ".join(AV_CONTRIBUTORS), 12: "mars moon sun"}                            # 66.56–58
+
+
+def _by_house(table: dict[str, tuple[int, ...]]) -> dict[int, set[str]]:
+    return {h: {c for c in AV_CONTRIBUTORS if h in table[c]} for h in range(1, 13)}
+
+
+def test_ashtakavarga_tables_vs_texts():
+    totals = {"sun": 48, "moon": 49, "mars": 39, "mercury": 54, "jupiter": 56, "venus": 52, "saturn": 39}
+    for school, tab in ASHTAKAVARGA.items():
+        assert {p: sum(len(v) for v in rows.values()) for p, rows in tab.items()} == totals, school
+    ph, bp = ASHTAKAVARGA["phaladeepika"], ASHTAKAVARGA["bphs"]
+    assert ph["sun"] == PHALADEEPIKA_XXIII_SUN
+    assert ph["moon"]["moon"] == (1, 3, 6, 7, 10, 11) and ph["moon"]["mars"] == (2, 3, 5, 6, 9, 10, 11)  # XXIII.4
+    assert ph["venus"]["mars"] == (3, 5, 6, 9, 11, 12)                                                    # XXIII.8
+    assert bp["venus"]["mars"] == (3, 4, 6, 9, 11, 12)          # сноска к XXIII.8: «According to Parasara …»
+    for p, ref in (("sun", BPHS_66_SUN), ("moon", BPHS_66_MOON), ("venus", BPHS_66_VENUS)):
+        assert _by_house(bp[p]) == {h: set(v.split()) for h, v in ref.items()}, p
+    assert {p for p in ph if ph[p] != bp[p]} == {"moon", "venus"}
+
+
+def test_ashtakavarga_vs_pyjhora(R):
+    """PyJHora 4.8.7 (jhora/const.py ashtaka_varga_dict, get_ashtaka_varga) — таблица = БПХШ; те же натальные знаки."""
+    sav = {"T1": [26, 27, 30, 20, 29, 26, 25, 38, 26, 31, 27, 32], "T2": [26, 28, 28, 34, 29, 25, 36, 35, 28, 23, 22, 23],
+           "T3": [29, 25, 29, 34, 20, 22, 27, 31, 35, 29, 30, 26], "T4": [27, 22, 25, 30, 30, 29, 25, 35, 30, 40, 20, 24]}
+    t1_bav = {"sun": [2, 3, 4, 2, 5, 4, 5, 6, 3, 4, 6, 4], "moon": [3, 3, 7, 6, 1, 3, 4, 6, 4, 5, 2, 5],
+              "mars": [2, 3, 3, 2, 5, 4, 4, 4, 1, 3, 4, 4], "mercury": [6, 4, 4, 2, 5, 5, 5, 6, 2, 6, 4, 5],
+              "jupiter": [4, 6, 4, 5, 6, 5, 0, 5, 7, 5, 5, 4], "venus": [7, 4, 3, 2, 4, 4, 5, 4, 6, 4, 3, 6],
+              "saturn": [2, 4, 5, 1, 3, 1, 2, 7, 3, 4, 3, 4]}
+    for k in T:
+        r = calculate(T[k], on_date=ON, year=2026, sections="jyotish", ashtakavarga_school="bphs")["jyotish"]
+        av = r["ashtakavarga"]
+        assert list(av["sav"].values()) == sav[k], k
+        assert av["sav_total"] == 337
+        if k == "T1":
+            assert {p: list(v.values()) for p, v in av["bav"].items()} == t1_bav
+    # умолчание — «Пхаладипика»: отличие только в картах Луны и Венеры
+    a = R["T1"]["jyotish"]["ashtakavarga"]
+    assert a["school"] == "phaladeepika" and list(a["sav"].values()) == [26, 26, 31, 20, 29, 25, 26, 38, 26, 31, 27, 32]
+
+
+def test_ashtakavarga_transit_T1(R):
+    """«Пхаладипика» XXIII.11 (0…8 точек), XXIII.20 (сумма знака > 28 — благоприятно)."""
+    t = R["T1"]["jyotish"]["transits_on_date"]
+    got = {g: t[g]["ashtakavarga"]["bav_bindus"] for g in ("sun", "moon", "mars", "mercury", "jupiter", "venus",
+                                                            "saturn")}
+    assert got == {"sun": 4, "moon": 6, "mars": 2, "mercury": 5, "jupiter": 5, "venus": 5, "saturn": 4}
+    assert t["mars"]["ashtakavarga"]["bav_result"].startswith("expenditure")
+    assert (t["saturn"]["ashtakavarga"]["sav_bindus"], t["saturn"]["ashtakavarga"]["sav_verdict"]) == (32, "good")
+    assert "bav_bindus" not in t["rahu"]["ashtakavarga"]
+    sat = R["T1"]["jyotish"]["slow_transits_in_year"]["saturn"]
+    assert all("bav_bindus" in x and "sav_bindus" in x for x in sat)
+    nt = calculate(BirthInput(1990, 5, 15, place="Москва", gender="female"), on_date=ON, sections="jyotish")
+    assert nt["jyotish"]["ashtakavarga"] is None and any("Аштакаварга" in w for w in nt["warnings"])
+
+
+def test_viparita_vedha_prasna_marga(R):
+    """«Прашна-марга» ст. 35, 53: граха в неблагоприятном доме, который служит домом ведхи, «встречно» снимается
+    грахой в соответствующем благоприятном доме. T2: Меркурий в 9-м (ведха для 6-го), в 6-м Марс и Юпитер."""
+    m = R["T2"]["jyotish"]["transits_on_date"]["mercury"]
+    assert (m["house_from_moon"], m["viparita_vedha_house"], m["viparita_vedha_by"], m["result"]) == (
+        9, 6, ["mars", "jupiter"], "unfavorable")
+    r = calculate(T["T2"], on_date=ON, year=2026, sections="jyotish", viparita_vedha=True)
+    assert r["jyotish"]["transits_on_date"]["mercury"]["result"] == "unfavorable_cancelled"
+    s = R["T1"]["jyotish"]["transits_on_date"]["sun"]          # Солнце в 9-м, в 3-м только Сатурн (пара-исключение)
+    assert (s["viparita_vedha_house"], s["viparita_vedha_by"]) == (3, [])
+
+
+def test_node_gochara_prasna_marga(R):
+    """«Прашна-марга» ст. 51: «The Vedhya positions for Rahu and Ketu are 3, 6, and 11 as for Saturn and the Vedha
+    positions are 12, 9, 5»; «Пхаладипика» XXVI.2: «Rahu and Ketu are similar to the Sun» (3, 6, 10, 11)."""
+    assert NODE_GOCHARA["prasna_marga"] == GOCHARA_GOOD["saturn"]
+    assert set(NODE_GOCHARA["phaladeepika"]) == set(GOCHARA_GOOD["sun"])
+    assert R["T3"]["jyotish"]["transits_on_date"]["rahu"]["result"] == "favorable"          # Раху в 10-м
+    r = calculate(T["T3"], on_date=ON, year=2026, sections="jyotish", node_gochara="prasna_marga")["jyotish"]
+    assert r["transits_on_date"]["rahu"]["house_from_moon"] == 10
+    assert r["transits_on_date"]["rahu"]["result"] == "unfavorable"
+
+
+def test_kantaka_shani_kendra_2026():
+    """«Пхаладипика» I.17: «The 1st, the 10th, the 7th and the 4th houses are known by the terms Kendra Kantaka»;
+    hindutone.com: «Some astrologers extend the term Kantaka Shani to Saturn in the 1st, 4th, 7th and 10th».
+    Сатурн в Рыбах (2026) — кендра для Рыб, Стрельца, Девы, Близнецов."""
+    jd = julian_day_ut(datetime(2026, 10, 14, 9, 0, tzinfo=timezone.utc))
+    zone = ns._Zone("UTC+05:30")
+    act = {ms for ms in range(12) if saturn_periods(ms, jd, zone, span_years=4)["kantaka_shani"]["active"]}
+    assert act == {11, 8, 5, 2}
