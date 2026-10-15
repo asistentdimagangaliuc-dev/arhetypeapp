@@ -2,10 +2,10 @@
 
 > Модуль: `calculators/forecast_western.py` (`calculate(b, **options)`), тесты: `calculators/tests/test_forecast_western.py`.
 > Python: `calculate(BirthInput(1990, 5, 15, 14, 30, place="Москва"), on_date="2026-10-14")`.
-> CLI (пока метод не внесён в общий `calculators/cli.py`): `.venv/bin/python -m calculators.forecast_western --date 1990-05-15 --time 14:30 --place Москва --opt on_date=2026-10-14 [--opt sr_place=Новосибирск --opt progression_angles=solar_arc]`.
+> CLI (пока метод не внесён в общий `calculators/cli.py`): `.venv/bin/python -m calculators.forecast_western --date 1990-05-15 --time 14:30 --place Москва --opt on_date=2026-10-14 [--opt sr_place=Новосибирск --opt progression_angles=solar_arc --opt progression_direction=converse --opt profection_month=calendar --opt primary_directions=true --opt exact_window_years=30]`.
 > Натальная карта берётся из модуля 06 (`calculators/western.py`): те же время, дома, узел, аспекты и таблицы.
 
-**Коротко для агента.** Прогноз всегда считается **на конкретную дату** `on_date` — назовите её пользователю. Пять техник отвечают на разные вопросы: **транзиты** — какие реальные планеты сейчас (и в периоде) касаются натальных точек; **вторичные прогрессии** («день = год») — медленное внутреннее развитие, прежде всего прогрессивная Луна и фаза прогрессивной лунации; **дирекции солнечной дуги** — все точки радикса сдвинуты на дугу Солнца; **соляр** — карта на момент возврата Солнца к натальной долготе (на год вперёд); **годовые профекции** — знак года и управитель года (эллинистическая техника). Числа берите из калькулятора; формулы ниже нужны для проверки и объяснения. Точные моменты транзитов ищутся с учётом ретроградных петель: один аспект медленной планеты может стать точным **трижды** — называйте все проходы.
+**Коротко для агента.** Прогноз всегда считается **на конкретную дату** `on_date` — назовите её пользователю. Пять техник отвечают на разные вопросы: **транзиты** — какие реальные планеты сейчас (и в периоде) касаются натальных точек; **вторичные прогрессии** («день = год») — медленное внутреннее развитие, прежде всего прогрессивная Луна и фаза прогрессивной лунации; **дирекции солнечной дуги** — все точки радикса сдвинуты на дугу Солнца; **соляр** — карта на момент возврата Солнца к натальной долготе (на год вперёд); **годовые профекции** — знак года и управитель года (эллинистическая техника). Числа берите из калькулятора; формулы ниже нужны для проверки и объяснения. Точные моменты транзитов ищутся с учётом ретроградных петель: один аспект медленной планеты может стать точным **трижды** — называйте все проходы. По запросу (опции, умолчания не меняют): конверсные вторичные прогрессии, первичные дирекции планет к углам, варианты месяцев профекции, расширенное окно поиска точных дат прогрессий и дирекций.
 
 ---
 
@@ -20,12 +20,14 @@
 | **Дирекции солнечной дуги (solar arc directions)** | Все точки радикса сдвигаются на одну и ту же дугу — путь прогрессивного Солнца от рождения (AstroWiki: «All the planets and axes are moved by the same amount as the sun moves in one day») | ≈1° в год | истинная дуга; орбис 1°; ASC + дуга |
 | **Соляр (solar return, солнечная революция)** | Карта на момент, когда Солнце возвращается к своей натальной долготе; действует до следующего соляра | 1 год | тропический; место рождения; Плацидус |
 | **Лунар (lunar return)** | То же для Луны: возврат к натальной долготе Луны раз в ~27,3 сут | 1 мес. | на место соляра |
-| **Годовые профекции (annual profections)** | От знака ASC отсчитывается по знаку на каждый прожитый год; управитель полученного знака — «управитель года» (time-lord) | 1 знак = 1 год | от ASC, целые знаки, традиционные управители, смена года в момент соляра |
+| **Годовые профекции (annual profections)** | От знака ASC отсчитывается по знаку на каждый прожитый год; управитель полученного знака — «управитель года» (time-lord) | 1 знак = 1 год | от ASC, целые знаки, традиционные управители, смена года в момент соляра; месяц — 1/12 года (`profection_month`) |
+| **Первичные дирекции к углам (primary directions)** — по запросу | Планета (промиссор) переносится суточным вращением неба до MC, IC, ASC или DSC радикса; дуга в прямом восхождении переводится в годы «ключом» | 1° RA ≈ 1 год | выключены (`primary_directions=True`); со своей широтой (in mundo); ключ Наибода; до 100 лет |
 
 ### 1.2. Расхождения школ и вариантов
 
 **Транзиты — орбис.** Единого орбиса нет (AstroWiki «Transit»: «It is not possible to give a definite answer…»).
-- astro.com: отчёты Роберта Хэнда (Extended Daily Horoscope, Transits of the Year, Astrotext Forecast) — «an orb of 1° for all transits to all natal planets» (FAQ «Forecast Horoscopes»). Лиз Грин — «более сложная система» (до/после точного аспекта, тип аспекта, планеты), её орбисы «в целом шире»; таблица не опубликована ⚠.
+- astro.com: отчёты Роберта Хэнда (Extended Daily Horoscope, Transits of the Year, Astrotext Forecast) — «an orb of 1° for all transits to all natal planets» (FAQ «Forecast Horoscopes»). Лиз Грин — «a more complex system which considers different factors, such as pre-orb / post-orb, aspect type, and the planets involved. It would be too complex to list all the orbs individually… her orbs are generally wider»; там же: «We do not publish the logic behind our calculations and interpretations». ⚠ Таблица орбисов Грин не опубликована — воспроизвести её нельзя (повторный поиск 15.10.2026 ничего не дал); для «широких» орбисов задавайте `transit_orbs` числом или словарём и называйте это вариантом.
+- Р. Хэнд, «Planets in Transit» (1976), Transit Rule 2: «Strictly speaking, there is no such thing as an "orb" of influence concerning a transit… Space can be converted into time, because the transiting planet is moving, so an orb of so many degrees and minutes indicates the length of time in which a transit is likely…»; его компьютерный отчёт в той же книге даёт для каждого транзита «the date it enters one degree of orb, the date it becomes exact» — это и есть умолчание 1°.
 - AstroWiki «Transit»: «The initial recommendation is to use a small orb of around one degree… The orb can then be increased to three or five degrees».
 - Kerykeion (вторичный): для внешних планет «1 to 3 degrees is usually sufficient», для внутренних — «within 1 degree or less».
 - **Период действия**: astro.com «Transits of the Year» считает транзит активным «from the first entry into orb up to the last exit» (с учётом ретроградной петли), а «Astrotext Forecast» — только пока планета в орбисе 1° (транзит прерывается и возобновляется). FAQ: «What is really reliable is the date when a transit is exact». Поэтому калькулятор выдаёт **все точные моменты** с номером прохода, а длительность оставляет на выбор школы.
@@ -37,12 +39,16 @@
 | `progression_angles` | Формула | Кто использует |
 |---|---|---|
 | `mean_sun` (**по умолчанию**) | ARMC_p = ARMC_рожд + 0,98564733° × возраст; ASC, MC и куспиды пересчитываются из ARMC_p | astro.com: «the number of years is multiplied by the mean daily motion of the Sun… added to the sidereal time of birth, and axes and houses are recalculated… ('Naibod key') 0.98564733°»; AstroWiki: «The most common method…» (3 мин 56,55 с звёздного времени в год) |
-| `solar_arc` | MC_p = MC_рожд + (Солнце_прогр − Солнце_рожд) в долготе; ASC и куспиды — из MC_p на широте рождения | Solar Fire (по описанию astro.com; ⚠ первоисточник Solar Fire не открыт); на astro.com — опция «MC from solar arc» |
-| `naibod` | MC_p = MC_рожд + 0,98564733° × возраст в **долготе** | вариант «Naibod in longitude» ⚠ (в источниках модуля описан только принцип ключа Наибода) |
-| `solar_arc_ra` | ARMC_p = ARMC_рожд + (α_Солнца_прогр − α_Солнца_рожд) | вариант «solar arc in RA» ⚠ |
-| `quotidian` | карта на сам прогрессивный момент: ARMC растёт на ~361° за прогрессивные сутки (= за год жизни) | astro.com: опция «ARMC 361° / prog. Day» |
+| `solar_arc` | MC_p = MC_рожд + (Солнце_прогр − Солнце_рожд) в долготе; ASC и куспиды — из MC_p на широте рождения | Solar Fire (по описанию astro.com FAQ: «Solar Fire calculates them as follows: The solar arc… is added to the midheaven»); Astrolog 8 — ключи `-p1 -pc` («Solar arc house cusps recomputed based on progressed MC», `charts0.cpp`); на astro.com — опция «MC from solar arc». ⚠ Что это **умолчание** Solar Fire, известно только из FAQ astro.com: руководство Solar Fire не найдено (повторный поиск 15.10.2026) |
+| `naibod` | MC_p = MC_рожд + 0,98564733° × возраст в **долготе** | «Naibod in Longitude» — один из пяти способов в руководстве Astracadabra v1 (© 2004–2008 Esoteric Technologies, производитель Solar Fire): «S.A. in Long., S.A. in R.A., Naibod in Longitude, Naibod in Right Ascension and Mean Quotidian»; есть и в Solar Fire («Solar Fire currently has Naibod in longitude and r.a., and solar arc in long. and r.a.» — Astrolog32 Wish List); К. Б. Риске (Llewellyn's Complete Book of Predictive Astrology, 2011): «I have found that angles progressed by Naibod in longitude are the most accurate» |
+| `solar_arc_ra` | ARMC_p = ARMC_рожд + (α_Солнца_прогр − α_Солнца_рожд) | «Solar Arc in R.A.» — те же источники (Astracadabra, Solar Fire) |
+| `quotidian` | карта на сам прогрессивный момент: ARMC растёт на ~361° за прогрессивные сутки (= за год жизни) | astro.com: опция «ARMC 361° / prog. Day»; **умолчание Astrolog 8** (`-p`: куспиды строятся на момент `is.Tp = T + (JDp − T)/(rProgDay·rProgCusp)`, `-pC` по умолчанию 1,0 — `calc.cpp`, `charts0.cpp`) |
 
-astro.com подчёркивает: способы через ключ Наибода и солнечную дугу «strictly speaking… are not real secondary progressions, but primary directions» углов.
+astro.com подчёркивает: способы через ключ Наибода и солнечную дугу «strictly speaking… are not real secondary progressions, but primary directions» углов. На вопрос «Can I set a progressed chart to use SA (solar arcs) in Longitude method?» FAQ «Other methods» отвечает «No»: на astro.com прогрессивные углы — только ARMC + 3m56s в год. Старый Astrolog (до 7-й версии) прогрессировал MC «using Naibod right ascension» (Astrolog32 Wish List) — это наш `mean_sun`.
+
+**Прогрессивные углы — наклон эклиптики ε** (`progression_obliquity`). По умолчанию истинный ε на прогрессивный момент JD_p (`"progressed"`); вариант `"natal"` — ε рождения, как в Astrolog 8 для куспидов от направленного MC (`-p1 -pc`: `SwissHouse(is.Tp, …)` с `is.Tp` = время рождения; `calc.cpp`). Для `quotidian` всегда ε прогрессивного момента (это настоящая карта на этот момент). Разница — секунды дуги (T4: ASC 0,2″), на даты срабатывания не влияет. ⚠ Какой ε берёт astro.com, не опубликовано.
+
+**Конверсные вторичные прогрессии** (`progression_direction="converse"`). astro.com FAQ «Other methods»: «For 'converse' secondary progressions, use negative age with offset from your birth date… born in 1950 and want converse progressions for 2002, the age is 52. Using negative age, you ought to enter the year 1898». Калькулятор: JD_p = JD₀ − A; углы теми же способами с отрицательным возрастом (`mean_sun`: ARMC₀ − 0,98564733° × A; `solar_arc`: дуга отрицательна); в реальном времени прогрессивная Луна и элонгация движутся **назад** (Луна переходит в предыдущий знак, фаза лунации сменяется на предыдущую). Дирекции солнечной дуги остаются прямыми (конверсная дуга не реализована).
 
 **Дирекции — истинная дуга или ключ Наибода.** AstroWiki «Solar Arc»: «It is possible to use either the actual distance travelled by the Sun… (the true solar arc) or… the mean solar arc… Naibod key… 59 minutes and 8.33 seconds of arc». Разница за год жизни зависит от сезона рождения: Солнце проходит 0,953–1,019°/сут, у T1 (рождение в мае) к 36 годам истинная дуга на 0,99° **меньше** Наибодовой — это почти год во времени срабатывания. По умолчанию — истинная (`arc="true"`: дуга = прогрессивное Солнце − натальное, как в определении AstroWiki и в Solar Fire по описанию astro.com).
 **astro.com в картах «Solar arc directions» / «Natal and solar arc direction» берёт среднюю дугу (Наибод)**: «The age of the native is calculated in years, and then multiplied by the mean daily motion of the Sun. The result is added to all planets, axes and houses» (FAQ «Overview chart types»). Для сверки с картами дуги astro.com задавайте `arc="naibod"`.
@@ -55,8 +61,19 @@ ASC в дирекциях: «All the planets and axes are moved by the same amou
 **Профекции.**
 - Брennan (TMA, astro.com): «you begin from the sign that contains the Ascendant; the ruler of that sign becomes the "time-lord of the year" for the first year»; «When a person is born, start from zero at the sign that contains the Ascendant, which is the 1st Whole Sign house… Every twelve years, the profection returns to the rising sign… 12… 24, then 36, 48, 60». Управители — **традиционные** («I'm going to be using the traditional rulership scheme»), высшие планеты как управители не берутся, но учитываются, если стоят в знаке года.
 - Граница года: «In the second year of the native's life, starting on their first solar return» (TMA) и «it jumps suddenly on the day of your birthday» (подкаст, эп. 153). Разница — не больше суток. По умолчанию `profection_boundary="solar_return"`, вариант `"birthday"` (местная полночь дня рождения).
-- Месячные профекции: «profections can actually be done at a yearly rate, at a monthly rate, or even daily» (Brennan, эп. 153), механика месяца в источнике не описана. AstroWiki «Profection» (по Knappich): 1 знак = 1 месяц от знака года. Калькулятор делит год профекции на 12 равных частей ⚠ (есть версии с 28-дневными и календарными месяцами — не реализованы).
+- Месячные профекции: «profections can actually be done at a yearly rate, at a monthly rate, or even daily» (Brennan, эп. 153); в книге Brennan «Hellenistic Astrology» (2017, гл. 17): «Profections can also be advanced on a monthly, daily, or even hourly level», механика месяца не дана. Источники с механикой (опция `profection_month`):
+
+  | `profection_month` | Правило | Источник |
+  |---|---|---|
+  | `equal` (**по умолчанию**) | год профекции (соляр → соляр) делится на 12 равных частей; знак месяца = знак года + номер месяца | ⚠ условность калькулятора: прямого источника нет; от `calendar` отличается на ±1–2 сут в границах |
+  | `calendar` | месяцы от дня рождения: границы — местная полночь того же числа каждого следующего месяца (если такого числа нет — последний день месяца) | D. George, «Astrology and the Authentic Self» (2008): «the seventh house governs the first month following the birthday—in Bill's case, November 17 to December 17. The eighth house governs the following month—December 17 to January 17»; AstroWiki «Profection» (по Knappich): возраст «27 years, 6 months, and 5 days» → 6 месяцев = 6 знаков |
+  | `thirteen` | 13 равных частей года профекции (≈ 28,1 сут), знак = знак года + номер; 13-й месяц снова в знаке года | Птолемей, Tetrabiblos IV.10 (пер. Ashmand, 1822): «the number of the month… is to be projected from such places as possess the dominion of the year, in the proportion of twenty-eight days per sign»; R. Hand (предисловие к Project Hindsight, т. IX, 1995): «the monthly profections have to go at the rate of thirteen signs per year… a little over 28 days» |
+  | `valens` | дуга светила секты от натального положения до текущего, по 30° на знак от знака года (днём Солнце, ночью Луна; без времени рождения — Солнце с предупреждением) | Валент, Anthology IV.28 (пер. M. Riley): «determine the distance from the Sun at the moment in question to the Sun at the nativity, then count that distance from the sign which has been allotted the year. For night births… from the Moon» |
+
+  Ещё у Валента (V.6 по Riley; у Brennan — 5, 4: 1, «Nechepso»): «distance from the Sun's current position to the Moon's position at birth, then count that distance from the Ascendant»; сам Валент считал действенными месяцы, когда Солнце проходит знаки распределения года, — **не реализованы**.
 - Другие «профекционные» системы (AstroWiki «Profection»): Мюнхенская ритмика (7 лет на дом), школа Глана (8⅓ года), Возрастная точка Хуберов (6 лет на дом Коха), ключ Франкленда (7 лет на знак) — **не реализованы**.
+
+**Первичные дирекции** (`primary_directions=True`, только к углам). astro.com предлагает их отдельной картой («Primary Directions are a complex subject…»; FAQ «Other methods») с опциями `mb=0` «promissors without latitude», `mc=1/2` только прямые/только конверсные, ключи `ms=n` «Naibod/Kühr», `ms=L`/`ms=a` движение Солнца в день рождения по эклиптике/экватору, `ms=k` «Kündig: 1 degree in AR»; какой ключ у astro.com по умолчанию, в FAQ не сказано ⚠. Калькулятор считает только **соединения планет и северного узла с MC, IC, ASC, DSC**: для углов формулы одинаковы в системах Плацидуса и Региомонтана (Makransky, «Primary Directions. A Primer of Calculation», гл. II: «The simplest directions to calculate are those in which the MC or IC is the significator»). Дуга > 0 — прямая (direct), < 0 — конверсная (converse); во времени берётся |дуга| (Makransky, гл. III: «Converse arcs are here treated as direct arcs»). Ключи (`pd_key`): `naibod` (по умолчанию; 0,98564733° = 1 год), `ptolemy` (1° = 1 год), `birthday_ra` (Симмонайт: ход Солнца по RA за дату рождения 0h–24h UT), `true_solar_ra` (Плацидус: «the arc of direction is added to the sun's natal RA… timed by the motion in RA of the secondary progressed sun»; по Makransky — «overwhelmingly the most popular method… by modern practitioners»). Широта промиссора (`pd_latitude`): `with` — in mundo (по умолчанию, как astro.com без `mb=0`), `without` — in zodiaco. Дирекции к планетам, мунданные аспекты и полюса значимых точек (Плацидус/Региомонтан) **не реализованы** ⚠ (у Makransky — гл. IV–VII).
 
 ### 1.3. Значения по умолчанию и почему
 
@@ -80,6 +97,11 @@ ASC в дирекциях: «All the planets and axes are moved by the same amou
 | `include_lunar_return` | `True` | `False` | — |
 | `profection_from` | `"asc"` | `"sun"`, `"moon"`, `"mc"` | классика — от ASC; от других точек — «advanced» вариант (слайды Brennan) |
 | `profection_boundary` | `"solar_return"` | `"birthday"` | Brennan (TMA) |
+| `profection_month` | `"equal"` | `"calendar"`, `"thirteen"`, `"valens"` | §1.2 (умолчание — условность ⚠) |
+| `progression_direction` | `"direct"` | `"converse"` | astro.com: конверсные — «negative age» |
+| `progression_obliquity` | `"progressed"` | `"natal"` | Astrolog 8 `-p1 -pc` — ε рождения; влияние ≤ 4″ |
+| `exact_window_years` | 3 | (0, 120] лет | окно поиска точной даты аспектов прогрессий (кроме Луны: ±120 сут) и дирекций; `null` — точность вне окна |
+| `primary_directions` | `False` | `True` + `pd_key` (`"naibod"` \| `"ptolemy"` \| `"birthday_ra"` \| `"true_solar_ra"`), `pd_latitude` (`"with"` \| `"without"`), `pd_max_age` (100) | Makransky; astro.com (опции `ms`, `mb`) |
 | `hsys`, `node` | `"P"`, `"true"` | как в модуле 06 | единообразие с натальной картой |
 
 ---
@@ -89,13 +111,13 @@ ASC в дирекциях: «All the planets and axes are moved by the same amou
 | Поле | Обязательно | Что будет без него |
 |---|---|---|
 | Дата рождения | да | — |
-| Время рождения | для углов, домов, профекций от ASC, Луны | Натал считается на 12:00 местного (как в 06). **Нет**: натальных домов и углов, прогрессивных углов, дирекций ASC/MC, углов соляра и лунара, профекций от ASC (можно `profection_from="sun"`). Ненадёжны: натальная Луна (±6–7°) и транзиты к ней, прогрессивная Луна (±6 мес.), фаза лунации (±6 мес.), момент соляра (±12 ч, т. к. натальное Солнце известно лишь ±0,5°) |
+| Время рождения | для углов, домов, профекций от ASC, Луны | Натал считается на 12:00 местного (как в 06). **Нет**: натальных домов и углов, прогрессивных углов, дирекций ASC/MC, углов соляра и лунара, профекций от ASC (можно `profection_from="sun"`), первичных дирекций. Ненадёжны: натальная Луна (±6–7°) и транзиты к ней, прогрессивная Луна (±6 мес.), фаза лунации (±6 мес.), момент соляра (±12 ч, т. к. натальное Солнце известно лишь ±0,5°) |
 | Место рождения (или `tz`) | для UTC; координаты — для домов | без координат — как без времени для домов; без пояса расчёт невозможен |
 | `on_date` | желательно | сегодня с предупреждением |
 | Место соляра | нет | место рождения |
 | Пол, имя | не нужны | — |
 
-**Чувствительность ко времени рождения.** Прогрессивные и дирекционные **углы** сдвигаются на 1° (≈ 1 год срабатывания) при ошибке времени рождения ≈ 4 мин (AstroWiki «Direction»: «a time of birth which is incorrect by as little as 4 minutes would lead to prognoses which are inaccurate by up to one year»). Прогрессивная Луна: 1 ч ошибки ≈ 0,5° натальной Луны ≈ 2 недели в датах. Транзиты к планетам от времени рождения почти не зависят (кроме Луны).
+**Чувствительность ко времени рождения.** Прогрессивные и дирекционные **углы** сдвигаются на 1° (≈ 1 год срабатывания) при ошибке времени рождения ≈ 4 мин (AstroWiki «Direction»: «a time of birth which is incorrect by as little as 4 minutes would lead to prognoses which are inaccurate by up to one year»). Прогрессивная Луна: 1 ч ошибки ≈ 0,5° натальной Луны ≈ 2 недели в датах. Первичные дирекции к углам: 4 мин времени = 1° RAMC ≈ 1 год во всех ключах. Транзиты к планетам от времени рождения почти не зависят (кроме Луны).
 
 ---
 
@@ -124,16 +146,16 @@ ASC в дирекциях: «All the planets and axes are moved by the same amou
 
 ### 3.3. Вторичные прогрессии
 
-1. **Прогрессивный момент**: JD_p = JD₀ + A (1 год жизни = 1 сутки эфемерид). Проверка: Wikipedia — родившийся 02.04.1982 в 2007 г. имеет прогрессии на 27.04.1982 («25 days for 25 years»).
+1. **Прогрессивный момент**: JD_p = JD₀ + A (1 год жизни = 1 сутки эфемерид). Проверка: Wikipedia — родившийся 02.04.1982 в 2007 г. имеет прогрессии на 27.04.1982 («25 days for 25 years»). **Конверсные** (`progression_direction="converse"`): JD_p = JD₀ − A; перевод в реальное время JD = JD₀ − (JD_p − JD₀) × 365,24219; «скорость в год» = −(суточная скорость эфемерид).
 2. **Прогрессивные планеты** — положения на JD_p; «скорость в год» = суточная скорость эфемерид. Прогрессивные планеты дополнительно размещаются в натальных домах и в домах прогрессивной карты.
-3. **Прогрессивные углы** (§1.2), с истинным наклоном ε на JD_p:
+3. **Прогрессивные углы** (§1.2), с истинным наклоном ε на JD_p (`progression_obliquity="natal"` — ε на JD₀, кроме `quotidian`); у конверсных возраст A берётся со знаком минус:
    - `mean_sun`: ARMC_p = ARMC₀ + 0,98564733° × A;
    - `naibod`: MC_p = MC₀ + 0,98564733° × A, затем ARMC_p = α(MC_p) = atan2(sin λ · cos ε, cos λ);
    - `solar_arc`: MC_p = MC₀ + (☉_p − ☉₀), ARMC_p = α(MC_p);
    - `solar_arc_ra`: ARMC_p = ARMC₀ + (α☉_p − α☉₀);
    - `quotidian`: ARMC_p — звёздное время самого момента JD_p на месте рождения.
    Затем по ARMC_p (как в 06 §3.2): **MC = atan2(sin ARMC, cos ARMC · cos ε)**, **ASC = atan2(cos ARMC, −(sin ARMC · cos ε + tg φ · sin ε))** (+ правило восточной половины), куспиды — `swe.houses_armc(ARMC, φ, ε, hsys)`; за полярным кругом — Порфирий.
-4. **Аспекты прогрессивных точек к натальным** — как §3.2 п. 2–3, орбис 1°, скорость — «в год». Соединение прогрессивной точки со своей же натальной точкой не выводится (медленные планеты остаются в орбисе десятилетиями), **кроме Луны** (прогрессивный «лунный возврат» в ~27 лет). Точная дата — корень в реальном времени (окно ±120 сут для Луны, ±3 года для остальных); `null` — точность вне окна.
+4. **Аспекты прогрессивных точек к натальным** — как §3.2 п. 2–3, орбис 1°, скорость — «в год». Соединение прогрессивной точки со своей же натальной точкой не выводится (медленные планеты остаются в орбисе десятилетиями), **кроме Луны** (прогрессивный «лунный возврат» в ~27 лет). Точная дата — корень в реальном времени (окно ±120 сут для Луны, ±`exact_window_years` = 3 года для остальных; ближайший к `on_date` корень); `null` — точность вне окна. У медленных планет аспект в орбисе 1° может быть точным за десятилетия (T2: прогр. Сатурн △ Луны — точно 25.10.2005, найдено при `exact_window_years=30`).
 5. **Прогрессивная Луна**: знак, натальный дом, дом прогрессивной карты; когда вошла в знак, ближайшие смены знака и натального дома; все такие события в периоде. Перевод из прогрессивного времени в реальное: **JD = JD₀ + (JD_p − JD₀) × 365,24219**. Средняя скорость прогрессивной Луны 11,8–15,4°/год: знак за 1,95–2,5 года (AstroWiki: «on average 2 1/2 years in one house or sign»).
 6. **Фаза прогрессивной лунации**: элонгация E = (☽_p − ☉_p) mod 360°, фаза = ⌊E / 45°⌋ (8 фаз Радьяра, границы — табл. 4.4). Начало фазы, следующая фаза, последнее и следующее прогрессивное новолуние, следующее полнолуние — корни E(JD_p) = 45°·k в прогрессивном времени, переведённые в реальные даты. Прогрессивный синодический цикл ≈ 29,5 года (astro.com: «progressed New Moons occur only about every 29.5 years»).
 
@@ -157,7 +179,7 @@ ASC в дирекциях: «All the planets and axes are moved by the same amou
 1. Полных лет N = round((начало текущего года профекции − JD₀) / 365,24219), где начало — последний соляр ≤ `on_date` (или местная полночь последнего дня рождения).
 2. Знак года S = (знак ASC + N) mod 12; номер дома в целых знаках = N mod 12 + 1 (возраст 0 → 1-й дом).
 3. Управитель года — **традиционный** управитель S (табл. 4.6); современный — для справки. Выводятся: положение управителя в радиксе (знак, дом в целых знаках и по Плацидусу), его транзит на `on_date`, натальные планеты в знаке S.
-4. Месяц профекции m = ⌊12 × (t − начало) / (конец − начало)⌋; знак месяца = S + m ⚠.
+4. Месяц профекции (`profection_month`, §1.2): `equal` — m = ⌊12 × (t − начало) / (конец − начало)⌋ ⚠ (условность); `calendar` — m = число прошедших границ «то же число, что день рождения, местная полночь»; `thirteen` — m = ⌊13 × (t − начало) / (конец − начало)⌋ (0…12); `valens` — m = ⌊((λ_светила(t) − λ_светила натал) mod 360°) / 30°⌋, светило секты. Знак месяца = S + m (mod 12), управитель — традиционный.
 
 ### 3.7. Псевдокод
 
@@ -200,6 +222,19 @@ N = round((JDsr − JD0)/365.24219); S = (sign(ASC) + N) mod 12; lord = ruler_tr
 | Профекция | N = полных лет на момент последнего соляра; знак года = знак ASC + (N mod 12); дом = N mod 12 + 1; управитель — традиционный (табл. 4.6) | 36 mod 12 = 0 → Дева, 1-й дом, Меркурий ✓ |
 | Сколько проходов у транзита | натальная точка (± угол аспекта) внутри дуги попятного хода (от стоянки D до стоянки R, табл. 4.7) → три прохода за цикл | Юпитер: R 13.12.2026 на 27°01′ Льва, D 13.04.2027 на 16°59′ Льва; □ Солнца = 24°20′ Льва внутри → 3 прохода ✓ |
 | Лунар | раз в 27,3 сут; 1° натальной Луны ≈ 2 ч | 21.09.2026 → 18.10.2026 (27,35 сут) ✓ |
+
+### 3.9. Первичные дирекции к углам (`primary_directions=True`)
+
+По Makransky («Primary Directions. A Primer of Calculation», гл. I–III; формулы проверены на его спекулуме принца Чарльза, §7.7):
+1. Для каждого промиссора (10 планет + северный узел) — прямое восхождение α и склонение δ на момент рождения: со своей широтой (`pd_latitude="with"`, in mundo; видимые α, δ истинного экватора даты) или точки эклиптики λ с β = 0 (`"without"`, in zodiaco; ε истинный).
+2. Восходящая разность **AD = arcsin(tg δ · tg φ)** (Formula I-1; φ — географическая широта рождения). Если |tg δ · tg φ| ≥ 1 (незаходящее/невосходящее тело) — дирекций к ASC/DSC нет (предупреждение).
+3. Дуги (приводятся к (−180°, 180°]):
+   - → MC: **α − RAMC**; → IC: **α − (RAMC + 180°)**;
+   - → ASC: **(α − AD) − (RAMC + 90°)** (косое восхождение OA = α − AD; OA ASC = RAMC + 90°; Formula II-1);
+   - → DSC: **(α + AD) − (RAMC − 90°)** (косое нисхождение OD = α + AD; Formula II-2).
+   Дуга > 0 — прямая дирекция (d), < 0 — конверсная (c).
+4. Время по |дуге| (`pd_key`): Наибод — |дуга| / 0,98564733 лет; Птолемей — |дуга| лет; Симмонайт — |дуга| / (α☉(0h UT следующего дня) − α☉(0h UT даты рождения)); Плацидус (`true_solar_ra`) — t: α☉(JD₀ + t) = α☉₀ + |дуга|, возраст = t лет (1 сут = 1 год). Дата = JD₀ + возраст × 365,24219.
+5. Выводятся все дирекции до `pd_max_age` лет (по умолчанию 100) и отдельно — с датой в пределах ±1 года от `on_date`.
 
 ---
 
@@ -301,7 +336,29 @@ N = round((JDsr − JD0)/365.24219); S = (sign(ASC) + N) mod 12; lord = ruler_tr
 | `solar_arc_ra` | 23,9585° | 8°51′53″ Овна | 0°17′32″ Льва |
 | `quotidian` | 131,6283° | 23°55′39″ Рака | 18°52′00″ Весов |
 
-Натальный MC Эйнштейна (12°50′ Рыб) у точки равноденствия: там 1° прямого восхождения ≈ 1,09° долготы, поэтому прибавка 25,9° к ARMC (`mean_sun`) даёт MC на 2,15° дальше, чем прибавка 26,0° к MC в долготе (`solar_arc`). 2° — это ≈ 2 года во времени срабатывания аспектов к MC.
+Натальный MC Эйнштейна (12°50′ Рыб) у точки равноденствия: там 1° прямого восхождения ≈ 1,09° долготы, поэтому прибавка 25,9° к ARMC (`mean_sun`) даёт MC на 2,15° дальше, чем прибавка 26,0° к MC в долготе (`solar_arc`). 2° — это ≈ 2 года во времени срабатывания аспектов к MC. С `progression_obliquity="natal"` (ε рождения 23,45647° вместо 23,45638°) ASC `mean_sun` и `solar_arc` сдвигаются на 0,2″, MC `mean_sun` — на 0,03″ (MC `solar_arc` от ε не зависит).
+
+### 4.9. Месяц профекции T1 на 14.10.2026 00:00 UTC по вариантам (год: Дева, 1-й дом, с 15.05.2026 06:34 MSK)
+
+| `profection_month` | Месяц | Знак / управитель | Границы (UTC) |
+|---|---|---|---|
+| `equal` | 5 из 12 | Козерог / Сатурн | 13.09.2026 21:26 – 14.10.2026 07:54 |
+| `calendar` | 5 из 12 | Козерог / Сатурн | 14.09.2026 21:00 – 14.10.2026 21:00 (15-е число, 00:00 MSK) |
+| `thirteen` | 6 из 13 | Водолей / Сатурн | 02.10.2026 14:57 – 30.10.2026 17:14 |
+| `valens` (дневное рождение → Солнце, дуга 146,33°) | 5 | Козерог / Сатурн | 17.09.2026 04:55 – 17.10.2026 16:50 (Солнце на 24°20′ Девы … Весов) |
+
+На 15.10.2026: `equal` и `calendar` — уже Водолей (6-й месяц), `valens` — ещё Козерог. Варианты расходятся у границ месяцев, а `thirteen` — систематически (13 месяцев в году).
+
+### 4.10. Ключи первичных дирекций (Makransky, гл. III; пример — принц Чарльз, §7.7)
+
+| `pd_key` | Годы на 1° дуги | MO ☌ MC mund d (дуга 16,10°) | JU ☌ DSC zod c (дуга −45,54°) |
+|---|---|---|---|
+| `ptolemy` | 1 | 16,10 г. → 21.12.1964 | 45,54 г. → 30.05.1994 |
+| `naibod` (по умолчанию) | 1 / 0,98564733 = 1,01456 | 16,335 г. → 17.03.1965 | 46,205 г. → 28.01.1995 |
+| `birthday_ra` | 1 / (ход α☉ за дату рождения = 1,025°) | 15,707 г. → 30.07.1964 | 44,429 г. → 20.04.1993 |
+| `true_solar_ra` | по прогрессивному Солнцу в α | 15,318 сут → 10.03.1964 | 42,043 сут → 30.11.1990 |
+
+(Даты — по Makransky; калькулятор: 23.12.1964, 19.03.1965, 03.08.1964, 06.03.1964; 29.05.1994, 27.01.1995, 22.04.1993, 04.12.1990 — дуги отличаются на ≤ 0,02°, т. е. ≤ 1 нед.)
 
 ---
 
@@ -335,12 +392,13 @@ N = round((JDsr − JD0)/365.24219); S = (sign(ASC) + N) mod 12; lord = ruler_tr
     "house_ingresses": [{"body": "jupiter", "utc": "...", "cusp": 1, "enters_house": 1, "retrograde": false}]
   },
   "progressions": {
-    "progressed_jd": 2448063.353234, "progressed_utc": "1990-06-20T20:28:39+00:00", "age_years": 36.415734,
-    "year_length_days": 365.24219,
+    "direction": "direct", "progressed_jd": 2448063.353234, "progressed_utc": "1990-06-20T20:28:39+00:00", "age_years": 36.415734,
+    "year_length_days": 365.24219, "exact_search_window_years": 3.0,
     "positions": {"moon": {"pos": "2°01′38″ Близнецы", "speed_per_year": 15.04, "natal_house": 9, "progressed_house": 8},
                   "asc": {"...": "..."}, "mc": {"...": "..."}},
     "angles": {"method": "mean_sun", "method_ru": "...", "armc": 103.904955, "armc_natal": 68.011884,
-               "armc_advance": 35.893071, "system": "P", "cusps": [{"house": 1, "lon": 189.25, "pos": "..."}]},
+               "armc_advance": 35.893071, "system": "P", "obliquity": 23.44197, "obliquity_source": "progressed",
+               "cusps": [{"house": 1, "lon": 189.25, "pos": "..."}]},
     "aspects_to_natal": [{"progressed": "mc", "natal": "venus", "aspect": "square", "orb": 0.0497, "phase": "separating",
                           "exact_utc": "2026-09-24T03:05:09+00:00"}],
     "moon": {"pos": "...", "entered_sign_utc": "...", "next_sign_change": {"utc": "...", "to_sign_ru": "Рак"},
@@ -350,7 +408,7 @@ N = round((JDsr − JD0)/365.24219); S = (sign(ASC) + N) mod 12; lord = ruler_tr
                  "next_phase_name": "new", "last_new_moon": {"...": "..."}, "next_new_moon": {"...": "..."}, "next_full_moon": {"...": "..."}}
   },
   "solar_arc": {"arc_method": "true", "arc": 34.90559, "arc_dms": "34°54′", "arc_true": 34.90559, "arc_naibod": 35.893071,
-                "asc_method": "arc", "directed": {"mc": {"pos": "14°34′41″ Рак", "natal_house": 10}},
+                "asc_method": "arc", "exact_search_window_years": 3.0, "directed": {"mc": {"pos": "14°34′41″ Рак", "natal_house": 10}},
                 "aspects_to_natal": [{"directed": "mc", "natal": "neptune", "aspect": "opposition", "orb": 0.2243,
                                       "phase": "separating", "exact_utc": "...", "exact_age_years": 36.181}]},
   "solar_return": {"moment_jd": 2461175.649, "moment_utc": "2026-05-15T03:34:26+00:00", "local": "2026-05-15T06:34:26",
@@ -366,12 +424,20 @@ N = round((JDsr − JD0)/365.24219); S = (sign(ASC) + N) mod 12; lord = ruler_tr
                   "boundary": "solar_return", "natal_planets_in_sign": [],
                   "lord_natal": {"pos": "8°01′12″ Телец", "house_whole_sign": 9, "house": 9},
                   "lord_transit": {"pos": "15°35′50″ Скорпион", "retrograde": false, "natal_house": 3, "house_whole_sign": 3},
-                  "month": {"index": 5, "sign_ru": "Козерог", "lord": "saturn", "start_utc": "...", "end_utc": "...", "variant": "..."}},
-  "steps": [{"step": "1. Натальная карта", "detail": "..."}, "... 7 шагов ..."]
+                  "month": {"method": "equal", "variant": "...", "months_in_year": 12, "index": 5, "sign_ru": "Козерог",
+                            "lord": "saturn", "start_utc": "...", "end_utc": "..."}},   // valens: + "luminary", "luminary_arc"
+  "primary_directions": null,   // при primary_directions=True:
+  // {"key": "naibod", "key_ru": "...", "latitude": "with", "armc": 68.011884, "oa_asc": 158.011884, "od_dsc": 338.011884,
+  //  "obliquity": 23.44..., "birthday_ra_motion": null, "max_age": 100.0,
+  //  "speculum": {"sun": {"ra": 51.968036, "dec": 18.857191, "ad": 30.114574}, "...": {}},
+  //  "directions": [{"promissor": "neptune", "significator": "ic", "aspect": "conjunction", "type": "direct",
+  //                  "arc": 37.4725, "arc_dms": "37°28′", "age_years": 38.0181, "jd": ..., "utc": "2028-05-21T..."}],
+  //  "near_on_date": []}
+  "steps": [{"step": "1. Натальная карта", "detail": "..."}, "... 7 шагов (8-й — первичные дирекции, если включены) ..."]
 }
 ```
 
-Без времени рождения: `progressions.angles`, `solar_return.angles/houses`, `profections` (от ASC) = `null`, ключей `asc`/`mc` нет в `directed`, `natal.asc` = `null`.
+Без времени рождения: `progressions.angles`, `solar_return.angles/houses`, `profections` (от ASC), `primary_directions` = `null`, ключей `asc`/`mc` нет в `directed`, `natal.asc` = `null`.
 
 ---
 
@@ -388,6 +454,9 @@ N = round((JDsr − JD0)/365.24219); S = (sign(ASC) + N) mod 12; lord = ruler_tr
 - Лунар: следующий через 27,0–27,7 сут.
 - Профекции: возраст 0, 12, 24, 36 … → 1-й дом; знак года = знак ASC + N mod 12.
 - Фаза лунации = ⌊элонгация/45°⌋ + 1; `phase_started` ≤ `on_date` ≤ `next_phase`.
+- Конверсные прогрессии: JD_p = JD₀ − A; `mean_sun`: прирост ARMC = −0,98564733 × A; «скорость в год» = −скорость эфемерид; в момент события прогрессивной Луны она на границе знака/куспида и уходит в **предыдущий** знак/дом; фаза началась на верхней границе (45°·(k+1)) и кончится на нижней (45°·k); дирекции дуги те же, что у прямых.
+- Месяцы профекции: `equal` — 12 равных частей; `calendar` — границы в 00:00 местного времени того же числа; `thirteen` — 13 равных частей, 13-й месяц в знаке года; `valens` — в начале месяца светило секты стоит на натальной долготе + 30°·m.
+- Первичные дирекции: дуга = формула §3.9 из спекулума (α, δ, AD) и RAMC; `age_years` = |дуга| / ключ; ни одной дирекции старше `pd_max_age`; без времени рождения — `null`.
 
 **Типичные ошибки**
 1. **Часовой пояс места соляра.** Момент соляра один и тот же везде; меняется местное время. T1: 15.05.2026 03:34:26 UTC = 06:34:26 в Москве и 10:34:26 в Новосибирске. Если ввести московское время как новосибирское, ASC соляра «уедет» на целый знак. Пояс **рождения** на соляр не переносится: летнее время 1990 г. (UTC+4) или LMT 1879 г. действовали только тогда — в 2026 г. Москва живёт по UTC+3, Ульм по CET/CEST (калькулятор сам берёт IANA-зону места, §3.5 п. 2).
@@ -404,7 +473,10 @@ N = round((JDsr − JD0)/365.24219); S = (sign(ASC) + N) mod 12; lord = ruler_tr
 12. **Прогрессии без точного времени.** Прогрессивные углы и дирекции ASC/MC при времени «около 8 утра» бессмысленны (4 мин ≈ 1 год); прогрессивная Луна — ±2 недели на каждый час ошибки.
 13. **Соляр по «таблице дат».** Момент считается только по эфемериде; «соляр в день рождения в то же время, что рождение» ошибочен на часы (T2: −0,8 сут).
 
-**Граничные случаи:** соляр за полярным кругом (Плацидус не определён → Порфирий, предупреждение; §7.5); 29 февраля (§7.5); неизвестное время (§7.5); `on_date` раньше рождения — ошибка (конверсные методы не поддерживаются; astro.com делает конверсные прогрессии отрицательным возрастом — ⚠ не реализовано); стоянка до точного аспекта (§7.4); прогрессивное новолуние до рождения (`before_birth: true`, реальная «дата» раньше рождения).
+14. **Профекция месяца без указания варианта.** Четыре варианта (§1.2, табл. 4.9) дают разные знаки у границ месяцев, `thirteen` — почти всегда другой; называйте вариант.
+15. **Знак конверсной дуги первичной дирекции.** Конверсная дирекция (дуга < 0) — не «до рождения»: во времени берётся |дуга| (Makransky); тип `converse` указывайте отдельно.
+
+**Граничные случаи:** соляр за полярным кругом (Плацидус не определён → Порфирий, предупреждение; §7.5); 29 февраля (§7.5); неизвестное время (§7.5); `on_date` раньше рождения — ошибка (конверсные прогрессии — опцией `progression_direction="converse"` на дату после рождения, §7.8); стоянка до точного аспекта (§7.4); прогрессивное новолуние до рождения (`before_birth: true`, реальная «дата» раньше рождения; у конверсных — фазы после рождения в прогрессивном времени); рождение 29–31 числа в `profection_month="calendar"` — граница в последний день короткого месяца (рождение 31.01 → 28.02, затем 31.03); незаходящий промиссор на широте рождения — нет дирекций к ASC/DSC (предупреждение).
 
 ---
 
@@ -421,11 +493,14 @@ N = round((JDsr − JD0)/365.24219); S = (sign(ASC) + N) mod 12; lord = ruler_tr
 | Фазы прогрессивной лунации | F. Boele, «The Progressed Lunation Cycle» (astro.com; данные рождения из статьи) | 28 из 28 утверждений совпадают (§7.6); ещё 2 события Леннона (ноябрь 1961, 08.11.1968) у границы фазы: по расчёту фаза наступает на 33 и 25 дней позже (≈1° элонгации ≈ 1 ч времени рождения рейтинга A) |
 | Годовые профекции Ф. Ф. Копполы (AA, 07.04.1939 1:38 EST, Детройт; ASC 7°24′ Козерога по Astrotheme) | C. Brennan, TMA (astro.com) | 4 из 4: Дева/Меркурий в 32 года (1971), Весы/Венера 10-й дом (1972), Водолей/Сатурн (1976), Телец/Венера (1979) |
 | Прогрессивная дата 02.04.1982 → 2007 г. | Wikipedia «Astrological progression» | 27.04.1982 ✓ |
+| Первичные дирекции к углам: спекулум и дуги принца Чарльза (14.11.1948 21:14:39 GMT, 51N30, 0W10) | B. Makransky, «Primary Directions. A Primer of Calculation» (archive.org) | RAMC 12,37 ✓; α, AD 6 тел — Δ ≤ 0,02°; 7 дуг (MO ☌ MC, SU ☌ IC, SA ☌ IC, PL ☌ ASC, UR ☌ ASC, JU ☌ DSC mund и zod) — Δ ≤ 0,015°; 8 сроков в 4 ключах — Δ ≤ 0,02 г. (§7.7) |
+| Календарные месяцы профекции | D. George, «Astrology and the Authentic Self» (пример «Bill»: 7-й дом года, 17.11; 17.05–16.06 — 1-й дом) | воспроизведено на синтетическом рождении 17.11.1996 ✓ (тест `test_profection_calendar_months_george`) |
+| Конверсные прогрессии | astro.com FAQ «Other methods» («negative age») | JD_p = JD₀ − A, положения = эфемерида на JD₀ − A ✓ |
 | Ключ Наибода и «3 мин 56,55 с» | astro.com FAQ, AstroWiki | 0,98564733° × 240 с/° = 236,555 с ✓ |
 
 ### 7.1. T4 — Альберт Эйнштейн, прогноз на 30.06.1905 (annus mirabilis; соляр на Берн)
 
-**Вход:** натал 14.03.1879 11:30 LMT, Ульм (48,4011N, 9,9876E) — как в модуле 06 §7.1. `on_date = 1905-06-30` (дата поступления статьи о специальной теории относительности в Annalen der Physik — общеизвестный факт, в модуле не проверялся ⚠). Соляр на Берн (46,9480N, 7,4474E, `Europe/Zurich`; Эйнштейн жил в Берне в 1902–1909 гг. ⚠ общеизвестно, не проверялось). Период поиска транзитов — весь 1905 год.
+**Вход:** натал 14.03.1879 11:30 LMT, Ульм (48,4011N, 9,9876E) — как в модуле 06 §7.1. `on_date = 1905-06-30` (статья «Zur Elektrodynamik bewegter Körper» «was received on 30 June and published 26 September» — Wikipedia «Annus mirabilis papers», вторичный). Соляр на Берн (46,9480N, 7,4474E, `Europe/Zurich`; Эйнштейн работал в Швейцарском патентном бюро в Берне, в 1903–1905 гг. жил на Kramgasse 49, в 1909 г. перешёл в Цюрихский университет — Wikipedia «Albert Einstein», «Einsteinhaus», вторичный). Период поиска транзитов — весь 1905 год.
 
 1. **Натал:** UTC 1879-03-14 10:50:03, JD₀ = 2407422,951423; Солнце 23°30′28″ Рыб, ASC 11°38′50″ Рака, MC 12°50′23″ Рыб, ARMC₀ = 344,1841°.
 2. **Целевой момент:** 1905-06-30 00:00 UTC = JD 2417026,5; A = (2417026,5 − 2407422,951423)/365,24219 = 26,293645 года.
@@ -439,7 +514,7 @@ N = round((JDsr − JD0)/365.24219); S = (sign(ASC) + N) mod 12; lord = ruler_tr
 5. **Солнечная дуга:** истинная D = 19,5022° − 353,5078° (mod 360) = **25,9945°** (25°59′40″; `arc_dms` = 26°00′ после округления до минуты); Наибода = 0,98564733 × 26,293645 = 25,9163°. Направленные: Юпитер 27°29′02″ Водолея + 25°59′40″ = 23°28′42″ Рыб ☌ натального Солнца 0°02′ сх. (точно 10.07.1905, 26,32 года); Венера ⚹ MC 0°08′ (09.05.1905); ASC □ Нептуна 0°14′ (23.09.1905); Нептун ⚹ Сатурна 0°19′ (28.10.1905); Уран △ Марса 0°22′ (12.02.1905); Нептун ⚹ Меркурия 0°43′ (04.10.1904).
 6. **Соляр 1905 (Берн):** Солнце возвращается на 23°30′28″ Рыб **1905-03-14 18:13:01 UTC = 19:13:01 CET (UTC+1)**; отклонение от годовщины момента рождения +0,308 сут (контрольная точка: < 1 сут). Следующий соляр 1906-03-15 00:11 UTC. ASC соляра 1°46′52″ Весов (4-й натальный дом), MC 2°11′44″ Рака (12-й натальный); Солнце соляра в 6-м доме соляра (10-м натальном), Нептун R на MC соляра (☌ 3°11′), Луна соляра 28°04′ Близнецов в 9-м доме. Сверка JPL Horizons: Δ 0,09″ (≈ 2 с).
    **Лунар** (на Берн): 1905-06-16 11:37:35 UTC = 12:37:35 CET; ASC лунара 26°57′ Девы, натальная Луна в 3-м доме лунара; следующий 13.07.1905.
-7. **Профекции:** год с 14.03.1905 (соляр) по 15.03.1906; N = 26; знак ASC Рак + 26 mod 12 = Рак + 2 = **Дева, 3-й дом** (целые знаки); управитель года — **Меркурий** (в радиксе 3°08′ Овна, 10-й дом), в знаке Девы натальный Уран; транзитный Меркурий 30.06.1905 — 14°13′ Рака, в 1-м натальном доме. Месяц 4 (14.06–14.07.1905): Стрелец, Юпитер ⚠.
+7. **Профекции:** год с 14.03.1905 (соляр) по 15.03.1906; N = 26; знак ASC Рак + 26 mod 12 = Рак + 2 = **Дева, 3-й дом** (целые знаки); управитель года — **Меркурий** (в радиксе 3°08′ Овна, 10-й дом), в знаке Девы натальный Уран; транзитный Меркурий 30.06.1905 — 14°13′ Рака, в 1-м натальном доме. Месяц 4 (`equal`: 14.06–14.07.1905): Стрелец, Юпитер; тот же знак во всех вариантах (`calendar` 14.06–14.07 CET, `thirteen` 07.06–05.07, `valens` 15.06–16.07).
 
 ### 7.2. T1 — Иванова А. С., 15.05.1990 14:30 MSD, Москва; прогноз на 14.10.2026
 
@@ -464,7 +539,7 @@ N = round((JDsr − JD0)/365.24219); S = (sign(ASC) + N) mod 12; lord = ruler_tr
 6. **Соляр 2026 (Москва):** **2026-05-15 03:34:26 UTC = 06:34:26 MSK**; отклонение −0,289 сут; ASC соляра 3°17′10″ Рака (10-й натальный дом), MC 21°44′34″ Водолея; Солнце в 12-м доме соляра; Нептун □ ASC соляра 0°23′. Следующий соляр 15.05.2027 09:09 UTC. Horizons: Δ 0,01″.
    С `sr_place="Новосибирск"`: тот же момент, местное 10:34:26 (UTC+7), ASC в другом знаке (тест `test_relocated_vs_birthplace_same_moment`).
    **Лунар:** 21.09.2026 10:03:34 UTC (13:03 MSK), ASC 5°49′ Стрельца; следующий 18.10.2026.
-7. **Профекции:** N = 36 → Дева + 36 mod 12 = **Дева, 1-й дом**; управитель года **Меркурий** (радикс: 8°01′ Тельца, 9-й дом); транзитный Меркурий 14.10.2026 — 15°36′ Скорпиона (3-й дом) и в ретроградной петле 24.10–13.11.2026. Месяц 5 (13.09–14.10.2026): Козерог/Сатурн ⚠.
+7. **Профекции:** N = 36 → Дева + 36 mod 12 = **Дева, 1-й дом**; управитель года **Меркурий** (радикс: 8°01′ Тельца, 9-й дом); транзитный Меркурий 14.10.2026 — 15°36′ Скорпиона (3-й дом) и в ретроградной петле 24.10–13.11.2026. Месяц 5 (`equal`: 13.09–14.10.2026): Козерог/Сатурн; другие варианты — табл. 4.9.
 
 ### 7.3. T2 — Петров Д. О., 04.02.1984 23:30 MSK, Москва; на 14.10.2026
 
@@ -488,7 +563,7 @@ N = round((JDsr − JD0)/365.24219); S = (sign(ASC) + N) mod 12; lord = ruler_tr
 3. Прогрессии: JD_p = 2453087,341496 = 2004-03-22 20:11:45 UTC; Солнце 2°32′ Овна, Луна 24°50′ Овна (12-й прогрессивный, 1-й натальный дом; Телец — с 14.03.2027); углы `mean_sun` MC 18°13′48″ Козерога, ASC 2°26′31″ Близнецов; **лунация: Новолуние** (элонгация 22,30°, прогрессивное новолуние было 20.11.2024 в 20,7 года).
 4. Дуга: истинная 22,5817°, Наибода 22,2980°; направленная Венера ☌ Марса 0°06′ сх. (21.11.2026), Нептун ☌ Меркурия 0°12′ сх. (24.12.2026).
 5. **Соляр 29 февраля в невисокосный год:** 2026-02-28 13:17:55 UTC = **28.02.2026 16:17:55 MSK** (отклонение −0,665 сут от 01.03 — годовщины в невисокосный год); ASC соляра 21°49′ Льва, MC 0°18′ Тельца. Соседние годы (местное время MSK, UTC+3): 2027 — 28.02 22:03:16; 2028 (високосный) — **29.02 03:47:54**; 2100 (невисокосный по григорианскому правилу) — 28.02 15:02:13.
-6. Профекции: N = 22 → Рыбы + 22 mod 12 = Рыбы + 10 = **Козерог, 11-й дом**, управитель **Сатурн** (радикс 6°20′ Рака, 4-й дом по Плацидусу, 5-й в целых знаках; транзит 10°34′ Овна R в 1-м доме). Месяц 8 (29.09–30.10.2026): Лев/Солнце ⚠.
+6. Профекции: N = 22 → Рыбы + 22 mod 12 = Рыбы + 10 = **Козерог, 11-й дом**, управитель **Сатурн** (радикс 6°20′ Рака, 4-й дом по Плацидусу, 5-й в целых знаках; транзит 10°34′ Овна R в 1-м доме). Месяц 8 (`equal`: 29.09–30.10.2026): Лев/Солнце; `calendar` (29-е число) и `valens` — тоже Лев, `thirteen` — 9-й из 13, Дева/Меркурий.
 
 **Соляр за полярным кругом:** T1, соляр 2026 на Мурманск (68,9585N, 33,0827E): Плацидус не определён → Порфирий (`houses.system = "O"`), ASC 29°58′ Рака, предупреждение «Соляр: Система домов Плацидус… не определена».
 
@@ -525,6 +600,22 @@ N = round((JDsr − JD0)/365.24219); S = (sign(ASC) + N) mod 12; lord = ruler_tr
 | У. Черчилль | премьер 10.05.1940, речи 04.06 и 20.08.1940 | Balsamic | 325,45° / 326,25° / 328,75° ✓ |
 | Э. Рузвельт (11.10.1884 11:00 EST) | Декларация прав человека 10.12.1948 | Balsamic | 330,38° ✓ |
 | Н. Мандела | президент 10.05.1994 | Balsamic | 329,54° ✓ |
+
+### 7.7. Внешний пример: первичные дирекции к углам (принц Чарльз, Makransky)
+
+**Вход:** 14.11.1948 21:14:39 GMT, 51°30′N, 0°10′W (как в спекулуме Makransky), `primary_directions=True`.
+1. Спекулум: RAMC 12,3689° (Makransky 12,37 = ST 0h49m28s); ε истинный 23,4480° (у Makransky 23,4459 — средний). α/AD: Солнце 230,01/−24,69 (230,01/−24,70), Луна 28,48/14,47 (28,47/14,46), Сатурн 157,63/14,04 (157,63/14,03), Плутон 141,48/32,38 (141,49/32,37), Уран 89,92/33,40 (89,93/33,40), Юпитер 269,88/−32,92 (269,87/−32,93).
+2. Дуги (in mundo): MO ☌ MC = 28,48 − 12,37 = **+16,11** d (16,10); SU ☌ IC = 230,01 − 192,37 = **+37,64** d (37,64); SA ☌ IC = **−34,74** c (−34,74); PL ☌ ASC = (141,48 − 32,38) − 102,37 = **+6,74** d (6,75); UR ☌ ASC = (89,92 − 33,40) − 102,37 = **−45,85** c (−45,84); JU ☌ DSC = (269,88 − 32,92) − 282,37 = **−45,41** c (−45,43). In zodiaco: JU ☌ DSC **−45,54** c (−45,54).
+3. Сроки — табл. 4.10 (Makransky в скобках): расхождение дат ≤ 4 сут, т. е. ≤ 0,02° дуги — разница эфемерид 1980-х и Swiss Ephemeris.
+Тесты: `test_primary_directions_makransky_arcs`, `test_primary_directions_makransky_speculum_and_keys`.
+
+### 7.8. T1 с опциями: конверсные прогрессии, первичные дирекции, окно точных дат
+
+**Конверсные прогрессии на 14.10.2026** (`progression_direction="converse"`): JD_p = 2448026,9375 − 36,415734 = **1990-04-09 00:31:20 UTC**; Солнце 18°54′18″ Овна, Луна 6°29′40″ Весов (−12,16°/год, 2-й натальный дом); `mean_sun`: ARMC 68,0119° − 35,8931° = 32,1188°, MC 4°22′52″ Тельца, ASC 21°41′40″ Льва. Луна «вошла» в Весы (из Скорпиона) 01.11.2024, перейдёт в 1-й натальный дом 25.10.2026 (назад через куспид 2-го дома 6°08′ Весов) и в Деву 26.04.2027. Лунация: 167,59° — **Выпуклая** (с 01.09.2025, когда элонгация убывала через 180°), следующая фаза — **Первая четверть** 25.08.2029; последнее конверсное новолуние 15.08.2010.
+
+**Первичные дирекции** (`primary_directions=True`, Наибод, in mundo): до 100 лет — 21 дирекция; в пределах ±1 года от 14.10.2026 (`near_on_date`) — ни одной; недавние — ☿ ☌ MC c (дуга −31,53°, 11.05.2022), ♅ ☌ IC d (+32,01°, 04.11.2022), ♃ ☌ MC d (+32,37°, 17.03.2023); следующая — ♆ ☌ IC d (+37,47°, **21.05.2028**), затем ♀ ☌ DSC d (+39,39°, 03.05.2030).
+
+**Окно точных дат** (T2, `exact_window_years=30`): прогр. Сатурн △ Луны — точно 25.10.2005, прогр. Сатурн □ Солнца — 19.10.2041, прогр. Марс △ MC — 09.01.2031 (при окне 3 года — `null`).
 
 ---
 
