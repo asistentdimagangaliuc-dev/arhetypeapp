@@ -5,14 +5,16 @@
 * ``bazi_year`` — Ба-цзы: годовой столп (流年, граница — Личунь), 12 месячных столпов (流月) с моментами
   цзе, столп дня, текущий Столп удачи (大运) и место в нём; взаимодействия годового/месячного столпа и
   Столпа удачи с натальной картой (合/冲/刑/害/破, 三合/三会, 伏吟/反吟), божество ствола года, отношения
-  с Тай Суй (值/冲/刑/害/破太岁), «征»/«晦» по 《渊海子平》, «戰/沖/和/好» удачи и года по 《滴天髓》.
+  с Тай Суй (值/冲/刑/害/破太岁, 真太岁, 日年相并), «征»/«晦» по 《渊海子平》 и 《三命通会》, «戰/沖/和/好» удачи
+  и года по 《滴天髓》, 小运/行年 года по 《三命通会》 «论小运»; 反吟 — «天克地冲» или (опция) классическое «相对».
 * ``ninestar_year`` — Девятизвёздная Ки / летящие звёзды: звезда года и месяцев, полные карты 年盤/月盤
-  (9 дворцов, прямой полёт), палата звезды рождения (回座), японские 凶方/吉方 (五黄殺, 暗剣殺, 歳破/月破,
+  (9 дворцов, прямой полёт) и 日盤, палата звезды рождения (回座), японские 凶方/吉方 (五黄殺, 暗剣殺, 歳破/月破/日破,
   本命殺, 本命的殺, 月命殺, 定位対冲, 吉方, 最大吉方 в двух трактовках) и китайские годовые «ша» (太岁, 岁破,
-  三煞, 五黄, 二黑).
+  三煞, 五黄, 二黑); сектора направлений 30°/60° и 8 × 45° (опция azimuth).
 * ``jyotish`` — Джйотиш: Вимшоттари (махадаша/антардаша/пратьянтардаша на дату и периоды года), гочара
   9 грах от натальной Луны (Чандра-лагна) и Лагны по таблицам «Пхаладипики» (гл. XXVI) с ведхой, ингрессии
-  Сатурна/Юпитера/Раху/Кету за год, Саде-сати, Аштама- и Ардхаштама-Шани с датами.
+  Сатурна/Юпитера/Раху/Кету за год, Саде-сати, Аштама-, Ардхаштама- и Кантака-Шани с датами; випарита-ведха и
+  узлы по «Прашна-марге» (опции); аштакаварга («Пхаладипика» XXIII / БПХШ 66) и оценка транзитов по точкам.
 
 Натальные карты не пересчитываются заново: используются ``calculators.bazi``, ``calculators.ninestar``,
 ``calculators.jyotish`` (их умолчания и опции).
@@ -510,6 +512,9 @@ def _bazi_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zone: 
                                                             for r in _pair_relations(ix, yi, fy_rule)]})
         small["birth_bazi_year"] = birth_bz_year
         small["source"] = "《三命通会》 卷二 «论小运»"
+        if "hour_based" not in small:
+            small["note"] = ("hour_based не рассчитан: нужны время рождения (столп часа) и пол (направление); "
+                             "xing_nian — нужен пол")
         if "hour_based" in small:
             steps.append(f"小运 {year} (虚岁 {age}): от столпа часа {bz.ganzhi(pidx['hour'])} "
                          f"{'вперёд' if luck and luck['direction'] == 'forward' else 'назад'} на {age} → "
@@ -848,7 +853,7 @@ def _ninestar_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zo
         "year": {"year": year, "star": ys, "star_ja": ns.STARS[ys]["ja"], **ydir,
                  "honmei_palace_meaning": ("八方塞がり (звезда рождения в центре)" if hp == "C"
                                            else f"{PALACE_JA[hp]}: тема дворца — звезда {PALACE_HOME[hp]} "
-                                                f"{ns.STARS[PALACE_HOME[hp]]['ja']} (⚠ см. KB 19 §8)"),
+                                                f"{ns.STARS[PALACE_HOME[hp]]['ja']}; фаза цикла — honmei_palace_phase"),
                  "honmei_palace_phase": KAIZA_PHASE[hp]},
         "chinese_annual_afflictions": cn,
         "months": months,
@@ -1328,8 +1333,12 @@ def calculate(b: BirthInput, **options) -> dict:
       tz: пояс прогноза (IANA или 'UTC+03:00'); по умолчанию пояс места рождения;
       sections: список блоков из ('bazi', 'ninestar', 'jyotish');
       Ба-цзы: solar_time, zi_hour, nobleman_variant (передаются в bazi.calculate);
-      Ки: day_star_method (как в ninestar; None — не считать звезду дня), tendency_method;
-      Джйотиш: ayanamsa ('lahiri'), node ('mean'), dasha_year ('gregorian'), vedha_by_nodes (False).
+              fan_yin_rule ('tian_ke_di_chong' | 'clash' — 《三命通会》);
+      Ки: day_star_method (как в ninestar; None — не считать звезду дня), tendency_method,
+          day_chart (True — строить 日盤), azimuth (азимут цели, градусы от севера → сторона в 30°/60° и 45°);
+      Джйотиш: ayanamsa ('lahiri'), node ('mean'), dasha_year ('gregorian'), vedha_by_nodes (False),
+               node_gochara ('phaladeepika' | 'prasna_marga'), viparita_vedha (False), ashtakavarga (True),
+               ashtakavarga_school ('phaladeepika' | 'bphs').
     """
     warnings: list[str] = []
     steps: list[str] = []
