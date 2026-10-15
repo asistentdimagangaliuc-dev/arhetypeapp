@@ -1059,7 +1059,11 @@ def saturn_periods(moon_sign: int, jd_center: float, zone: "ns.Zone", ayan: str 
                    < (s["end_jd"] if s["end_jd"] is not None else 1e18) for s in run)
 
     res: dict = {}
-    for kind, houses in (("sade_sati", {12, 1, 2}), ("ashtama_shani", {8}), ("ardhashtama_shani", {4})):
+    # «kantaka_shani» в широком смысле: Сатурн в кендре от Луны (1, 4, 7, 10) — «The 1st, the 10th, the 7th and the
+    # 4th houses are known by the terms Kendra, Kantaka and Chatushtaya» («Пхаладипика» I.17); узкий смысл (4-й) —
+    # ardhashtama_shani.
+    for kind, houses in (("sade_sati", {12, 1, 2}), ("ashtama_shani", {8}), ("ardhashtama_shani", {4}),
+                         ("kantaka_shani", {1, 4, 7, 10})):
         raw = _runs(segs, houses, moon_sign)
         bounds = [((r[0]["start_jd"] if r[0]["start_jd"] is not None else -1e18),
                    (r[-1]["end_jd"] if r[-1]["end_jd"] is not None else 1e18)) for r in raw]
@@ -1253,6 +1257,10 @@ def _jyotish_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zon
                             "house_from_moon": h, "favorable_house": h in gtable[g],
                             "house_from_lagna": gochara_house(s["sign"], lagna_sign) if lagna_sign is not None
                             else None})
+                if av is not None:
+                    lst[-1]["sav_bindus"] = av["sav"][s["sign"]]
+                    if g in AV_PLANETS:
+                        lst[-1]["bav_bindus"] = av["bav"][g][s["sign"]]
         year_transits[g] = lst
 
     sat = saturn_periods(moon_sign, ref_jd, zone, ayan)
@@ -1267,6 +1275,12 @@ def _jyotish_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zon
     if not b.has_time:
         warnings.append("Время рождения неизвестно: знак Луны мог смениться в течение суток — проверьте "
                         "moon_range_for_day модуля 07 (от знака Луны зависят гочара и Саде-сати).")
+    if av is not None:
+        steps.append("Аштакаварга (" + av_school + "): транзит по точкам своей карты — " + "; ".join(
+            f"{jy.GRAHA_RU[g]} {transits[g]['ashtakavarga']['bav_bindus']}" for g in AV_PLANETS)
+            + f"; сумма знаков 337 = {av['sav_total']}.")
+    elif options.get("ashtakavarga", True):
+        warnings.append("Аштакаварга не рассчитана: нужна Лагна (время и место рождения).")
 
     return {
         "variant": natal["variant"],
@@ -1279,6 +1293,18 @@ def _jyotish_section(b: BirthInput, ref_jd: float, on_date: date, year: int, zon
         "transit_moment": _when(ref_jd, zone),
         "slow_transits_in_year": year_transits,
         "saturn": sat,
+        "ashtakavarga": ({"school": av_school,
+                          "source": ("«Пхаладипика» XXIII.3–9, 11, 20" if av_school == "phaladeepika"
+                                     else "БПХШ гл. 66 (пер. R. Santhanam); правила транзита — «Пхаладипика» XXIII"),
+                          "bav": {p: {eph.SIGNS_RU[i]: n for i, n in enumerate(row)} for p, row in av["bav"].items()},
+                          "sav": {eph.SIGNS_RU[i]: n for i, n in enumerate(av["sav"])},
+                          "totals": av["totals"], "sav_total": av["sav_total"],
+                          "note": "точки (bindu) в знаках натальной аштакаварги без шодханы; транзит граха по знаку "
+                                  "с 0…8 точками в её карте — XXIII.11; знак с суммой > 28 — благоприятен для "
+                                  "транзитов (XXIII.20); у Раху/Кету своей аштакаварги нет"}
+                         if av is not None else None),
+        "variant_options": {"node_gochara": node_gochara, "vedha_by_nodes": vedha_by_nodes,
+                            "viparita_vedha": viparita, "ashtakavarga_school": av_school},
         "year_window": {"from": _when(y0, zone)["local"], "to": _when(y1, zone)["local"],
                         "note": "гражданский год в поясе прогноза"},
     }
