@@ -10,6 +10,8 @@
    * kinliuren 0.1.2.9 (PyPI, https://github.com/kentang2017/kinliuren) — снимок 720 уроков;
    * liuren-ts-lib 3.1.0 (npm, https://github.com/look-fate/liuren-ts-lib) — таблица src/sanchuan.json.
 4. lunar-python 1.4.8 — моменты 中气 (смена месячного генерала).
+5. 《景祐六壬神定经》 (北宋, 杨惟德), 卷下 — 太阳过宫 («释日度», «释璧度»), 涉害 «复等», Благородный «旦/暮»:
+   https://simplelits.com/books/classical/classical-08345-景祐六壬神定经/3
 """
 from __future__ import annotations
 
@@ -1102,3 +1104,32 @@ def test_nian_year_lichun_vs_lunar():
     assert "nian_year='lunar'" not in _alts(r) and r["nian_ming"]["age_xusui"] == 1
     with pytest.raises(ValueError):
         calculate(T1, nian_year="bad")
+
+
+def test_yuejiang_guogong_jingyou():
+    # 《景祐六壬神定经》 (北宋 杨惟德), 卷下 «释日度»: «假令十一月十五日冬至，在南斗六度。至二十一日，在南斗十二度。
+    # 于辰在丑方，用大吉为月将。若二十日以前用式占事，犹用功曹为月将»; «释璧度»: «自斗宿十二度，至女宿七度，为大吉».
+    # https://simplelits.com/books/classical/classical-08345-景祐六壬神定经/3
+    jd0 = find_sun_longitude(270.0, swe.julday(1035, 12, 1, 0.0, swe.JUL_CAL), search_back=False)  # 冬至 1035
+    gen = lambda jd: Z[liuren.monthly_general_guogong(liuren.sun_longitude(jd), jd)]
+    assert gen(jd0 + 5) == "寅" and gen(jd0 + 6) == "丑"      # «二十日以前…功曹», «二十一日…大吉»
+    assert Z[monthly_general(liuren.sun_longitude(jd0 + 1))] == "丑"   # по 中气 — сразу после 冬至
+    # Независимая сверка: 《六壬大全》 卷六 «太阳过宫，立春前九日有竒，日躔子分…惊蛰前十日，日躔亥分…» (минская
+    # эпоха) — те же «дворцы» запаздывают после 中气 на 5–14 сут.; модель 《景祐》 + прецессия для 1400 г.
+    # расходится с этой таблицей не более чем на 3 сут.
+    daquan6 = {0: 6, 11: 5, 10: 7, 9: 9, 8: 10, 7: 10, 6: 9, 5: 10, 4: 12, 3: 14, 2: 12, 1: 9}
+    jd = swe.julday(1400, 7, 1, 0.0, swe.JUL_CAL)
+    bds = {g: lon for lon, g, _ in liuren.guogong_boundaries(jd)}
+    for lon, _name, _ru, g in liuren.ZHONGQI:
+        jz = find_sun_longitude(lon, jd, search_back=False)
+        lag = find_sun_longitude(bds[g], jz, search_back=False) - jz
+        assert abs(lag - daquan6[g]) <= 3.0, (Z[g], lag)
+    # calculate(): T3 (29.02.2004) — по 中气 генерал 亥 (после 雨水), по 太阳过宫 ещё 子
+    r = calculate(T3)
+    assert r["general"]["branch"] == "亥" and _alts(r)["yuejiang='guogong'"]["general"] == "子"
+    r = calculate(T3, yuejiang="guogong")
+    assert r["general"]["branch"] == "子" and r["solar"]["guogong"]["prev"]["general"] == "子"
+    assert r["chart"]["transmissions"]["sanchuan"] == "戌午寅" and _alts(r)["yuejiang='zhongqi'"]["general"] == "亥"
+    assert any("太阳过宫" in w for w in r["warnings"])
+    with pytest.raises(ValueError):
+        calculate(T3, yuejiang="lunar_month")
