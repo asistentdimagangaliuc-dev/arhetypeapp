@@ -41,7 +41,7 @@
 | Набор | Книга | Архетипы | Как определяется архетип |
 |---|---|---|---|
 | 12 «героев» Пирсон | *Awakening the Heroes Within*, 1991 | Innocent, Orphan, Warrior, Caregiver, Seeker, Destroyer, Lover, Creator, Ruler, Magician, Sage, Fool [39] | опросник PMAI (Pearson-Marr Archetype Indicator) [39][43] |
-| 12 брендовых архетипов Марк и Пирсон | *The Hero and the Outlaw*, 2001 | Innocent, Explorer, Sage, Hero, Outlaw, Magician, Everyman (Regular Guy), Lover, Jester, Caregiver, Creator, Ruler, в матрице из четырёх мотивов [42] | по позиционированию бренда; теста в книге нет [42] |
+| 12 брендовых архетипов Марк и Пирсон | *The Hero and the Outlaw*, 2001 | Innocent, Explorer, Sage, Hero, Outlaw, Magician, Everyman (Regular Guy), Lover, Jester, Caregiver, Creator, Ruler, в матрице из четырёх мотивов [42] | архетип бренда как основа позиционирования [42] |
 
 Корнями модели Пирсон называет теорию архетипов Юнга и «путь героя» Кэмпбелла. Таро, астрологии, нумерологии и дат рождения на странице о корнях модели нет [38].
 
@@ -256,7 +256,7 @@
 |---|---|---|---|
 | Грир | ММ + ДД + ГГГГ | складывать цифры, пока > 22 | Райдер–Уэйт: 8 Сила, 11 Справедливость |
 | Tarot School (Рут Энн и Уолд Амберстоун) | ММ + ДД + первые две цифры года + последние две | своё правило для трёхзначных сумм; однозначная n → пара n и n + 9 | Райдер–Уэйт |
-| Арриен | ММ + ДД + ГГГГ | как у Грир, но 28 → 10, а 22 = Шут (0) и 4 | Тота: 8 Adjustment, 11 Lust |
+| Арриен | ММ + ДД + ГГГГ | сумма цифр; > 22 — до однозначного, но 28 → 10; 22 = Шут (0) и 4 | Тота: 8 Adjustment, 11 Lust |
 | Русскоязычные схемы из СМИ (nur.kz, lenta.ru, vikna.tv, svitstyle) | день; сумма цифр даты; день + месяц + сумма цифр года | вычитать 22 или складывать цифры | обе нумерации |
 
 Пример из модуля 12: для 15.05.1990 по Грир выходит 2010 → 3, «одиночная 3-3»; по Tarot School 129 → 21, то есть пара 21/3 [47]. К этим вариантам добавляются авторские: у К. Молокановой для дней 23–31 вычитается 22 и выходят «два архетипа», есть и вариант «число + месяц + год» [31]; в посте на Teletype (2024) сумма цифр даты сводится к 1–9, и число становится арканом 1–9, а категории названы «архетипами» [64].
@@ -481,7 +481,7 @@
 Наблюдения по таблице:
 - У всех трёх авторов совпадают 2 знака из 12: Овен (Марс — Воин) и Скорпион (Маг) [111]–[113].
 - Одни и те же архетипы разнесены по разным знакам. Правитель — Весы у kodeam, Лев и Козерог у Lau; Мудрец — Стрелец у kodeam, Козерог у Dykman, Дева у Lau; Заботливый — Телец у kodeam, Рак у Dykman и Lau [111]–[113].
-- Второй ярлык у Lau часто совпадает с ярлыком Dykman (Trickster, Caregiver, Sovereign, Diplomat, Explorer, Visionary, Mystic), но ни один автор не ссылается на другого [112][113].
+- Один из двух ярлыков Lau часто совпадает с ярлыком Dykman (Trickster, Caregiver, Sovereign, Diplomat, Explorer, Visionary, Mystic), но ни один из них не ссылается на другого [112][113].
 
 **Астро-брендинг без системы архетипов.** Bonnie Sorsby связывает Асцендент, Солнце, Луну и Венеру с чертами бренда (Лев на Асценденте — «bold, confident, high-impact»; Козерог-Солнце — «structured, authoritative, legacy-driven»). Star Powered продаёт курс «AstroBrand 101» и «AstroBrand® Method» и, по сводке поиска, аудиопрограмму о «12 zodiac archetypes for brand development» (⚠ страница при открытии оказалась пустой). Есть тетрадь «Astro-Branding Workbook» по Солнцу, Луне и Асценденту [114]. Марк и Пирсон нигде не упоминаются [114]. В рунете астролог Е. Шустина («Москва 24», 14.10.2025) советует знакам темы блога без архетипов; заметка proza.ru 2016 г. «Какой вы блоггер по гороскопу?» не открывалась (⚠) [115]. Подборки русскоязычных курсов по астрологии — это курсы натальной астрологии, о брендинге в выдаче ничего нет; Toolfox оговаривает, что «астрология относится к области верований» [116].
 
@@ -505,6 +505,7 @@
 - **Процедура.** Пишут 24 бумажки: 12 с именами своих архетипов и 12 с числами 1–12. Обе стопки кладут лицом вниз, перемешивая архетипы, спрашивают, в каких домах они «best serve me», затем вынимают по одной бумажке из каждой стопки: число — это дом. О дате и времени рождения не сказано ничего [118].
 - **Четыре архетипа выживания:** Ребёнок (Child), Жертва (Victim), Проститутка (Prostitute), Саботажник (Saboteur); о Саботажнике — «powerful archetype that we all possess» [118].
 - **Распространённость.** Карту продолжают строить сертифицированные «Archetypal Consultants» её института [119].
+- **Обоснование.** Коллективное бессознательное Юнга [117] и «a simple intuitive process» вместо положения созвездий при рождении [118].
 - **Товарные знаки (кратко).** Знак ARCHETYPES (рег. № 5481385, кл. 41) действует, владелец — CMED, LLC; в навигации myss.com есть пункт «Archetypes® with Caroline Myss». Знак SACRED CONTRACTS аннулирован 14.03.2009. Условия сайта запрещают копирование и производные работы без письменного разрешения [120].
 - ⚠ Как выбираются остальные 8 личных архетипов из галереи, на прочитанных страницах не описано [163].
 
@@ -523,6 +524,10 @@
 - **Русскоязычные.** Статья vc.ru «Human Design в бизнесе» переводит типы в маркетинговые роли: Манифестор — «смелые, провокационные кампании», Проектор находит слабые места конкурентов, Рефлектор помогает понять, как аудитория видит бренд; упаковка: Манифестор — «инновации, власть, скорость», Генератор — «попробуй, почувствуй, откликнись». Юнга, Пирсон и архетипов нет; примеры известных людей даны с оговорками «предположительно» и «вероятно» [129]. Запросы «Дизайн человека для блогера архетипы бренда» и «"Дизайн человека" архетипы Юнга профиль линии» связок не дали [163]. ⚠ Русскоязычные курсы «ДЧ для бизнеса и блогеров» в Telegram не проверены.
 - **Права (кратко).** У Jovian Archive Media действуют знаки JOVIAN ARCHIVE HUMAN DESIGN (№ 7892431, 12.08.2025) и MYBODYGRAPH HUMAN DESIGN (№ 7724676, 11.03.2025), оба с дисклеймером «HUMAN DESIGN»; «THE HUMAN DESIGN SYSTEM» не зарегистрирован, три заявки не прошли (2006, 2023, 2024) [124]. Jovian заявляет «exclusive worldwide rights to the Human Design System» и запрещает производные работы [123]. Флорентийский суд (03.06.2020, RG n. 2756/2020) постановил, что «системы Human Design» как объекта копирайта не существует, а идеи и методы могут свободно излагать неавторы [121].
 
+**Распространённость.** Англоязычная среда: три книги «HD для бизнеса», официальное приложение BG5 и один сайт с «архетипами» типов; связок с Марк и Пирсон — 0 [125][126][128]. Русскоязычная: одна статья vc.ru, без архетипов [129]; ⚠ Telegram не проверен [163].
+
+**Обоснование.** В найденных источниках — авторитет основателя и его «alleged mystical experience in 1987» [121]; эмпирических данных нет (§4.5).
+
 **Согласие между авторами.** Сравнивать нечего: таблиц «HD ↔ архетипы Юнга или Марк и Пирсон» в найденных источниках нет [163].
 
 ---
@@ -538,6 +543,7 @@
 - **Научный статус.** ⚠ По сводке поиска: «contemplative and spiritual framework with no peer-reviewed evidence base» [134]. Статьи о Gene Keys в английской Википедии нет (404) [163].
 - **Права (кратко).** Знак GENE KEYS (рег. № 7499528 от 10.09.2024, кл. 9, 16, 41, 42, 45). Условия сайта: «Prohibited Commercial Use: You must not use any part of the content on our platform for commercial purposes without obtaining a formal license» [135].
 - **Не найдено** (⚠ поиск ограничен): связки практиков «Тень Gene Keys = Тень Юнга» и «Gene Keys ↔ Марк и Пирсон» [163]. ⚠ Употребление слова «архетип» в книге Радда 2009 г. по тексту не проверено.
+- **Распространённость и обоснование.** Формулировка «64 archetypes» — официальная, на сайте школы [131]; как её подхватывают практики, в том числе русскоязычные, отдельно не искалось [163]. Ссылок на Юнга или другие теории архетипов на прочитанной официальной странице нет [131]; система выросла из Дизайна Человека [133].
 
 ---
 
@@ -565,6 +571,7 @@
 - **Дневные Мастера.** Есть серия Joey Yap *The Ten Day Masters*; например, Bing (Ян-Огонь) описан как «passionate, energetic and vibrant» [138]. Поиск «BaZi ten Day Masters archetypes Jungian» связи не нашёл [163].
 - В модуле 01 базы Десять божеств названы по английским терминам Joey Yap [139].
 - **Вывод r13** [163]. Профили — «ролевые» ярлыки поверх классических Десяти божеств. Термин «маска» близок к юнгианской «персоне», но ссылки на Юнга в найденных описаниях нет; это наблюдение исследователя, а не утверждение Yap.
+- **Распространённость и обоснование.** Одна коммерческая система (серия книг и бокс-сет, 2010) [136]; опора — классические Десять божеств, профили — ярлыки поверх них [136].
 - ⚠ Тексты книг Yap не открывались. Таблицы «Дневной Мастер → архетип» у других школ (Jerry King, Mastery Academy, русскоязычные) не искались [163].
 
 ---
@@ -589,7 +596,7 @@
 
 **Коротко.** Обе системы в базе определяются **по анкете, а не по дате рождения** [162]. Соционика основана на **психологических типах** Юнга (функции и установки), а не на архетипах коллективного бессознательного. Таблиц «эннеатип ↔ архетип Пирсон или Марк и Пирсон» не найдено.
 
-- **Соционика.** Она «incorporates Carl Jung's work on *Psychological Types* with Antoni Kępiński's theory of information metabolism»; у Аушры Аугустинавичюте «eight psychic functions rather than four». Архетипы и коллективное бессознательное в статье не упоминаются. Комиссия РАН по лженауке поставила соционику в один ряд с астрологией и гомеопатией [145]. Русскоязычные источники так же описывают её «на базе типологии Юнга», с 8-компонентной моделью [146].
+- **Соционика.** Она «incorporates Carl Jung's work on *Psychological Types* with Antoni Kępiński's theory of information metabolism»; у Аугустинавичюте «eight psychic functions rather than four». Архетипы и коллективное бессознательное в статье не упоминаются. Комиссия РАН по лженауке поставила соционику в один ряд с астрологией и гомеопатией [145]. Русскоязычные источники так же описывают её «на базе типологии Юнга», с 8-компонентной моделью [146].
 - **Соционика ↔ астрология («астросоционика»).** Г. Шульман («Соционика изнутри», 2007): знак Солнца → ТИМ; таблица в доступных источниках не найдена. Блог md-bochkareva.com: знак Меркурия → ТИМ, частично (7 знаков); автор сам пишет, что совпадения по Солнцу, Луне и управителю Асцендента — около 30% [149]. Это связка с типами, а не с архетипами.
 - **Модель Биби (John Beebe, eight-function model)** — единственная документированная связка «тип ↔ юнгианский архетип»: 1 Hero/Heroine, 2 Good Parent, 3 Puer/Puella, 4 Anima/Animus, 5 Opposing Personality, 6 Senex/Witch, 7 Trickster, 8 Daemon [147]. Применение к 16 типам MBTI описано у C. Shumate (Routledge) [148]. Это MBTI-линия, не соционика и не система по дате. ⚠ Переносили ли модель Биби на Модель А соционики, не подтверждено.
 - **Эннеаграмма.** Таблица «эннеатип ↔ Пирсон» не найдена (поиск одним запросом). Нашлись только эннеаграмма × старшие арканы Таро (mysticryst, ⚠ по выдаче) и эннеаграмма × RIASEC (корейское исследование, не по теме) [150][163]. Собственные «архетипы» эннеаграммы — 27 «Tritype® Archetypes» Кэтрин Фовр (например, 136 «The Taskmaster», 269 «The Good Samaritan»): авторские названия наборов трёх типов, не юнгианские и не пирсоновские [149].
@@ -715,7 +722,7 @@
 4. **В каком статусе идею можно описывать.** Только как **символическую интерпретацию конкретной школы с явным указанием автора соответствия**, а не как диагностику личности. Так формулируют и сами источники базы и рынка: «эзотерические или типологические практики без научного подтверждения предсказательной силы» (README базы) [162]; «Научного обоснования у метода нет» (модуль 10) [48]; «Numerology is not a science» (JobCannon) [73]; «астрология относится к области верований» (Toolfox) [116].
 5. **Типичные искажения, найденные в источниках,** которые стоит учитывать при пересказе:
    - приписывание Юнгу того, чего у него нет: «каждое изображение на картах Таро … отдельный архетип» [31]; 12 брендовых архетипов как «Jung's 12 Archetypes» [32];
-   - смешение двух наборов Пирсон (1991 и 2001) [111][30];
+   - неуточнённый набор Пирсон: «Шут по Пирсон» без указания, Fool 1991 г. это или Jester 2001 г. [30]; таблица kodeam построена на 12 «героях» 1991 г., а не на брендовом наборе [111];
    - выдача авторской реконструкции за таблицу классика («таблица Nichols») [8][163];
    - «традиция десятилетий» для метода, датированного 2006 г. [50].
 
@@ -748,3 +755,210 @@
 10. **Цолькин.** Названы ли 20 глифов «archetypes» в книге-спутнике *The Mayan Oracle*; *The Mayan Factor* и поздние тексты Аргуэльеса.
 11. **Права.** Российские регистрации «Матрица судьбы», «Дизайн человека», «Генные ключи» в ФИПС не проверены.
 12. **Типология.** Таблицы «эннеатип → брендовый архетип» в маркетинговых блогах; русскоязычные «соционика ↔ архетипы»; перенос модели Биби на Модель А.
+
+---
+
+## Источники
+
+Ссылки на неавторизованные копии книг не приводятся. Где текст тома сверялся исследователем по скану, дана только библиографическая ссылка.
+
+**Юнг и Таро**
+1. Greer M. K., «Carl Jung and Tarot», 31.03.2008 — https://marykgreer.com/2008/03/31/carl-jung-and-tarot/ — цитаты Юнга с выходными данными: *Visions*, vol. 2, с. 923; CW 9i §81; *Letters* (письма Eckstein 1930, Cornell 1960); пересказ von Franz 1988 и Bair 2003, с. 549 — [профессиональный; цитаты Юнга — первоисточник в пересказе]
+2. carljungdepthpsychologysite.blog, «Tarot», 10.08.2021 — https://carljungdepthpsychologysite.blog/2021/08/10/tarot-2/ — *Visions*, с. 923; *Children's Dreams*, с. 351; *Letters* I, с. 77 — [популярный; компиляция цитат]
+3. Princeton University Press, Jung C. G., *Visions: Notes of the Seminar Given in 1930–1934*, ed. C. Douglas, 1997 — https://press.princeton.edu/books/hardcover/9780691099712/visions — библиография — [первоисточник: издатель]
+4. Jung C. G., *The Archetypes and the Collective Unconscious*, Collected Works, vol. 9, part I, Princeton University Press — §7, §81 (с. 38 по указателю тома); сверено исследователем блока 1 по скану тома, ссылка на скан не приводится — [первоисточник]
+5. Jung C. G., *Aion*, Collected Works, vol. 9, part II, Princeton University Press — Foreword, оглавление; сверено исследователем блока 1, ссылка на скан не приводится — [первоисточник]
+6. Wikipedia, «Tarot card reading» — https://en.wikipedia.org/wiki/Tarot_card_reading — о семинаре 1933 г.; Семецкая; Pew 2025; Рэнди и Даммет — [популярный]
+
+**Таро ↔ Юнг: авторы**
+7. Red Wheel/Weiser, Nichols S., *Tarot and the Archetypal Journey*, 2019, ISBN 978-1-57863-659-4 — https://redwheelweiser.com/book/tarot-and-the-archetypal-journey-9781578636594/ — описание издателя — [первоисточник: издатель]
+8. Nichols S., *Jung y el Tarot. Un viaje arquetípico*, Editorial Kairós (© 1980, 2019; цифровое издание 2022), ISBN 978-84-7245-191-9, ознакомительный фрагмент — https://content.e-bookshelf.de/media/reading/L-18717667-86f49bf70f.pdf — оглавление, предисловие M. K. Greer, введение L. van der Post, гл. 1 — [первоисточник: фрагмент издателя]
+9. Aeclectic, Cehovet B., обзор «Jung and Tarot» — https://www.aeclectic.net/tarot/books/jung-and-tarot/ — [популярный]
+10. Goodreads, «Jung and Tarot» — https://www.goodreads.com/book/show/1031747 — отзывы читателей — [популярный]
+11. LibraryThing, Sallie Nichols — https://www.librarything.com/a/18239 — биография — [популярный; по выдаче поиска]
+12. Glassmeyer D., «A Jungian Approach to the Tarot», OLLI University of Cincinnati, 2022 (PDF) — https://www.uc.edu/content/dam/refresh/cont-ed-62/olli/22-winter/jung%20tarot%201.pdf — цитаты Nichols, Hamaker-Zondag, Sargent — [популярный; учебный конспект, атрибуции не сверены]
+13. Red Wheel/Weiser, Pollack R., *Seventy-Eight Degrees of Wisdom* — https://redwheelweiser.com/book/seventy-eight-degrees-of-wisdom-9781578636655/ — [первоисточник: издатель]
+14. Shortform и Blinkist, пересказы Pollack — https://www.shortform.com/summary/seventy-eight-degrees-of-wisdom-summary-rachel-pollack ; https://www.blinkist.com/books/seventy-eight-degrees-of-wisdom-en — [популярный]
+15. Aeclectic, обзор *78 Degrees of Wisdom* — https://www.aeclectic.net/tarot/books/78-degrees-of-wisdom/ — [популярный; по выдаче поиска]
+16. Banzhaf H., *Das Tarotbuch*, Goldmann/Arkana, ознакомительный фрагмент — https://www.penguinrandomhouse.de/leseprobe/Das-Tarotbuch/leseprobe_9783442336463.pdf — с. 15, раздел о происхождении карт, сноска о *Tarot und die Reise des Helden* (München, 1997) — [первоисточник: фрагмент издателя]
+17. Banzhaf H., *Tarot and the Journey of the Hero* (2000): eBay, Goodreads, Lecturalia — https://www.ebay.com/p/1651642 ; https://www.goodreads.com/book/show/242532 ; https://www.lecturalia.com/libro/62661/el-tarot-y-el-viaje-del-heroe — [популярный; по выдаче поиска]
+18. Paragon House, Rosengarten A., *Tarot and Psychology: Spectrums of Possibility*, 2000 — https://paragonhouse.com/product/tarot-and-psychology-spectrums-of-possibility/ — [первоисточник: издатель]
+19. Aeclectic, обзор Rosengarten — https://www.aeclectic.net/tarot/books/psychology-spectrums/ — раздел «Empirical Studies», предисловие L. M. DuQuette — [популярный]
+20. White Crane Journal, рецензия на Rosengarten — https://www.whitecraneinstitute.org/wcjarchives/wc01104.htm — [популярный]
+21. AbeBooks, Wang R., *The Jungian Tarot and Its Archetypal Imagery* (аннотация издателя: 1988; Marcus Aurelius Press, 2001; U.S. Games, 2017) — https://www.abebooks.com/9780971559110/Jungian-Tarot-Archetypal-Imagery-Trilogy-0971559112/plp — [популярный; воспроизводит аннотацию издателя]
+22. learntarot.com, Jungian Tarot — https://learntarot.com/judesc.htm ; Aeclectic, Jungian Tarot — https://aeclectic.net/tarot/cards/jungian/ — [популярный]
+23. Healy K. C., пост в alt.divination, 23.07.1994 — https://anna.lysator.liu.se/pub/religion/neopagan/Tarot/Decks/jungian_deck — [популярный]
+24. Wikipedia, «Carl Sargent» — https://en.wikipedia.org/wiki/Carl_Sargent — год книги — [популярный]
+25. Kerykeion, «Jung and Tarot» (обновлено 13.06.2026, curated by G. Battaglia) — https://kerykeion.net/content/learn-tarots/psychology/jung-and-tarot — [популярный]
+26. Kerykeion, «Hero's journey in Major Arcana» — https://kerykeion.net/content/learn-tarots/psychology/heros-journey-in-major-arcana — [популярный]
+27. Davidson J., «Tarot & Hero's Journey: The Magician», 2014 — https://jessicadavidson.co.uk/2014/07/09/tarot-heros-journey-the-magician/ — [популярный]
+28. Crawford C., Energetic Tarot, 2023 — https://energetictarot.co.uk/the-tarot-major-arcana-cards/ — [популярный]
+29. Кузьмич А., «Архетипические и психологические соответствия Старших арканов», Illumina Tarot, 10.11.2018 — https://www.illuminatarot.com/post/архетипические-и-психологические-соответствия-старших-арканов — [популярный]
+30. b17.ru, «Архетипы в картах Таро» — https://www.b17.ru/article/739217/ — [популярный; прочитан только фрагмент выдачи, страница отдавала 429]
+31. Молоканова К., «Архетипы Таро. Как через дату рождения познакомиться с собой и „прочитать“ других», Литрес, 03.12.2025, ознакомительный фрагмент — https://www.litres.ru/book/kseniya-molokanova/arhetipy-taro-kak-cherez-datu-rozhdeniya-poznakomitsya-72830167/chitat-onlayn/ — [первоисточник (практик)]
+
+**Таро ↔ Пирсон и брендовые архетипы**
+32. Venefica A., «Tarot Archetypes Meaning…», tarotteachings.com, 17.09.2025 — https://www.tarotteachings.com/?p=2602 — таблица «Jung's 12 Archetypes vs. Tarot's Major Players» — [популярный]
+33. Lau N., «Brand Archetypes: Aligning Your Brand with Major Arcana», mysticryst.com (дата не указана) — https://mysticryst.com/blogs/the-mystic-journal/brand-archetypes-aligning-your-brand-with-major-arcana — [популярный]
+34. Pippin Mizzi C., «How to Use Tarot to Build Your Brand as a Creative», janefriedman.com, 31.07.2024 / 18.02.2025 — https://janefriedman.com/how-to-use-tarot-to-build-your-brand-as-a-creative/ — [популярный]
+35. wordshurt, лист «голосов бренда», Gumroad — https://wordshurt.gumroad.com/l/yuaeb — [популярный; 404, только сниппет]
+36. Kolomiets P., «Major Arcana personality archetypes», JobCannon, 07.08.2026 — https://jobcannon.io/blog/major-arcana-personality-archetypes — [популярный]
+37. BrandKnew, обзор Hartwell & Chen *Archetypes in Branding* — https://www.brandknewmag.com/book-review/archetypes-in-branding-a-toolkit-for-creatives-and-strategists/ — [популярный]
+38. Pearson C. S., «The roots of the Pearson-Marr archetypes» — https://www.carolspearson.com/post/new-article-the-roots-of-the-pearson-marr-archetypes — [первоисточник]
+39. Pearson C. S., «About Carol S. Pearson and her archetypal journey» — https://carolspearson.com/about/about-carol-s-pearson-and-her-archetypal-journey — 12 архетипов 1991 г., PMAI — [первоисточник; по выдаче поиска]
+40. LibraryThing, Pearson C. S., *Awakening the Heroes Within* — https://www.librarything.com/work/328601 — [популярный; по выдаче поиска]
+41. thebrandarchetypes.com, «A History of Brand Archetypes» — https://thebrandarchetypes.com/history/ — [популярный; сайт студии]
+42. getAbstract, Mark M., Pearson C. S., *The Hero and the Outlaw* (2001) — https://www.getabstract.com/en/summary/the-hero-and-the-outlaw/1499 — [популярный]
+43. psytests.org, «Определитель архетипа Пирсон–Марр» — https://psytests.org/typo/heropm.html — [популярный]
+
+**Карты рождения Грир и Арриен**
+44. Red Wheel/Weiser, Greer M. K., *Archetypal Tarot: What Your Birth Card Reveals About Your Personality, Your Path, and Your Potential*, 2021 — https://redwheelweiser.com/book/archetypal-tarot-9781578637485/ — [первоисточник: издатель]
+45. Greer M. K., «Who Are You in the Tarot?», marykgreer.com, 17.08.2011 — https://marykgreer.com/2011/08/17/who-are-you-in-the-tarot/ — [первоисточник]
+46. Arrien A., *The Tarot Handbook* (1987): обзор Aeclectic — https://www.aeclectic.net/tarot/books/handbook-arrien/ ; Goodreads — https://www.goodreads.com/book/show/269883 — [популярный; по сниппетам выдачи, страницы не открывались]
+47. `knowledge-base/12-tarot-loshu-vedic.md`, §1A и §3A — сводка базы со ссылками на первоисточники: Greer, *Tarot for Your Self* (1984, с. 29–41; таблица с. 32); Greer, *Archetypal Tarot* (2021, с. xiii, 172–173); Arrien, *The Tarot Handbook* (1987); Amberstone, *Tarot Tips* (2003, Tip #69); массовые схемы nur.kz, lenta.ru, vikna.tv, svitstyle.com.ua — [внутренний: сводка базы]
+
+**Матрица судьбы и русскоязычные «22 архетипа по дате»**
+48. `knowledge-base/10-destiny-matrix.md`, §1 (история метода по matrica-sudby.ru, оговорка о научном обосновании, таблица расхождений: п. 1 — свёртка, п. 6 — нумерация 8/11) — [внутренний: сводка базы]
+49. Эксмо/Бомбора, Ладини Н., «Матрица судьбы: Первоисточник», ISBN 978-5-04-209095-0 — https://eksmo.ru/book/matritsa-sudby-pervoistochnik-ITD1409842/ — аннотация — [первоисточник: издатель]
+50. matrica-sudby.ru (сервис Я. Шмидт) — https://matrica-sudby.ru/ ; «9 аркан в Матрице судьбы», 28.06.2025 — https://matrica-sudby.ru/matrix/9-arkan-v-matrice-sudby.html — [первоисточник (практик)]
+51. numerolog.ru, «Личный бренд через Матрицу судьбы» — https://numerolog.ru/matritsa-sudby-lichnogo-brenda — [популярный]
+52. DTF, «Значение арканов в Матрице Судьбы: полный гайд», 13.09.2025 — https://dtf.ru/luchshii-rating/4025521-arkany-v-matrice-sudby — [популярный]
+53. Матрикс А., «Матрица судьбы. Личный бренд», Litres, 06.05.2023, 156 с., ознакомительный фрагмент — https://www.livelib.ru/book/1073779/readpart-matritsa-sudby-lichnyj-brend-albina-matriks ; https://litres.com/book/albina-matriks/matrica-sudby-lichnyy-brend-69212533/read/ — [первоисточник (практик)]
+54. Гаджибек А., «Личный бренд по арканам Матрицы Судьбы: как раскрыть свой потенциал и достичь успеха», ознакомительный фрагмент — https://www.livelib.ru/book/1403644/readpart-lichnyj-brend-po-arkanam-matritsy-sudby-kak-raskryt-svoj-potentsial-i-dostich-uspeha-anna-gadzhibek — [первоисточник (практик)]
+55. Путинцева Е., «Архетипы и стиль. 22 визуальных кода и практических примера», Ridero, 2025, ISBN 978-5-0065-4019-4 — https://books.yandex.ru/books/tfkNDXua/read-online ; коллективная книга «Визуальный язык эксперта», Ridero, 2026 — https://books.yandex.ru/books/JLM98OEP/read-online — [первоисточник (практик)]
+56. Щеняева М., интенсив «Архетипы. Распаковка личности» — https://shchenyaeva.art/mc/7 — [популярный, рекламный]
+57. Курочкина М., курс «Психологический портрет. Пространство архетипов», ВКонтакте, 14.06.2022 — https://m.vk.ru/@analiz_taro-psihologicheskii-portret-dlya-sebya-i-klientov — [первоисточник (практик)]
+58. Горькая М., профиль нумеролога, woman.ru — https://www.woman.ru/user/mariya-gorkaya-numerolog-id403453650/ — [популярный; по выдаче поиска]
+59. sozai.app, транскрипт «Арканы потенциальных бизнесменов в матрице судьбы» — https://sozai.app/transcript/arkany-potential-businessmen-matrix-fate/ — [популярный; не открывался]
+60. vikna.tv, «Матрица судьбы: что это и как…» — https://vikna.tv/ru/dlia-tebe/matrytsa-sudby-chto-eto-y-kak-y-o-chem-mozhno-uznat/ — [популярный]
+61. USPTO TSDR и WIPO Madrid Monitor, знаки LADINI: https://tsdr.uspto.gov/statusview/sn79443153 ; https://tsdr.uspto.gov/statusview/sn79438028 ; https://www3.wipo.int/madrid/monitor/en/showData.jsp?ID=ROM.1900910 ; https://www3.wipo.int/madrid/monitor/en/showData.jsp?ID=ROM.1888975 — [первоисточник: реестр]
+62. Соколова Е., «Архетип бренда. Как не превратить маркетинг в астрологию», Sostav, 02.07.2026 — https://www.sostav.ru/blogs/288649/93766 — [популярный; мнение практика]
+63. Студия Deza, пост на Sostav, 07.08.2025 — https://www.sostav.ru/blogs/283812/65584 — [профессиональный]; тест «Таротипы» — https://tarotipy.ru/ — [первоисточник]
+64. @klava_domanava, «Аркан Таро по дате рождения», Teletype, 12.12.2024 — https://teletype.in/@klava_domanava/Ix9foCIaxfM — [популярный]
+
+**Нумерология**
+65. Decoz H., «Life Path», worldnumerology.com — https://www.worldnumerology.com/numerology-life-path/ — [первоисточник (практик)]
+66. Millman D., страница книги *The Life You Were Born to Live* — https://peacefulwarrior.com/the-life-you-were-born-to-live/ — [первоисточник: сайт автора]
+67. Knox County Public Library, запись: Millman, H J Kramer, 1993 — https://discover.knoxcountylibrary.org/Record/157784 — [первоисточник: библиография; по выдаче поиска]; Marlowe's Books, «First Edition… 1993» — https://www.marlowesbooks.com/The-Life-You-Were-Born-To-Live.-A-Guide-To-Finding-Your-Life-Purpose-Millman-Dan-Book-161812 — [популярный; по выдаче поиска]
+68. New World Library, *The Life You Were Born to Live*, 25th Anniversary Edition (2018) — https://newworldlibrary.com/?p=412 — [первоисточник: издатель; по выдаче поиска]
+69. Wikipedia, «Dan Millman» — https://en.wikipedia.org/wiki/Dan_Millman — [популярный]
+70. Women of Grace, критика системы Millman — https://www.womenofgrace.com:8443/blog/?p=707 — [популярный; по выдаче поиска]
+71. Open Library, Javane F., Bunker D., *Numerology and the Divine Triangle* (Para Research, 1979) — https://openlibrary.org/isbn/0914918109 — [первоисточник: библиография]
+72. Описания *Numerology and the Divine Triangle*: Microcosm Publishing — https://microcosmpublishing.com/catalog/books/41106 ; Bookshare — https://bookshare.org/browse/book/6343353 ; Paper Plus — https://www.paperplus.co.nz/shop/books/numerology-and-the-divine-triangle-758858 — [популярный; аннотации, частично по выдаче поиска]
+73. JobCannon, «Numerology — about» — https://jobcannon.io/assessments/numerology/about — [популярный]
+74. Jungian Center, «Jung on Numbers» — https://jungiancenter.org/jung-on-numbers/ — [популярный; по выдаче поиска]
+75. carljungdepthpsychologysite.blog, о M.-L. von Franz, 29.08.2020 — https://carljungdepthpsychologysite.blog/2020/08/29/marie-louise-von/ — [популярный; по выдаче поиска]
+76. Goodreads, Storm L., *The Enigma of Numbers* (2008) — https://www.goodreads.com/book/show/5217699-enigma-of-numbers — [популярный]
+77. Wikipedia, «Numerology» — https://en.wikipedia.org/wiki/Numerology — Falk (2009); Dudley (1997) — [популярный]
+78. Sostav, блог агентства нейминга «Мало слов, много нейминга», 28.10.2025 — https://www.sostav.ru/blogs/281529/70026 — [популярный]
+79. Teletype: Атман А., «Памятка по архетипам», 07.10.2024 — https://teletype.in/@anaatman/FuLirdNDJFJ ; Харольская У., «Колесо Архетипов. Разбор», 09.12.2024 — https://teletype.in/@uk-psy/archetip — [популярный]
+80. О психоматрице: Sostav — https://www.sostav.ru/blogs/292039/95395 ; Т—Ж — https://t-j.ru/psychomatrix/ — [популярный; по выдаче поиска]
+
+**Внутренние модули базы (проверка поиском по файлам)**
+81. `knowledge-base/08-pythagoras-square.md`, `09-alexandrov-square.md`, `11-numerology.md` (Decoz как основная пифагорейская школа), `12-tarot-loshu-vedic.md` (часть про Ло Шу и ведическую нумерологию), `13-tzolkin.md` (§1, шаг 6: сдвиг Dreamspell и счёта кʼиче), `15-syutsay.md` (§1) — поиск слов «архетип», «Юнг», «Пирсон», 2026-10-15 — [внутренний]
+
+**Цолькин и Сюцай**
+82. Wikipedia, «Dreamspell» — https://en.wikipedia.org/wiki/Dreamspell — [популярный]
+83. Wikipedia, «José Argüelles» — https://en.wikipedia.org/wiki/Jos%C3%A9_Arg%C3%BCelles — влияния; критика Feder 1990, Hess 1993 — [популярный]
+84. Окунева Н., «260 сценариев для жизни, бизнеса и любви. Календарь Майя Цолькин + карты Таро», Ridero, 2021, ISBN 978-5-0055-7118-2, фрагмент — https://litres.com/book/nataliya-okuneva/260-scenariev-dlya-zhizni-biznesa-i-lubvi-kalendar-mayya-66844638/read/ — [первоисточник (практик)]
+85. Spilsbury A., Bryner M., *The Mayan Oracle* (1992): learntarot.com — https://learntarot.com/mjdesc.htm — [популярный]; Simon & Schuster — https://www.simonandschuster.com/books/The-Mayan-Oracle/Ariel-Spilsbury/9781591431237 — [первоисточник: издатель; 403, только сниппет]
+86. «Философия Сюцай», zhanatglobal.com — https://zhanatglobal.com/filosofiya-syucai — [первоисточник (школа)]
+
+**Юнг и астрология**
+87. Jung C. G., *Escritos sobre astrología*, ed. S. Rossi & K. Le Grice, Trotta (исп. изд. *Jung on Astrology*), ознакомительный фрагмент — https://www.trotta.es/static/pdf/JUNG_Sobre_astrologia_Avance_de_lectura.pdf — с. 13 (письма Барбо 26.05.1954, *Letters II*, с. 400–402; Фрейду 08.05.1911, 254J), с. 14 (Фрейду 12.06.1911, 259J), с. 15 (CW 15 / OC 15, с. 50), с. 16 (введение составителей), с. 18 (*Aion*, OC 9/2, с. 97), сноска 5 (книги Л. Грин 2018 г.) — [первоисточник: научное издание текстов Юнга]
+88. Routledge, Rossi S., Le Grice K. (eds.), *Jung on Astrology*, 2017 — https://www.routledge.com/Jung-on-Astrology/Rossi-Jung-LeGrice/p/book/9781138230736 — [первоисточник: библиография]
+89. carljungdepthpsychologysite.blog, «Astrology», 24.06.2020 (письмо Б. В. Раману 06.09.1947 по *Letters I*) — https://carljungdepthpsychologysite.blog/2020/06/24/astrology-7/ — [популярный; цитирует первоисточник]
+90. C.G. Jung Foundation NY, курс C. Poorbaugh «An Archetypal View of Jung's Typology through the Lens of Astrological Symbolism», 2018 — https://cgjungny.org/3603/ — [профессиональный]
+91. Friends of Jung, «Jung's relationship to astrology» — https://ofj.org/event/jungs-relationship-to-astrology/ — [профессиональный]
+92. Zeng J., Fraikin N., «Synchronicity in Post-Jungian Astrology: A Cosmological Quest», *Journal of Analytical Psychology*, 2025, 70(5), DOI 10.1111/1468-5922.70016 — https://repository.essex.ac.uk/41591/1/J%20Analytical%20Psychology%20-%202025%20-%20Zeng%20-%20Synchronicity%20in%20Post%E2%80%90Jungian%20Astrology%20A%20Cosmological%20Quest.pdf — с. 2–3 (CW 8 §§869, 877, 878, 901), с. 7–9 (Грин 1984, с. 276; Тарнас), о *Relating* (Greene 1978, с. 24) — [профессиональный, рецензируемый, открытый доступ]
+93. jungianalchemist.substack.com, «Carl Jung's curious experiment…», 13.11.2025 — https://jungianalchemist.substack.com/p/carl-jungs-curious-experiment-to — [популярный]
+94. Dean G. et al., astrology-and-science.com, раздел исследований — https://astrology-and-science.com/d-rese2.htm — Shanks, *APP* 1983, 2.1, 12–16 (перепечатка *Kosmos* 1985, 14.1); Gauquelin 1985 — [профессиональный]
+95. Dean G., Kelly I. W., «Is Astrology Relevant to Consciousness and Psi?», *Journal of Consciousness Studies* 10(6–7): 175–198, 2003 — полный текст https://astrology-and-science.com/D-psia2.htm ; аннотация https://astrology-and-science.com/D-psia1.htm ; Ingenta https://www.ingentaconnect.com/content/imp/jcs/2003/00000010/f0020006/art00010 — [профессиональный]
+96. Wikipedia, «Synchronicity» — https://en.wikipedia.org/wiki/Synchronicity — Bonds 2002; Carroll 2003; van Elk, Friston, Bekkering 2016; Kerr 2013 — [популярный, со ссылками на рецензируемые работы]
+
+**Архетипическая и психологическая астрология**
+97. Wikipedia, «Psychological astrology» — https://en.wikipedia.org/wiki/Psychological_astrology — CW 15 (1971), с. 56; Радьяр 1936; CPA 1983; оценка исследований — [популярный]
+98. Wikipedia, «Cosmos and Psyche» — https://en.wikipedia.org/wiki/Cosmos_and_Psyche — [популярный]
+99. Wikipedia, «Richard Tarnas» — https://en.wikipedia.org/wiki/Richard_Tarnas — [популярный]
+100. Tarnas R., «The Ideal and the Real: Saturn–Neptune», *Archai*, issue 1, с. 1–2 — https://www.archai.org/wp-content/uploads/2016/04/Tarnas-%E2%80%93-The-Ideal-and-the-Real-%E2%80%93-Archai-Issue-1.pdf — [первоисточник]
+101. cosmosandpsyche.com (сайт Р. Тарнаса) — https://cosmosandpsyche.com/ — [первоисточник]
+102. Wikipedia, «Liz Greene» — https://en.wikipedia.org/wiki/Liz_Greene — [популярный]
+103. Red Wheel/Weiser, Greene L., *Relating* (01.06.1978) — https://redwheelweiser.com/?p=105840 — [первоисточник: издатель]; Goodreads, *Relating* (01.11.1977) — https://www.goodreads.com/book/show/30117859 — [популярный; по выдаче поиска]
+104. astro.com, Liz Greene — https://www.astro.com/cgi/xa.cgi/people/greene_e.htm — [первоисточник]; Urania Trust, Liz Greene — https://uraniatrust.org/celebrated-astrologers/liz-greene — [популярный; по выдаче поиска]
+105. Wikipedia, «Stephen Arroyo» — https://en.wikipedia.org/wiki/Stephen_Arroyo — [популярный]
+106. Georgia College, студенческий постер «Personality Types», 2015 — https://kb.gcsu.edu/src/2015/friday/154 — [популярный]
+107. Gómez J. C., «Los cuatro tipos psicológicos de Jung y los cuatro elementos de la astrología», 29.03.2009, обн. 25.08.2023 — https://www.escueladeastrologiapsicologica.com/los-cuatro-tipos-psicologicos-de-jung-y-los-cuatro-elementos-de-la-astrologia/ — [популярный]
+108. Kerykeion, «History of psychological astrology» — https://kerykeion.net/content/learn-astrology/history-psychological-astrology — [популярный]; Jung Society, страница мероприятия — https://www.jung.org/event-3842471 — [популярный; 404, только сниппет]
+109. Burt K., *Archetypes of the Zodiac* (Llewellyn, 1988; ISBN 0875420885): Open Library — https://openlibrary.org/works/OL1670943W — [первоисточник: библиография]; Goodreads — https://www.goodreads.com/book/show/2549602 — [популярный; ошибочный год 1951]; eBay — https://www.ebay.com/p/792613 — [популярный; аннотация продавца]
+110. Вега Е., «Архетипы Души. Психология Натальной Карты», Литрес, 13.03.2026, фрагмент — https://litres.com/book/ekaterina-vega/arhetipy-dushi-psihologiya-natalnoy-karty-73529176/read/ — [первоисточник (практик)]
+
+**Знак → архетип, астро-брендинг**
+111. kodeam, «Что общего у Зодиака с архетипом», 2019 (Medium 04.02.2019 → proza.ru) — https://proza.ru/2019/08/17/1375 ; англ. версия — https://medium.com/@de.koshelev/pearson-zodiac-en-c6ee7cec04b8 (403, не прочитана) — [популярный; первоисточник этой гипотезы]
+112. Dykman A., «Astrological signs and their legendary archetypes», myastrology.com, 19.11.2024 — https://myastrology.com/article/astrological-signs-and-their-legendary-archetypes/ — [популярный]
+113. Lau N., «The 12 Zodiac Signs as Jungian Archetypes: Your Birth Chart as Psyche Map», mysticryst.com (футер © 2026) — https://mysticryst.com/blogs/the-mystic-journal/the-12-zodiac-signs-as-jungian-archetypes-your-birth-chart-as-psyche-map — [популярный]
+114. Астро-брендинг: Sorsby B. — https://bonniesorsby.com/blog/how-your-birth-chart-shapes-your-brand-identity-and-aesthetic ; Star Powered — https://starpowered.com/what-the-heck-is-astrology-based-branding/ (⚠ содержание по сводке поиска) ; Astro-Branding Workbook — https://demenastro.gumroad.com/l/free-brand-guide — [популярный]
+115. m24.ru, «Как разным знакам зодиака стать успешными блогерами», 14.10.2025 — https://www.m24.ru/news/14102025/837752 ; proza.ru, «Какой вы блоггер по гороскопу?», 2016 — https://proza.ru/2016/10/28/43 (не открывалась) — [популярный]
+116. Подборки курсов по астрологии: Toolfox — https://toolfox.ru/courses/lichnoe-razvitie/astrologiya ; DTF — https://dtf.ru/id2630801/4730009-35-luchshikh-kursov-po-astrologii — [популярный; по выдаче поиска]
+
+**Колесо Мисс**
+117. Myss C., *Sacred Contracts*, Transworld e-book, ознакомительный фрагмент — https://content.e-bookshelf.de/media/reading/L-535049-ae25abbe32.pdf — Introduction, оглавление — [первоисточник]
+118. myss.com: «The Archetypal Wheel» — https://myss.com/free-resources/sacred-contracts-and-your-archetypes/the-archetypal-wheel/ ; «Casting Your Chart of Origin» — https://myss.com/free-resources/sacred-contracts-and-your-archetypes/casting-your-chart-of-origin/ ; «The Four Archetypes of Survival» — https://myss.com/free-resources/sacred-contracts-and-your-archetypes/appendix-the-four-archetypes-of-survival/ — [первоисточник]
+119. Couch S., «How to: Casting Your Sacred Contracts Chart of Origin», Goodreads — https://www.goodreads.com/author_blog_posts/15285072-how-to-casting-your-sacred-contracts-chart-of-origin — [популярный]
+120. USPTO TSDR, ARCHETYPES № 5481385 — https://tsdr.uspto.gov/statusview/sn86687391 ; USPTO Trademark Search (SACRED CONTRACTS № 2579651, аннулирован) — https://tmsearch.uspto.gov/ ; Myss.com Terms of Use — https://myss.com/customer-support/terms-of-use/ ; myss.com — https://myss.com/ — [первоисточник: реестр и правообладатель]
+
+**Human Design**
+121. Wikipedia, «Human Design» — https://en.wikipedia.org/wiki/Human_Design — происхождение, статус, пересказ решения суда Флоренции (RG n. 2756/2020, 03.06.2020) — [популярный]
+122. Jovian Archive, «Incarnation Crosses in Human Design» — https://jovianarchive.com/pages/incarnation-crosses-in-human-design — [первоисточник]
+123. Jovian Archive, Terms and Conditions — https://jovianarchive.com/pages/terms-and-conditions — [первоисточник]
+124. USPTO TSDR, знаки Jovian Archive: https://tsdr.uspto.gov/statusview/sn97639098 ; https://tsdr.uspto.gov/statusview/sn97606650 ; https://tsdr.uspto.gov/statusview/sn88009411 ; https://tsdr.uspto.gov/statusview/sn78500640 ; https://tsdr.uspto.gov/statusview/sn97642294 ; https://tsdr.uspto.gov/statusview/sn98217560 — [первоисточник: реестр]
+125. BG5 Business Institute — https://bg5businessinstitute.com/ — [первоисточник]
+126. JobCannon, «Human Design types» — https://jobcannon.io/types/human-design — [популярный]
+127. quietlycourageous.substack.com, «Human Design: the profile lines» — https://quietlycourageous.substack.com/p/human-design-the-profile-lines — [популярный]
+128. Книги «HD для бизнеса» (по аннотациям): Palmer J. L., *Human Design for Business* — https://overdrive.com/media/9990894/human-design-for-business ; Farrell-Knapp C., *Human Design for Coaches and Course Creators* — https://mitpressbookstore.mit.edu/book/9781778096501 ; Stapleton J., *On Marketing & Human Design* — https://www.shortform.com/summary/on-marketing-human-design-summary-juliette-stapleton — [популярный]
+129. vc.ru, «Human Design в бизнесе: как использовать типы личности для эффективного маркетинга и управления» — https://vc.ru/id5167893/2148567-human-design-v-biznese — [популярный]
+130. `knowledge-base/04-human-design.md` — стр. 10 (правообладатель), стр. 323 и 930 (канал 34-57), таблица «Линии профиля» — [внутренний]
+
+**Gene Keys**
+131. genekeys.com, «How to read your profile» — https://genekeys.com/how-to-read-your-profile/ — [первоисточник]
+132. genekeys.com, справка о ключевых словах линий в Венере и Жемчужине — https://genekeys.com/docs/why-do-i-have-different-line-keynotes-in-my-venus-or-pearl-sequence/ — [первоисточник]
+133. `knowledge-base/05-gene-keys.md` — стр. 10 (происхождение из HD), стр. 24 («Бренд = Дело жизни»), таблица линий (по коду официального профайлера https://genekeys.com/free-profile/) — [внутренний]
+134. carolinabaffigo.substack.com, «The Gene Keys explained» — https://carolinabaffigo.substack.com/p/the-gene-keys-explained — [популярный; по сводке поиска]
+135. USPTO TSDR, GENE KEYS № 7499528 — https://tsdr.uspto.gov/statusview/sn98164360 ; Gene Keys Terms & Conditions — https://genekeys.com/terms-and-conditions/ — [первоисточник: реестр и правообладатель]
+
+**Ба-цзы**
+136. AbeBooks, Yap J., *BaZi Profiling Box Set* (JY Books, 2010) — https://www.abebooks.com/9789675395598/BaZi-Profiling-Box-Set-Yap-9675395591/plp — [популярный, библиография]
+137. Goodreads, Joey Yap (список книг, в том числе *The Pioneer – Indirect Wealth*) — https://www.goodreads.com/author/show/584579.Joey_Yap?tab=author — [популярный]
+138. thryft.my, Yap J., *The Ten Day Masters – Bing* — https://thryft.my/products/the-ten-day-masters-bazi-essentials-bing-yang-fire — [популярный]
+139. `knowledge-base/01-bazi.md`, §4.4 «Десять божеств» — [внутренний]
+
+**Цзы Вэй, Ки, Джйотиш, Ци Мэнь, Да Лю Жэнь**
+140. masterseanchan.com, «ZWDS main stars» — https://www.masterseanchan.com/zwds-main-stars/ — [популярный, практик]
+141. `knowledge-base/02-ziwei-doushu.md` (стр. 781), `03-nine-star-ki-gua.md` (стр. 182–191, со сверкой по zh.wikisource), `07-jyotish.md` (§8.4), `16-qimen-dunjia.md` (стр. 20), `17-da-liu-ren.md` (стр. 18) — [внутренний]
+142. Exotic India, Harness D. M., *The Nakshatras: The Lunar Mansions of Vedic Astrology* (1999) — https://www.exoticindiaart.com/book/details/nakshatras-lunar-mansions-of-vedic-astrology-ubi850 — [популярный]
+143. Goodreads, Sutton K., *The Nakshatras: The Stars Beyond the Zodiac* (2014) — https://www.goodreads.com/book/show/24700503 — [популярный]
+144. vedicalchemy.substack.com, интервью с D. Harness, 11.06.2024 — https://vedicalchemy.substack.com/p/vedic-astrology-the-lunar-mansions — [популярный]
+
+**Соционика, эннеаграмма, модель Биби**
+145. Wikipedia, «Socionics» — https://en.wikipedia.org/wiki/Socionics — [популярный]
+146. Харченкова Л. И., доклад о соционике, 2016 — https://www.lihachev.ru/pic/site/files/lihcht/2016_Sbornik/2016_Dokladi/2016_sec2_048.pdf — [профессиональный]; Афиша Daily, «Что такое соционика» — https://daily.afisha.ru/poleznye-stati/30170-chto-takoe-socionika/ — [популярный]
+147. Wikipedia, «John Beebe» — https://en.wikipedia.org/wiki/John_Beebe — [популярный]
+148. Routledge, Shumate C., *Projection and Personality Development via the Eight-Function Model* — https://routledge.com/Projection-and-Personality-Development-via-the-Eight---Function/Shumate/p/book/9780367341381 — [профессиональный]
+149. `knowledge-base/14-socionics-enneagram.md` — стр. 112–113 (астросоционика: Шульман, md-bochkareva.com), стр. 554 (27 Tritype® Archetypes); Fauvre K. C., «What is Tritype®?» — https://www.katherinefauvre.com/tritype — [внутренний; первоисточник через базу]
+150. Эннеаграмма × RIASEC, корейское исследование — https://www.koreascience.or.kr/article/JAKO202209156893992.pdf — [профессиональный, не по теме; по сводке поиска]
+
+**Эмпирика**
+151. Wikipedia, «Astrology and science» — https://en.wikipedia.org/wiki/Astrology_and_science — Forer 1949; Pigliucci 2010; Wunder 2003; Hartmann et al. 2006; Rogers & Soule 2009; Allum 2010; Joshanloo 2024; Voas — [популярный, со ссылками на рецензируемые работы]
+152. Wikipedia, «Shawn Carlson» — https://en.wikipedia.org/wiki/Shawn_Carlson — [популярный]; Carlson S., «A double-blind test of astrology», *Nature* 318: 419–425, 1985, DOI 10.1038/318419a0 — [первоисточник; здесь не открывался, прочитан через вторичные источники]
+153. imsc.res.in, пересказ теста Карлсона — https://www.imsc.res.in/~jayaram/Articles/astro/astro.html — [популярный; по сводке поиска]
+154. Ertel S., переанализ теста Карлсона, PhilPapers — https://api.philpapers.org/rec/ERTAOS — [профессиональный]
+155. Hartmann P., Reuter M., Nyborg H., «The relationship between date of birth and individual differences in personality and general intelligence: A large-scale study», *Personality and Individual Differences* 40(7): 1349–1362, 2006, DOI 10.1016/j.paid.2005.11.017 — Crossref https://api.crossref.org/works/10.1016/j.paid.2005.11.017 — [первоисточник: библиография]; библиография NLS — https://nlsinfo.org/bibliography/search/author=Hartmann%2C+Peter — [профессиональный; по сводке поиска]
+156. Wyman A. J., Vyse S., «Science versus the stars: a double-blind test of the validity of the NEO Five-Factor Inventory and computer-generated astrological natal charts», *Journal of General Psychology* 135(3): 287–300, 2008, PMID 18649494, DOI 10.3200/GENP.135.3.287-300 — Europe PMC https://europepmc.org/article/MED/18649494 — [профессиональный: аннотация рецензируемой статьи]; tandfonline http://www.tandfonline.com/doi/abs/10.3200/GENP.135.3.287-300 (403)
+157. Discover Magazine, «Are personality tests any more accurate than astrology?» — https://discovermagazine.com/mind/psychology-vs-astrology — [популярный; по выдаче поиска]
+158. Wikipedia, «Barnum effect» — https://en.wikipedia.org/wiki/Barnum_effect — Forer 1949 (*J. Abnorm. Soc. Psychol.*); Dickson & Kelly 1985 (*Psychological Reports* 57(1): 367–382) — [популярный, со ссылками на рецензируемые работы]
+159. Wikipedia, «Mars effect» — https://en.wikipedia.org/wiki/Mars_effect — [популярный]; Skeptic UK, «Astrology, Gauquelin and the real explanation for the Mars Effect» — https://www.skeptic.org.uk/?p=48696 — [популярный]
+160. Wikipedia, «Season of birth» — https://en.wikipedia.org/wiki/Season_of_birth — Disanto et al. 2012; Csajbók et al. 2022; Russell & Startup 1986; Boland et al. 2015, 2018 — [популярный]
+161. Wikipedia, «Jungian archetypes» — https://en.wikipedia.org/wiki/Jungian_archetypes — Shelburne 1988; Gundry 2006; Reed 2009 — [популярный, со ссылками]
+
+**Внутренние: база и заметки исследования**
+162. `knowledge-base/README.md` — «Статус знаний»; §1 (соционика и эннеаграмма «по дате не вычисляются»); §2 (список модулей); примечание о Сюцай; §5 (числа Сюцай = Мулянк/Бхагьянк) — [внутренний]
+163. Заметки исследования `_notes/`: `r12-esoteric-tarot-numerology.md` (ограничения поиска; §1.4; §8 подсчёты; §9 выводы), `r13-esoteric-astro-hd-gk.md` (вводные ограничения; выводы §§1–11; пробелы), `r16-gap-esoteric.md` (ограничения; §§1–10), `r01-jung.md` (§8), `r04-ru-systems.md` (§§1.10–1.15), `r10-legal.md` (§§5.6, 5.8–5.10), `r15-gap-ru-practice.md` (§1.4) — отчёты исследователей о ходе поиска, недоступных страницах и их выводы — [внутренний]

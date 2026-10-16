@@ -1,0 +1,284 @@
+# Бунтарь (Outlaw)
+
+> **Другие названия:**
+> - перевод «Питера», 2005: «Бунтарь» — пару Outlaw → «Бунтарь» прямо подтверждает название русского издания «Герой и бунтарь» [3]. Во вступительном разделе «101 архетип» этого издания, по заметкам, — «Бунтарь/Разрушитель» ⚠ не подтверждено легальным источником [3];
+> - перевод «Бомборы» (пер. А. Д. Сайфуллиной): «Бунтарь» [2; 20];
+> - МИФ, 2024 (перевод Пирсон 1991): **«Бунтарь» — но это Destroyer**, другой архетип другой системы: «Бунтарь разрушает многое из того, что прежде казалось незыблемым»; слова «Разрушитель» во фрагменте нет [5];
+> - Пирсон 1991: **Destroyer** [4]; PMAI до 2020: Destroyer; PMAI-2020: **Revolutionary**; в адресе страницы на сайте Пирсон — «outlaw-archetype» [7; 9; 10]. В «The Hero Within» (1986/1989) аналога нет [6];
+> - Марк и Пирсон: строка псевдонимов для Бунтаря в OCR повреждена ⚠ [1]; резюме getAbstract использует «The Rebel» [22];
+> - Kaye Putnam: **The Maverick**, «also known as the Outlaw, the Revolutionary, the Rebel» [12];
+> - Хартвелл и Чен: семейство **Rebel**; в слайдах Хартвелл подархетипы Activist, Gambler, Maverick, Reformer [17; 18];
+> - русские практики: «Бунтарь» — Адт [49], I-am-Brand [53], Сураева [51], Гас [50], Дяченко [55], ADWAI [56], RSV [57], АрхетипиУМ [46]; «Бунтарь (Революционер)» — подкаст Дяченко [36]; «Разбойник» (калька с Outlaw) — Левшин [52]; «Разрушитель/Революционер/Бунтарь» — Skillbox [54]; в тезисах «Ломоносов-2020» (Ташкент) — «Бунтарь (the Destroyer)» [47]. Имя «Изгой» в источниках не найдено;
+> - тюркская локализация Леоновой (Казахстан): в группе «Изменения» — Батыр, Палуан, Шаман; поимённого соответствия архетипам Марк и Пирсон во фрагменте нет ⚠ [58].
+>
+> **Группа мотивации (Марк и Пирсон 2001):** часть III «Leaving a Thumbprint on the World: Hero, Outlaw, Magician», с. 101; в «Бомборе» — «Оставить след в этом мире. Герой, Бунтарь, Маг» [1; 2]; в тезисах «Ломоносов-2025» — «Оставить в мире свой след» [48]. Полюс оси — Risk/Mastery; соотнесение частей с полюсами — вывод по названиям частей, явной таблицы в книге не найдено ⚠ [1] · **Глава книги:** гл. 8 «The Outlaw», с. 123 (англ. изд. 2001); в «Бомборе» — гл. 8 «Бунтарь» [1; 2] · **Девиз:** «Rules are meant to be broken.» [1]; русская формулировка девиза в легальных источниках не найдена.
+>
+> **Соответствие во «внутренней» модели Пирсон:** Destroyer в «Awakening the Heroes Within» (1991), часть III «The Journey—Becoming Real» (с. 121); номер главы (11) восстановлен по порядку ⚠ [4]. В PMAI-2020 — Revolutionary [9; 10]; на сайте Пирсон — в кластере с Seeker, Lover и Creator [8]. Пирсон пишет, что Destroyer для брендинга «would really not work», маркетологи предпочли Outlaw, а в PMAI он «becomes the Revolutionary» [8].
+
+---
+
+## 1. Суть, базовое желание, цель, мотивация, ценности
+
+**Брендовая модель (Марк и Пирсон 2001)**
+- Девиз «Rules are meant to be broken.» [1].
+- Сводная таблица Solomon: базовое желание — «Revenge or revolution»; цель — «To destroy what is not working»; страх — «Being powerless»; стратегия — «Disrupt, destroy, or shock» [19]. В OCR книги стратегия видна обрывком «… or shock» [1]. Ebaq передаёт желание так же: «revenge or revolution» [14].
+- Дар: «Gift: outrageousness» [1]; продолжение «radical freedom» ⚠ не подтверждено.
+- «Outlaw brands love to be identified with things that are bad»; в главе есть раздел «Carriers of Outmoded and Revolutionary Behaviors»; люди «yearn to be an Outlaw, at least a little bit, some of the time» [1].
+
+**«Внутренняя» модель Пирсон (Destroyer)**
+- «Awakening the Heroes Within» (1991), врезка главы [4]:
+  - Goal: «Growth, metamorphosis»;
+  - Fear: «Stagnation or annihilation; death [without rebirth]»;
+  - Response to Dragon/Problem: «Be destroyed by it, or destroy it»;
+  - Task: «Learn to let go, turn it over, accept mortality»;
+  - Gift: «Humility, acceptance».
+  - В сводной таблице на с. 10–11: «Metamorphosis», «Annihilation», «Allow dragon to slay it», «Let go», «Humility» [4].
+- В переводе МИФ архетипы пути — те, что помогают «стремиться, отпускать, любить и творить»; «отпускать» — роль Бунтаря-Destroyer [5].
+- Современная версия: Revolutionary наиболее реализован, когда может «change something that they feel needs changing»; нестандартные мыслители, оспаривают статус-кво [7]. Функция на сайте Пирсон — замечать, что не работает, и предлагать перемены [8].
+- Пирсон объясняет переименования контекстом: Outlaw в личностной работе поощрял бы аморальные действия, а в брендинге апеллирует к подавленной «wild side» потребителя [8].
+
+**Версии практиков**
+- Kaye Putnam (Maverick): базовое желание «Liberation & revolution»; ценности — Freedom, Non-conformity, Conviction, Authenticity, Disruption, Truth [12].
+- Iconic Fox: «desire for revolution partly to change the world for the better and partly for the anarchy involved» [13].
+
+**Юнгианские корни**
+- «Outlaw» — не юнгианский термин; брендовые 12 — конструкция Марк и Пирсон 2001 г. [59]. В заметках юнгианский Трикстер, у которого есть «reversal of the hierarchic order» (CW 9i §456), сопоставлен с Шутом, а не с Бунтарём [60] ⚠ не подтверждено легальным источником. Прямого юнгианского соответствия Бунтарю в источниках не найдено.
+
+## 2. Главный страх, тень, ловушки
+
+**Брендовое описание (Марк и Пирсон 2001)**
+- Страх: «Fear: being powerless, … trivialized» — подтверждено фрагментом [1]. Ebaq: «being powerless, trivialized or inconsequential» [14].
+- Ловушка (фрагмент): «Trap: to go over to the …» [1]. Популярное продолжение «dark side, criminality» ⚠ подтверждено частично.
+- Авторы предупреждают о «importance of the Outlaw archetype to the identity of far-right groups» и о подростках, которые, «feeling particularly powerless and angry», тянутся к насилию [1].
+- Бурная негативная реакция на рекламу Calvin Klein и Camel с подростками: «such a backlash against Calvin Klein and Camel cigarettes» [1].
+
+**Теневые формы по Пирсон (1991) и позже**
+- Врезка «Shadow Levels of the Destroyer»: «Self-destructiveness (including drug and alcohol abuse, suicide) and/or destruction…» [4].
+- Таблица теней: «Includes all self-destructive behaviors — addictions, compulsions…» [4].
+- Таблица «Archetypes and Addictions» (с. 19): зависимое качество — Self-destructiveness; зависимость — «Suicide/self-destructive habits» [4].
+- «shadow Destroyer … that loves death» [4].
+- **Направление тени разное:** у Пирсон тень Разрушителя направлена прежде всего на себя (саморазрушение), у M&P брендовая тень Бунтаря — на общество (криминал, «тёмная сторона») [4; 1].
+- Ловушки Revolutionary на сайте Пирсон: «reckless», бесконечные или ненужные перемены, осуждение других, «stubbornly oppositional» [7].
+
+**Версии практиков**
+- Kaye Putnam, тень: легко оскорбить и зайти слишком далеко; высокомерие или враждебность; рефлекторное неприятие всего популярного [12].
+- Iconic Fox: «anger is part of their motivation, which can become the dominant force. Without a fight, they are lost» [13].
+- Багдасарова и Силенко: слабость — «бессилие», табу — «посредственность» [39].
+- АрхетипиУМ: тень — «абьюз… агрессия»; страх — «Оказаться бессильным, заурядным» [46].
+- Подкаст Дяченко с Фадеевым: доставка «Ёбидоёби» приведена как пример **тени** Бунтаря (сценарий «психопатия») [36] ⚠ виден только описание выпуска и таймкоды.
+
+**Связки тени со страхами начинающих блогеров (только найденные у практиков)**
+- Связок тени Бунтаря со страхами или блоками начинающих блогеров в источниках **не найдено**.
+- У АрхетипиУМ страх Бунтаря выписан («Оказаться бессильным, заурядным») [46], но связь с блогом на странице архетипа, по заметкам, не проводится.
+
+## 3. Сильные стороны и таланты
+- Марк и Пирсон: дар — «outrageousness» [1].
+- Сайт Пирсон: передовые подходы, защита реформ; организации-Revolutionary — «radical ideas», реформы, «contrarian voice» [7].
+- Kaye Putnam: смелость сказать вслух то, что другие только думают [12].
+- Пирсон 1991 (Destroyer): дар — «Humility, acceptance»; умение отпускать [4].
+
+## 4. Коммуникация: тон голоса, манера речи, словарь, визуальные коды, цвета и символы
+
+**Тон и манера речи**
+- Iconic Fox: «Formal communication should be avoided and your language and tone should be laced with grit and attitude»; статус-кво и конформизм — «common enemy» [13].
+- Kaye Putnam: «polarizing on purpose». Запреты: не идти за толпой, не смягчать посыл ради мейнстрима, «Avoid volume without value», не быть неискренним [12].
+- WEDEX: провокация, ирония и сарказм, «Do it your way», «anti-advertising» [15].
+- Plenum (на примере Тинькофф): слоган «НЕ ТАКОЙ КАК ВСЕ», позиционирование против классических банков, вызывающий тон [28].
+
+**Словарь**
+- Эмоции (Evokes) у Kaye Putnam: Liberation, Stimulation, Thrill, Empowerment, Rebellion, Boldness [12].
+- Ценности Бунтаря в разборе блогера Моргенштерна: «обновление, шокирование, свобода» [39].
+
+**Цвета и визуальные коды — кто рекомендует**
+
+| Кто | Что | Комментарий |
+|---|---|---|
+| Марк и Пирсон 2001 | палитр архетипам **не назначают** | [1] |
+| Пирсон (carolspearson.com) | цветов нет | [7] |
+| Kaye Putnam | на страницах архетипов цветов нет | [12] |
+| Ebaq 2026 | цветов нет | [14] |
+| zipBoard 2020 | «Black, dark reds, and dark oranges»; шрифты «Shock factor with bold and non-conventional fonts»; символ — открытая дорога (реклама Harley) | автор и источник цветов не указаны [16] |
+| WEDEX 2025 | «black and red» в контрасте, «harsh fonts», агрессивная графика | [15] |
+| Iconic Fox | палитра только картинкой, текстом не проверяется ⚠ | [13] |
+| Plenum 2024 (RU, на примере Тинькофф) | объёмная типографика | [28] |
+
+- Здесь практики **в основном сходятся**: чёрный + красный [16; 15].
+
+**Символы у Марк и Пирсон** [1]:
+- логотип Apple — «an apple with a bite out of it», отсылка к грехопадению («fortunate fall»);
+- ролик Apple «1984» («1984 won't be like '1984'»);
+- «cowboys with the black hats» — во фрагменте врезки рядом с «Gift: outrageousness».
+
+## 5. Восприятие аудиторией: кого привлекает, кого отталкивает
+
+**Кого привлекает**
+- Марк и Пирсон: MTV «reaches adolescents everywhere»; «kids tend to love it» [1]. Люди «yearn to be an Outlaw, at least a little bit, some of the time» [1].
+- Пирсон: в брендинге Outlaw апеллирует к потребителям, подавившим свою «wild side» [8].
+- Kaye Putnam: аудитория — те, кто «feel alienated or dissatisfied with society»; категории — «sex, alcohol, or subversiveness»; такие бренды «they'd rather be loved by some than tolerated by all» [12].
+
+**Кого отталкивает**
+- Марк и Пирсон: MTV — «which is why kids tend to love it and parents worry about it»: притягивает подростков и отталкивает родителей [1].
+- Бурная реакция общества на рекламу Calvin Klein и Camel с подростками [1].
+- Kaye Putnam: поляризация — сознательная («polarizing on purpose») [12].
+
+## 6. Мировые бренды
+
+| Бренд | Кто относит к архетипу и где | Аргумент | Актуальность на 2026-10-15 |
+|---|---|---|---|
+| Harley-Davidson | M&P, гл. 8, «Harley-Davidson: An Outlaw Masterpiece» [1]; Iconic Fox («Brand In Action») [13]; Kaye Putnam («American by birth, rebel by choice») [12]; Ebaq («the typical outlaw brand») [14]; zipBoard [16]; WEDEX [15]; Соколова [38] | открытая дорога, свобода [16] | действует; выручка за 2025 ф. г. — 4,47 млрд долл. (снижение), генеральный директор — Artie Starrs [21]. ⚠ Изменения позиционирования 2024–2025 гг. не подтверждены. Как одноархетипный пример спорен: Digital Surgeons — Rebel + Everyman, Imperial — «more of the Patriarch» с Companion [26; 27] |
+| MTV | M&P: «Outlaw brands include MTV» [1] | «kids tend to love it and parents worry about it» [1] | ⚠ закрытие ряда международных музыкальных каналов MTV в 2025 г. не проверено |
+| Apple | M&P: ролик «1984» и «Think different» [1]; getAbstract: «Does Apple Computer bring to mind 'The Rebel?'» [22] | откушенное яблоко как «fortunate fall» [1] | действует; **спорно**: у M&P Apple звучит и в контексте Творца; Kaye Putnam («the quintessential Magician»), zipBoard и WEDEX — Маг [12; 16; 15]; Iconic Fox — Outlaw → Creator [13]; Соколова — «маг и творец» [38] |
+| Calvin Klein | M&P: «Although one could see Calvin Klein as a Lover brand… the company also has Outlaw qualities» [1] | смесь Любовника и Бунтаря | ⚠ не проверялось |
+| Camel | M&P, в контексте общественной реакции на рекламу с подростками [1] | — | ⚠ не проверялось |
+| Diesel | Kaye Putnam («Be stupid» ⚠ кампания 2010 г., дата не проверена) [12]; Ebaq [14]; WEDEX [15] | — | ⚠ не проверялось |
+| Virgin | Ebaq [14]; WEDEX [15] | у M&P Virgin — «superbrand», единство которого держит основатель — «living icon» [1, с. 285 ⚠] | бренд Virgin действует |
+| Virgin Mobile | zipBoard (2020) [16] | — | **устарел**: Virgin Mobile USA прекратил работу 02.02.2020 с переводом абонентов в Boost Mobile [23] |
+| Patagonia | Kaye Putnam: Maverick с вторичным Explorer [12] | — | ⚠ не проверялось. У M&P и Ebaq — Искатель [1; 14] |
+| CarMax | Kaye Putnam [12] | в заметках не приведён | ⚠ не проверялось |
+| Uber | Kaye Putnam, пример подтипа Vigilante [12] | — | ⚠ не проверялось |
+| BMW | перевод «Бомборы», ч. I: бренд, «олицетворяющий архетип Бунтаря» [20] | — | ⚠ не проверялось. **Спорно**: у zipBoard BMW — Герой [16] |
+| Barbour | Imperial: видео «dominated by the Rebel», есть Companion; таксономия не Марк–Пирсон [27] | — | ⚠ не проверялось |
+| Monobank, Pravda Beer (Украина, региональные примеры) | WEDEX [15] | в заметках не приведён | ⚠ не проверялось |
+
+## 7. Русскоязычные бренды
+
+| Бренд | Страна | Атрибуция | Аргумент | Актуальность |
+|---|---|---|---|---|
+| Тинькофф → Т-Банк | RU | Plenum, 2024 [28]; Craftum, 2025 [29]; собственный медиаблог банка ставит «Тинькофф Банк» в примеры Бунтаря рядом с Harley-Davidson и Diesel [31] ⚠ страница вернула 503, виден только фрагмент выдачи; fdrv.pro — Бунтарь только «в период становления» [32] ⚠ по фрагменту | слоган «НЕ ТАКОЙ КАК ВСЕ», позиционирование против классических банков, объёмная типографика, вызывающий тон [28]; банк сломал традиционный образ, отказавшись от отделений [29] | **ребрендинг**: в 02.2024 герб заменён жёлтым щитом с буквой «Т», 05.06.2024 сменилось название [33; 34 ⚠ по фрагменту]. Эксперты ADPASS в основном видят переход к нейтральному экосистемному образу: Омелье (Weavers) — «все изменить, ничего не меняя», Фейгин (DDVB) — «весь аромат бренда ушел» [35]. Новой атрибуции архетипа после ребрендинга не найдено |
+| Додо Пицца | RU | Gromov Branding [30] | компания «разрушила стереотипы» о пиццериях, сделав процессы прозрачными и технологичными | **спорно**: Plenum относит Dodo Brands к Творцу [28] |
+| ProteinRex | ⚠ страна в источнике не указана, российское происхождение не проверено | Craftum, 2025 [29] | полезные десерты с необычными формулами: не обязательно отказываться от сладкого, чтобы худеть | ⚠ не проверено |
+| «Ёбидоёби» | RU | подкаст Дяченко с Фадеевым — пример **тени** Бунтаря (сценарий «психопатия») [36] | — | ⚠ виден только описание выпуска; это пример теневой стороны, а не образец |
+| Tele2 → t2 | RU | Plenum относит к Герою [28]; близость к Бунтарю — оценка исследования, не из источника | платформа «Другие правила» и обещание «уход от шаблонных решений» [33] | см. карточку Героя |
+
+- Опубликованных атрибуций Бунтаря брендам из Казахстана, Беларуси, Узбекистана и Армении в источниках не найдено.
+
+## 8. Блогеры и эксперты — международные (в первую очередь англоязычные)
+
+| Персона | Платформа и ниша | Атрибуция | Почему этот архетип |
+|---|---|---|---|
+| Мадонна | музыкант, не блогер | M&P: меняет образы, «but she is always the outrageous Rebel» [1, с. 1–2 ⚠]; бренд-идентичность бросает вызов делению «the virgin and the whore» — ⚠ глава не установлена [1] | последовательность одного архетипа при смене образов |
+| Джек Николсон | актёр | M&P: всегда Outlaw [1, с. 1–2 ⚠] | — |
+| Ричард Брэнсон | основатель Virgin; блог и LinkedIn, аудитория ⚠ не проверена | Kaye Putnam, «Real-life Mavericks» [12] | черты — оценка исследования, не из источника: вызовы отраслевым устоям, рискованные публичные трюки, неформальный стиль |
+| Леди Гага | музыкант, не блогер | Kaye Putnam [12] | черты — оценка исследования, не из источника: провокационный визуальный образ и игра с нормами |
+| Malcolm X | историческая фигура | Kaye Putnam [12] | — |
+| Kat Von D | тату-культура, альтернативная эстетика | Kaye Putnam [12] | — |
+| Mark Manson | YouTube, 3,16 млн на 2026-10-15 [24]; книги о саморазвитии | оценка исследования, не из источника | провокационные заголовки и намеренно грубая лексика в названии книги (⚠ год не проверен); оспаривание норм позитивной психологии; ирония. Смешанный тип: Бунтарь + Мудрец |
+| GaryVee (Gary Vaynerchuk) | YouTube, 4,89 млн [24] ⚠ число совпадает с каналом Jay Shetty, перепроверить | оценка исследования, не из источника | резкий неформальный язык; вызов «правилам» карьеры и маркетинга; призыв действовать — уже черта Героя/Motivator. Смешанный тип |
+
+## 9. Блогеры и эксперты — русскоязычные
+
+| Персона | Страна | Платформа | Атрибуция | Почему | Правовой статус |
+|---|---|---|---|---|---|
+| Моргенштерн (Алишер Моргенштерн) | RU, живёт вне РФ | YouTube (около 12,4 млн на 09.2026), Telegram [40] | Багдасарова и Силенко, 2021 [39] | деятельность «шокирует и разрушает стереотипы»; ценности — «обновление, шокирование, свобода» [39] | по Википедии, с 06.05.2022 внесён в реестр иностранных агентов Минюста РФ [40]. Перед использованием нужна юридическая проверка и маркировка |
+| Артемий Лебедев | RU | дизайнер, предприниматель, блогер; YouTube-канал заблокирован платформой 22.02.2023; ЖЖ закрыт в 12.2020 с переходом на Teletype; Telegram; с 10.2023 — дизайн-директор VK [42] | SberBusiness.live, 2024: Творец «с яркими чертами Бунтаря» [41] | Википедия фиксирует, что он «занимает резкие позиции» и вовлечён в публичные споры [42] | в заметках отметок нет |
+| Михаил Фадеев | RU | маркетолог, CEO агентства «АМР» | выбран гостем рубрики «Разговор с архетипом (Бунтарь)», но ярлык отвергает: «Я не знаю, что такое бренд-архетип», «У меня нет цели бунтовать» [37] | пример того, что эксперт может звучать резко, но мотивировать себя ремеслом, а не протестом — оценка исследования, не из источника | в заметках отметок нет |
+| Олег Тиньков | RU (по Википедии, вышел из гражданства РФ в 10.2022) [44] | — | Булыгина: упомянут как Бунтарь ссылкой, без разбора [43] | аргументов в источнике нет | по Википедии, 16.02.2024 Минюст внёс его в реестр иностранных агентов [44]. Перед использованием нужна юридическая проверка |
+| Вера Демина | ⚠ страна не указана | TenChat | Булыгина: ведущий Шут, «яркое вкрапление» — Бунтарь, акценты Славного малого и Мудреца [43] | разбор поста блогера на вебинаре | в заметках отметок нет |
+| Алексей Водовозов | RU | терапевт и токсиколог, научный журналист; YouTube, Telegram [45] | оценка исследования, не из источника: Мудрец со вторичными чертами Бунтаря | тон «развенчания мифов» [45] | в заметках отметок нет. ⚠ Последняя датированная активность в Википедии — 2021 |
+
+- Проверенных Бунтарей в нишах финансов, образования и лайфстайла в источниках не найдено.
+
+## 10. Сочетания: гармоничные и конфликтные
+
+**Позиция первоисточника**
+- Марк и Пирсон рекомендуют один архетип: «one—and only one—archetype» [1, с. 42 ⚠; 14]. Мадонна и Джек Николсон у них — примеры **одного** устойчивого архетипа при смене образов [1, с. 1–2 ⚠].
+- Бунтарь — в группе мастерства с Героем и Магом [1].
+- Близость к Искателю: Искатель «identifies with the Outsider», в той же фразе — MTV, Outlaw-бренд гл. 8 [1].
+- Calvin Klein — Любовник с «Outlaw qualities» [1].
+- Levi's дрейфовал между Outlaw, Hero и Explorer — у авторов пример размывания [1].
+
+**Гармоничные и рабочие связки (как в источниках)**
+- Бунтарь + Искатель: Patagonia у Kaye Putnam — «Maverick with an Explorer secondary» [12].
+- Творец + Бунтарь: Лебедев у SberBusiness.live [41]. У Пирсон Разрушитель — пара к Творцу: «the creator and the destroyer, or revolutionary», то есть что создаёшь и что отпускаешь [11]; в руководстве PMAI пара Revolutionary–Creator прямо названа «complementary pairs», которые «psychologically complete one another» [10].
+- Герой + Бунтарь: «Heroic Maverick»; Хан Соло как «push and pull» между Hero и Rebel; «Rebel Royal» (Rebel + Royal) — у Digital Surgeons [26].
+- Бунтарь + Славный малый: Harley-Davidson у Digital Surgeons — «Everyman makes the Rebel feel attainable» [26].
+- Шут + Бунтарь: Вера Демина у Булыгиной [43].
+- Соколова: компании, которая ценит инновации и свободу, подходят Искатель, Маг или Бунтарь, а Опекун и Правитель «вряд ли подойдут» [38].
+- По оценкам исследования, не из источника: Бунтарь + Мудрец (Mark Manson, Водовозов), Бунтарь + Герой (GaryVee), Искатель ≈ Бунтарь (Casey Neistat — см. карточку Искателя).
+- У потребителей (Spangenberg, MDS) Бунтарь попадает в кластер «High Social Influence» вместе с Героем и Правителем [25].
+
+**Смена архетипа во времени**
+- Apple, по Iconic Fox, «broke through» как Outlaw и затем стал Creator [13].
+- Т-Банк: после ребрендинга 2024 г. эксперты видят переход от вызывающего образа к нейтральному экосистемному [35].
+
+**Конфликтные и рискованные связки**
+- Бунтарь и «стабильная» тройка (Заботливый, Творец, Правитель) лежат на противоположных полюсах осей M&P; конфликт — вывод исследования, не прямая цитата [1]. При этом пара Разрушитель–Творец у Пирсон — дополнительная [11; 10], а Соколова прямо называет Опекуна и Правителя неподходящими для ценностей свободы [38].
+- Скандальный потенциал: реклама Calvin Klein и Camel вызвала общественную реакцию [1].
+
+## 11. Расхождения между авторами
+- **Девиз.** M&P — «Rules are **meant** to be broken» [1]; у Kaye Putnam в описании картины мира — «rules were made to be broken» [12]. В самой книге M&P формулировка «Rules Are Made to Be Broken» — подзаголовок в разделе о **Шуте**, что повышает риск путаницы [1].
+- **Имя.** Outlaw (M&P) [1], Destroyer (Пирсон 1991) [4], Revolutionary (PMAI-2020) [9], Maverick (Kaye Putnam) [12], Rebel (Хартвелл; getAbstract) [17; 22].
+- **Омонимия «Бунтаря».** В «Бомборе» «Бунтарь» — это Outlaw (бренды) [2]; в переводе МИФ «Бунтарь» — это Destroyer (Пирсон 1991) [5]; в тезисах «Ломоносов-2020» — «Бунтарь (the Destroyer)» [47]. Одно русское слово указывает на два разных архетипа двух систем.
+- **Желание и страх.** Брендовый Бунтарь — «revenge or revolution», страх бессилия и незначительности [19; 1]; внутренний Разрушитель — «Growth, metamorphosis», страх стагнации и уничтожения [4]. Это **сильное расхождение**: социальный протест против отпускания и метаморфозы. Современная Пирсон (Revolutionary) сблизила личностный архетип с брендовым пониманием [7].
+- **Направление тени.** У Пирсон 1991 — на себя (саморазрушение) [4]; у M&P — на общество (криминал, ультраправые группы) [1].
+- **Почему переименовали.** Пирсон: Destroyer «would really not work» в брендинге [8]; в PMAI-2020 имена изменены, чтобы все звучали «equally positive» [9], а руководство PMAI добавляет, что Destroyer у большинства людей стабильно оказывался внизу профиля [10].
+- **Apple.** M&P — Бунтарь («1984», «Think different») и Творец [1; 22]; Kaye Putnam, zipBoard, WEDEX — Маг [12; 16; 15]; Iconic Fox — Outlaw → Creator [13]; Digital Surgeons — Rebel, Sage, Caretaker по точкам контакта [26]; Соколова — Маг + Творец [38].
+- **Harley-Davidson.** Как одиночный Бунтарь — у M&P, Kaye Putnam, Iconic Fox, Ebaq, zipBoard, WEDEX, Соколовой [1; 12; 13; 14; 16; 15; 38]; как смесь — у Digital Surgeons (Rebel + Everyman) и Imperial («more of the Patriarch», в другой таксономии) [26; 27].
+- **BMW.** «Бомбора» — Бунтарь [20]; zipBoard — Герой [16].
+- **Додо.** Gromov Branding — Бунтарь [30]; Plenum — Творец [28].
+- **Т-Банк.** До 2024 г. Бунтарь почти единодушно [28; 29; 31 ⚠]; fdrv.pro ограничивает это «периодом становления» [32 ⚠]; после ребрендинга архетипической переатрибуции не найдено [35].
+- **Цвета.** Практики в основном сходятся: чёрный + красный [16; 15]; первоисточники цветов не дают [1; 7; 12].
+- **Пересечение страхов.** «Being powerless» у Бунтаря M&P [19] пересекается с «powerlessness» в страхе Воина у Пирсон 1991 [4] — наблюдение — оценка исследования, не из источника.
+
+## Источники
+
+1. Mark M., Pearson C. S. *The Hero and the Outlaw: Building Extraordinary Brands Through the Power of Archetypes.* New York: McGraw-Hill, 2001. ISBN 0071364153. Текст сверялся полнотекстовым поиском по библиотечному экземпляру Internet Archive (короткие OCR-фрагменты, возможны ошибки распознавания): https://archive.org/details/herooutlawbuildi0000mark . Оглавление: ч. II — с. 49 (гл. 4 — с. 53, гл. 5 — с. 71, гл. 6 — с. 88); ч. III — с. 101 (гл. 7 — с. 105, гл. 8 — с. 123, гл. 9 — с. 140). Номера страниц с пометкой «⚠» взяты из заметок, где книга сверялась по неидентифицированной онлайн-копии; легальным источником они не подтверждены. [первоисточник]
+2. Марк М., Пирсон К. *Герой и бунтарь. Как использовать архетипы на пользу бизнесу и творчеству* / пер. А. Д. Сайфуллиной. М.: Бомбора, серия «Бомбора Foundation. Self-help», 512 с., ISBN 978-5-04-246600-7. Оглавление издателя (PDF): https://cdn.eksmo.ru/v2/ITD000000001500651/PDF/ITD000000001500651_TOC.pdf ; карточка: https://eksmo.ru/book/geroy-i-buntar-kak-ispolzovat-arkhetipy-na-polzu-biznesu-i-tvorchestvu-ITD1500651/ . Издание 2023 г. (серия «Маркетинг для немаркетологов», ISBN 978-5-04-172815-1; его оглавление не проверено): https://www.labirint.ru/books/950126/ . [первоисточник/издатель]
+3. Марк М., Пирсон К. *Герой и бунтарь. Создание бренда с помощью архетипов.* СПб.: Питер, 2005, серия «Маркетинг для профессионалов», 336 с., ISBN 5-94723-616-8. Выходные данные: https://urss.ru/cgi-bin/db.pl?lang=Ru&blang=ru&page=Book&id=154748 . Названия архетипов и частей этого перевода легальным источником не подтверждены (известны из неавторизованной копии; ссылка не приводится). [первоисточник/магазин — только выходные данные]
+4. Pearson C. S. *Awakening the Heroes Within: Twelve Archetypes to Help Us Find Ourselves and Transform Our World.* HarperSanFrancisco, 1991. ISBN 0062506781. Полнотекстовый поиск по экземпляру Internet Archive: https://archive.org/details/awakeningheroesw0000pear . Таблица «The Twelve Archetypes» — с. 10–11; «Archetypes and Addictions» — с. 19; часть III — с. 121. Страницы по колонтитулам (±1). [первоисточник]
+5. Пирсон К. *Пробуждение внутреннего героя. 12 архетипов, которые помогут раскрыть свою личность и найти путь* / пер. А. Багрянцевой. М.: МИФ, 2024. ISBN 978-5-00214-422-8. Ознакомительный фрагмент: https://www.litres.ru/book/carol-s-pearson-2/probuzhdenie-vnutrennego-geroya-12-arhetipov-kotorye-pom-70498927/chitat-onlayn/ ; выходные данные: https://www.labirint.ru/books/1002571/ . [первоисточник/издатель]
+6. Pearson C. S. *The Hero Within: Six Archetypes We Live By.* Expanded ed. San Francisco: Harper & Row, 1989 (©1986, 1989). ISBN 0-06-254862-X. https://archive.org/details/herowithin002330mbp . Шесть архетипов: Innocent, Orphan, Wanderer, Warrior, Martyr, Magician. [первоисточник]
+7. Pearson Archetypal System, carolspearson.com, «Revolutionary/Outlaw»: https://carolspearson.com/archetype-pages/outlaw-archetype . Дата не указана; просмотрено 2026-10-15. [первоисточник]
+8. carolspearson.com, «The Pearson 12-Archetype System: Human Development and Evolution»: https://www.carolspearson.com/about/the-pearson-12-archetype-system-human-development-and-evolution . [первоисточник]
+9. carolspearson.com, «PMAI re-release» (май 2020): https://www.carolspearson.com/wp-imort-2/pmai-re-release ; StoryWell (шкалы PMAI-2020): https://www.storywell.com/ . [первоисточник]
+10. Blandin K., Marr H. K., Pearson C. S. *PMAI Manual.* Gainesville: CAPT, 2021. ISBN 978-0-935652-05-5, гл. 2–3. PDF издателя: https://cdn.prod.website-files.com/5fc7fbb375805cc285353295/65d8ffa286160b97014347f7_PMAI_Manual_2021-1.pdf . [первоисточник; издатель инструмента]
+11. Matousek M. «Which Archetypes Are You Living?» — интервью с C. S. Pearson. Psychology Today, 2024-08-08: https://www.psychologytoday.com/us/blog/the-seekers-forum/202408/which-archetypes-are-you-living . [профессиональный; прямая речь автора системы]
+12. Putnam K. «Brand Archetypes». kayeputnam.com, © 2026: обзор https://kayeputnam.com/brand-archetypes/ ; страница архетипа https://kayeputnam.com/brand-archetypes/maverick ; квиз https://kayeputnam.com/quiz/ . [профессиональный; первоисточник для её системы]
+13. Houraghan S. «Brand Archetypes: The Definitive Guide [36 Examples]». Iconic Fox, опубл. 2018-05-03, обновл. 2025-12-01: https://iconicfox.com.au/brand-archetypes/ . [профессиональный]
+14. Dvornechuck A. «Brand Archetypes: The Definitive Guide for 2026 (48 Examples)». Ebaq Design, 2026-01-27: https://www.ebaqdesign.com/blog/brand-archetypes . Пересказывает формулировки M&P. [профессиональный]
+15. Vlasiuk P. «Choosing a brand archetype: how to find your image among 12 classic roles». WEDEX (Украина), 2025-10-13: https://wedex.com.ua/en/blog/choosing-a-brand-archetype-how-to-find-your-image-among-12-classic-roles/ . [профессиональный]
+16. «Branding archetypes». Блог zipBoard, 2020-10-29; автор и источник цветов не указаны: http://zipboard.co/blog/content-dev/branding-archetypes/ . [популярный]
+17. Hartwell M. «Archetypes in Branding» (слайды курса, 70 слайдов). SlideShare, 22.08.2014: https://www.slideshare.net/slideshow/archetypes-in-branding/49975573 . [первоисточник для системы Хартвелл, ранняя версия]
+18. Hartwell M., Chen J. C. *Archetypes in Branding: A Toolkit for Creatives and Strategists.* HOW Books / F+W Media, 2012 (60 архетипов: 12 семейств по 5; колода из 60 карт). Каталог: https://www.bookshare.org/browse/book/652185 . Текст книги не просмотрен. [профессиональный — каталог]
+19. Solomon M. R. *Consumer Behavior: Buying, Having, and Being.* 11th ed. Pearson, 2014: https://archive.org/details/consumerbehavior0000mich_edi11 ; изд. 2018: https://archive.org/details/consumerbehavior0000solo_n4t7 . Сводная таблица полей M&P (Core desire / Goal / Fear / Strategy). [профессиональный; вторичное воспроизведение M&P]
+20. Марк М., Пирсон К. «Герой и бунтарь» (пер. А. Сайфуллиной), ознакомительный фрагмент на Литрес (предисловия и часть I): https://www.litres.ru/book/carol-s-pearson-2/geroy-i-buntar-kak-ispolzovat-arhetipy-na-polzu-biznesu-74458861/chitat-onlayn/ . [первоисточник/фрагмент издателя]
+21. Wikipedia, «Harley-Davidson»: https://en.wikipedia.org/wiki/Harley-Davidson . [популярный]
+22. getAbstract, резюме *The Hero and the Outlaw* (доступна только превью-часть): https://www.getabstract.com/en/summary/the-hero-and-the-outlaw/1499 . [профессиональный]
+23. Wikipedia, «Virgin Mobile USA»: https://en.wikipedia.org/wiki/Virgin_Mobile_USA . [популярный]
+24. YouTube, шапки каналов, данные на 2026-10-15: https://www.youtube.com/@iamMarkManson ; https://www.youtube.com/@garyvee . [первоисточник для числа подписчиков]
+25. Spangenberg K. *Brand Archetypes.* PhD diss., University of Washington, Foster School of Business, 2021, с. 17–25: https://digital.lib.washington.edu/researchworks/items/c15713ba-a19c-4da6-9ca8-2758d42560e1 . [профессиональный — диссертация]
+26. Digital Surgeons, «Combining Brand Archetypes»: https://legacy.digitalsurgeons.com/thoughts/marketing/brand-archetypes/ . [профессиональный]
+27. Merlo O. «Lessons for leaders: successful brands have multiple personalities». Imperial College Business School, 14.08.2023: https://imperial.ac.uk/business-school/print/pdf/node/6431 . Таксономия не Марк–Пирсон. [профессиональный]
+28. Крячко А. (Plenum). «Архетипы в маркетинге на примере диджитальных российских брендов». dsgners.ru, 28.05.2024: https://dsgners.ru/Plenum/5317-arhetipyi-v-marketinge-na-primere-didjitalnyih-brendov . [профессиональный]
+29. Craftum, блог. «Архетипы бренда…», 18.06.2025, автор не указан: https://craftum.com/blog/arhetipy-brenda/ . [популярный]
+30. Gromov Branding. «Архетипы бренда: полный гайд с примерами российских и мировых компаний» (автор и дата не указаны): https://gromovbranding.ru/branding-blog/arhetipy-brenda-polnyy-gayd-primerami-rossiyskih-mirovyh . [популярный]
+31. Т-Банк, «Секреты». «Архетип бренда: что это и как выбрать нужный архетип»: https://secrets.tbank.ru/razvitie/arhetip-brenda/ . ⚠ Страница вернула 503, виден только фрагмент выдачи. [первоисточник-самоописание]
+32. fdrv.pro. «12 архетипов бренда: описание и примеры»: https://fdrv.pro/blog/arhetipy-v-brendinge . ⚠ Виден только фрагмент выдачи. [популярный]
+33. Sostav. «Громкие ребрендинги 2024 года», 24.12.2024: https://www.sostav.ru/publication/gromkie-rebrendingi-2024-72155.html ; Mobile-Review, «Tele2 превратился в t2. Ребрендинг по другим правилам»: https://mobile-review.com/all/articles/operator/tele2-prevratilsya-v-t2-rebrending-po-drugim-pravilam (⚠ только фрагмент выдачи). [профессиональный]
+34. Ведомости. «"Тинькофф" стал Т-Банком», 05.06.2024: https://www.vedomosti.ru/finance/articles/2024/06/05/1041572-tinkoff-stal-t-bankom . ⚠ Виден только фрагмент выдачи. [профессиональный]
+35. ADPASS. «"Тинькофф" поменял название на Т-банк. Эксперты ADPASS оценивают…», 05.06.2024: https://adpass.ru/tinkoff-opyat-pereshel-t-eksperty-adpass-razbirayut-podhodit-li-gruppe-novyj-brend/ . [профессиональный]
+36. Дяченко А. «Полный разбор бренд-архетипа Бунтарь (Революционер). Гость — Михаил Фадеев», подкаст, 21.04.2023. Описание и таймкоды: https://litres.com/podcast/aleksandr-dyachenko/polnyy-razbor-brend-arhetipa-buntar-revolucioner-gost-73429987/ . ⚠ Виден только фрагмент выдачи. [профессиональный]
+37. Дяченко А., Фадеев М. «Разговор с архетипом (Бунтарь)». Sostav-блог, 05.05.2023: https://www.sostav.ru/blogs/261743/37806 . [профессиональный]
+38. Соколова Е. (агентство «Опыт бренда»). «Архетип бренда. Как не превратить маркетинг в астрологию». Sostav-блог, 02.07.2026: https://www.sostav.ru/blogs/288649/93766 . [профессиональный]
+39. Багдасарова Р. А., Силенко В. А. (Финансовый университет). «Архетипический маркетинг в блогинге: современные средства продвижения образа». Материалы интернет-конференции «Журналистика в эпоху цифровых трансформаций», ТГУ им. Г. Р. Державина, 2021: https://www.tsutmb.ru/nauka/internet-konferencii/2021/zhurnalistika_v_epohu_cifrovyh_transformacij/5/Bagdasarova_Silenko.pdf . [профессиональный: тезисы, низкий уровень рецензирования]
+40. Википедия, «Моргенштерн (музыкант)»: https://ru.wikipedia.org/wiki/Моргенштерн_(музыкант) . [популярный]
+41. Карпова Е. «Искатель, Шут или Мудрец: как использовать архетипы в бизнесе». SberBusiness.live, 24.06.2024: https://sberbusiness.live/publications/archetype . [популярный: корпоративное медиа]
+42. Википедия, «Лебедев, Артемий Андреевич»: https://ru.wikipedia.org/wiki/Лебедев,_Артемий_Андреевич . [популярный]
+43. Булыгина И. «Не текстом единым живут блогеры: TenChat прошёл вебинар „Блогинг через архетипы“». TenChat, ~09.2025: https://tenchat.ru/media/3757216-ne-tekstom-yedinym-zhivut-blogery-tenchat-proshel-vebinar-bloging-cherez-arkhetipy . [популярный]
+44. Википедия, «Тиньков, Олег Юрьевич»: https://ru.wikipedia.org/wiki/Тиньков,_Олег_Юрьевич . [популярный]
+45. Википедия, «Водовозов, Алексей Валерьевич»: https://ru.wikipedia.org/wiki/Водовозов,_Алексей_Валерьевич . [популярный]
+46. АрхетипиУМ (Ю. Соловьева), страница архетипа: https://arhetipium.ru/buntar ; главная: https://arhetipium.ru/ . Просмотрено 2026-10-15. [популярный, рекламный]
+47. Собитова М. (ташкентский филиал МГУ). «Восприятие архетипических образов в телевизионной рекламе», тезисы «Ломоносов-2020»: https://confhub.ru/archive/Lomonosov_2020_2/data/19441/114596_uid452819_report.pdf . [профессиональный: тезисы]
+48. Тезисы «Ломоносов-2025», «Архетипы как способ формирования голоса онлайн-СМИ» (Волгоградский филиал РАНХиГС): https://confhub.ru/archive/Lomonosov_2025/data/36727/183406_uid271377_report.pdf . [профессиональный; студенческие тезисы]
+49. Адт А. Тест «Бренд-Личность»: https://alinaadt.ru/archetypes . [первоисточник — автор системы]
+50. Гас К. Пост об архетипах личного бренда. Teletype, 09.07.2024: https://teletype.in/@katyagas/czNfmod6BTZ . [первоисточник — автор системы]
+51. Сураева А. «Личный бренд с помощью архетипов: база». vc.ru, 16.01.2024: https://vc.ru/marketing/988741-lichnyi-brend-s-pomoshyu-arhetipov-baza . [популярный]
+52. Левшин Р. Статья для НОКС, 25.12.2023: https://nokc.org.ru/nokc-style/ . [профессиональный]
+53. Богданов А. (I-am-Brand). «Архетипы в личном бренде», 04.08.2023: https://i-am-brand.ru/knowledge-base/arhetipy-v-lichnom-brende/ . [популярный]
+54. Старцева П. «Архетипы простыми словами». Skillbox Media, 01.03.2024: https://skillbox.ru/media/design/archetypes-in-simple-words/ . [популярный]
+55. Дяченко А. «Бренд-архетип Славный Малый (Друг): что общего у Марьиванны и криптоинноваций?». Sostav-блог, 25.12.2023: https://www.sostav.ru/blogs/261743/42960 . [профессиональный]
+56. ADWAI Digital. «12 архетипов личного бренда»: https://adwai.digital/blog/j4rlrpry31-12-arhetipov-lichnogo-brenda-postroenie . Дата не указана. [популярный]
+57. «Россия — страна возможностей», блог. «Архетипы в соцсетях: как сделать блог узнаваемым», 05.11.2025: https://rsv.ru/blog/arhetipy-v-soczsetyah-kak-sdelat-blog-uznavaemym/ . [популярный]
+58. Леонова М. *Вечный бренд. Тюркские архетипы в маркетинге.* Ridero, 2025 (фрагмент): https://books.yandex.ru/books/PKGjPsYP/read-online . [первоисточник]
+59. Wikipedia, «Jungian archetypes»: https://en.wikipedia.org/wiki/Jungian_archetypes . [популярный]
+60. Jung C. G. *The Archetypes and the Collective Unconscious* (Collected Works, vol. 9i). 2nd ed. Princeton University Press, 1968, «On the Psychology of the Trickster-Figure», §§456–488. В заметках текст сверялся по сетевой копии, легальность которой не установлена; ссылка не приводится. [первоисточник; ⚠ не подтверждено легальным источником]
