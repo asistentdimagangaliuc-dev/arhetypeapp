@@ -21,7 +21,7 @@
 ## 3. Как проявляется в жизни, культуре, коммуникации
 
 - Через срыв и помехи: новый план «разваливается» из-за собственных страхов [3].
-- Подзаголовок «Guardian of Choice» повторяют вторичные пересказы [5][13]. Формулировка «защищает от неудобной правды» при проверке v04 ни в [5], ни в Галерее [3] не найдена; в видеосеминаре Мисс её тоже нет [12]; текст [4] закрыт платным доступом (⚠ только платный доступ: mavericksandmalbec.substack.com, повторная проверка 2026-10-16).
+- Подзаголовок «Guardian of Choice» есть и в книге 2001 года («The Saboteur: Guardian of Choice», проверка v13) [14]; его повторяют вторичные пересказы [5][13]. Формулировка «защищает от неудобной правды» при проверке v04 ни в [5], ни в Галерее [3] не найдена; в видеосеминаре Мисс её тоже нет [12]; текст [4] закрыт платным доступом (⚠ только платный доступ: mavericksandmalbec.substack.com, повторная проверка 2026-10-16).
 
 ## 4. Отличие от ближайшего архетипа из 12
 
@@ -135,7 +135,7 @@
 11. Myss C. *Sacred Contracts: Awakening Your Divine Potential*, ознакомительный фрагмент электронного издания (оглавление), e-bookshelf.de: https://content.e-bookshelf.de/media/reading/L-535049-ae25abbe32.pdf — [первоисточник: фрагмент издателя]
 12. Myss C. «The Saboteur» (myss.com, серия «The Power of Archetypes», 07.02.2023; анонс видеосеминара). https://myss.com/the-saboteur-the-power-of-archetypes/ — [первоисточник; страница открыта 2026-10-16]
 13. Oden M. S. *When Nobody's Home the "Why".* CreateSpace, 2016 (ISBN 9781535005180) — сниппет полнотекстового поиска Open Library: «The Saboteur: Guardian of Choice». Ссылка на копию не приводится. — [популярный; вторичный]
-14. Myss C. *Sacred Contracts.* Harmony, 2001 — сниппет полнотекстового поиска Open Library (с. 458 скана): «Noting that she had the Saboteur archetype in her third house (self-expression and siblings)…». Поиск: https://openlibrary.org/search/inside?q=%22Saboteur+archetype+in+her+third+house%22 ; ссылка на копию не приводится. — [первоисточник; сниппет]
+14. Myss C. *Sacred Contracts.* Harmony, 2001 — сниппет полнотекстового поиска Open Library (с. 458 скана): «Noting that she had the Saboteur archetype in her third house (self-expression and siblings)…»; при проверке v13 — также «The Saboteur: Guardian of Choice Like the Prostitute and the Victim…» (поиск https://openlibrary.org/search/inside?q=%22Saboteur%3A+Guardian+of+Choice%22 ). Поиск: https://openlibrary.org/search/inside?q=%22Saboteur+archetype+in+her+third+house%22 ; ссылка на копию не приводится. — [первоисточник; сниппет]
 15. АСТ, Мисс К. «Архетипы: союзники и разрушители. Источник вашей силы» (колода; пер. Г. А. Кобляковой); в аннотации названа книга «Колесо Судьбы, или Священные Соглашения». https://ast.ru/book/arkhetipy-soyuzniki-i-razrushiteli-istochnik-vashey-sily-879844/ — [каталог издателя; страница открыта 2026-10-16]
 16. OverDrive (National Library Board Singapore), Myss C. *The Language of Archetypes* (Macmillan Audio, 2007; 11 CD), описание. https://nlb.overdrive.com/media/91216 — [каталог]
 17. Marie L. (Dr. Linda Marie). *Archetypes To The Rescue.* JADA Press, 2005 (ISBN 9780977134304) — сниппет полнотекстового поиска Open Library: «aversion to having the survival archetypes in their groupings». Ссылка на копию не приводится. — [популярный; практик системы Мисс]
