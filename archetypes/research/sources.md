@@ -1,12 +1,12 @@
 # Источники базы знаний об архетипах: сводный список
 
-Дата сборки — 2026-10-16 (пересборка после раунда доукомплектования c01–c07 и проверки v11–v15; протокол — [`_notes/f01-final-tidy.md`](_notes/f01-final-tidy.md)). Сводный указатель всех источников, на которые ссылаются итоговые файлы базы в `archetypes/research/`: [01-systems.md](01-systems.md), [02-cards/](02-cards/README.md) (12 брендовых карточек, 12 файлов `extra-*.md` и README), [03-blends.md](03-blends.md), [04-diagnostics.md](04-diagnostics.md), [05-personal-brand.md](05-personal-brand.md), [06-esoteric-links.md](06-esoteric-links.md). В [verification.md](verification.md) собственного списка источников нет; он использован только для разделов о недоступных ссылках и о сознательно не используемых ресурсах.
+Дата сборки — 2026-10-16 (пересборка после раунда доукомплектования c01–c07 и проверки v11–v15; протокол — [`_notes/f01-final-tidy.md`](_notes/f01-final-tidy.md); после неё вручную добавлены 7 записей межфайловой сверки — [verification.md §7.7](verification.md)). Сводный указатель всех источников, на которые ссылаются итоговые файлы базы в `archetypes/research/`: [01-systems.md](01-systems.md), [02-cards/](02-cards/README.md) (12 брендовых карточек, 12 файлов `extra-*.md` и README), [03-blends.md](03-blends.md), [04-diagnostics.md](04-diagnostics.md), [05-personal-brand.md](05-personal-brand.md), [06-esoteric-links.md](06-esoteric-links.md). В [verification.md](verification.md) собственного списка источников нет; он использован только для разделов о недоступных ссылках и о сознательно не используемых ресурсах.
 
 ## Как устроен файл
 
-- **Откуда записи.** Скрипт извлёк все пункты нумерованных списков из разделов «## Источники» итоговых файлов: **2031 запись** из 30 файлов. Для каждой записи сохранены файл и номер пункта.
+- **Откуда записи.** Скрипт извлёк все пункты нумерованных списков из разделов «## Источники» итоговых файлов: 2031 запись из 30 файлов. После межфайловой сверки (verification.md §7.7) вручную добавлены ещё 7 записей: 01 [176], 05 [144], 02-cards/06 [72, 73], 02-cards/08 [71, 72], 02-cards/12 [65]; всего **2038 записей**. Для каждой записи сохранены файл и номер пункта.
 - **Ничего не добавлено.** Описания, URL и метки взяты из записей дословно. Если у источника несколько записей, показано самое полное описание (самая длинная запись; при этом запись об одном источнике предпочитается пакетной записи вида «Википедия: А — URL; Б — URL»). Единственная правка — метка из конца записи перенесена в отдельный столбец.
-- **Дедупликация.** После неё осталось **905 уникальных источников**. Правила:
+- **Дедупликация.** После неё осталось **906 уникальных источников** (905 при пересборке f01; из 7 записей межфайловой сверки новая только страница книги на сайте «Эксмо», остальные сведены с имеющимися источниками). Правила:
   - один URL — один источник. URL нормализованы: без схемы и `www.`, без завершающего `/`, с раскодированными символами, без учёта регистра; ссылки `doi.org`, Crossref, PMC и Semantic Scholar сведены к DOI; копия Wayback Machine — к исходному адресу;
   - если в записи об одной статье указаны DOI и копии текста (PDF автора, репозиторий, DOAJ), все эти адреса считаются одной статьёй;
   - книги без URL сведены по автору, названию и году; библиотечные экземпляры Internet Archive (`archive.org/details/…`) — к той же книге. Разные издания (например, *The Hero Within* 1989 и 1998 годов, русские издания 2005, 2023 и 2026 годов) — разные источники;
@@ -33,13 +33,13 @@
 
 | Основная метка | Уникальных источников | Доля |
 |---|---:|---:|
-| первоисточник | 293 | 32 % |
+| первоисточник | 294 | 32 % |
 | профессиональный | 167 | 18 % |
 | популярный | 419 | 46 % |
 | без стандартной метки | 26 | 3 % |
-| **Всего** | **905** | 100 % |
+| **Всего** | **906** | 100 % |
 
-Для сравнения, распределение всех исходных записей (2031) по метке записи: первоисточник — 695, профессиональный — 480, популярный — 811, без стандартной метки — 45.
+Для сравнения, распределение всех исходных записей (2038) по метке записи: первоисточник — 700, профессиональный — 480, популярный — 813, без стандартной метки — 45.
 
 ### Распределение по разделам
 
@@ -51,7 +51,7 @@
 | 4 | [Русскоязычные системы, переводы, практики](#4-русскоязычные-системы-переводы-практики) | 121 |
 | 5 | [Бренды и примеры (мировые)](#5-бренды-и-примеры-мировые) | 67 |
 | 6 | [Бренды и примеры (русскоязычные)](#6-бренды-и-примеры-русскоязычные) | 46 |
-| 7 | [Блогеры и эксперты](#7-блогеры-и-эксперты) | 91 |
+| 7 | [Блогеры и эксперты](#7-блогеры-и-эксперты) | 92 |
 | 8 | [Смешанные профили — исследования](#8-смешанные-профили--исследования) | 30 |
 | 9 | [Диагностика, психометрика, критика](#9-диагностика-психометрика-критика) | 30 |
 | 10 | [Право и товарные знаки](#10-право-и-товарные-знаки) | 63 |
@@ -67,7 +67,7 @@
 - `01 [22, 23]` — две записи об одном источнике в одном файле.
 - Номера ведут в список источников соответствующего файла. В тексте файла ссылка выглядит как `[n]`, иногда со страницей или параграфом: `[n, §221]`.
 
-Число записей по файлам: 01 — 175; 03 — 117; 04 — 188; 05 — 143; 06 — 203; 02-cards/01 — 75; 02-cards/02 — 71; 02-cards/03 — 80; 02-cards/04 — 78; 02-cards/05 — 75; 02-cards/06 — 71; 02-cards/07 — 69; 02-cards/08 — 70; 02-cards/09 — 67; 02-cards/10 — 75; 02-cards/11 — 66; 02-cards/12 — 64; 02-cards/README — 7; 02-cards/extra-anima-animus — 22; 02-cards/extra-great-mother — 30; 02-cards/extra-guide-mentor — 47; 02-cards/extra-myss-child — 32; 02-cards/extra-persona — 38; 02-cards/extra-prostitute — 13; 02-cards/extra-saboteur — 18; 02-cards/extra-self — 14; 02-cards/extra-shadow — 36; 02-cards/extra-trickster — 35; 02-cards/extra-victim — 16; 02-cards/extra-vogler-roles — 36.
+Число записей по файлам: 01 — 176; 03 — 117; 04 — 188; 05 — 144; 06 — 203; 02-cards/01 — 75; 02-cards/02 — 71; 02-cards/03 — 80; 02-cards/04 — 78; 02-cards/05 — 75; 02-cards/06 — 73; 02-cards/07 — 69; 02-cards/08 — 72; 02-cards/09 — 67; 02-cards/10 — 75; 02-cards/11 — 66; 02-cards/12 — 65; 02-cards/README — 7; 02-cards/extra-anima-animus — 22; 02-cards/extra-great-mother — 30; 02-cards/extra-guide-mentor — 47; 02-cards/extra-myss-child — 32; 02-cards/extra-persona — 38; 02-cards/extra-prostitute — 13; 02-cards/extra-saboteur — 18; 02-cards/extra-self — 14; 02-cards/extra-shadow — 36; 02-cards/extra-trickster — 35; 02-cards/extra-victim — 16; 02-cards/extra-vogler-roles — 36.
 
 ## 1. Юнг и постъюнгианцы
 
@@ -611,7 +611,7 @@
 - Википедия, «Спортмастер»: https://ru.wikipedia.org/wiki/Спортмастер . Просмотрено 2026-10-16. — [популярный] — где цитируется: 02-cards/04 [76]
 - Википедия, «Яндекс Лавка»: https://ru.wikipedia.org/wiki/Яндекс_Лавка . — [популярный] — где цитируется: 02-cards/01 [35]
 - Википедия, просмотрено при проверке v11 2026-10-16: «GeekBrains» https://ru.wikipedia.org/wiki/GeekBrains ; «РБК» https://ru.wikipedia.org/wiki/РБК ; «HeadHunter» https://ru.wikipedia.org/wiki/HeadHunter . — [популярный] — где цитируется: 02-cards/03 [80]
-- Википедия, просмотрено при проверке v11 2026-10-16: «VK (компания)» https://ru.wikipedia.org/wiki/VK_(компания) ; «Додо Пицца» https://ru.wikipedia.org/wiki/Додо_Пицца ; «Крыгина, Елена Александровна» https://ru.wikipedia.org/wiki/Крыгина,_Елена_Александровна . — [популярный] — где цитируется: 02-cards/06 [71], 02-cards/07 [34]
+- Википедия, просмотрено при проверке v11 2026-10-16: «VK (компания)» https://ru.wikipedia.org/wiki/VK_(компания) ; «Додо Пицца» https://ru.wikipedia.org/wiki/Додо_Пицца ; «Крыгина, Елена Александровна» https://ru.wikipedia.org/wiki/Крыгина,_Елена_Александровна . — [популярный] — где цитируется: 02-cards/06 [71], 02-cards/07 [34], 02-cards/08 [72]
 - Википедия. «ВТБ 24». https://ru.wikipedia.org/wiki/ВТБ_24 ; «Уралсиб» (страница-неоднозначность). https://ru.wikipedia.org/wiki/Уралсиб (доступ 2026-10-16). — [популярный] — где цитируется: 02-cards/extra-trickster [32]
 - Википедия. «Росгосстрах». https://ru.wikipedia.org/wiki/Росгосстрах (доступ 2026-10-16). — [популярный] — где цитируется: 02-cards/extra-great-mother [28]
 - Википедия: Bork — https://ru.wikipedia.org/wiki/Bork ; ЦУМ (Москва) — https://ru.wikipedia.org/wiki/ЦУМ_(Москва) ; Ереванский коньячный завод — https://ru.wikipedia.org/wiki/Ереванский_коньячный_завод — [популярный; проверено 16.10.2026, добавлен при проверке c04] — где цитируется: 02-cards/12 [60]
@@ -632,7 +632,7 @@
 
 - Mark Manson: About — https://markmanson.net/about ; YouTube — https://www.youtube.com/@IAmMarkManson . — [первоисточник: сайт персоны; для разбора 6.6] — где цитируется: 03 [104]
 - Porterfield A. Официальный сайт, главная страница. https://www.amyporterfield.com/ — [первоисточник: сайт автора; рекламный; просмотр 2026-10-16] — где цитируется: 02-cards/extra-guide-mentor [44]
-- TenChat, публичный профиль «Вера Демина» (@verdem): https://tenchat.ru/0588077 . Просмотрено 16.10.2026 (установлено при проверке v12; перенесено из карточек 07 и 09 при сверке f01). — [первоисточник для площадки и числа подписчиков] — где цитируется: 02-cards/05 [74], 02-cards/07 [69], 02-cards/09 [67]
+- TenChat, публичный профиль «Вера Демина» (@verdem): https://tenchat.ru/0588077 . Просмотрено 16.10.2026 (установлено при проверке v12; перенесено из карточек 07 и 09 при сверке f01). — [первоисточник для площадки и числа подписчиков] — где цитируется: 05 [144], 02-cards/05 [74], 02-cards/07 [69], 02-cards/09 [67]
 - Tim Ferriss: About — https://tim.blog/about/ ; подкаст — https://tim.blog/podcast/ ; YouTube — https://www.youtube.com/@TimFerriss . — [первоисточник: сайт персоны; для разбора 6.6] — где цитируется: 03 [103]
 - YouTube, вкладки «Видео» каналов из [23], данные на 2026-10-16 (подписи «… ago» у последних видео). — [первоисточник для активности] — где цитируется: 02-cards/02 [69]
 - YouTube, вкладки «Видео» каналов из [23], данные на 2026-10-16 (подписи «… ago» у последних видео); проверка @DavidGoggins (404) и @realdavidgoggins (2 подписчика). — [первоисточник для активности] — где цитируется: 02-cards/04 [73]
@@ -641,7 +641,7 @@
 - YouTube, данные на 2026-10-16: https://www.youtube.com/@DavidBlaine ; https://www.youtube.com/@elenakrygina ; https://www.youtube.com/@safronovy ; каналы из [21]. Возраст последних видео — по подписям «… ago». — [первоисточник для числа подписчиков и активности] — где цитируется: 02-cards/06 [67]
 - YouTube, шапка и RSS канала на 16.10.2026 (проверка c04): https://www.youtube.com/@VALUETAINMENT — [первоисточник для числа подписчиков и дат] — где цитируется: 02-cards/12 [62]
 - YouTube, шапка канала «Слава Комиссаренко» на 16.10.2026 — https://www.youtube.com/@slavakomissarenko — [первоисточник для числа подписчиков; добавлен при проверке v03] — где цитируется: 02-cards/09 [55]
-- YouTube, шапки и RSS каналов на 16.10.2026 (проверка c04): https://www.youtube.com/@ElenaKrygina ; https://www.youtube.com/@NikkieTutorials — [первоисточник для числа подписчиков и дат] — где цитируется: 02-cards/06 [67], 02-cards/08 [69]
+- YouTube, шапки и RSS каналов на 16.10.2026 (проверка c04): https://www.youtube.com/@ElenaKrygina ; https://www.youtube.com/@NikkieTutorials — [первоисточник для числа подписчиков и дат] — где цитируется: 02-cards/06 [67, 73], 02-cards/08 [69]
 - YouTube, шапки и RSS каналов на 16.10.2026 (проверка c04): https://www.youtube.com/@tryguys ; https://www.youtube.com/@emmachamberlain ; https://www.youtube.com/@lizzka (последний ролик по RSS https://www.youtube.com/feeds/videos.xml?channel_id=UC3XGNDKlaOvXRSMY9cGt6ig — 23.11.2024) ; https://www.youtube.com/@KuplinovPlay — [первоисточник для числа подписчиков и дат] — где цитируется: 02-cards/07 [66]
 - YouTube, шапки и описания русскоязычных каналов на 16.10.2026 (проверка v03): https://www.youtube.com/@lizzka ; https://www.youtube.com/@KuplinovPlay ; https://www.youtube.com/@Kuplinov (записи стримов) — [первоисточник для числа подписчиков и самоописания] — где цитируется: 02-cards/07 [57, 66]
 - YouTube, шапки каналов на 15.10.2026 (перепроверены 16.10.2026, проверка v03): https://www.youtube.com/@casey ; https://www.youtube.com/@PeterMcKinnon ; https://www.youtube.com/@thefutur ; https://www.youtube.com/@mattdavella — [первоисточник для числа подписчиков и самоописания; оценка архетипа — исследовательская] — где цитируется: 02-cards/02 [23], 02-cards/11 [29, 65]
@@ -656,6 +656,7 @@
 - YouTube, шапки каналов, данные на 2026-10-15: https://www.youtube.com/@JockoPodcastOfficial ; https://www.youtube.com/@melrobbins ; https://www.youtube.com/@TheBodyCoachTV ; https://www.youtube.com/@MrBeast . — [первоисточник для числа подписчиков] — где цитируется: 02-cards/04 [23]
 - YouTube, шапки каналов, данные на 2026-10-15: https://www.youtube.com/@TonyRobbinsLIVE ; https://www.youtube.com/@zachking ; https://www.youtube.com/@drjoedispenza ; https://www.youtube.com/@JayShetty . — [первоисточник для числа подписчиков] — где цитируется: 02-cards/06 [21]
 - «Клуб путешествий Михаила Кожухова», страница «О клубе». https://mktravelclub.ru/about/ — [первоисточник: сайт компании; просмотр 2026-10-16] — где цитируется: 02-cards/extra-guide-mentor [42]
+- Эксмо. Крыгина Е. «Макияж. Книга Елены Крыгиной», страница книги на сайте издательства (ISBN 978-5-699-83648-2; 336 с.; «Дата выхода: 27 февраля 2017»): https://eksmo.ru/book/makiyazh-kniga-eleny-kryginoy-ITD632304/ — просмотрено 2026-10-16 при межфайловой сверке — [первоисточник; издатель] — где цитируется: 02-cards/06 [72], 02-cards/08 [71]
 
 **Профессиональные**
 
@@ -667,7 +668,7 @@
 
 - Men Today. «Крутой бизнесмен или инфоцыган: кто такой Дмитрий Портнягин?», 08.10.2024, обновл. 10.02.2026: https://www.mentoday.ru/heroes/ordinary-heroes/krutoi-biznesmen-ili-infocygan-kto-takoi-dmitrii-portnyagin/ . — [популярный: глянцевое медиа] — где цитируется: 02-cards/04 [70]
 - The Blueprint. Материал о Е. Шейдлиной, 06.2017 — https://theblueprint.ru/fashion/industry/ellen-sheidlina — [популярный] — где цитируется: 02-cards/11 [40]
-- Wikipedia (англ.), просмотрено при проверке v11 2026-10-16: «Mel Robbins» https://en.wikipedia.org/wiki/Mel_Robbins ; «Khabib Nurmagomedov» https://en.wikipedia.org/wiki/Khabib_Nurmagomedov . — [популярный] — где цитируется: 02-cards/04 [78]
+- Wikipedia (англ.), просмотрено при проверке v11 2026-10-16: «Mel Robbins» https://en.wikipedia.org/wiki/Mel_Robbins ; «Khabib Nurmagomedov» https://en.wikipedia.org/wiki/Khabib_Nurmagomedov . — [популярный] — где цитируется: 02-cards/04 [78], 02-cards/12 [65]
 - Wikipedia, «Bear Grylls»: https://en.wikipedia.org/wiki/Bear_Grylls ; YouTube — https://www.youtube.com/@BearGrylls ; сайт — https://www.beargrylls.com/ . — [популярный; для разбора 6.6] — где цитируется: 03 [107]
 - Wikipedia, «Brené Brown»: https://en.wikipedia.org/wiki/Bren%C3%A9_Brown ; сайт: https://brenebrown.com/ (2026-10-16 отдаёт 403 автоматическим запросам). — [популярный; для разбора 6.6] — где цитируется: 03 [105]
 - Wikipedia, «Marie Kondo»: https://en.wikipedia.org/wiki/Marie_Kondo ; сайт: https://konmari.com/ . — [популярный; для разбора 6.6] — где цитируется: 03 [106]
@@ -846,7 +847,7 @@
 - TTABVUE: Fascinate, Inc. (№ 91240037, № 91226396) — https://ttabvue.uspto.gov/ttabvue/v?qs=Fascinate+Inc — [первоисточник; реестр споров] — где цитируется: 04 [157]
 - TTABVUE: HERO'S JOURNEY, возражение № 91211005 — https://ttabvue.uspto.gov/ttabvue/v?qs=85252681 ; Joseph Campbell Foundation — https://ttabvue.uspto.gov/ttabvue/v?qs=Joseph+Campbell+Foundation — [первоисточник; реестр споров] — где цитируется: 04 [156]
 - TTABVUE: проверка по серийным номерам (STORYBRAND, STORY BRAND, JOVIAN ARCHIVE HUMAN DESIGN, MYBODYGRAPH, GENE KEYS, Ladini, PMAI) — производств нет; пример запроса: https://ttabvue.uspto.gov/ttabvue/v?qs=88444964 — [первоисточник; реестр споров] — где цитируется: 04 [159]
-- U.S. Copyright Office Public Records (поиск 2026-10-15; номера TX… — в тексте). https://publicrecords.copyright.gov/ — [первоисточник; реестр] — где цитируется: 01 [156], 04 [38]
+- U.S. Copyright Office Public Records (поиск 2026-10-15; номера TX… — в тексте). https://publicrecords.copyright.gov/ — [первоисточник; реестр] — где цитируется: 01 [156, 176], 04 [38]
 - U.S. Copyright Office. Circular 33 «Works Not Protected by Copyright» (rev. 03/2021). https://www.copyright.gov/circs/circ33.pdf — [первоисточник] — где цитируется: 04 [131]
 - USPTO Trademark Search (поиск по словам и владельцам, 2026-10-15). https://tmsearch.uspto.gov/ — [первоисточник; реестр] — где цитируется: 04 [125], 06 [120]
 - USPTO TSDR, записи по номерам регистрации (сформированы 2026-10-15): HERO'S JOURNEY № 4424264 — https://tsdr.uspto.gov/statusview/rn4424264 ; SACRED MONEY ARCHETYPES № 4431978 — https://tsdr.uspto.gov/statusview/rn4431978 ; LEADERSHIP ARCHETYPES № 7275171 — https://tsdr.uspto.gov/statusview/rn7275171 ; ARCHETYPES AT WORK № 5877102 — https://tsdr.uspto.gov/statusview/rn5877102 ; PROM ARCHETYPES № 6840864 — https://tsdr.uspto.gov/statusview/rn6840864 — [первоисточник; реестр] — где цитируется: 04 [168]
