@@ -77,7 +77,7 @@
 
 - **Письмо Mrs. Eckstein, 16.09.1930:** «Yes, I know of the Tarot». Там же Юнг называет Таро «the oldest cards historically known». Грир отмечает, что это исторически неверно: обычные игральные карты появились на 50–75 лет раньше Таро [1]. В *Letters*, vol. I, с. 77 есть фраза «the pack of cards originally used by the Spanish gypsies» [2]. Эта же фраза входит в текст письма Eckstein 1930 г. в цитате у Грир [1], так что речь, по-видимому, об одном письме (страница по тому не сверена ⚠).
 - **Семинар «Видения» (Visions Seminar), заседание 1 марта 1933 г.** Издание — *Visions: Notes of the Seminar Given in 1930–1934*, ed. C. Douglas, vol. 2, Princeton, 1997, с. 923 [3]. Цитаты: «They are psychological images, symbols with which one plays»; «Those are sort of archetypal ideas, of a differentiated nature» [1]. Поводом стала фигура гермафродита: «Now in the Tarot there is a hermaphroditic figure called the diable» [2]. В той же цитате у Грир «sort of archetypal ideas» названы символы солнца, повешенного, башни, поражённой молнией, и колеса фортуны [1]; Википедия пересказывает это место [6].
-- **CW 9i, «The Archetypes of the Collective Unconscious», §81:** «the set of pictures in the Tarot cards were distantly descended from the archetypes of transformation». Этот взгляд, по словам Юнга, подтвердила ему лекция профессора Рудольфа Бернулли [1][4]. ⚠ Год и тема лекции Бернулли не установлены.
+- **CW 9i, «The Archetypes of the Collective Unconscious», §81:** «the set of pictures in the Tarot cards were distantly descended from the archetypes of transformation». Этот взгляд, по словам Юнга, подтвердила ему лекция профессора Рудольфа Бернулли [1][4]. ⚠ Год и тема лекции Бернулли не установлены. ⚠ В OCR легального библиотечного экземпляра CW 9i фраза не найдена (v01); цитата подтверждена по Грир [1] (v06), а [4] сверен по скану неустановленного статуса (уточнено при межфайловой сверке с `01-systems.md`).
 - **Семинар «Детские сны» (Children's Dreams Seminar), с. 351:** «In alchemy and tarot, blue is the color of the moon, of silver, and of the soul» [2].
 - **Письмо A. D. Cornell, 09.02.1960** (*Letters*, vol. II, с. 538): эксперименты с синхронистическими методами («astrology, geomancy, Tarot cards, and the I Ching») в Институте К. Г. Юнга начинали, но бросили: «too few co-workers and too little means» [1][2]. Страница 538 — по [2].
 - **Свидетельства о Юнге со стороны** (не его слова, оба — в пересказе Грир [1]):
@@ -217,7 +217,7 @@
 
 | Брендовый архетип (Марк и Пирсон) | Avia Venefica 2025 [32] | Nicole Lau [33] | b17.ru ⚠ [30] | Совпадение |
 |---|---|---|---|---|
-| Ruler (Правитель) | Император (+ Король Пентаклей) | Император «Authority/Leader» | Император | **да, 3 из 3** |
+| Ruler (Правитель) | Император (+ Король Пентаклей) | Император «Authority/Leader» | Император | **да, 3 из 3** (у Lau — сопоставление исследования, см. «Как читать столбец Lau»; согласия авторов не означает) |
 | Magician (Маг) | Маг | Маг «Innovator/Transformer» (и Смерть — «Transformer») | — | да |
 | Sage (Мудрец) | Отшельник, Жрица | Отшельник «Sage/Expert» | — | да по Отшельнику |
 | Caregiver (Заботливый) | Императрица (+ Королева Кубков) | Императрица «Nurturer/Creator» | — | да |
