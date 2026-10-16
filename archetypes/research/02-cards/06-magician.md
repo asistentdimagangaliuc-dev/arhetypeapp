@@ -1,0 +1,283 @@
+# Маг (Magician)
+
+> **Другие названия:**
+> - перевод «Питера», 2005: «Маг» — ⚠ не подтверждено легальным источником [3];
+> - перевод «Бомборы» (пер. А. Д. Сайфуллиной): «Маг» [2];
+> - МИФ, 2024 (перевод Пирсон 1991): «Маг» [5];
+> - Пирсон 1986/1989, 1991, сайт Пирсон и PMAI-2020: Magician — одно из немногих имён, не менявшихся ни в одной версии [6; 4; 7; 9];
+> - Марк и Пирсон: строка псевдонимов («also known as…») для Мага в OCR ⚠ не прочитана [1];
+> - Kaye Putnam: The Magician, синонимы Inventor, Transformer, Visionary [12];
+> - Хартвелл и Чен: семейство Magician; в слайдах Хартвелл подархетипы Alchemist, Engineer, Innovator, Scientist [17; 18];
+> - русские практики: «Маг» — Адт [43], I-am-Brand [47], Сураева [45], Дяченко [49], ADWAI [50], АрхетипиУМ [40]; «Волшебник» — Левшин (во втором его списке — «Маг») [46], Kokoc («Волшебник (или маг)») [48]; «Маг (волшебник, трансформатор)» — Гас [44]; у Дяченко — пять вариаций: «Визионер», «Алхимик», «Целитель», «Катализатор», «Волшебник» [28]. Имя «Чародей» в источниках не найдено;
+> - омонимы из других систем: «Маг» — аркан 1 в «Матрице судьбы» («Новаторы, креативщики») [51]; «маг» у Мура и Жиллетта [52];
+> - тюркская локализация Леоновой (Казахстан): в группе «Изменения» — Батыр, Палуан, Шаман; поимённого соответствия архетипам Марк и Пирсон во фрагменте нет ⚠ [53].
+>
+> **Группа мотивации (Марк и Пирсон 2001):** часть III «Leaving a Thumbprint on the World: Hero, Outlaw, Magician», с. 101; в «Бомборе» — «Оставить след в этом мире. Герой, Бунтарь, Маг» [1; 2]; в тезисах «Ломоносов-2025» — «Оставить в мире свой след» [42]. Полюс оси — Risk/Mastery; соотнесение частей с полюсами — вывод по названиям частей, явной таблицы в книге не найдено ⚠ [1] · **Глава книги:** гл. 9 «The Magician», с. 140 (англ. изд. 2001); в «Бомборе» — гл. 9 «Маг» [1; 2] · **Девиз:** «It can happen!» [1]; русская формулировка девиза в легальных источниках не найдена.
+>
+> **Соответствие во «внутренней» модели Пирсон:** Magician — последний из шести архетипов «The Hero Within» (1986/1989), гл. 6, с. 116 [6]; в «Awakening the Heroes Within» (1991) — часть IV «The Return—Becoming Free» (с. 179), номер главы (15) восстановлен по порядку ⚠ [4]; в PMAI-2020 — Magician [9]; на сайте Пирсон — в кластере с Ruler, Sage и Jester [8].
+
+---
+
+## 1. Суть, базовое желание, цель, мотивация, ценности
+
+**Брендовая модель (Марк и Пирсон 2001)**
+- Девиз «It can happen!» [1].
+- Врезка главы: «Core desire: knowled[ge] of the fundamental laws of how the world or uni-verse works»; «Goal: make [dreams] come [true]» [1]. Это единственное прямое подтверждение метки «Core desire» в OCR всей книги [1].
+- Стратегия во фрагменте видна обрывком «… vis[ion]…» [1]; полная формулировка — по таблице Solomon [19].
+- Сводная таблица Solomon: базовое желание — «Knowledge of fundamental laws and how the world works»; цель — «Make dreams come true»; страх — «Unanticipated negative consequences»; стратегия — «Develop vision and live it» [19].
+- «EARLIEST IMAGES of the Magician were the shaman»; «Magician brands include all those that foster "magical moments"» [1].
+
+**«Внутренняя» модель Пирсон**
+- «The Hero Within» (1989): цель — «Wholeness», задача — «Joy/faith», страх — «Superficiality» (с. xxvii). Маг учится принимать изобилие (с. 15); путь героя завершается «authenticity and wholeness of the Magician» (с. xxvii) [6].
+- «Awakening the Heroes Within» (1991), врезка главы [4]:
+  - Goal: «Transformation of lesser into better realities»;
+  - Fear: «Evil sorcery (transformation in a negative direction)»;
+  - Response to Dragon/Problem: «Transform [it]…» — обрезано ⚠;
+  - Task: «Alignment of Self with cosmos» и Gift: «Personal power» — записаны в раннем раунде заметок, в позднем раунде по OCR не переподтверждены ⚠.
+  - В сводной таблице на с. 10–11: «Transformation», «Evil sorcery»; остальные ячейки ⚠ не получены [4].
+- Современная версия: Magician «most fulfilled when they can see a vision realized»; интуитивные; их заряжают периоды больших перемен [7]. Функция на сайте Пирсон — духовный смысл и исцеление [8].
+
+**Версии практиков**
+- Kaye Putnam: базовое желание «Transformation & vision»; бренд «makes the impossible feel inevitable»; ценности — Transformation, Innovation, Vision, Self-awareness, Actualization, Dreaming [12].
+- Iconic Fox: «strives to make dreams come true through somewhat mystical ways» [13].
+
+**Юнгианские корни**
+- Отдельного архетипа «Маг» у Юнга нет: «magician» — один из обликов Мудрого старца наряду с «doctor, priest, teacher, professor, grandfather» (CW 9i §398). Тёмная сторона — «the wicked magician who, from sheer egoism, does evil for evil's sake» (§415) [54] ⚠ не подтверждено легальным источником. Сопоставление «Маг ≈ облик Мудрого старца» — оценка исследования, не из источника.
+
+## 2. Главный страх, тень, ловушки
+
+**Брендовое описание (Марк и Пирсон 2001)**
+- Страх: «Fear: unanticipated negative consequences» — подтверждено фрагментом [1]; так же у Ebaq [14] и Solomon [19].
+- О тёмной стороне [1]:
+  - «This negative trap within the Magician archetype can… [promote] fascist and racist ends»;
+  - «The negative image of the Magician also shows up in charismatic political leaders who…».
+- Популярная формулировка ловушки «becoming manipulative» ⚠ дословно не подтверждена, но по смыслу совпадает с фрагментами [1].
+- Дар «finding win-win outcomes» ⚠ как поле врезки не подтверждён: фраза «Win—win outcomes are the safest strategy» найдена в другом контексте [1].
+- Пример злоупотребления силой — ученик чародея из «Фантазии» Disney [1].
+
+**Теневые формы по Пирсон (1989, 1991)**
+- Врезка «Levels of the Magician Shadow»: «Evil sorcerer or wicked witch, synchronistic negative occurrences, calling negativity to oneself, or turning positive into [negative]…» [4].
+- Таблица теней: «The evil sorcerer, transforming better into lesser options» [4].
+- «We engage in such evil sorcery anytime we belittle ourselves or another» [4].
+- В указателе: «shadow Magician and [Advertising], 207». Пирсон сама связывает рекламу с теневым Магом (с. 205–207) [4].
+- В предисловии 1989 г. Пирсон пишет, что больше написала бы о теневых сторонах Мага — Sorcerer's Apprentice и Evil Sorcerer [6].
+- Строка Мага в таблице «Archetypes and Addictions» в заметках не приведена — в источниках не найдено.
+- Ловушки на сайте Пирсон: манипулятивное использование влияния; надежда на удачу или спасение; нетерпение к тем, кто не разделяет видение [7].
+- В интервью 2024 г. Пирсон описывает тень вообще как отвергнутые качества, которые проецируются на других; в ней может быть «treasure» [11].
+
+**Версии практиков**
+- Kaye Putnam, тень: трудно быть в настоящем, расфокус; «At its worst, the Magician manipulates» [12].
+- zipBoard: риск выглядеть «over the top» [16].
+- Багдасарова и Силенко (о BadComedian): «ловушкой данного образа может стать активное и бессознательное манипуляторство» [36].
+- АрхетипиУМ: тень — «Манипуляция… Игра в «гуру» без реальных знаний»; страх — «остаться «фокусником» вместо настоящего Мага» [40].
+- Булыгина, раздел «Риски»: «нереалистичные обещания» [41].
+- Пилиповец: Маг работает «только при наличии доказательств» [35].
+- Дяченко: в вариации «Целитель» много «инфоцыган» [28].
+
+**Связки тени со страхами начинающих блогеров (только найденные у практиков)**
+- АрхетипиУМ: Маги «Могут быть перфекционистами и чувствительными к критике»; страх — «остаться «фокусником» вместо настоящего Мага» [40]. По смыслу это близко к синдрому самозванца, но сам источник этого слова не использует — оценка исследования, не из источника.
+- Пилиповец: «только при наличии доказательств» [35] — ближайшая найденная формулировка риска «подменить экспертизу образом»; со страхами новичков автор её не связывает.
+- У англоязычных практиков связок тени Мага со страхами новичков в источниках не найдено.
+
+## 3. Сильные стороны и таланты
+- Сайт Пирсон: видит множество перспектив; вселяет веру в смелые возможности; процветает в периоды трансформации; организации-Magician — «catalysts for change» [7].
+- Kaye Putnam: бренд как катализатор, «reacting agent». Подсказка автора: Magician-продукты почти всегда исполняют одно из трёх желаний — исцеление, молодость, процветание [12].
+- Пирсон 1991: дар — «Personal power» ⚠ (см. раздел 1) [4].
+- «The Hero Within» (1989): цельность, радость и вера [6].
+
+## 4. Коммуникация: тон голоса, манера речи, словарь, визуальные коды, цвета и символы
+
+**Тон и манера речи**
+- Kaye Putnam: «sell transformation, not features»; не обещать постепенных улучшений; «Don't show your hand»; «Always look polished and intentional»; лёгкая загадочность допустима [12].
+- Iconic Fox: путь трансформации — «Lost to found, Insecurity to security, Worn out to refreshed» [13].
+- Ebaq: «magical moments», мистика [14].
+- WEDEX: «Create your own miracle», «Surpass your expectations» [15].
+- Plenum (на примере Ozon): «волшебный» тон [25].
+- Дяченко (на примере «Мистраля», вариация «Алхимик»): «из простого сложное», идея «можем быть кем захотим» [28].
+
+**Словарь**
+- Эмоции (Evokes) у Kaye Putnam: Intrigue, Awe, Enchantment, Inspiration, Wonder, Hope [12].
+
+**Цвета и визуальные коды — кто рекомендует**
+
+| Кто | Что | Комментарий |
+|---|---|---|
+| Марк и Пирсон 2001 | палитр архетипам **не назначают** | [1] |
+| Пирсон (carolspearson.com) | цветов нет | [7] |
+| Kaye Putnam | на страницах архетипов цветов нет | [12] |
+| Ebaq 2026 | цветов нет | [14] |
+| zipBoard 2020 | «Pastels such as purples, pinks, and some light blues»; шрифты «Fun and flowing, maybe even some cursive»; предупреждение «over the top» | автор и источник цветов не указаны [16] |
+| WEDEX 2025 | эффекты света и тени, анимация, символы метаморфозы (спирали, звёздная пыль), логотип, «рождающийся из песка» | [15] |
+| Iconic Fox | палитра только картинкой, текстом не проверяется ⚠ | [13] |
+| Plenum 2024 (RU, на примере Ozon) | «растянутая буква О» в логотипе как знак трансформации | ⚠ в Википедии о смене логотипа сведений нет [25; 32] |
+| Pixies 2021 (кейс MAX\MAX) | 3D-элементы на сайте и техноозвучка передают «магию» | [30] |
+| популярная конвенция «фиолетовый/тёмно-синий/чёрный/золото» | ⚠ источником не подтверждена | — |
+
+**Символы у Марк и Пирсон** [1]:
+- шаман;
+- шампанское, газированная вода («magical moments»);
+- Calgon — «Take me away»;
+- ученик чародея из «Фантазии» Disney — пример злоупотребления силой.
+
+## 5. Восприятие аудиторией: кого привлекает, кого отталкивает
+
+**Кого привлекает**
+- Iconic Fox: Маг «rarely fits a buyer persona but appeals to different personas with their ability to transform» [13].
+- Kaye Putnam: «We rely on Magicians to guide us through transitions»; людей очаровывает их мышление [12].
+- Марк и Пирсон: кампания MasterCard «Priceless» работает с амбивалентностью потребителей к деньгам («recognizes consumers' ambivalence toward…») [1].
+
+**Кого отталкивает**
+- Прямых данных об отталкиваемых сегментах в источниках не найдено.
+- Названы риски: «over the top» [16]; манипуляция [12; 7]; «нереалистичные обещания» [41]; образ без доказательств [35].
+- В исследовании ассоциаций потребителей в четырёх странах кластер «risk and mastery» (Hero, Magician, Outlaw) проверить полностью не удалось [24].
+
+## 6. Мировые бренды
+
+| Бренд | Кто относит к архетипу и где | Аргумент | Актуальность на 2026-10-15 |
+|---|---|---|---|
+| MasterCard | M&P, гл. 9, «MasterCard: A Marketing Masterpiece», кампания «Priceless» (в указателе — подрубрика Magician, с. 154–160; точная страница ⚠ не установлена) [1]; Ebaq [14] | работа с амбивалентностью к деньгам [1] | действует; текущие кампании ⚠ не проверялись. M&P и Ebaq сходятся |
+| Oil of Olay | M&P: «Olay as a Magician brand» [1] | — | ⚠ не проверялось |
+| Перечень M&P: «sparkling water, champagne, Sony, General Foods International Coffees, Calgon ("Take me away"), many cruise lines, Jackie O…» | M&P, гл. 9 [1]; Sony — также Ebaq [14] | «magical moments» | ⚠ рекламные слоганы конца XX века, актуальность не проверялась |
+| Lucent Technologies | M&P: «Magician Organization: Lucent Technologies» (с. 153–154) [1] | — | **устарел**: поглощена Alcatel 01.12.2006 (Alcatel-Lucent), позднее активы перешли Nokia [20] |
+| Polaroid | M&P, рядом с Chanel No. 5 («capturing those moments») [1] | — | ⚠ контекст и актуальность не уточнены |
+| Disney | Iconic Fox («Brand In Action») [13]; zipBoard [16]; Ebaq [14]; Kaye Putnam [12]; WEDEX [15] | в заметках не приведён | действует; **противоречит M&P**, где Disney — в перечне Невинного [1] |
+| Apple | Kaye Putnam («the quintessential Magician») [12]; zipBoard [16]; WEDEX [15]; Пилиповец — Маг + Творец [35]; Соколова — «маг и творец» [34]; Дяченко ставит Стива Джобса и Apple рядом с вариацией «Визионер» [28] | — | действует; **спорно**: у M&P Apple — Бунтарь («1984», «Think different») и Творец [1] |
+| Tesla | Kaye Putnam [12]; WEDEX [15] | — | ⚠ утверждения о восприятии 2025–2026 гг. не включены как непроверенные |
+| TED | Kaye Putnam [12] | — | ⚠ другие источники этого не подтверждают и не опровергают |
+| Мистер Пропер | Дяченко, среди примеров вариаций Мага [28] | вариация в заметках не уточнена ⚠ | ⚠ не проверялось |
+| MacPaw, Reface (Украина, региональные примеры) | WEDEX [15] | в заметках не приведён | ⚠ не проверялось |
+
+## 7. Русскоязычные бренды
+
+| Бренд | Страна | Атрибуция | Аргумент | Актуальность |
+|---|---|---|---|---|
+| Ozon | RU (также AM, BY, KZ, KG, UZ и др.) | Plenum, 2024 [25]; Craftum, 2025 [26] | трансформация e-commerce, скорость реакции на желания клиента, «растянутая буква О» в логотипе, «волшебный» тон [25]; компания «исполнит любое желание» [26] | в 09.2025 холдинг перерегистрирован на остров Октябрьский (Калининград), с 11.11.2025 акции на Мосбирже, в 12.2025 запущен «Ozon Селект» [32]. ⚠ «Растянутая О» в Википедии не упоминается |
+| Яндекс | RU | Gromov Branding [27] | превращает сложные технологии в простые полезные продукты | суббренды источники относят к другим архетипам: Яндекс Лавка — Невинный [25; 26], Яндекс Карты и «Яндекс. Забота» — Заботливый [29] |
+| МТС | RU | Дяченко, 24.04.2026: вариация «Визионер» — креатив «Как изменится будущее» с Дмитрием Нагиевым [28] | — | **атрибуция кампании, а не бренда**: в другой статье того же автора МТС — Заботливый-«Дворецкий» [29] |
+| «Мистраль» (крупы) | RU | Дяченко, 2026: вариация «Алхимик» [28] | «из простого сложное», «можем быть кем захотим» | статья 04.2026 |
+| «Черноголовка» (линейка чая) | RU | Дяченко, 2026: вариация «Целитель» [28] | отсылки к «силе природы», «русской душе», чистоте | статья 04.2026 |
+| ПИК, ролик «Серия плюс» | RU | Дяченко, 2026: вариация «Катализатор» [28] | одно событие из детства запускает цепочку семейных радостей; бренд работает «закулисно» | атрибуция ролика |
+| MAX\MAX (продакшн мероприятий) | RU | кейс студии Pixies [30] | 3D-элементы на сайте и техноозвучка передают «магию» | ⚠ не проверено |
+| INNOWEEK (форум техпредпринимателей) | RU | FOLGA: «Это творец с чертами мага» [31] | помогает развивать идеи и искать партнёров | ⚠ не проверено |
+| Kaspi.kz | KZ | оценка исследования, не из источника | повседневное «приложение для всего» ближе к Славному малому; инновации (оплата ладонью Alaqan, ИИ-ассистент Kasper, 07.2026) добавляют черты Мага [33] | в 2025 г. выход в Турцию (Hepsiburada) [33]. Опубликованного разбора архетипа Kaspi не найдено |
+
+- Опубликованных атрибуций Мага брендам из Казахстана, Беларуси, Узбекистана и Армении в источниках не найдено; Kaspi.kz — только оценка исследования.
+
+## 8. Блогеры и эксперты — международные (в первую очередь англоязычные)
+
+| Персона | Платформа и ниша | Атрибуция | Почему этот архетип |
+|---|---|---|---|
+| Tony Robbins | YouTube, 2,76 млн на 2026-10-15 [21]; семинары личностного роста | Kaye Putnam, «Real-life Magicians: Walt Disney, Steve Jobs, Tony Robbins, Steven Spielberg» [12] | черты — оценка исследования, не из источника: обещание быстрой внутренней трансформации, иммерсивные семинары, язык «прорыва» |
+| Уолт Дисней, Стив Джобс, Стивен Спилберг | публичные и исторические фигуры, не блогеры | Kaye Putnam [12] | — |
+| Jackie O | историческая фигура | M&P, в перечне Magician [1] | — |
+| Kaye Putnam | бренд-стратег, подкасты | самоидентификация: «My two archetypes are the magician and the sage» [22] | — |
+| Zach King | YouTube, 43,5 млн [21]; короткие видео | оценка исследования, не из источника | буквальная «магия» — цифровые иллюзии; эффект «невозможное случилось»; отполированная постановка («polished and intentional», формулировка Putnam [12]) |
+| Dr Joe Dispenza | YouTube, 1,82 млн [21]; медитации | оценка исследования, не из источника | тема трансформации сознания и тела; медитации; обещание радикального изменения (подтипы Alchemist и Inner Guide у Putnam [12]) |
+| Jay Shetty | YouTube, 4,89 млн [21] ⚠ число совпадает с каналом GaryVee, перепроверить | оценка исследования, не из источника | путь «монах → наставник»; духовные практики для массовой аудитории; мягкий вдохновляющий тон. Смешанный тип: Маг (Inner Guide) + Мудрец |
+
+## 9. Блогеры и эксперты — русскоязычные
+
+| Персона | Страна | Платформа | Атрибуция | Почему | Правовой статус |
+|---|---|---|---|---|---|
+| BadComedian (Евгений Баженов) | RU | YouTube (около 6,03 млн на 23.06.2026); в 12.2024 закрыл группу во VK [37] | Багдасарова и Силенко, 2022: «Архетип Мага очевиден в блогерской деятельности BadСomedian» [36] | разбор и критика кино, «особое видение», «чтобы изменить мир, нужно начать с себя»; ловушка — «бессознательное манипуляторство» [36] | в прочитанной половине статьи Википедии сведений о реестре иноагентов или уголовных делах нет ⚠ [37]; нужна сверка с реестром Минюста. Перед использованием нужна юридическая проверка |
+| Дмитрий Нагиев | RU | — | Дяченко, 2026: Маг-«Визионер» как лицо креатива МТС «Как изменится будущее» — это атрибуция кампании, а не личного бренда [28] | рядом в статье — Стив Джобс и Apple | правовой статус и платформы ⚠ не проверялись. Перед использованием нужна юридическая проверка |
+| Братья Сафроновы | RU | иллюзионисты: шоу «Чудо-люди», «Империя иллюзий» и др.; YouTube, Rutube, Дзен, VK; премия Merlin за шоу 2025 г. [38] | оценка исследования, не из источника | буквальное «чудо» как продукт, перевоплощение и иллюзия; шоу-подача добавляет Шута [38] | в заметках отметок нет. Википедия отмечает, что многие утверждения статьи без источников |
+| Елена Крыгина | RU | визажист; видеоблог на YouTube с 2013 г., марка Krygina Cosmetics, книга «Макияж» (2016) [39] | кандидат без источника: в одном раунде заметок — Маг (трансформация через макияж) ⚠ не проверялось; в другом — Любовник (оценка исследования, не из источника) | расхождение интерпретаций | ⚠ правовой статус и активность в 2026 г. не проверены |
+
+- «Визионеров-Магов» среди блогеров в нишах науки и техники с источником не найдено.
+
+## 10. Сочетания: гармоничные и конфликтные
+
+**Позиция первоисточника**
+- Марк и Пирсон рекомендуют один архетип: «one—and only one—archetype» [1, с. 42 ⚠; 14].
+- Маг — в группе мастерства с Героем и Бунтарём [1].
+- Пограничный случай Мудрец/Маг — Дипак Чопра: «mystique can contribute to the aura of the Sage brand» [1].
+
+**Гармоничные и рабочие связки (как в источниках)**
+- Маг + Мудрец: самоописание Kaye Putnam [22]; Чопра у M&P [1]; Jay Shetty — оценка исследования, не из источника.
+- Маг + Творец: Apple у Пилиповец и Соколовой [35; 34]; INNOWEEK — «творец с чертами мага» [31]; Творец + Маг + Искатель — бренд шёлковых платков у Соколовой [34].
+- Соколова: компании, которая ценит инновации и свободу, подходят Искатель, Маг или Бунтарь [34].
+- По оценкам исследования, не из источника: Маг + Шут (Братья Сафроновы), Славный малый + Маг (Kaspi.kz).
+- У потребителей (Spangenberg, MDS) Маг попадает в кластер «Positive Emotional Arousal» вместе с Любовником и Шутом, а не с Героем и Бунтарём [23].
+
+**Контрасты и риски**
+- Kaye Putnam противопоставляет Мага Мудрецу и Невинному по прозрачности: «Unlike the Sage or the Innocent, it feels natural for Magician brands to be slightly obscure» [12].
+- Маг и «стабильная» тройка (Заботливый, Творец, Правитель) лежат на противоположных полюсах осей M&P; конфликт — вывод исследования, не прямая цитата [1]. При этом связка Маг + Творец встречается у практиков как рабочая [35; 34; 31].
+- Риски, названные практиками: «нереалистичные обещания» [41]; работает «только при наличии доказательств» [35].
+
+**Пары в модели Пирсон**
+- У Пирсон 1991 Маг стоит на этапе «возвращения» вместе с Правителем, Мудрецом и Шутом [4]. Конкретная пара для Мага прямой цитатой не подтверждена: по одной реконструкции заметок это Правитель–Маг, по порядку таблицы «complementary pairs» в руководстве PMAI — Маг–Мудрец; обе ⚠ [4; 10].
+
+## 11. Расхождения между авторами
+- **Девиз.** M&P — «It can happen!» [1]; Ebaq — «Anything can happen!» [14].
+- **Страх.** M&P — «unanticipated negative consequences» [1]; Пирсон 1991 — «Evil sorcery (transformation in a negative direction)» [4]; Пирсон 1989 — «Superficiality» [6]. 1991 и 2001 сходятся по смыслу (негативная трансформация), 1989 — другое.
+- **Цель.** 1989 — «Wholeness» [6]; 1991 — «Transformation of lesser into better realities» [4]; 2001 — «make dreams come true» [1].
+- **Ловушка и дар.** «becoming manipulative» и «finding win-win outcomes» ⚠ дословно в первоисточнике не найдены [1].
+- **Task и Gift у Пирсон 1991.** Ранний раунд заметок приводит «Alignment of Self with cosmos» и «Personal power», поздний раунд по OCR их не переподтвердил ⚠ [4].
+- **Disney.** M&P — Невинный [1]; все просмотренные современные гайды — Маг [13; 16; 14; 12; 15].
+- **Apple.** M&P — Бунтарь и Творец [1]; Kaye Putnam, zipBoard, WEDEX — Маг [12; 16; 15]; Пилиповец и Соколова — Маг + Творец [35; 34].
+- **МТС.** У одного автора в двух статьях — Маг-«Визионер» и Заботливый-«Дворецкий»: архетип привязан к кампании, а не к бренду [28; 29].
+- **Пирсон о рекламе.** В «Awakening the Heroes Within» реклама связана с **теневым** Магом (с. 205–207) [4], а брендовая книга 2001 г. описывает Мага как источник «magical moments» [1]. Это напряжение внутри работ одного автора — оценка исследования, не из источника.
+- **Одни ярлыки — разные семьи.** Healer — подтип Мага у Пирсон [7] и Putnam (Alchemist, он же Healer) [12], а у Хартвелл — в семье Caregiver [17]. Engineer у Хартвелл — в семье Мага [17], у Putnam — подтип Мудреца [12]. Visionary у Putnam — синоним Мага [12], у Хартвелл — подархетип Творца [17]. Шаман у M&P — «EARLIEST IMAGES of the Magician» [1], у Хартвелл — подархетип Мудреца [17].
+- **Маг у Юнга.** Не отдельный архетип, а один из обликов Мудрого старца [54] ⚠.
+- **Омонимы.** «Маг» как аркан 1 «Матрицы судьбы» [51] и «маг» у Мура и Жиллетта [52] — другие системы, к брендовому Магу M&P отношения не имеют.
+- **Цвета.** zipBoard — пастель (фиолетовый, розовые, голубой) [16]; WEDEX — не палитра, а свет, тень и символы метаморфозы [15]; популярная конвенция «фиолетовый/тёмно-синий/чёрный/золото» ⚠ не подтверждена.
+- **Группировка.** У M&P Маг — с Героем и Бунтарём [1]; у потребителей в исследовании Spangenberg — с Любовником и Шутом [23].
+- **Lucent Technologies.** Образцовая «Magician Organization» M&P [1] — поглощена в 2006 г. [20].
+
+## Источники
+
+1. Mark M., Pearson C. S. *The Hero and the Outlaw: Building Extraordinary Brands Through the Power of Archetypes.* New York: McGraw-Hill, 2001. ISBN 0071364153. Текст сверялся полнотекстовым поиском по библиотечному экземпляру Internet Archive (короткие OCR-фрагменты, возможны ошибки распознавания): https://archive.org/details/herooutlawbuildi0000mark . Оглавление: ч. II — с. 49 (гл. 4 — с. 53, гл. 5 — с. 71, гл. 6 — с. 88); ч. III — с. 101 (гл. 7 — с. 105, гл. 8 — с. 123, гл. 9 — с. 140). Номера страниц с пометкой «⚠» взяты из заметок, где книга сверялась по неидентифицированной онлайн-копии; легальным источником они не подтверждены. [первоисточник]
+2. Марк М., Пирсон К. *Герой и бунтарь. Как использовать архетипы на пользу бизнесу и творчеству* / пер. А. Д. Сайфуллиной. М.: Бомбора, серия «Бомбора Foundation. Self-help», 512 с., ISBN 978-5-04-246600-7. Оглавление издателя (PDF): https://cdn.eksmo.ru/v2/ITD000000001500651/PDF/ITD000000001500651_TOC.pdf ; карточка: https://eksmo.ru/book/geroy-i-buntar-kak-ispolzovat-arkhetipy-na-polzu-biznesu-i-tvorchestvu-ITD1500651/ . Издание 2023 г. (серия «Маркетинг для немаркетологов», ISBN 978-5-04-172815-1; его оглавление не проверено): https://www.labirint.ru/books/950126/ . [первоисточник/издатель]
+3. Марк М., Пирсон К. *Герой и бунтарь. Создание бренда с помощью архетипов.* СПб.: Питер, 2005, серия «Маркетинг для профессионалов», 336 с., ISBN 5-94723-616-8. Выходные данные: https://urss.ru/cgi-bin/db.pl?lang=Ru&blang=ru&page=Book&id=154748 . Названия архетипов и частей этого перевода легальным источником не подтверждены (известны из неавторизованной копии; ссылка не приводится). [первоисточник/магазин — только выходные данные]
+4. Pearson C. S. *Awakening the Heroes Within: Twelve Archetypes to Help Us Find Ourselves and Transform Our World.* HarperSanFrancisco, 1991. ISBN 0062506781. Полнотекстовый поиск по экземпляру Internet Archive: https://archive.org/details/awakeningheroesw0000pear . Таблица «The Twelve Archetypes» — с. 10–11; часть IV — с. 179; теневой Маг и реклама — с. 205–207. Страницы по колонтитулам (±1). [первоисточник]
+5. Пирсон К. *Пробуждение внутреннего героя. 12 архетипов, которые помогут раскрыть свою личность и найти путь* / пер. А. Багрянцевой. М.: МИФ, 2024. ISBN 978-5-00214-422-8. Ознакомительный фрагмент: https://www.litres.ru/book/carol-s-pearson-2/probuzhdenie-vnutrennego-geroya-12-arhetipov-kotorye-pom-70498927/chitat-onlayn/ ; выходные данные: https://www.labirint.ru/books/1002571/ . [первоисточник/издатель]
+6. Pearson C. S. *The Hero Within: Six Archetypes We Live By.* Expanded ed. San Francisco: Harper & Row, 1989 (©1986, 1989). ISBN 0-06-254862-X. https://archive.org/details/herowithin002330mbp . Гл. 6 «The Magician» — с. 116; сводная таблица и порядок пути — с. xxvii; «чему учит каждая стадия» — с. 15; предисловие к расширенному изданию — с. xv–xvii. [первоисточник]
+7. Pearson Archetypal System, carolspearson.com, «Magician»: https://carolspearson.com/archetype-pages/magician-archetype . Дата не указана; просмотрено 2026-10-15. [первоисточник]
+8. carolspearson.com, «The Pearson 12-Archetype System: Human Development and Evolution»: https://www.carolspearson.com/about/the-pearson-12-archetype-system-human-development-and-evolution . [первоисточник]
+9. carolspearson.com, «PMAI re-release» (май 2020): https://www.carolspearson.com/wp-imort-2/pmai-re-release ; StoryWell (шкалы PMAI-2020): https://www.storywell.com/ . [первоисточник]
+10. Blandin K., Marr H. K., Pearson C. S. *PMAI Manual.* Gainesville: CAPT, 2021. ISBN 978-0-935652-05-5, гл. 2–3. PDF издателя: https://cdn.prod.website-files.com/5fc7fbb375805cc285353295/65d8ffa286160b97014347f7_PMAI_Manual_2021-1.pdf . [первоисточник; издатель инструмента]
+11. Matousek M. «Which Archetypes Are You Living?» — интервью с C. S. Pearson. Psychology Today, 2024-08-08: https://www.psychologytoday.com/us/blog/the-seekers-forum/202408/which-archetypes-are-you-living . [профессиональный; прямая речь автора системы]
+12. Putnam K. «Brand Archetypes». kayeputnam.com, © 2026: обзор https://kayeputnam.com/brand-archetypes/ ; страница архетипа https://kayeputnam.com/brand-archetypes/magician ; квиз https://kayeputnam.com/quiz/ . [профессиональный; первоисточник для её системы]
+13. Houraghan S. «Brand Archetypes: The Definitive Guide [36 Examples]». Iconic Fox, опубл. 2018-05-03, обновл. 2025-12-01: https://iconicfox.com.au/brand-archetypes/ . [профессиональный]
+14. Dvornechuck A. «Brand Archetypes: The Definitive Guide for 2026 (48 Examples)». Ebaq Design, 2026-01-27: https://www.ebaqdesign.com/blog/brand-archetypes . Пересказывает формулировки M&P. [профессиональный]
+15. Vlasiuk P. «Choosing a brand archetype: how to find your image among 12 classic roles». WEDEX (Украина), 2025-10-13: https://wedex.com.ua/en/blog/choosing-a-brand-archetype-how-to-find-your-image-among-12-classic-roles/ . [профессиональный]
+16. «Branding archetypes». Блог zipBoard, 2020-10-29; автор и источник цветов не указаны: http://zipboard.co/blog/content-dev/branding-archetypes/ . [популярный]
+17. Hartwell M. «Archetypes in Branding» (слайды курса, 70 слайдов). SlideShare, 22.08.2014: https://www.slideshare.net/slideshow/archetypes-in-branding/49975573 . [первоисточник для системы Хартвелл, ранняя версия]
+18. Hartwell M., Chen J. C. *Archetypes in Branding: A Toolkit for Creatives and Strategists.* HOW Books / F+W Media, 2012 (60 архетипов: 12 семейств по 5; колода из 60 карт). Каталог: https://www.bookshare.org/browse/book/652185 . Текст книги не просмотрен. [профессиональный — каталог]
+19. Solomon M. R. *Consumer Behavior: Buying, Having, and Being.* 11th ed. Pearson, 2014: https://archive.org/details/consumerbehavior0000mich_edi11 ; изд. 2018: https://archive.org/details/consumerbehavior0000solo_n4t7 . Сводная таблица полей M&P (Core desire / Goal / Fear / Strategy). [профессиональный; вторичное воспроизведение M&P]
+20. Wikipedia, «Lucent Technologies»: https://en.wikipedia.org/wiki/Lucent_Technologies . [популярный]
+21. YouTube, шапки каналов, данные на 2026-10-15: https://www.youtube.com/@TonyRobbinsLIVE ; https://www.youtube.com/@zachking ; https://www.youtube.com/@drjoedispenza ; https://www.youtube.com/@JayShetty . [первоисточник для числа подписчиков]
+22. Logo Geek Podcast, ep. 139 «Archetypes in Branding» (гость Kaye Putnam): https://logogeek.uk/podcast/branding-archetypes . [профессиональный; интервью]
+23. Spangenberg K. *Brand Archetypes.* PhD diss., University of Washington, Foster School of Business, 2021, с. 17–25: https://digital.lib.washington.edu/researchworks/items/c15713ba-a19c-4da6-9ca8-2758d42560e1 . [профессиональный — диссертация]
+24. Xara-Brasil D., Hamza K. M., Marquina P. «The meaning of a brand? An archetypal approach». *Revista de Gestão* 25(2):142–159, 2018. https://doi.org/10.1108/REGE-02-2018-0029 . [профессиональный]
+25. Крячко А. (Plenum). «Архетипы в маркетинге на примере диджитальных российских брендов». dsgners.ru, 28.05.2024: https://dsgners.ru/Plenum/5317-arhetipyi-v-marketinge-na-primere-didjitalnyih-brendov . [профессиональный]
+26. Craftum, блог. «Архетипы бренда…», 18.06.2025, автор не указан: https://craftum.com/blog/arhetipy-brenda/ . [популярный]
+27. Gromov Branding. «Архетипы бренда: полный гайд с примерами российских и мировых компаний» (автор и дата не указаны): https://gromovbranding.ru/branding-blog/arhetipy-brenda-polnyy-gayd-primerami-rossiyskih-mirovyh . [популярный]
+28. Дяченко А. «Сила волшебных брендов. Пять вариаций бренд-архетипа Мага…». Sostav-блог подкаста «Маркетинг и реальность», 24.04.2026: https://www.sostav.ru/blogs/261743/84422 . [профессиональный]
+29. Дяченко А. «О тебе уже подумали: пять вариаций бренд-архетипа Заботливого…». Sostav-блог, 17.08.2026: https://www.sostav.ru/blogs/261743/101795 . [профессиональный]
+30. Аникеева Е. (студия Pixies). «12 архетипов брендинга, или Как найти свой имидж…». Sostav, 23.02.2021: https://www.sostav.ru/publication/dlya-chego-nuzhen-rebrending-12-arkhetipov-brendinga-ili-kak-nai-ti-svoi-imidzh-i-otstroitsya-ot-konkurentov-47437.html . [первоисточник: кейсы студии]
+31. Креативное агентство FOLGA. «Шут успокаивающий или героизм имею? Разбираем 12 архетипов брендов». Yagla, дата не указана: https://yagla.ru/blog/drugoe-o-marketinge/shut-uspokaivayushchiy-ili-geroizm-imeyu-razbiraem-12-arhetipov-brendov--2510u116588/ . [профессиональный]
+32. Википедия, «Ozon»: https://ru.wikipedia.org/wiki/Ozon . [популярный]
+33. Википедия, «Kaspi.kz»: https://ru.wikipedia.org/wiki/Kaspi.kz . [популярный]
+34. Соколова Е. (агентство «Опыт бренда»). «Архетип бренда. Как не превратить маркетинг в астрологию». Sostav-блог, 02.07.2026: https://www.sostav.ru/blogs/288649/93766 . [профессиональный]
+35. Пилиповец О. Статья об архетипах основателя. MyBusiness.by (Беларусь), 26.01.2026: https://mybusiness.by/2026/tpost/archetypes-founder-business . [популярный]
+36. Багдасарова Р. А., Силенко В. А. «Комьюнити-блогерство: архетипы и бренды» // Гуманитарные науки. Вестник Финансового университета. 2022;12(1):161–166: https://humanities.fa.ru/jour/article/download/629/616 . [профессиональный]
+37. Википедия, «BadComedian»: https://ru.wikipedia.org/wiki/BadComedian . Прочитана первая половина статьи. [популярный]
+38. Википедия, «Братья Сафроновы»: https://ru.wikipedia.org/wiki/Братья_Сафроновы . [популярный]
+39. Факты о Е. Крыгиной: Lady Mail.ru https://lady.mail.ru/article/478829-sekretyi-idealnogo-makiyazha-ot-top-vizazhista-2/ ; Эксмо https://eksmo.ru/authors/krygina-elena-aleksandrovna-ITD23634/ ; РБК Стиль, 2018 https://style.rbc.ru/amp/news/5bec249b9a7947de4d86c807 . [популярный]
+40. АрхетипиУМ (Ю. Соловьева), страница архетипа: https://arhetipium.ru/mag ; главная: https://arhetipium.ru/ . Просмотрено 2026-10-15. [популярный, рекламный]
+41. Булыгина И. «12 архетипов блогеров… (ч.3)». TenChat, ~2025: https://tenchat.ru/media/3819574-12-arkhetipov-blogerov-kak-produktivno-sotrudnichat-bez-syurprizov-ch3 . [популярный]
+42. Тезисы «Ломоносов-2025», «Архетипы как способ формирования голоса онлайн-СМИ» (Волгоградский филиал РАНХиГС): https://confhub.ru/archive/Lomonosov_2025/data/36727/183406_uid271377_report.pdf . [профессиональный; студенческие тезисы]
+43. Адт А. Тест «Бренд-Личность»: https://alinaadt.ru/archetypes . [первоисточник — автор системы]
+44. Гас К. Пост об архетипах личного бренда. Teletype, 09.07.2024: https://teletype.in/@katyagas/czNfmod6BTZ . [первоисточник — автор системы]
+45. Сураева А. «Личный бренд с помощью архетипов: база». vc.ru, 16.01.2024: https://vc.ru/marketing/988741-lichnyi-brend-s-pomoshyu-arhetipov-baza . [популярный]
+46. Левшин Р. Статья для НОКС, 25.12.2023: https://nokc.org.ru/nokc-style/ . [профессиональный]
+47. Богданов А. (I-am-Brand). «Архетипы в личном бренде», 04.08.2023: https://i-am-brand.ru/knowledge-base/arhetipy-v-lichnom-brende/ . [популярный]
+48. Пыльнова А. «Архетипы бренда». Kokoc.com, 17.06.2026: https://kokoc.com/blog/arhetipy-brenda/ . [популярный]
+49. Дяченко А. «Бренд-архетип Славный Малый (Друг): что общего у Марьиванны и криптоинноваций?». Sostav-блог, 25.12.2023: https://www.sostav.ru/blogs/261743/42960 . [профессиональный]
+50. ADWAI Digital. «12 архетипов личного бренда»: https://adwai.digital/blog/j4rlrpry31-12-arhetipov-lichnogo-brenda-postroenie . Дата не указана. [популярный]
+51. Матрикс А. *Матрица судьбы. Личный бренд.* Литрес, 06.05.2023: https://litres.com/book/albina-matriks/matrica-sudby-lichnyy-brend-69212533/read/ . Эзотерическая система, не Марк–Пирсон. [первоисточник для этой системы]
+52. Мур Р., Жиллетт Д. *Король, воин, маг, любовник: новый взгляд на архетипы зрелого мужчины.* М.: Литературная учеба, 2014. ISBN 978-5-88915-079-4. Карточка: https://www.labirint.ru/reviews/goods/464858/ . [первоисточник/магазин]
+53. Леонова М. *Вечный бренд. Тюркские архетипы в маркетинге.* Ridero, 2025 (фрагмент): https://books.yandex.ru/books/PKGjPsYP/read-online . [первоисточник]
+54. Jung C. G. *The Archetypes and the Collective Unconscious* (Collected Works, vol. 9i). 2nd ed. Princeton University Press, 1968, «The Phenomenology of the Spirit in Fairytales», §§398, 415. В заметках текст сверялся по сетевой копии, легальность которой не установлена; ссылка не приводится. [первоисточник; ⚠ не подтверждено легальным источником]
