@@ -1,6 +1,6 @@
 # Карточки архетипов — оглавление
 
-> **Дата среза:** 2026-10-15. Это материалы исследования, а не описание продукта.
+> **Дата среза:** 2026-10-15. Это материалы исследования, а не описание продукта. Независимая проверка карточек `extra-…` и этого оглавления — [_notes/v04-extra-cards.md](../_notes/v04-extra-cards.md) (2026-10-16).
 
 ## Назначение папки
 
@@ -84,23 +84,24 @@
 |---|---|---|---|
 | Independence / Self-Actualization | Part II «The Yearning for Paradise» | «В поисках рая» | Простодушный (Innocent; «Бомбора» — Дитя), Искатель (Explorer), Мудрец (Sage) |
 | Risk / Mastery | Part III «Leaving a Thumbprint on the World» | «Оставить след в этом мире» | Герой (Hero), Бунтарь (Outlaw), Маг (Magician) |
-| Belonging ⚠ | Part IV «No Man (or Woman) Is an Island» | «Один в поле не воин» | Славный малый (Regular Guy/Gal), Любовник (Lover), Шут (Jester) |
+| Belonging/People | Part IV «No Man (or Woman) Is an Island» | «Один в поле не воин» | Славный малый (Regular Guy/Gal), Любовник (Lover), Шут (Jester) |
 | Stability / Control | Part V «Providing Structure to the World» | «Упорядочить мир» | Заботливый (Caregiver; «Бомбора» — Служитель), Творец (Creator), Правитель (Ruler) |
 
 Источники и оговорки к таблице:
-- Оси названы в главе 1 так: «…Independence/Self-Actualization, and Stability/Control versus Risk/Mastery» [1]. Полюс, противоположный Independence/Self-Actualization, во фрагмент не попал; вероятно, это «Belonging/People», но ⚠ не подтверждено (r02). На схемах в начале частей видны подписи «Stability Belonging Independence» [1].
+- Оси названы в главе 1 так: «along two axes: Belonging/People versus Independence/Self-Actualization, and Stability/Control versus Risk/Mastery» [1]. Полюс «Belonging/People» подтверждён при проверке v04 по полнотекстовому поиску Open Library (сниппет книги 2001 г.) и по таблице Solomon [7]. На схемах в начале частей видны подписи «Stability Belonging Independence» [1].
 - Состав частей II–V — по оглавлению оригинала [1] и перевода «Бомборы» [2].
 - Соотнесение частей с полюсами осей — вывод по названиям частей; явной таблицы в книге не найдено ⚠ (r02).
 - В книге — «Self-Actualization»; распространённая подпись «Independence & Fulfillment» — пересказ вторичных источников (r02).
-- Независимо группу «risk and mastery» (Hero, Magician, Outlaw) и четыре «human drivers» называет академическая статья Xara-Brasil и соавт. (2018) [3].
+- Независимо группу «risk and mastery» (Hero, Magician, Outlaw) и четыре «human main drivers» называет академическая статья Xara-Brasil и соавт. (2018) [3]; два других «драйвера» там подписаны «belonging and enjoyment» и «independence and fulfillment» (сверено по полному тексту при проверке v04).
 - У русскоязычных практиков группы называются по-разному, например «Стабильность и желание контролировать», «Принадлежность и удовольствие», «Риск и мастерство», «Независимость и реализация» (I-am-Brand) [4]. Названия частей в переводе «Питера» (2005) известны только из неавторизованной копии и легальным источником ⚠ не подтверждены (r14).
 - Те же четыре мотива («belonging, stability, mastery and self-actualization») называет сайт набора Хартвелл и Чена [5]; то, что их 60 карт организованы вокруг этой оси, — оценка исследования (r03) ⚠.
 
 ## Источники
 
-1. Mark M., Pearson C. S. *The Hero and the Outlaw: Building Extraordinary Brands Through the Power of Archetypes.* New York: McGraw-Hill, 2001. Гл. 1 (оси модели, рис. 1.2–1.3); оглавление частей II–V (Part II с. 49, Part III с. 101). Сверено исследованием по фрагментам полнотекстового поиска (r02, r14); ссылка на копию не приводится. — [первоисточник]
+1. Mark M., Pearson C. S. *The Hero and the Outlaw: Building Extraordinary Brands Through the Power of Archetypes.* New York: McGraw-Hill, 2001. Гл. 1 (оси модели, рис. 1.2–1.3); оглавление частей II–V (Part II с. 49, Part III с. 101). Сверено исследованием по фрагментам полнотекстового поиска (r02, r14); формулировка осей и страницы частей II–III перепроверены по полнотекстовому поиску Open Library (v04). Ссылка на копию не приводится. — [первоисточник]
 2. Эксмо / «Бомбора». Марк М., Пирсон К. «Герой и бунтарь», пер. А. Д. Сайфуллиной (ISBN 978-5-04-246600-7), оглавление (PDF издателя). https://cdn.eksmo.ru/v2/ITD000000001500651/PDF/ITD000000001500651_TOC.pdf — [первоисточник/издатель]
-3. Xara-Brasil D., Hamza K. M., Marquina P. The meaning of a brand? An archetypal approach // Revista de Gestão 25(2):142–159 (2018). https://doi.org/10.1108/REGE-02-2018-0029 — [профессиональный]
+3. Xara-Brasil D., Hamza K. M., Marquina P. The meaning of a brand? An archetypal approach // Revista de Gestão 25(2):142–159 (2018). https://doi.org/10.1108/REGE-02-2018-0029 (⚠ на 2026-10-16 переход по DOI на сайт Emerald отвечает HTTP 403; данные сверены по Crossref). Открытый доступ (CC BY 4.0): https://revistas.usp.br/rege/article/view/147500 — [профессиональный]
 4. Богданов А., I-am-Brand. «Архетипы в личном бренде», 04.08.2023. https://i-am-brand.ru/knowledge-base/arhetipy-v-lichnom-brende/ — [популярный]
 5. Archetypes in Branding (M. Hartwell, J. Chen), официальный сайт. https://www.archetypesinbranding.com/ — [первоисточник]
 6. Jung C. G. *The Archetypes and the Collective Unconscious* (Collected Works, vol. 9i). 2nd ed. Princeton University Press (Bollingen Series XX), 1968. §80, §99 (с. 48), §309. Ссылка на копию книги не приводится. — [первоисточник]
+7. Solomon M. R. *Consumer Behavior: Buying, Having, and Being.* 11th ed. Pearson, 2014 — изложение осей Mark & Pearson («belonging/people versus independence/self-actualization»). Сверено по полнотекстовому поиску Open Library (v04); ссылка на копию не приводится. — [профессиональный; вторичное воспроизведение M&P]

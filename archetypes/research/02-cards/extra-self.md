@@ -13,7 +13,7 @@
 
 ## 2. Светлая и тёмная стороны / урок
 
-- **Светлая сторона.** Самость — целостность и центр, к которым ведёт развитие личности; в перечне форм перерождения Юнг называет «естественную трансформацию (индивидуацию)» [2, §§199–219].
+- **Светлая сторона.** Самость — целостность и центр, к которым ведёт развитие личности; в разделе о психологии перерождения, среди видов субъективной трансформации, Юнг называет «естественную трансформацию (индивидуацию)» [2, §234].
 - **Тёмная сторона — инфляция эго.** Эго отождествляет себя с ассимилированными бессознательными содержаниями [1, §§44–46].
 - **Мана-личность.** «The mana-personality is a dominant of the collective unconscious, the well-known archetype of the mighty man» (CW 7 §377); исторически она «evolves into the hero and the godlike being» (CW 7 §389); отождествившись с ней, человек становится лишь «adulterated with an archetype» (CW 7 §380) — всё по [3] ⚠ (CW 7 сверен только по Шарпу).
 - **Урок** (пересказ Юнга): эго — часть целого и не должно присваивать себе целое [1, гл. I; §§44–46].
@@ -46,13 +46,13 @@
 - **Хиллман** (архетипическая психология) отвергает Самость как слишком предписывающее понятие, а вместе с ней и «карты роста» [9].
 - **Нолл** («The Jung Cult», 1994) видел в индивидуации рецепт «обожествления»; Шамдасани («Cult Fictions», 1998) оспорил «культовый» тезис [10].
 - **Пирсон и Юнг** употребляют «Self» в разных значениях (см. раздел 4).
-- **Таро.** Самость — в Мире и Солнце (Kerykeion, Avia Venefica) [5][6] или как «нереализованная Самость» в Шуте (OLLI) [7]. Глава Nichols о Солнце «Centro radiante» с этим совместима, но слова «Самость» в названии нет (r16).
+- **Таро.** Самость — в Мире и Солнце (Kerykeion, Avia Venefica) [5][6] или как «нереализованная Самость» в Шуте (OLLI) [7]. Глава Nichols о Солнце «Centro radiante» с этим совместима, но слова «Самость» в названии нет (r16); подробно — [06-esoteric-links.md](../06-esoteric-links.md).
 - **Сверка.** Номер параграфа определения (≈§9) в копии не виден ⚠; CW 7 и CW 12 сверены только по Шарпу ⚠.
 
 ## Источники
 
 1. Jung C. G. *Aion: Researches into the Phenomenology of the Self* (Collected Works, vol. 9ii). 2nd ed. Princeton University Press, 1968. Гл. I «The Ego», с. 5 (≈§9 ⚠); §§44–46, 59–60. Ссылка на копию книги не приводится. — [первоисточник]
-2. Jung C. G. *The Archetypes and the Collective Unconscious* (Collected Works, vol. 9i). 2nd ed. Princeton University Press (Bollingen Series XX), 1968. §§199–219 («Concerning Rebirth», 1940/1950); §278 («The Psychology of the Child Archetype»); §§306, 315 («The Psychological Aspects of the Kore», 1951). Ссылка на копию книги не приводится. — [первоисточник]
+2. Jung C. G. *The Archetypes and the Collective Unconscious* (Collected Works, vol. 9i). 2nd ed. Princeton University Press (Bollingen Series XX), 1968. §234 («Concerning Rebirth», 1940/1950; разд. 2.B.h «Natural transformation (individuation)» — номер сверен по полнотекстовому поиску Open Library, v04); §278 («The Psychology of the Child Archetype»); §§306, 315 («The Psychological Aspects of the Kore», 1951). Ссылка на копию книги не приводится. — [первоисточник]
 3. Sharp D. *C. G. Jung Lexicon.* Toronto: Inner City Books, 1991; онлайн-версия, опубликованная с согласия автора: https://www.psychceu.com/jung/sharplexicon.html — статьи «Self», «Mana-personality», «Inflation» (цитаты CW 12 §44; CW 7 §§377, 380, 389). — [профессиональный]
 4. Pearson C. S. *Awakening the Heroes Within.* HarperSanFrancisco, 1991. Оглавление: Part I «The Dance of Ego, Self, and Soul», гл. 2–4; Parts II–IV. Сверено исследованием по фрагментам полнотекстового поиска (r14); ссылка на копию не приводится. — [первоисточник]
 5. Kerykeion. «Jung and Tarot» (обновлено 13.06.2026). https://kerykeion.net/content/learn-tarots/psychology/jung-and-tarot — [популярный]

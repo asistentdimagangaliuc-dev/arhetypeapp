@@ -1,6 +1,6 @@
 # Проститутка (Prostitute) — «архетип выживания», Кэролайн Мисс
 
-> **Источник понятия:** C. Myss, «Sacred Contracts: Awakening Your Divine Potential» (Harmony, 2001), глава «Speaking Archetypes: Your Four Principal Energy Companions» [1][2]; онлайн-версия «Gallery of Archetypes» (myss.com, PDF, 2015), семейство Survival, статья Prostitute [3]; статья «The Prostitute — The Power of Archetypes» на myss.com [4] · **Ближайший архетип из 12:** нет. Исследование (r03, оценка, не из источника): «нет аналога; тема целостности».
+> **Источник понятия:** C. Myss, «Sacred Contracts: Awakening Your Divine Potential» (Harmony, 2001), глава «Speaking Archetypes: Your Four Principal Energy Companions» [1][2][6]; онлайн-версия «Gallery of Archetypes» (myss.com, PDF, 2015), семейство Survival, статья Prostitute [3]; статья «The Prostitute — The Power of Archetypes» на myss.com [4] · **Ближайший архетип из 12:** нет. Исследование (r03, оценка, не из источника): «нет аналога; тема целостности».
 > **Дата среза:** 2026-10-15. Русское название — перевод исследования: русское издание Мисс не проверено ⚠. Пометки — см. [README](README.md).
 
 ## 1. Суть по автору системы
@@ -8,7 +8,7 @@
 - **Общий для всех архетип выживания** — вместе с Дитя, Жертвой и Саботажником [1][3]; см. [extra-myss-child.md](extra-myss-child.md).
 - **Подзаголовок** — «guardian of faith» (хранитель веры) [3].
 - **Ядро:** уроки продажи или «торга» своей целостностью и духом, когда под угрозой физическое и финансовое выживание. «Продаются» также таланты, идеи и любое самовыражение [3].
-- **Ключевой вопрос** на myss.com — «through what means will I survive?» [4] ⚠ (по поисковой сводке; страница не открывалась).
+- **Ключевой вопрос** на myss.com (текст видеозаписи от 15.03.2023) — «through what means will I survive?» [4]; страница открыта и сверена при проверке v04.
 
 ## 2. Светлая и тёмная стороны / урок
 
@@ -18,7 +18,7 @@
 
 ## 3. Как проявляется в жизни, культуре, коммуникации
 
-- Человек остаётся в несчастливых отношениях или на нелюбимой работе ради финансовой безопасности [3][4].
+- Человек остаётся в несчастливых отношениях или на нелюбимой работе ради финансовой безопасности [3].
 - «Продажа» талантов, идей и самовыражения — часть описания самой Мисс [3].
 - Название шокирует; это отмечает и исследование (r03, оценка). Русская терминология Мисс в переводах не проверена ⚠ (r04).
 
@@ -34,18 +34,20 @@
 
 ## 6. Примеры (персонажи, бренды, публичные фигуры)
 
-В источниках не найдено.
+- **Из источников:** в Галерее к Проститутке приведены роли Джека Леммона («Квартира» и др.), Фреда Макмюррея в «Двойной страховке», Марлона Брандо в «В порту»; «Трагическая история доктора Фауста» Марлоу; Ошун (ориша йоруба), храмовые проститутки [3] (исправлено при проверке v04: раньше было «в источниках не найдено»).
+- **Бренды и публичные фигуры:** в источниках не найдено.
 
 ## 7. Расхождения между авторами
 
 - Других авторов, которые описывали бы этот архетип, в собранных материалах нет; сравнивать не с чем.
-- Формулировка ключевого вопроса «through what means will I survive?» известна только по поисковой сводке страницы myss.com ⚠ [4].
+- Формулировка ключевого вопроса «through what means will I survive?» подтверждена по странице myss.com [4] (раньше была известна только по поисковой сводке).
 - Русское название не устоялось: перевод книги Мисс в источниках не проверен ⚠ (r04).
 
 ## Источники
 
 1. Publishers Weekly. Рецензия на Myss C. *Sacred Contracts: Awakening Your Divine Potential* (Harmony, 2001). https://publishersweekly.com/9780517703922 — [профессиональный]
-2. Iowa City Public Library, каталог *Sacred contracts* (оглавление). https://search.icpl.org/Record/1206155 — [профессиональный — каталог; по поисковой сводке]
+2. Iowa City Public Library, каталог *Sacred contracts* (оглавление). https://search.icpl.org/Record/1206155 (⚠ ссылка недоступна на 2026-10-16: HTTP 403; оглавление подтверждено по фрагменту издателя [6]) — [профессиональный — каталог; по поисковой сводке]
 3. Myss C. «Gallery of Archetypes» (PDF, myss.com, 2015, 105 с.), семейство Survival, статья Prostitute. https://myss.com/wp-content/uploads/2015/07/Gallery-of-Archetypes.pdf — [первоисточник]
-4. Myss C. «The Prostitute — The Power of Archetypes» (myss.com). https://myss.com/the-prostitute-the-power-of-archetypes/ — [первоисточник; по поисковой сводке ⚠]
+4. Myss C. «The Prostitute» (myss.com, раздел «The Power of Archetypes», 15.03.2023). https://myss.com/the-prostitute-the-power-of-archetypes/ — [первоисточник; страница открыта 2026-10-16]
 5. Jung C. G. *The Archetypes and the Collective Unconscious* (Collected Works, vol. 9i). 2nd ed. Princeton University Press (Bollingen Series XX), 1968. §221 («Concerning Rebirth», 1940/1950). Ссылка на копию книги не приводится. — [первоисточник]
+6. Myss C. *Sacred Contracts: Awakening Your Divine Potential*, ознакомительный фрагмент электронного издания (оглавление), e-bookshelf.de: https://content.e-bookshelf.de/media/reading/L-535049-ae25abbe32.pdf — [первоисточник: фрагмент издателя]

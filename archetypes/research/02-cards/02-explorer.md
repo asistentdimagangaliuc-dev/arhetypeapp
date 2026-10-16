@@ -29,7 +29,7 @@
 **«Внутренняя» модель Пирсон**
 - «The Hero Within» (1989), Wanderer: цель — «Autonomy», задача — «Identity», страх — «Conformity» (с. xxvii). Странник учится «find and name one's own truth» (с. 15) [6].
 - «Awakening the Heroes Within» (1991), врезка главы (с. 123, колонтитул «124») [4]:
-  - Goal: «Search for a better life or a better [way]»;
+  - Goal: «Search for a better life or a better way»;
   - Fear: «Conformity, becoming entrapped»;
   - Response to Dragon/Problem: «Leave it, escape, take off»;
   - Task: «Be true to a deeper or higher truth»;
@@ -88,17 +88,17 @@
 - Plenum (на примере Aviasales): тон свободы и первопроходства [28].
 
 **Словарь**
-- Эмоции (Evokes) у Kaye Putnam: Excitement, Adventure, Freedom, Open-mindedness, Confidence [12].
+- Эмоции (Evokes) у Kaye Putnam: Happiness, Excitement, Adventure, Freedom, Open-mindedness, Confidence [12].
 
 **Цвета и визуальные коды — кто рекомендует**
 
 | Кто | Что | Комментарий |
 |---|---|---|
-| Марк и Пирсон 2001 | палитр архетипам **не назначают** | ⚠ фраза «The color green reinforces the ecological, natural imagery»; контекст фрагмента не установлен, вероятно глава об Искателе (The Body Shop) [1] |
+| Марк и Пирсон 2001 | палитр архетипам **не назначают** | фраза «The color green reinforces the ecological, natural imagery» относится к **Starbucks** (исправлено: в предыдущем предложении — «Starbucks has a particularly androgynous feel», в следующем — «the Starbucks décor»); это описание одного бренда, а не рекомендация палитры [1] |
 | Пирсон (carolspearson.com) | цветов нет | [7] |
 | Kaye Putnam | на страницах архетипов цветов нет | [12] |
 | Ebaq 2026 | цветов нет | [14] |
-| zipBoard 2020 | «Earthy neutrals, grey, tan, some oranges, and reds»; шрифты «Less is more, structured, and youthful» | автор и источник цветов не указаны [16] |
+| zipBoard 2020 | «Earthy colors such as neutrals, grey, tan, some oranges, and reds»; шрифты «Less is more, structured, and youthful» | автор и источник цветов не указаны [16] |
 | WEDEX 2025 | широкие пейзажи, природные цвета, динамичные ракурсы | [15] |
 | Iconic Fox | палитра только картинкой, текстом не проверяется ⚠ | [13] |
 | Plenum 2024 (RU, на примере бренда) | образы природы в визуале Aviasales | [28] |
@@ -131,7 +131,7 @@
 | Starbucks | M&P, гл. 5, «Starbucks, an Explorer-Brand Masterpiece» [1]; Kaye Putnam, подтип Cultural Aficionado [12] | интерьер как парусник, морская богиня в логотипе [1] | действует; позиционирование 2025–2026 ⚠ не проверялось. M&P и Putnam сходятся |
 | Amazon.com | M&P, с. 77 [1]; DeSantis Breindel [22] | название отсылает к плаванию по Амазонке [1] | действует; у потребителей четырёх стран ассоциации с Explorer редки [24] |
 | Levi's | M&P: «once a strong and clear Explorer brand, drifted from Outlaw to Hero, back to Explorer»; «the Levi's brand has seemed a bit lost» [1]; «patchwork quilt of archetypal identities» [1, с. 10 ⚠] | — | действует; **спорен как пример Искателя уже у самих M&P** |
-| REI, Patagonia, Land's End | M&P: «Think, for example, of brands like Levi's, REI, Patagonia, and Land's End» [1]; Patagonia — также Ebaq [14] | в заметках не приведён | ⚠ не проверялось. **Patagonia спорна**: у Kaye Putnam — Maverick (Бунтарь) с вторичным Explorer [12] |
+| REI, Patagonia, Land's End | M&P: «Think, for example, of brands like Levi's, REI, Patagonia, and Land's End» [1]; Patagonia — также Ebaq [14] | в заметках не приведён | ⚠ не проверялось. **Patagonia спорна**: Kaye Putnam приводит её дважды — на странице Explorer («the "un-company"…») и на странице Maverick как «Maverick with an Explorer secondary» [12] |
 | Jeep (Wrangler) | M&P, в перечне внедорожников [1]; Kaye Putnam [12]; Ebaq [14]; zipBoard [16]; WEDEX [15]; Imperial — Explorer–Entrepreneur, в таксономии не Марк–Пирсон [26] | в заметках не приведён | действует ⚠; согласован в большинстве источников |
 | The Body Shop | M&P, с. 81: «combines this cutting-edge image with the Explorer's…» [1] | — | 02.2024 британское подразделение в администрировании; 03.2024 американское — Chapter 7; 09.2024 британский бизнес и товарные знаки куплены Auréa; 10.2025 возвращение в США только онлайн [21]. Пример с оговоркой |
 | The North Face | Iconic Fox («Brand In Action») [13]; Ebaq [14]; WEDEX [15] | в заметках не приведён | ⚠ не проверялось |
@@ -174,7 +174,7 @@
 
 | Персона | Страна | Платформа | Атрибуция | Почему | Правовой статус |
 |---|---|---|---|---|---|
-| Антон Птушкин | UA | YouTube (около 5,45 млн на 17.01.2026), Telegram, Rutube, Дзен; в 2017–2018 вёл «Орёл и Решка» [33] | Бетева — атрибуция списком, без аргументов, в одном ряду с Жаком Ивом Кусто, Jeep, National Geographic [35] | аргументы — оценка исследования, не из источника: путешествия как основной жанр, собственный продакшн «Всё сам» (2020) [33] | правовой статус не проверялся; язык и доступность текущего контента для русскоязычной аудитории ⚠ не проверены. Перед использованием нужна юридическая проверка |
+| Антон Птушкин | UA | YouTube (около 5,45 млн на 17.01.2026), Telegram, Rutube, Дзен; в 2017–2018 вёл «Орёл и Решка» [33] | Бетева — атрибуция списком, без аргументов, в одном ряду с Жаком Ивом Кусто, Jeep, National Geographic [35] | аргументы — оценка исследования, не из источника: путешествия как основной жанр, собственный продакшн «Всё сам» (2020) [33] | по Википедии (со ссылкой на издание Baza), с 16.04.2022 ему запрещён въезд в Россию на 50 лет, до 2072 г. [33]; язык и доступность текущего контента для русскоязычной аудитории ⚠ не проверены. Перед использованием нужна юридическая проверка |
 | «Орёл и решка» | ⚠ в заметках не указано | тревел-шоу | Бетева, без аргументов [35] | — | — |
 | Михаил Кожухов | RU | телепутешественник: «В поисках приключений» (2002–2006), «Вокруг света», «Далеко и ещё дальше»; с 04.2013 «Клуб путешествий»; VK, Instagram [34] | оценка исследования, не из источника | двадцатилетняя линия тревел-шоу; тур-клуб как продолжение роли «проводника»; есть черты Мудреца (документальные фильмы о кругосветке и Севморпути) [34] | в заметках отметок нет. ⚠ Собственный YouTube или Telegram не указан, активность в 2026 г. не проверена |
 | Оксана Пилиповец | BY | основатель MyBusiness.by | самоидентификация: «внутренний Исследователь» при «внешнем Мудреце» и «поддерживающем Творце-Архитекторе»; профиль получен через «ИИ-анализ» [36] | — | в заметках отметок нет |
@@ -197,7 +197,7 @@
 - Искатель + Шут: неназванный институт, «искатель-шут» [31].
 - Мудрец + Исследователь: так Пилиповец описывает Google; свой профиль — «внешний Мудрец, поддерживающий Творец-Архитектор, внутренний Исследователь» [36].
 - По оценкам исследования, не из источника: Искатель + Герой (Bear Grylls), Искатель + Мудрец (Tim Ferriss, Кожухов), Искатель ≈ Бунтарь (Casey Neistat).
-- Пирсон: Искатель в паре с Любовником — «the seeker, paired with the Lover», то есть уйти с привычной территории [11]. В PMAI-руководстве эта пара выведена из порядка таблицы «complementary pairs» и прямо в тексте не названа ⚠ [10].
+- Пирсон: Искатель в паре с Любовником — «the Lover and the seeker», которые «are about leaving your familiar ground and taking a journey» (цитата исправлена по тексту интервью) [11]. В PMAI-руководстве эта пара выведена из порядка таблицы «complementary pairs» и прямо в тексте не названа ⚠ [10].
 - Соколова (Sostav): компании, которая ценит инновации и свободу, лучше подходят Искатель, Маг или Бунтарь, а Опекун и Правитель «вряд ли подойдут» [39].
 - У потребителей (Spangenberg, MDS) Искатель попадает в кластер «Sense of Wonder» вместе с Творцом [25].
 - В таксономии Imperial (не Марк–Пирсон): Land Rover — Explorer–Seeker, Jeep — Explorer–Entrepreneur [26].
@@ -212,7 +212,7 @@
 - **Девиз.** M&P — «Don't Fence Me In» [1]; Ebaq — «You only get one life. Make it count.» [14].
 - **Страх.** M&P в передаче Ebaq шире: «getting trapped, conforming, inner emptiness, nonbeing» [14]; Пирсон 1991 — «Conformity, becoming entrapped» [4]; 1989 — «Conformity» [6]. На уровне «ловушки и конформизма» источники сходятся.
 - **Пары.** Пирсон соединяет Искателя с Любовником [11], а оси M&P разводят их по противоположным полюсам [1].
-- **Patagonia.** M&P и Ebaq — Искатель [1; 14]; Kaye Putnam — Бунтарь с вторичным Искателем [12].
+- **Patagonia.** M&P и Ebaq — Искатель [1; 14]; Kaye Putnam — и Искатель (страница Explorer), и Бунтарь с вторичным Искателем (страница Maverick) [12].
 - **Aviasales.** Plenum и Craftum — Искатель [28; 29]; FOLGA — Шут [31]. Юмор как приём легко принять за Шута как архетип — оценка исследования, не из источника.
 - **Demix.** Craftum — Искатель [29]; по слогану — скорее Герой (оценка исследования, не из источника).
 - **Цвета.** zipBoard — землистые нейтральные с оранжевым и красным [16]; WEDEX — природные цвета и пейзажи [15]; у M&P есть только ⚠ упоминание зелёного в неустановленном контексте [1]. Конвенция «зелёный/коричневый/хаки» ⚠ не подтверждена.
@@ -228,7 +228,7 @@
 3. Марк М., Пирсон К. *Герой и бунтарь. Создание бренда с помощью архетипов.* СПб.: Питер, 2005, серия «Маркетинг для профессионалов», 336 с., ISBN 5-94723-616-8. Выходные данные: https://urss.ru/cgi-bin/db.pl?lang=Ru&blang=ru&page=Book&id=154748 . Названия архетипов и частей этого перевода легальным источником не подтверждены (известны из неавторизованной копии; ссылка не приводится). [первоисточник/магазин — только выходные данные]
 4. Pearson C. S. *Awakening the Heroes Within: Twelve Archetypes to Help Us Find Ourselves and Transform Our World.* HarperSanFrancisco, 1991. ISBN 0062506781. Полнотекстовый поиск по экземпляру Internet Archive: https://archive.org/details/awakeningheroesw0000pear . Таблица «The Twelve Archetypes» — с. 10–11; «Archetypes and Addictions» — с. 19; врезка главы о Seeker — с. 123–124; часть III — с. 121. Страницы по колонтитулам (±1). [первоисточник]
 5. Пирсон К. *Пробуждение внутреннего героя. 12 архетипов, которые помогут раскрыть свою личность и найти путь* / пер. А. Багрянцевой. М.: МИФ, 2024. ISBN 978-5-00214-422-8. Ознакомительный фрагмент: https://www.litres.ru/book/carol-s-pearson-2/probuzhdenie-vnutrennego-geroya-12-arhetipov-kotorye-pom-70498927/chitat-onlayn/ ; выходные данные: https://www.labirint.ru/books/1002571/ . [первоисточник/издатель]
-6. Pearson C. S. *The Hero Within: Six Archetypes We Live By.* Expanded ed. San Francisco: Harper & Row, 1989 (©1986, 1989). ISBN 0-06-254862-X. https://archive.org/details/herowithin002330mbp . Гл. 3 «The Wanderer» — с. 51; сводная таблица — с. xxvii; «чему учит каждая стадия» — с. 15. [первоисточник]
+6. Pearson C. S. *The Hero Within: Six Archetypes We Live By.* Expanded ed. San Francisco: Harper & Row, 1989 (©1986, 1989). ISBN 0-06-254862-X. Экземпляр библиотечной выдачи Internet Archive (поиск по тексту): https://archive.org/details/herowithinsixarc00pear . Прежняя ссылка на свободно скачиваемую копию Universal Digital Library (herowithin002330mbp) заменена при проверке 2026-10-16: статус разрешения правообладателя не установлен. Гл. 3 «The Wanderer» — с. 51; сводная таблица — с. xxvii; «чему учит каждая стадия» — с. 15. [первоисточник]
 7. Pearson Archetypal System, carolspearson.com, «Seeker»: https://carolspearson.com/archetype-pages/seeker-archetype . Дата не указана; просмотрено 2026-10-15. [первоисточник]
 8. carolspearson.com, «The Pearson 12-Archetype System: Human Development and Evolution»: https://www.carolspearson.com/about/the-pearson-12-archetype-system-human-development-and-evolution . [первоисточник]
 9. carolspearson.com, «PMAI re-release» (май 2020): https://www.carolspearson.com/wp-imort-2/pmai-re-release ; StoryWell (шкалы PMAI-2020): https://www.storywell.com/ . [первоисточник]

@@ -12,7 +12,7 @@
 - **Древняя структура психики.** Трикстер — «"psychologem," an archetypal psychic structure of extreme antiquity», «a faithful reflection of an absolutely undifferentiated human consciousness» [1, §465].
 - **Двойственность.** «He is both subhuman and superhuman, a bestial and divine being, whose chief and most alarming characteristic is his unconsciousness». Он — «forerunner of the saviour» [1, §472].
 - **Связь с Тенью.** Трикстер — параллель индивидуальной тени [1, §485] (см. [extra-shadow.md](extra-shadow.md)).
-- **У Воглера** Трикстер (Trickster) — одна из 8 ролевых функций истории [2]; архетипы у него — «flexible character functions rather than as rigid character types» [3].
+- **У Воглера** Трикстер (Trickster) — одна из 8 ролевых функций истории (по 3-му изд.; в 1-м изд. — одна из 7) [2][3]; архетипы у него — «flexible character functions rather than as rigid character types» [3]. На своём сайте Воглер описывает трикстеров как «Clowns and mischief-makers» и, в психологическом плане, как «Our own mischievous subconscious, urging us to change» [16]. В русском переводе книги Воглера эта функция названа «Плут» [17].
 
 ## 2. Светлая и тёмная стороны / урок
 
@@ -57,7 +57,7 @@
 
 ## 7. Расхождения между авторами
 
-- **Трикстер = Шут или Маг?** Брендовые гайды и PMAI сближают Трикстера с Шутом [10][11]; Nichols — с Магом [8]; в русском блоге b17.ru аркан Шут — «Трикстер по Юнгу или Шут по Пирсон» [12] ⚠ (полный текст не прочитан).
+- **Трикстер = Шут или Маг?** Брендовые гайды и PMAI сближают Трикстера с Шутом [10][11]; Nichols — с Магом [8]; в русском блоге b17.ru аркан Шут — «Трикстер по Юнгу или Шут по Пирсон» [12] ⚠ (полный текст не прочитан); связки с Таро подробно — [06-esoteric-links.md](../06-esoteric-links.md).
 - **Положительный или теневой образ?** Юнг — бессознательная фигура, параллель тени, но и предвестник спасителя [1]. Мур и Жиллетт — теневая форма [4] ⚠. Брендовые гайды — положительный синоним Шута [11].
 - **Сюжетная функция или личность?** У Воглера — функция в истории [2][3]; у Юнга — архетипическая структура психики [1, §465].
 
@@ -65,7 +65,7 @@
 
 1. Jung C. G. *The Archetypes and the Collective Unconscious* (Collected Works, vol. 9i). 2nd ed. Princeton University Press (Bollingen Series XX), 1968. «On the Psychology of the Trickster-Figure» (1954), §§456, 465, 469–470, 472, 485, 487. Ссылка на копию книги не приводится. — [первоисточник]
 2. Wikipedia. «The Writer's Journey: Mythic Structure for Writers» (8 архетипов, издания 1992/1998/2007/2020). https://en.wikipedia.org/wiki/The_Writer%27s_Journey:_Mythic_Structure_for_Writers — [популярный]
-3. Страница упражнения MIT с цитатой из Vogler C. *The Writer's Journey*, 1st ed. (ISBN 0-941188-13-2), p. 34 (⚠ в другой сводке p. 36). https://stuff.mit.edu/afs/athena.mit.edu/user/m/b/mbarker/www/exercises/exer981026.txt — [популярный — вторичная цитата первоисточника]
+3. Страница упражнения MIT с цитатой из Vogler C. *The Writer's Journey*, 1st ed. (ISBN 0-941188-13-2), p. 34 (цитата о функциях); на p. 36 той же сводки — список из семи архетипов, без Союзника. https://stuff.mit.edu/afs/athena.mit.edu/user/m/b/mbarker/www/exercises/exer981026.txt — [популярный — вторичная цитата первоисточника]
 4. Goodreads, *King, Warrior, Magician, Lover* (Moore R., Gillette D., 1990), аннотация и отзывы. https://www.goodreads.com/book/show/91781 — [популярный]
 5. Рожкова Т. (SmartHeart). «Миф как метод» // Т—Ж, 01.07.2025. https://t-j.ru/mif-kak-metod/ — [популярный]
 6. Издательство «Питер», PDF оглавления книги с ISBN 978-5-4461-1928 (18.08.2021). https://storage.piter.com/upload/contents/978544611928/978544611928_X.pdf — [первоисточник; название и автор ⚠ не установлены]
@@ -74,7 +74,9 @@
 9. Davidson J. «Tarot Hero's Journey: The Magician», 09.07.2014. https://jessicadavidson.co.uk/2014/07/09/tarot-heros-journey-the-magician/ — [популярный]
 10. Storywell (PMAI), описания архетипов. https://www.storywell.com/archetypes/archetype-descriptions.htm — [первоисточник для системы PMAI]
 11. Ebaq Design (A. Dvornechuck). «Brand Archetypes: The Definitive Guide for 2026», 27.01.2026. https://www.ebaqdesign.com/blog/brand-archetypes — [популярный]
-12. Сводка популярных таблиц «аркан ↔ архетип»: b17.ru «Архетипы в картах Таро» https://www.b17.ru/article/739217/ (⚠ прочитан только фрагмент выдачи); Illumina Tarot (А. Кузьмич, 10.11.2018) и OLLI UC 2022 — по заметке r12 §1.4; OLLI: https://www.uc.edu/content/dam/refresh/cont-ed-62/olli/22-winter/jung%20tarot%201.pdf — [популярный]
+12. Сводка популярных таблиц «аркан ↔ архетип»: b17.ru «Архетипы в картах Таро» https://www.b17.ru/article/739217/ (⚠ прочитан только фрагмент выдачи; ⚠ ссылка недоступна на 2026-10-16: HTTP 503); Illumina Tarot (А. Кузьмич, 10.11.2018) и OLLI UC 2022 — по заметке r12 §1.4; OLLI: https://www.uc.edu/content/dam/refresh/cont-ed-62/olli/22-winter/jung%20tarot%201.pdf — [популярный]
 13. Solomon M. R. *Consumer Behavior: Buying, Having, and Being.* 11th ed. Pearson, 2014 — сводная таблица по Mark & Pearson (2001), строка Jester; Franzen G., Moriarty S. *The Science and Art of Branding* (2009). Сверено исследованием по фрагментам (r14); ссылки на копии не приводятся. — [профессиональный; вторичное воспроизведение M&P]
 14. Pearson C. S. *Awakening the Heroes Within.* HarperSanFrancisco, 1991. Врезка главы «The Fool» (Goal / Response / Task / Gift). Сверено исследованием по фрагментам полнотекстового поиска (r14); ссылка на копию не приводится. — [первоисточник]
 15. Mark M., Pearson C. S. *The Hero and the Outlaw.* New York: McGraw-Hill, 2001. Гл. 8, девиз «Rules are meant to be broken». Сверено исследованием по фрагментам (r14); ссылка на копию не приводится. — [первоисточник]
+16. Vogler C. «The Hero's Journey» (раздел «The Archetypes», «Tricksters»), официальный сайт thewritersjourney.com, архивная копия Wayback Machine от 28.10.2016: https://web.archive.org/web/20161028170951/http://www.thewritersjourney.com/hero's_journey.htm (⚠ живой сайт на 2026-10-16 сбрасывает соединение). — [первоисточник: сайт автора]
+17. Фантлаб, издание: Воглер К. «Путешествие писателя». Альпина нон-фикшн, 2015, пер. М. Николенко (перевод с 3-го изд.; оглавление: «Плут»). https://fantlab.ru/edition158653 — [первоисточник/каталог]

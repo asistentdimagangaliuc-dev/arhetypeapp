@@ -19,7 +19,7 @@
 ## 1. Суть, базовое желание, цель, мотивация, ценности
 
 **Брендовая модель (Марк и Пирсон 2001)**
-- Базовое желание (core desire) — «Experience paradise»: так строка Невинного выглядит в сводной таблице учебника Solomon [19]. В OCR самой книги метка «Core desire» для Невинного не найдена ⚠ [1]. Ebaq передаёт ту же формулировку: «experience paradise» [14].
+- Базовое желание (core desire) — «Experience paradise»: так строка Невинного выглядит в сводной таблице учебника Solomon; там же Goal «To be happy», Fear «Doing wrong», Strategy «Do things right» [19]. В OCR самой книги метка «Core desire» для Невинного не найдена ⚠ [1]. Ebaq передаёт ту же формулировку: «experience paradise» [14].
 - Во фрагментах врезки главы видны цель «to be happy», стратегия «do things right» и дар «faith and optimism» [1].
 - Дар иллюстрируется разбором фильма «Форрест Гамп» [1]. Во фрагменте о «very young and the very old»: «the gift is trust in life» [1].
 - В главе есть отдельная врезка «Levels of the Innocent» (уровни архетипа); её содержание не получено ⚠ [1].
@@ -49,7 +49,7 @@
 ## 2. Главный страх, тень, ловушки
 
 **Брендовое описание (Марк и Пирсон 2001)**
-- Страх — совершить ошибку и быть наказанным. Полная формулировка по Ebaq: «doing something wrong or bad that will provoke punishment» [14]. В OCR врезки видны только «Fear: doing s[o]mething» и «punishment» [1].
+- Страх — совершить ошибку и быть наказанным. Полная формулировка по Ebaq: «doing something wrong or bad that will provoke punishment» [14]; у Solomon — короче: «Doing wrong» [19]. В OCR врезки видны только «Fear: doing s[o]mething» и «punishment» [1].
 - Ловушка (trap): часто цитируемое «boring for all their naive innocence» ⚠ не подтверждено ни в OCR книги, ни у Solomon. Колонки Trap у Solomon во фрагментах нет ⚠ [1; 19].
 - Марк и Пирсон описывают, как Pepsi строила образ Шута на контрасте с «sanctimonious Innocent Coke» [1, с. 275 ⚠]. Это риск восприятия Невинного как ханжеского, если смотреть глазами конкурента.
 
@@ -58,7 +58,7 @@
 - Таблица «Archetypes and Addictions» (с. 19): зависимое качество — Denial; зависимость — «Consumerism/sugar/cheerfulness» [4].
 - В тексте: «pathologically refusing the fall and holding on to…» — патологический отказ от «грехопадения», то есть от взросления и утраты иллюзий [4].
 - Пересказ издательства МИФ (2024): тень Простодушного внушает, «что наши проблемы просто надуманны» [43].
-- Ловушки Idealist на сайте Пирсон: бегство в фантазии от неприятной реальности; отрицание реальных проблем; сопротивление переменам; лояльность, которая сохраняется, «when it isn't deserved» [7].
+- Ловушки Idealist на сайте Пирсон: бегство в фантазии от неприятной реальности; отрицание реальных проблем; сопротивление переменам; лояльность, которая сохраняется, когда её не заслужили («too loyal when loyalty is not deserved») [7].
 
 **Версии практиков**
 - Kaye Putnam, теневая сторона: отрицание реальных проблем; сопротивление переменам; чёрно-белая картина мира; ожидание, что о тебе позаботятся (entitlement) [12].
@@ -78,7 +78,7 @@
 ## 3. Сильные стороны и таланты
 - Марк и Пирсон: дар — «faith and optimism» [1].
 - Пирсон 1991: дар — «Trust, optimism, loyalty», задача — «Fidelity, discernment» [4].
-- Сайт Пирсон: упорство перед препятствиями; умение вселить в других веру, что всё получится; поддержка и вдохновение. Организации-Idealist — «pushing through barriers that stop others» [7].
+- Сайт Пирсон: упорство перед препятствиями; умение вселить в других веру, что всё получится; поддержка и вдохновение. Организации-Idealist успешно умеют «ignoring and moving through barriers that would stop others» [7].
 - Iconic Fox: честность, чистота, умение видеть внутреннюю красоту в людях [13].
 
 ## 4. Коммуникация: тон голоса, манера речи, словарь, визуальные коды, цвета и символы
@@ -132,10 +132,10 @@
 | Coca-Cola | M&P, гл. 4, «Coke: An Innocent Masterpiece» (указатель: с. 60, 61) [1]; Kaye Putnam («It's the Real Thing») [12]; zipBoard [16]; WEDEX [15]; Pickles team (список без аргументов) [24] | потребители видят «Coke as an Innocent brand» [1] | действует; позиционирование 2024–2026 ⚠ не проверялось. Согласовано во всех просмотренных источниках |
 | McDonald's | M&P, «The Innocent Organization: The Case of McDonald's» [1]; Kaye Putnam [12] | Рональд Макдональд, Happy Meals, «primary colors» для детей [1] | действует; ⚠ позиционирование не проверялось |
 | Ivory (P&G) | M&P, с. 62–63 [1]; перевод «Бомборы», ч. I: мыло Ivory «дарит обновление, чистоту и невинность» [20] | чистота, «мыло, которое плавает» [1] | ⚠ не проверялось |
-| Volkswagen Beetle | M&P: «delivered on the Innocent promise» (указатель: Beetle, 24, 25, 268, 269; к какой странице относится фраза, ⚠ не установлено) [1] | в заметках не приведён | ⚠ не проверялось |
+| Volkswagen Beetle | M&P: Beetle, «which delivered on the Innocent principle in every way» (исправлено по поиску в тексте IA: не «promise», а «principle»; указатель: Beetle, 24, 25, 268, 269; к какой странице относится фраза, ⚠ не установлено) [1] | в заметках не приведён | **устарел как продукт**: последний Beetle (поколение A5) выпущен 09.07.2019, производство модели прекращено [61] |
 | Disney | M&P: в перечне «Innocent brands include»; «Innocent films include many Disney movies (as well as Disneyland and Disney World)» [1] | — | действует; **атрибуция спорна**: Iconic Fox, zipBoard, Ebaq, Kaye Putnam, WEDEX относят Disney к Магу [13; 16; 14; 12; 15], Postmypost — к Творцу + Невинному [25] |
-| Dove | Iconic Fox («Brand In Action») [13]; Kaye Putnam [12]; zipBoard [16]; WEDEX [15]; Ebaq [14] | в заметках не приведён | действует; **спорно**: у M&P Dove — Заботливый (Caregiver) как «secondary… category archetype» на фоне Невинного Ivory [1, с. 274 ⚠]; у потребителей в исследовании Spangenberg — Lover 4,63 против Innocent 4,60 [27] |
-| Перечень M&P «Innocent brands include»: PBS, Keds, Breyers, Baskin-Robbins, Pillsbury Doughboy; знаменитости Дорис Дэй, Мег Райан, Том Хэнкс; фильмы *Baby Boom*, *Local Hero* | M&P, гл. 4 [1] | в заметках не приведён | ⚠ не проверялось |
+| Dove | Iconic Fox («Brand In Action») [13]; Kaye Putnam [12]; zipBoard [16]; WEDEX [15]; Ebaq [14] | в заметках не приведён | действует; **спорно**: у M&P «in contrast to Ivory's Innocent identity, Dove is more of a Caregiver» — пример вторичного «category archetype» (подтверждено поиском в тексте IA) [1, с. 274 ⚠]; у потребителей в исследовании Spangenberg — Lover 4,63 против Innocent 4,60 [27] |
+| Перечень M&P «Innocent brands include»: PBS, Keds, Breyers, Baskin-Robbins, Pillsbury Doughboy (в том же перечне — Disney, Ronald McDonald, Ivory); знаменитости Дорис Дэй, Мег Райан, Том Хэнкс; фильмы *Baby Boom*, *Local Hero* | M&P, гл. 4 [1] | в заметках не приведён | ⚠ не проверялось |
 | Honest Tea | Kaye Putnam (на 2026 г.) [12] | — | **устарел**: Coca-Cola прекратила выпуск 31.12.2022 [22] |
 | Aveeno, Whole Foods | Ebaq [14] | в заметках не приведён | ⚠ не проверялось |
 | Innocent Drinks, VERA Naturals | WEDEX [15]; Innocent — также Pickles team [24] | в заметках не приведён | ⚠ не проверялось |
@@ -159,7 +159,7 @@
 
 | Персона | Платформа и ниша | Атрибуция | Почему этот архетип |
 |---|---|---|---|
-| Том Хэнкс | актёр, не блогер | M&P: в перечне «Innocent brands include movie stars…» [1]; «always Innocent» вместе с Мег Райан [1, с. 1–2 ⚠]; Kaye Putnam, «Real-life Innocents» [12]; Ebaq приводит его персонажа Форреста Гампа [14] | в источниках аргументы не развёрнуты |
+| Том Хэнкс | актёр, не блогер | M&P: в перечне «Innocent brands include movie stars…» [1]; вместе с Мег Райан наполняет каждую роль «with the spirit of the wide-eyed Innocent» (исправлено: формулировки «always Innocent» в тексте нет; с. 2 по колонтитулу) [1]; Kaye Putnam, «Real-life Innocents» [12]; Ebaq приводит его персонажа Форреста Гампа [14] | в источниках аргументы не развёрнуты |
 | Марта Стюарт | медиабренд о доме и кулинарии: ТВ, книги, соцсети | Kaye Putnam [12] | черты контента — оценка исследования, не из источника: традиционные ценности дома, «правильно сделанные» простые вещи, ностальгия (подтип Nostalgia у Putnam). Аудитория ⚠ не проверялась |
 | Тейлор Свифт, Риз Уизерспун | публичные фигуры с большими соцсетями, не блогеры | Kaye Putnam, «Real-life Innocents» [12] | в источнике аргументы не приведены; аудитория ⚠ не проверялась |
 | Дорис Дэй, Мег Райан | актрисы | M&P, перечень Innocent [1] | в источнике аргументы не приведены |
@@ -173,7 +173,7 @@
 | Юлия Высоцкая | RU | ТВ-шоу «Едим дома!» (НТВ, с 09.2003), YouTube (с 09.2018), VK, Telegram, Rutube; кулинария [36] | оценка исследования, не из источника | простая домашняя еда как формат больше 20 лет, кулинарная студия (с 2011), подача про уют и дом; возможна примесь Заботливого [36] | в заметках отметок нет |
 | Тутта Ларсен | RU | канал TUTTA.TV о материнстве (с 05.2015), детское шоу «Семья на ура!» («Карусель», с 05.2021), YouTube, Telegram, Дзен [37] | оценка исследования, не из источника | семейные и детские форматы, светлая подача, совместные шоу с детьми; пересекается с Заботливым [37] | в заметках отметок нет. ⚠ Последняя датированная активность в Википедии — 2023 |
 
-- Атрибуций Невинного русскоязычным блогерам из источников **не найдено**. Простодушный — самый малочисленный архетип среди найденных русскоязычных авторов.
+- Развёрнутых атрибуций Невинного русскоязычным блогерам в источниках **не найдено**. Единственное упоминание — у Гас: «Марго Савчук в архетипе «простодушный»» (как самопозиционирование блогера, без разбора) [47]; платформа, страна, активность и правовой статус ⚠ не проверены. Простодушный — самый малочисленный архетип среди найденных русскоязычных авторов.
 - Дяченко приводит только анонимный пример: девушка «одета» как Правитель, а по манере речи — Невинный [38].
 - Бетева иллюстрирует «Ребёнка» вымышленными персонажами (Форрест Гамп, Амели) [40].
 - В статье Багдасаровой и Силенко (2022, рис. 3, с. 165) есть фото блогера для архетипа «Ребёнок», но без подписи; имя ⚠ не установлено [41].
@@ -181,7 +181,7 @@
 ## 10. Сочетания: гармоничные и конфликтные
 
 **Позиция первоисточника**
-- Марк и Пирсон рекомендуют строить бренд на «one—and only one—archetype» [1, с. 42 ⚠; 14]. О личных брендах: Мег Райан и Том Хэнкс «always Innocent» при смене ролей, такие идентичности «not only consistent—they are compelling» [1, с. 1–2 ⚠].
+- Марк и Пирсон рекомендуют строить бренд на «one—and only one—archetype» [1, с. 42 ⚠; 14]. О личных брендах: Мег Райан и Том Хэнкс в каждой роли сохраняют «the spirit of the wide-eyed Innocent», такие идентичности «not only consistent—they are compelling» [1, с. 2 по колонтитулу].
 - Невинный стоит в одной группе с Искателем и Мудрецом (автономия, с. 52). Противоположный полюс — принадлежность (Славный малый, Любовник, Шут); две пары побуждений «pull us in opposite directions» [1].
 
 **Гармоничные и рабочие связки (как в источниках)**
@@ -203,10 +203,10 @@
 - «Святой Источник»: Мудрец → Невинный при выходе на федеральный рынок [32].
 
 ## 11. Расхождения между авторами
-- **Страх.** M&P — сделать что-то плохое и быть наказанным [14; 1]; Пирсон 1991 — «Abandonment» [4]; «The Hero Within» 1989 — «Loss of Paradise» [6]. В самой книге страх M&P подтверждён только обрывком OCR, у Solomon строка Невинного во фрагментах даёт лишь Core desire; полная формулировка страха известна по Ebaq [1; 19; 14].
+- **Страх.** M&P — сделать что-то плохое и быть наказанным [14; 1]; Пирсон 1991 — «Abandonment» [4]; «The Hero Within» 1989 — «Loss of Paradise» [6]. В самой книге страх M&P подтверждён только обрывком OCR; у Solomon строка Невинного даёт Core desire «Experience paradise», Goal «To be happy», Fear «Doing wrong», Strategy «Do things right»; полная формулировка страха известна по Ebaq [1; 19; 14].
 - **Цель.** «The Hero Within» (1989): «None»; Пирсон 1991: «Remain in safety»; M&P 2001: «to be happy» [6; 4; 1].
 - **Имя.** «Простодушный» («Питер» ⚠ [3]; МИФ [5]), «Дитя» («Бомбора» [2]), Idealist (PMAI-2020 [9]). Массовое в медиа 2023–2026 гг. «Невинный» не берётся ни из перевода «Бомборы», ни из МИФ — вывод по оглавлению и фрагменту [2; 5]. «Idealist» у Хартвелл — подархетип семьи Innocent [17], у Kaye Putnam — синоним [12], у современной Пирсон — имя самого архетипа [7].
-- **Причина переименования в PMAI.** Пирсон: имена изменены, чтобы все звучали «equally positive» [9]. Руководство PMAI 2021 называет и эмпирическую причину для Orphan и Destroyer (у большинства людей они внизу профиля); для Innocent → Idealist отдельной причины во фрагментах не видно [10].
+- **Причина переименования в PMAI.** Пирсон: имена изменены, чтобы все звучали «equally positive» [9]. Руководство PMAI 2021 называет и эмпирическую причину для Orphan и Destroyer (у большинства людей они внизу профиля). Для Innocent → Idealist причина тоже названа (исправлено): новое имя «better captures the adult Innocent who has matured», а после замены Orphan на Realist пару сделали «a more perfect pair» [10].
 - **Disney.** M&P — Невинный [1]; Iconic Fox, zipBoard, Ebaq, Kaye Putnam, WEDEX — Маг [13; 16; 14; 12; 15]; Postmypost — Творец + Невинный [25].
 - **Dove.** Практики — Невинный [13; 12; 16; 15; 14]; M&P — Заботливый на фоне Невинного Ivory [1, с. 274 ⚠]; потребители у Spangenberg — почти поровну Любовник и Невинный («flexible» бренд) [27].
 - **Цвета.** Пастель у zipBoard и WEDEX [16; 15] против «primary colors» McDonald's у M&P [1]. Популярная конвенция «белый/голубой» ⚠ не подтверждена.
@@ -223,7 +223,7 @@
 3. Марк М., Пирсон К. *Герой и бунтарь. Создание бренда с помощью архетипов.* СПб.: Питер, 2005, серия «Маркетинг для профессионалов», 336 с., ISBN 5-94723-616-8. Выходные данные: https://urss.ru/cgi-bin/db.pl?lang=Ru&blang=ru&page=Book&id=154748 . Названия архетипов и частей этого перевода легальным источником не подтверждены (известны из неавторизованной копии; ссылка не приводится). [первоисточник/магазин — только выходные данные]
 4. Pearson C. S. *Awakening the Heroes Within: Twelve Archetypes to Help Us Find Ourselves and Transform Our World.* HarperSanFrancisco, 1991. ISBN 0062506781. Полнотекстовый поиск по экземпляру Internet Archive: https://archive.org/details/awakeningheroesw0000pear . Таблица «The Twelve Archetypes» — с. 10–11; «Archetypes and Addictions» — с. 19; врезка главы — с. 71–72; «Levels of the Innocent Shadow» — с. 79. Страницы по колонтитулам (±1). [первоисточник]
 5. Пирсон К. *Пробуждение внутреннего героя. 12 архетипов, которые помогут раскрыть свою личность и найти путь* / пер. А. Багрянцевой. М.: МИФ, 2024. ISBN 978-5-00214-422-8. Ознакомительный фрагмент: https://www.litres.ru/book/carol-s-pearson-2/probuzhdenie-vnutrennego-geroya-12-arhetipov-kotorye-pom-70498927/chitat-onlayn/ ; выходные данные: https://www.labirint.ru/books/1002571/ . [первоисточник/издатель]
-6. Pearson C. S. *The Hero Within: Six Archetypes We Live By.* Expanded ed. San Francisco: Harper & Row, 1989 (©1986, 1989). ISBN 0-06-254862-X. https://archive.org/details/herowithin002330mbp . Сводная таблица — с. xxvii; «чему учит каждая стадия» — с. 15; предисловие к расширенному изданию — с. xv–xvii. [первоисточник]
+6. Pearson C. S. *The Hero Within: Six Archetypes We Live By.* Expanded ed. San Francisco: Harper & Row, 1989 (©1986, 1989). ISBN 0-06-254862-X. Экземпляр библиотечной выдачи Internet Archive (поиск по тексту): https://archive.org/details/herowithinsixarc00pear . Прежняя ссылка на свободно скачиваемую копию Universal Digital Library (herowithin002330mbp) заменена при проверке 2026-10-16: статус разрешения правообладателя не установлен. Сводная таблица — с. xxvii; «чему учит каждая стадия» — с. 15; предисловие к расширенному изданию — с. xv–xvii. [первоисточник]
 7. Pearson Archetypal System, carolspearson.com, «Innocent/Idealist»: https://carolspearson.com/archetype-pages/innocent-archetype . Дата не указана; просмотрено 2026-10-15. [первоисточник]
 8. carolspearson.com, «The Pearson 12-Archetype System: Human Development and Evolution»: https://www.carolspearson.com/about/the-pearson-12-archetype-system-human-development-and-evolution . [первоисточник]
 9. carolspearson.com, «PMAI re-release» (май 2020): https://www.carolspearson.com/wp-imort-2/pmai-re-release ; StoryWell (шкалы PMAI-2020): https://www.storywell.com/ . [первоисточник]
@@ -278,3 +278,4 @@
 58. Sharp D. *C. G. Jung Lexicon: A Primer of Terms & Concepts.* Toronto: Inner City Books, 1991; онлайн: https://www.psychceu.com/jung/sharplexicon.html . [профессиональный]
 59. Jung C. G. *The Archetypes and the Collective Unconscious* (Collected Works, vol. 9i). 2nd ed. Princeton University Press, 1968, «The Psychology of the Child Archetype», §§259–305. В заметках текст сверялся по сетевой копии, легальность которой не установлена; ссылка не приводится. [первоисточник; ⚠ не подтверждено легальным источником]
 60. Калиниченко С. С., Квеско Р. Б. «Мифодизайн как социокультурный феномен» // Известия Томского политехнического университета, 2009: https://cyberleninka.ru/article/n/mifodizayn-kak-sotsiokulturnyy-fenomen . [профессиональный]
+61. Wikipedia, «Volkswagen Beetle (A5)»: https://en.wikipedia.org/wiki/Volkswagen_Beetle_(A5) . Производство — 07.2011–07.2019; последний автомобиль — 09.07.2019. Просмотрено 2026-10-16. [популярный]

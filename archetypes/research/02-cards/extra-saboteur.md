@@ -1,6 +1,6 @@
 # Саботажник (Saboteur) — «архетип выживания», Кэролайн Мисс
 
-> **Источник понятия:** C. Myss, «Sacred Contracts: Awakening Your Divine Potential» (Harmony, 2001), глава «Speaking Archetypes: Your Four Principal Energy Companions» [1][2]; онлайн-версия «Gallery of Archetypes» (myss.com, PDF, 2015), семейство Survival, статья Saboteur [3] · **Ближайший архетип из 12:** прямого нет; частично — теневая сторона Бунтаря как разрушителя (через Destroyer у Пирсон 1991). Соответствие устанавливает исследование (r03, оценка, не из источника).
+> **Источник понятия:** C. Myss, «Sacred Contracts: Awakening Your Divine Potential» (Harmony, 2001), глава «Speaking Archetypes: Your Four Principal Energy Companions» [1][2][11]; онлайн-версия «Gallery of Archetypes» (myss.com, PDF, 2015), семейство Survival, статья Saboteur [3] · **Ближайший архетип из 12:** прямого нет; частично — теневая сторона Бунтаря как разрушителя (через Destroyer у Пирсон 1991). Соответствие устанавливает исследование (r03, оценка, не из источника).
 > **Дата среза:** 2026-10-15. Русское название — перевод исследования: русское издание Мисс не проверено ⚠. Пометки — см. [README](README.md).
 
 ## 1. Суть по автору системы
@@ -18,7 +18,7 @@
 ## 3. Как проявляется в жизни, культуре, коммуникации
 
 - Через срыв и помехи: новый план «разваливается» из-за собственных страхов [3].
-- Во вторичных пересказах Саботажник как «Guardian of Choice» защищает от неудобной правды [4][5].
+- Подзаголовок «Guardian of Choice» повторяет вторичный пересказ [5]. Формулировка «защищает от неудобной правды» при проверке v04 ни в [5], ни в Галерее [3] не найдена, а текст [4] на 2026-10-16 закрыт платным доступом ⚠.
 
 ## 4. Отличие от ближайшего архетипа из 12
 
@@ -36,23 +36,25 @@
 
 ## 6. Примеры (персонажи, бренды, публичные фигуры)
 
-В источниках не найдено.
+- **Из источников:** в Галерее к Саботажнику приведены роли Греты Гарбо в «Мата Хари», Анджелы Лэнсбери в «Маньчжурском кандидате»; Сальери в «Амадее» П. Шеффера; Локи («a Shape-shifter and Trickster»), Эрида/Дискордия, Змей [3] (исправлено при проверке v04: раньше было «в источниках не найдено»).
+- **Бренды и публичные фигуры:** в источниках не найдено.
 
 ## 7. Расхождения между авторами
 
-- **Связь со страхом и низкой самооценкой.** В одной из заметок (r11) эта формулировка Мисс помечена как не проверенная по первоисточнику (архив myss.com недоступен) ⚠; в другой (r03) она прочитана в PDF Галереи 2015 года [3]. Здесь она дана по PDF Галереи.
-- **«Защитник от неудобной правды»** — формулировка вторичных пересказов [4][5]; в пересказе Галереи (r03) её нет.
+- **Связь со страхом и низкой самооценкой.** В одной из заметок (r11) эта формулировка Мисс помечена как не проверенная по первоисточнику (архив myss.com недоступен); в другой (r03) она прочитана в PDF Галереи 2015 года [3]. При проверке v04 подтверждена по PDF: «The Saboteur's fears are all related to low self-esteem» [3].
+- **«Защитник от неудобной правды»** — формулировка, приписанная вторичным пересказам [4][5]; в Галерее [3] и в [5] её нет, [4] закрыт платным доступом ⚠ не подтверждено.
 - **Соответствие с 12** (тень Бунтаря-разрушителя) — только оценка исследования (r03).
 
 ## Источники
 
 1. Publishers Weekly. Рецензия на Myss C. *Sacred Contracts: Awakening Your Divine Potential* (Harmony, 2001). https://publishersweekly.com/9780517703922 — [профессиональный]
-2. Iowa City Public Library, каталог *Sacred contracts* (оглавление). https://search.icpl.org/Record/1206155 — [профессиональный — каталог; по поисковой сводке]
+2. Iowa City Public Library, каталог *Sacred contracts* (оглавление). https://search.icpl.org/Record/1206155 (⚠ ссылка недоступна на 2026-10-16: HTTP 403; оглавление подтверждено по фрагменту издателя [11]) — [профессиональный — каталог; по поисковой сводке]
 3. Myss C. «Gallery of Archetypes» (PDF, myss.com, 2015, 105 с.), семейство Survival, статья Saboteur. https://myss.com/wp-content/uploads/2015/07/Gallery-of-Archetypes.pdf — [первоисточник]
-4. Maverick & Malbec (Substack). «The Saboteur…». https://mavericksandmalbec.substack.com/p/the-saboteur-self-sabotage-and-a — [популярный]
+4. Maverick & Malbec (Substack). «The Saboteur…». https://mavericksandmalbec.substack.com/p/the-saboteur-self-sabotage-and-a (⚠ на 2026-10-16 текст закрыт платным доступом; открыт только вступительный абзац) — [популярный]
 5. Campbell C. M. «The Saboteur» // Live Encounters. https://liveencounters.net/?p=10396 — [популярный]
 6. Pearson C. S. *Awakening the Heroes Within.* HarperSanFrancisco, 1991. Врезка главы Destroyer; «Shadow Levels of the Destroyer». Сверено исследованием по фрагментам (r05, r14); ссылка на копию не приводится. — [первоисточник]
 7. Литрес, ознакомительный фрагмент: Пирсон К. «Пробуждение внутреннего героя», пер. А. Багрянцевой, МИФ («Бунтарь разрушает многое из того, что прежде казалось незыблемым»). https://www.litres.ru/book/carol-s-pearson-2/probuzhdenie-vnutrennego-geroya-12-arhetipov-kotorye-pom-70498927/chitat-onlayn/ — [первоисточник/фрагмент издателя]
 8. Mark M., Pearson C. S. *The Hero and the Outlaw.* New York: McGraw-Hill, 2001. Гл. 8 «The Outlaw»: девиз, «Fear: being powerless». Сверено по фрагментам (r14); ссылка на копию не приводится. — [первоисточник]
 9. Sorsby B. «How Shadow Work Can Strengthen Your Brand» (вероятно, 2025). https://bonniesorsby.com/how-to-use-shadow-work-to-strengthen-your-brand/ — [популярный]
 10. Исупова Е. «Тёмные стороны архетипов…» // Блог издательства МИФ, 23.07.2024 (пересказ книги К. Пирсон). https://blog.mann-ivanov-ferber.ru/2024/07/23/temnye-storony-arxetipov-kak-v-vas-proyavlyayutsya-teni-prostodushnogo-voina-shuta/ — [первоисточник: издательство, пересказ]
+11. Myss C. *Sacred Contracts: Awakening Your Divine Potential*, ознакомительный фрагмент электронного издания (оглавление), e-bookshelf.de: https://content.e-bookshelf.de/media/reading/L-535049-ae25abbe32.pdf — [первоисточник: фрагмент издателя]
