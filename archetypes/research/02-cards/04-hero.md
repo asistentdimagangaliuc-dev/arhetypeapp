@@ -80,7 +80,7 @@
 
 ## 3. Сильные стороны и таланты
 - Пирсон 1991: дар — «Courage, discipline, skill»; задача — «High-level assertiveness; fighting for what really matters» [4].
-- Сайт Пирсон: «winning attitude», фокус, способность вдохновлять; организации-Warrior — «reliably producing results» [7].
+- Сайт Пирсон: «winning attitude», фокус, способность вдохновлять; организации-Warrior успешны в «producing consistent results» (цитата исправлена) [7].
 - Марк и Пирсон: Hero-организации «good at motivating people (like coaches…)», развивают «winning employees and teams» [1].
 - Kaye Putnam: защищают, держат обещания, ставят чёткие границы [12].
 
