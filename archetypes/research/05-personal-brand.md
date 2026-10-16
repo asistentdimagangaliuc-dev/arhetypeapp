@@ -514,7 +514,7 @@
 42. Студия Deza. Архетипы в брендинге: удочка или крючок? Sostav, 07.08.2025. https://www.sostav.ru/blogs/283812/65584 — [популярный, рекламный] (в r04 — профессиональный)
 43. Deza. Тест «Таротипы». https://tarotipy.ru/ — [первоисточник]; сатирический тест
 44. Куликова И. Блог на «Снобе», 03.08.2024. https://snob.ru/profile/406294/blog/3095455/ (AMP-версия: https://snob.ru/blogs/amp/3095455/) — [популярный]
-45. Булыгина И. Блогинг через архетипы: как решить ключевую проблему общения и быть услышанным. TenChat, ~09.2025 (⚠ дата восстановлена). https://tenchat.ru/media/3750005-bloging-cherez-arkhetipy-kak-reshit-klyuchevuyu-problemu-obscheniya-i-byt-uslyshannym — [популярный, рекламный]
+45. Булыгина И. Блогинг через архетипы: как решить ключевую проблему общения и быть услышанным. TenChat, ~09.2025 (⚠ дата публикации на странице не указана; вебинар 04.09.2025 — по комментарию автора, проверено 2026-10-16). https://tenchat.ru/media/3750005-bloging-cherez-arkhetipy-kak-reshit-klyuchevuyu-problemu-obscheniya-i-byt-uslyshannym — [популярный, рекламный]
 46. TenChat. Не текстом единым живут блогеры: TenChat прошёл вебинар «Блогинг через архетипы» (2025). https://tenchat.ru/media/3757216-ne-tekstom-yedinym-zhivut-blogery-tenchat-proshel-vebinar-bloging-cherez-arkhetipy — [популярный]
 47. Булыгина И. 12 архетипов блогеров: как продуктивно сотрудничать без сюрпризов, ч. 3. TenChat. https://tenchat.ru/media/3819574-12-arkhetipov-blogerov-kak-produktivno-sotrudnichat-bez-syurprizov-ch3 — [популярный]; ч. 1–2 не открывались ⚠
 48. TenChat. Как найти баланс между личным и экспертным в блоге. https://tenchat.ru/media/1029110-kak-nayti-balans-mezhdu-lichnym-i-ekspertnym-v-bloge — [популярный]; ⚠ страница вернула 502, содержание по выдаче
