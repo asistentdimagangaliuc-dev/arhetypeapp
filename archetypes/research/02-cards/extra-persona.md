@@ -1,20 +1,20 @@
 # Персона (Persona) — аналитическая психология, К. Г. Юнг
 
-> **Источник понятия:** К. Г. Юнг, «Concerning Rebirth» (1940, ред. 1950; CW 9i §221); «Archetypes of the Collective Unconscious» (1934, ред. 1954; CW 9i §43); CW 7 §§243–253, 305–307 и CW 6 §801 (сверены только по «Jung Lexicon» Шарпа ⚠) [1][2] · **Ближайший архетип из 12:** нет. Персона — не «персонаж», а слой адаптации, через который человек (и бренд) показывает любой образ. То, что ближе всего к «образу бренда или блогера» стоит юнговская Персона, — вывод исследования (r01), не автора системы [1][2].
-> **Дата среза:** 2026-10-15. Пометки (⚠, «оценка исследования, не из источника», метки надёжности) — см. [README](README.md).
+> **Источник понятия:** К. Г. Юнг, «Concerning Rebirth» (1940, ред. 1950; CW 9i §221); «Archetypes of the Collective Unconscious» (1934, ред. 1954; CW 9i §43); CW 7 §§243–253, 305–307 и CW 6 §801 (по «Jung Lexicon» Шарпа; номера CW 7 §§245, 246, 307 и CW 6 §801 в раунде c01 подтверждены по полнотекстовому поиску Open Library [16][17][18][19]) [1][2] · **Ближайший архетип из 12:** нет. Персона — не «персонаж», а слой адаптации, через который человек (и бренд) показывает любой образ. То, что ближе всего к «образу бренда или блогера» стоит юнговская Персона, — вывод исследования (r01), не автора системы [1][2].
+> **Дата среза:** 2026-10-15; дополнено 2026-10-16 (раунд c01: разделы 7–14, перепроверка непроверенных мест, протокол — [_notes/c01-extra-jung.md](../_notes/c01-extra-jung.md)). Пометки (⚠, «оценка исследования, не из источника», метки надёжности) — см. [README](README.md).
 
 ## 1. Суть по автору системы
 
 - **Система адаптации.** Персона — «the individual's system of adaptation to, or the manner he assumes in dealing with, the world» [1, §221].
 - **То, чем человек не является.** «The persona is that which in reality one is not, but which oneself as well as others think one is» [1, §221]. Персона — «the mask of the actor»; за ней прячут лицо, которое видно в зеркале бессознательного [1, §43].
-- **Маска коллективной психики.** Персона — «only a mask of the collective psyche, a mask that feigns individuality» (CW 7 §245); это «a compromise between individual and society» (CW 7 §§245 сл.: у Шарпа обе цитаты даны с пометкой «pars. 245f.»); сознательная личность — «a more or less arbitrary segment of the collective psyche» (CW 7 §244) — всё по [2] ⚠ (CW 7 сверен только по Шарпу).
-- **Функциональный комплекс.** В «Психологических типах» Персона определена как «a functional complex that comes into existence for reasons of adaptation or personal convenience» (CW 6 §801 по [2]).
+- **Маска коллективной психики.** Персона — «only a mask of the collective psyche, a mask that feigns individuality» (CW 7 §245 [2][16]); это «a compromise between individual and society» (CW 7 §246: в экземплярах CW 7 номер «246» стоит на полях перед фразой «When we analyse the persona…», после которой идёт эта формулировка [17]; у Шарпа обе цитаты даны с пометкой «pars. 245f.» [2]); сознательная личность — «a more or less arbitrary segment of the collective psyche» (CW 7 §244 по [2]; формулировка есть в тексте CW 7 [17], номер параграфа ⚠ виден только у Шарпа: в сниппетах Open Library на 2026-10-16 поля не видны).
+- **Функциональный комплекс.** В «Психологических типах» Персона определена как «a functional complex that comes into existence for reasons of adaptation or personal convenience» (CW 6 §801 по [2]; номер подтверждён у Stein [19]).
 
 ## 2. Светлая и тёмная стороны / урок
 
 - **Светлая сторона.** Персона нужна: это способ приспособиться к миру и компромисс между личностью и обществом [1, §221][2, CW 7 §§245 сл.].
 - **Тёмная сторона — идентификация с Персоной.** Люди «become identical with their personas—the professor with his text-book, the tenor with his voice». Соблазн велик, «because the persona is usually rewarded in cash» [1, §221].
-- **Цена.** «A man cannot get rid of himself in favour of an artificial personality without punishment» (CW 7 §307 по [2]).
+- **Цена.** «A man cannot get rid of himself in favour of an artificial personality without punishment» (CW 7 §307 по [2]; номер подтверждён у Forsyth [18]).
 - **Родственная ловушка — инфляция и мана-личность.** Отождествившись с архетипическим содержанием, человек становится не важнее, а лишь «adulterated with an archetype» (CW 7 §380 по [2]); подробнее — [extra-self.md](extra-self.md).
 - **Урок** (пересказ Юнга): различать себя и свою роль; не путать признание роли с собственной индивидуальностью [1, §221][2, CW 7 §307].
 
@@ -23,13 +23,13 @@
 - **Профессии и публичные роли.** Пример Юнга — профессор, сросшийся с учебником, и тенор, сросшийся с голосом [1, §221].
 - **Театральная метафора.** Маска актёра [1, §43].
 - **Классификации.** В вики-сводке Персона, Анима/Анимус, Тень и Самость названы четырьмя архетипами, которые относятся к «separate systems of the personality» (по Pennington 2018) [3].
-- **Смежная практика — «альтер эго».** Тодд Херман («The Alter Ego Effect», 2019) предлагает «альтер эго» как способ обойти неуверенность и страх; в пересказах — пример Бейонсе / Sasha Fierce [4] ⚠ (детали по вторичным источникам). Это не юнговское понятие; сближение с Персоной — оценка исследования, не из источника.
+- **Смежная практика — «альтер эго».** Тодд Херман («The Alter Ego Effect», 2019) предлагает «альтер эго» как способ обойти неуверенность и страх. Пример Бейонсе / Sasha Fierce приводит выпуск подкаста Afford Anything с Херманом (25.03.2019) [4]; по Fortune (2023), Херман стоит за альтер эго Коби Брайанта «Black Mamba» [20]. Это не юнговское понятие; сближение с Персоной — оценка исследования, не из источника.
 - **Связки с Таро** (одной строкой): Персона — Колесница и Император (Kerykeion), Маг и Иерофант (конспект OLLI) [5][6]; подробно — [06-esoteric-links.md](../06-esoteric-links.md).
 
 ## 4. Отличие от ближайшего архетипа из 12
 
 - Ближайшего архетипа среди 12 нет: Персона — не роль из набора, а **механизм** показа любой роли. Брендовый архетип (Герой, Мудрец, Шут…) — содержание образа; Персона — то, что человек этим образом показывает миру, и риск с ним срастись. Это оценка исследования (r01), опирающаяся на [1, §221].
-- В брендинге архетип «выбирают» и «транслируют». У Юнга отношение к публичной маске настороженное: «that which in reality one is not» [1, §221], «a mask that feigns individuality» [2, CW 7 §245]. Воспроизводят ли эту критику Марк и Пирсон в «The Hero and the Outlaw», исследование по книге не проверило ⚠.
+- В брендинге архетип «выбирают» и «транслируют». У Юнга отношение к публичной маске настороженное: «that which in reality one is not» [1, §221], «a mask that feigns individuality» [2, CW 7 §245]. Прямой критики Персоны у Марк и Пирсон не найдено. По сайту Пирсон, их книга «warns against possession by the archetype» и призывает не поддаваться его «negative potentials» [21]. Употребляют ли авторы само слово «persona», проверить не удалось ⚠ (книга доступна только по записи в библиотеке; полнотекстовый поиск Open Library по частым словам на 2026-10-16 не выдаёт её фрагментов).
 
 ## 5. Значение для личного бренда и публичности
 
@@ -49,24 +49,140 @@
 - Самодистанцирование (речь о себе по имени или во втором лице) снижало дистресс перед публичным выступлением и улучшало оценку выступления наблюдателями [15].
 - Оценка исследования (r11), не из источника: архетип может работать и как «разрешение быть собой», и как шаблон-маска; по механизму «роль, через которую легче выйти» похожа на самодистанцирование, но прямых проверок на блогерах нет.
 
+**Дополнено в c01.** Шарп прямо пишет о вознаграждении за роль: «Money, respect and power come to those who can perform single-mindedly and well in a social role» [2]. Исследования онлайн-персоны (persona studies) прямо выводят понятие из Юнга и Гофмана [22]; см. разделы 7–11.
+
 ## 6. Примеры (персонажи, бренды, публичные фигуры)
 
 - **Из источников:** профессор с учебником и тенор с голосом — типовые примеры Юнга, а не конкретные люди [1, §221].
-- **Смежный жанр альтер эго (не юнговская Персона):** Бейонсе / Sasha Fierce, Коби Брайант / Black Mamba — в пересказах книги Хермана [4] ⚠.
-- **Бренды:** в источниках не найдено.
+- **Смежный жанр альтер эго (не юнговская Персона):** Бейонсе / Sasha Fierce, Коби Брайант / Black Mamba — по интервью Хермана [4] и статье Fortune [20].
+- **Бренды:** в источниках первого раунда не найдено. В раунде c01 найдены описания сконструированных «персон» брендов и виртуальных инфлюенсеров — см. раздел 12.
 
-## 7. Расхождения между авторами
+## 7. Желание, цель, мотивация, ценности
+
+- **Цель.** Адаптация к миру: Персона — «system of adaptation» [1, §221], компромисс между индивидом и обществом [2][17].
+- **Мотивация.**
+  - Социальное вознаграждение: «the persona is usually rewarded in cash» [1, §221]. Шарп: «Money, respect and power come to those who can perform single-mindedly and well in a social role» [2].
+  - Требования приличий: «The demands of propriety and good manners are an added inducement to assume a becoming mask» (CW 7 §305 по [2]).
+- **В исследованиях онлайн-персоны.** Авторы контента управляют «воображаемой аудиторией» и стараются сохранить аутентичность. Часть таких приёмов похожа на микроселебрити и личный брендинг — «strategic self-commodification» (Marwick, boyd) [24].
+- **Ценности.** Отдельного поля «ценности Персоны» в источниках не найдено (поиск 2026-10-16: словарь Шарпа, Barbour и соавт. 2014, Hogan 2010, Marwick и boyd 2011). По Юнгу, Персона обслуживает коллективные ожидания, а не собственные ценности человека (разделы 1–2).
+
+## 8. Страх, тень, ловушки
+
+- **Резюме раздела 2.** Главная ловушка — идентификация с Персоной; цена — «punishment» (CW 7 §307) [2][18].
+- **Последствия идентификации по Шарпу** (пересказ) [2]:
+  - человек теряет из виду, кто он без «защитного покрова»;
+  - реакции заданы коллективными ожиданиями: он думает и чувствует так, как «должна» его персона;
+  - близкие жалуются на эмоциональную дистанцию;
+  - он не может представить жизнь без этой роли.
+  Персона «may become a trap and a source of neurosis» [2].
+- **Компенсация изнутри.**
+  - Тень: чем ярче персона, тем темнее тень (Шарп, статья «Shadow») [2]. См. [extra-shadow.md](extra-shadow.md).
+  - Анима: она компенсирует персону; «If the persona is intellectual, the anima will certainly be sentimental» (CW 6 §804 по [2]); то же в CW 7 §309 [2]. См. [extra-anima-animus.md](extra-anima-animus.md).
+  - Двойная жизнь: за маской остаётся «private life», и это раздвоение сознания отражается на бессознательном (CW 7 §305, пересказ по [2]).
+- **Ловушки онлайн-персоны.**
+  - «Схлопывание контекстов»: одна лента для разных аудиторий (Marwick, boyd) [24].
+  - «Ловушка аутентичности»: «too real» и «not real enough» одновременно (Duffy, Hund) [14].
+  - «Calibrated amateurism» — нарочитая «сырость», за которой стоит тщательно сконструированная аутентичность (Abidin) [25].
+  - Бренд как «public mask»: выражает стремления и скрывает противоречия (Friebe) [31].
+- **Страх.** Отдельно «страх Персоны» в источниках не описан (поиск 2026-10-16: те же источники).
+
+## 9. Сильные стороны и таланты
+
+- **Защита и контакт.** По Шарпу, персона — «both a protective covering and an asset in mixing with other people»; «Civilized society depends on interactions between people through the persona» [2].
+- **Гибкость.** Психологическое понимание персоны позволяет «to assume and drop one at will» (Шарп) [2].
+- **Обратный случай.** Люди без развитой персоны, по Юнгу, идут «blundering from one social solecism to the next» (CW 7 §318 по [2]). Значит, развитая персона — социальный навык (оценка исследования на основе [2]).
+- **Смежные исследования и практика.** Самодистанцирование помогает выступать публично [15]. Альтер эго у Хермана — инструмент, чтобы делать «страшное» дело [4]. Онлайн-самопрезентация включает не только выступления, но и «выставки» записей, которыми человек управляет как куратор (Hogan) [23].
+
+## 10. Коммуникация: тон, манера речи, словарь, визуальные коды, цвета и символы
+
+- **Символ — маска.**
+  - Юнг: «the mask of the actor» [1, §43].
+  - Шарп: «Originally the word persona meant a mask worn by actors to indicate the role they played» [2].
+  - Persona studies: «persona is a mask and derived from performance and acting» [22].
+- **Сцена и кулисы.** Драматургическая модель Гофмана с «front and back stage» лежит в основе исследований онлайн-самопрезентации [23]. Barbour и соавт.: «Goffman's dramaturgical analogy allows us to consider persona as an everyday performance» [22].
+- **Тон и манера сконструированных персон брендов** (описания источников; отнесение к Персоне — оценка исследования, не из источника):
+  - Wendy's — «witty, humorous, and often sarcastic» присутствие в Twitter (X) [28];
+  - Duolingo — «sassy owl Duo»; контент «aims to entertain more than it aims to sell» [27];
+  - Яндекс «Алиса» — «проявляет эмоции, умеет шутить и «не терпит унизительного обращения в свой адрес»»; команда описала характер и около 320 сценариев реплик [29];
+  - ассистенты «Салют» Сбера: Сбер — «приятный молодой человек» с широким кругозором, Афина «скрупулезна и строга, любит цитировать философов», Джой — забавная [30].
+- **Цвета.** Юнгианских или брендинговых палитр «Персоны» в источниках не найдено (поиск 2026-10-16: словарь Шарпа, Barbour и соавт. 2014, Hogan 2010, HubSpot, Sostav). Единичный факт: маскот Duolingo — «big green mascot» [27]. Это цвет конкретного персонажа, а не палитра архетипа.
+
+## 11. Восприятие аудиторией: кого привлекает, кого отталкивает
+
+- **Привлекает.**
+  - «Дерзкие» персоны брендов: по HubSpot, «unhinged»-маркетинг особенно хорошо работает с поколением Z [27]. Цель Wendy's — образ «bold, playful, and authentic personality» и молодая аудитория [28].
+  - Виртуальная персона без «человека за маской»: у Lil Miquela более 7,6 млн подписчиков на разных платформах при открыто признанной искусственности [26].
+- **Отталкивает.**
+  - Несовпадение образа и человека: «недоверие», «ощущение фальши и манипуляции» (раздел 5) [11][12].
+  - Критика с двух сторон: «too real» и «not real enough» [14].
+- **Для самого автора.** Аутентичная самоподача связана с благополучием (раздел 5) [13].
+
+## 12. Бренды
+
+Источники описывают сконструированные «персоны» брендов. Юнговский термин использует только Friebe [31]; остальные отнесения к Персоне — **оценка исследования, не из источника**.
+
+**Мировые**
+
+| Бренд | Кто относит и где | Аргумент | Актуальность на 2026-10-16 |
+|---|---|---|---|
+| Nike, Apple, Dove | Friebe 2026 [31] | бренд-идентичность как «public masks», которые выражают стремления и скрывают противоречия (Персона и Тень по Юнгу) | — |
+| Wendy's | кейс LibreTexts [28]; HubSpot [27] | «sassy» персона в Twitter (X), «roast»-ответы с 2017 г.; цель — «bold, playful, and authentic personality» | текущее состояние аккаунта не проверялось (WebSearch исчерпан) |
+| Duolingo (сова Duo) | HubSpot, обновлено 20.07.2023 [27] | персонаж-маскот ведёт TikTok с начала 2021 г.; «unhinged» тон | на 07.2023 — почти 7 млн подписчиков в TikTok (HubSpot); позже не проверялось |
+| Lil Miquela (Brud) | Audrezet и соавт. 2025 [26] | «digital personas»: внешность целиком сгенерирована, общение и контент ведут люди из агентства Brud; сотрудничает с Calvin Klein, Samsung, BMW | статья 08.2025 |
+
+**Русскоязычные**
+
+| Бренд | Страна | Кто относит и где | Аргумент | Актуальность |
+|---|---|---|---|---|
+| Яндекс «Алиса» | RU | vc.ru, 10.10.2017 [29] — о создании «личности» ассистента | команда задала пол, возраст, имя, черты характера, около 320 сценариев реплик; редактор характера — В. Гуриев | на 2017 г.; позже не проверялось |
+| «Салют» (Сбер, Афина, Джой) | RU | Sostav, 05.11.2020 [30] | «семейство» персонажей с разными характерами и манерой общения; кампания Leo Burnett Moscow | на 2020 г.; позже не проверялось |
+
+Третьего русскоязычного примера с источником не найдено (поиск 2026-10-16 прерван: лимит WebSearch исчерпан).
+
+## 13. Блогеры и эксперты
+
+Персону как «маску» можно разбирать по публичному контенту: псевдоним, сценический образ, альтер эго. Ниже — **оценка исследования, не из источника**, если не указано иное. Альтер эго и сценический образ — не то же самое, что юнговская Персона (раздел 3).
+
+**Международные**
+
+| Персона | Страна | Платформа | Атрибуция | Почему | Правовое примечание |
+|---|---|---|---|---|---|
+| Бейонсе (Sasha Fierce) | US | сцена, альбом «I Am… Sasha Fierce» (2008) | альтер эго — Afford Anything [4], Fortune [20]; отнесение к Персоне — оценка исследования | (1) образ создан, чтобы справиться со страхом сцены [4]; (2) по Fortune, она называла Sasha Fierce «thing that takes over» перед аудиторией [20]; (3) альбом назван именем альтер эго [20] | — |
+| Стивен Колберт (персонаж «Stephen Colbert») | US | The Daily Show, The Colbert Report (Comedy Central), эпизодически The Late Show (CBS) | Википедия: «fictionalized persona of political satirist Stephen Colbert» [32] | (1) персонаж — «well-intentioned, poorly informed high-status idiot»; (2) в 2015 г., перейдя в The Late Show, Колберт отказался от персонажа — пример того, что персону можно «надеть и снять» [2][32]; (3) персонаж эпизодически возвращается [32] | — |
+| Lil Miquela | страна не указана; агентство Brud Universe — Лос-Анджелес | Instagram и др.; 7,6 млн подписчиков [26] | «digital personas» — Audrezet и соавт. [26]; отнесение — оценка исследования | (1) маска без человека: внешность сгенерирована; (2) контент ведут люди агентства; (3) открыто признаёт искусственность и работает с брендами [26] | — |
+
+**Русскоязычные**
+
+| Персона | Страна | Платформа | Атрибуция | Почему | Правовое примечание |
+|---|---|---|---|---|---|
+| Верка Сердючка (Андрей Данилко) | UA | сцена, ТВ | Конвалюк 2018 отделяет персонажа от исполнителя Данилко [35]; отнесение к Персоне — оценка исследования | (1) сценический персонаж с собственной биографией: проводница, затем звезда эстрады [35]; (2) смена облика и языка персонажа [35]; (3) персонаж разбирается как самостоятельный культурный герой [35] | По «Вечерней Москве», весной 2022 г. включён в список украинских артистов, которым «якобы» запретили въезд в РФ на 50 лет [36]. Перед использованием нужна юридическая проверка |
+| Дмитрий Пучков («Гоблин») | RU | сайт oper.ru; YouTube «Dmitry Puchkov» (более 3 млн подписчиков на 27.07.2022, по Википедии) | Википедия [34]; отнесение — оценка исследования | (1) псевдоним «старший оперуполномоченный Goblin» вырос из служебного прозвища и стал творческим [34]; (2) под этим именем выходят переводы и шоу «Тупичок Гоблина» [34]; (3) маска устойчива десятилетиями [34] | По Википедии, 16.12.2022 включён в санкционный список ЕС [34]. Перед использованием нужна юридическая проверка |
+| Евгений Баженов (BadComedian) | RU | YouTube «BadComedian» (6,03 млн подписчиков на 23.06.2026, по Википедии) | Википедия [33]; отнесение — оценка исследования | (1) выступает под псевдонимом BadComedian; (2) в СМИ — «главный кинокритик российского YouTube»; (3) до 2016 г. положительные обзоры выходили на отдельном канале «EvgenComedian» — разведение образов [33] | В статье Википедии сведений о статусе иноагента нет. Перед использованием нужна юридическая проверка |
+
+**Эксперты по теме:** Тодд Херман (альтер эго) [4][20]; P. D. Marshall, C. Moore, K. Barbour (persona studies) [22].
+
+## 14. Сочетания с другими архетипами
+
+- **Тень.** Компенсаторная пара: чем ярче персона, тем темнее тень (Шарп) [2]. См. [extra-shadow.md](extra-shadow.md).
+- **Анима и Анимус.** Анима «complementary to the persona» и компенсирует её (CW 7 §309 по [2]); характер анимы можно вывести из характера персоны (CW 6 §804 по [2]).
+- **Самость.** Цель индивидуации — «to divest the self of the false wrappings of the persona» (CW 7 §269 по [2]). См. [extra-self.md](extra-self.md).
+- **Мана-личность.** Отождествление с архетипом — «adulteration» (CW 7 §380 по [2]); см. [extra-self.md](extra-self.md).
+- **12 брендовых архетипов.** Персона — механизм показа любого из 12 (раздел 4). Альтер эго и маски брендов в найденных примерах чаще всего несут черты Шута (Wendy's, Duolingo, Колберт) и Бунтаря — оценка исследования, не из источника; см. [09-jester.md](09-jester.md).
+- **Трикстер.** Персонажи-маски, отделённые от исполнителя (Верка Сердючка), источники разбирают и как трикстеров [35]. См. [extra-trickster.md](extra-trickster.md).
+
+## 15. Расхождения между авторами
 
 - **Архетип ли Персона.** Сам Юнг в «Психологических типах» называет её «функциональным комплексом» (CW 6 §801, цитата по Шарпу [2]), в CW 7 §245 — «маской коллективной психики»; вики-сводка называет её одним из архетипов, относящихся к «separate systems of the personality» [3]. Причисление Персоны к «архетипам» — дело постъюнгианских классификаций, а не прямое утверждение Юнга (r01).
 - **Маска как инструмент или как риск.** Юнг предупреждает об идентификации с маской [1][2]. Херман предлагает сознательное альтер эго как инструмент [4]. Практики личного бренда в основном на стороне «не маска, а человек» [7][8][10][11]. Сопоставление позиций — оценка исследования, не из источника.
-- **Сверка параграфов.** CW 7 §§243–253, 305–307 и CW 6 §801 проверены только по Шарпу ⚠.
+- **Юнговская Персона и persona studies.** У Юнга Персона — компромисс с коллективом и риск идентификации [2]. В persona studies — нейтральный объект исследования публичного «я», которым человек во многом управляет сам [22]. Сопоставление — оценка исследования, не из источника.
+- **Сверка параграфов.** CW 7 §§245, 246, 307 и CW 6 §801 подтверждены по вторичным цитатам и полям экземпляров CW 7 [16][17][18][19]. Номера CW 7 §§243–244, 247–253, 305–306 — только по Шарпу ⚠ (в сниппетах Open Library на 2026-10-16 номера не видны).
 
 ## Источники
 
 1. Jung C. G. *The Archetypes and the Collective Unconscious* (Collected Works, vol. 9i). 2nd ed. Princeton University Press (Bollingen Series XX), 1968. §43 («Archetypes of the Collective Unconscious», 1934/1954), §221 («Concerning Rebirth», 1940/1950), с. 20, 122–123. Ссылка на копию книги не приводится. — [первоисточник]
-2. Sharp D. *C. G. Jung Lexicon: A Primer of Terms & Concepts.* Toronto: Inner City Books, 1991; онлайн-версия, опубликованная с согласия автора: https://www.psychceu.com/jung/sharplexicon.html — статьи «Persona», «Mana-personality» (цитаты CW 7 §§244–246, 307, 380; CW 6 §801). — [профессиональный; цитаты CW 7 и CW 6 по Шарпу]
+2. Sharp D. *C. G. Jung Lexicon: A Primer of Terms & Concepts.* Toronto: Inner City Books, 1991; онлайн-версия, опубликованная с согласия автора: https://www.psychceu.com/jung/sharplexicon.html — статьи «Persona», «Mana-personality» (цитаты CW 7 §§244–246, 307, 380; CW 6 §801); в раунде c01 также статьи «Persona» (CW 7 §§305, 318; текст Шарпа о последствиях идентификации), «Shadow», «Anima» (CW 7 §309; CW 6 §804), «Individuation» (CW 7 §269). — [профессиональный; цитаты CW 7 и CW 6 по Шарпу]
 3. Wikipedia. «Jungian archetypes». https://en.wikipedia.org/wiki/Jungian_archetypes — [популярный]
-4. Afford Anything, эп. 184 (Todd Herman, «The Alter Ego Effect»). https://affordanything.com/episode184 (⚠ ссылка недоступна на 2026-10-16: HTTP 403) — [популярный]
+4. Afford Anything, эп. 184 (Todd Herman, «The Alter Ego Effect»), 25.03.2019. https://affordanything.com/184-the-alter-ego-effect-with-todd-herman/ (старый адрес https://affordanything.com/episode184 перенаправляет сюда; на 2026-10-16 страница открывается через curl — HTTP 200, через WebFetch — 403). — [популярный]
 5. Kerykeion. «Jung and Tarot» (обновлено 13.06.2026). https://kerykeion.net/content/learn-tarots/psychology/jung-and-tarot — [популярный]
 6. OLLI, University of Cincinnati. «A Jungian Approach to the Tarot», 2022 (PDF). https://www.uc.edu/content/dam/refresh/cont-ed-62/olli/22-winter/jung%20tarot%201.pdf — [популярный]
 7. Яппарова И. «Что не так с архетипами?» // vc.ru, 16.04.2024. https://vc.ru/1129215-chto-ne-tak-s-arhetipami — [профессиональный, мнение практика]
@@ -78,3 +194,24 @@
 13. Bailey E. R., Matz S. C., Youyou W., Iyengar S. S. Authentic self-expression on social media is associated with greater subjective well-being // Nature Communications 11:4889 (2020). https://discovery-pp.ucl.ac.uk/10134044/1/Wu_s41467-020-18539-w.pdf (⚠ ссылка недоступна на 2026-10-16: HTTP 403); DOI: https://doi.org/10.1038/s41467-020-18539-w (данные и аннотация сверены по Crossref, v04) — [первоисточник]
 14. Duffy B. E., Hund E. Gendered Visibility on Social Media // International Journal of Communication 13:4983–5002 (2019). https://ijoc.org/index.php/ijoc/article/view/11729 — [первоисточник]
 15. Kross E. et al. Self-Talk as a Regulatory Mechanism: How You Do It Matters // JPSP 106(2):304–324 (2014). https://rascl.studentorg.berkeley.edu/assets/files/self-talk_as_a_regulatory_mechanism_how_you_do_it_matters.pdf — [первоисточник]
+16. Waddell T. *Mis/takes: Archetype, Myth and Identity in Screen Fiction.* London: Routledge, 2006. Ссылки «(CW 7, para. 245)» и «(CW 7, para. 246)» к фразам о персоне. Сверено по полнотекстовому поиску Open Library (сниппеты, c01); ссылка на копию не приводится. — [профессиональный]
+17. Jung C. G. *Two Essays on Analytical Psychology* (Collected Works, vol. 7). 2nd ed. Princeton University Press, 1966; *The Basic Writings of C. G. Jung* (1990). В сниппетах полнотекстового поиска Open Library (c01): «…collective psyche speaks. [246] 466 | When we analyse the persona…» (CW 7, приложение со ссылкой на §246) и «246 When we analyse the persona we strip off the mask…»; там же формулировки «arbitrary segment of the collective psyche» и «Fundamentally the persona is nothing real». Ссылка на копию книги не приводится. — [первоисточник; сверено по сниппетам]
+18. Forsyth J. *Freud, Jung, and Christianity.* Ottawa: University of Ottawa Press, 1989. Цитата «…artificial personality without punishment» с пометкой «(CW, 7:307)». Сверено по полнотекстовому поиску Open Library (сниппет, c01); ссылка на копию не приводится. — [профессиональный]
+19. Stein M. *Jung's Map of the Soul: An Introduction.* Chicago: Open Court, 1998. Примечание «Jung. Coll. Wks., Vol. 6, par. 801» к главе о персоне. Сверено по полнотекстовому поиску Open Library (сниппет, c01); ссылка на копию не приводится. — [профессиональный]
+20. Taylor C. «Creating an alter ego like Kobe Bryant's 'Black Mamba' could boost your work performance…» // Fortune, 30.09.2023. https://fortune.com/2023/09/30/kobe-bryant-beyonce-alter-ego-black-mamba-sasha-fierce-career-advice-performance-promotion-introvert-paul-mccartney-todd-herman-clinton-senkow-career-coach/ (частично за пейволом; нужные фрагменты открыты на 2026-10-16). — [популярный]
+21. Pearson C. S., официальный сайт: страница книги «The Hero and the Outlaw». https://carolspearson.com/books-page/the-hero-and-the-outlaw-building-extraordinary-brands-through-the-power-of-archetypes (доступ 2026-10-16). — [первоисточник: сайт автора]
+22. Barbour K., Marshall P. D., Moore C. Persona to Persona Studies // M/C Journal 17(3), 2014. https://journal.media-culture.org.au/index.php/mcjournal/article/view/841 ; DOI 10.5204/mcj.841. — [профессиональный]
+23. Hogan B. The Presentation of Self in the Age of Social Media: Distinguishing Performances and Exhibitions Online // Bulletin of Science, Technology & Society 30(6):377–386 (2010). DOI 10.1177/0270467610385893 (аннотация сверена по Crossref). — [первоисточник]
+24. Marwick A. E., boyd d. I tweet honestly, I tweet passionately: Twitter users, context collapse, and the imagined audience // New Media & Society 13(1):114–133 (2011; онлайн 07.07.2010). DOI 10.1177/1461444810365313 (аннотация сверена по Crossref). — [первоисточник]
+25. Abidin C. #familygoals: Family Influencers, Calibrated Amateurism, and Justifying Young Digital Labor // Social Media + Society 3(2), 2017. DOI 10.1177/2056305117707191 (аннотация сверена по Crossref). — [первоисточник]
+26. Audrezet A., Koles B., Moulard J. G., Ameen N., McKenna B. Virtual influencers: Definition and future research directions // Journal of Business Research 200 (2025) 115647 (CC BY). https://ueaeprints.uea.ac.uk/100464/1/Audrezet_etal_2025_JBusinessResearch.pdf — [профессиональный]
+27. Alfred L. «How Duolingo Struck Social Media Gold with Unhinged Content» // HubSpot Blog, обновлено 20.07.2023. https://blog.hubspot.com/marketing/duolingo-unhinged-content — [популярный]
+28. LibreTexts. «4.03: Case study: Wendy's social media success with the Roast campaign» (курс «Social Media for Public Relations», SIUE). https://socialsci.libretexts.org/Courses/Southern_Illinois_University_Edwardsville/Social_Media_for_Public_Relations/04%3A_Social_Media_for_PR_Case_Studies/4.03%3A_Case_study_Wendys_social_media_success_with_the_Roast_campaign — [популярный/учебный]
+29. «Как «Яндекс» создавал «Алису»» // vc.ru, 10.10.2017. https://vc.ru/26878 — [популярный]
+30. «„Сбер“ и Leo Burnett Moscow показали семейство виртуальных ассистентов „Салют“» // Sostav, 05.11.2020. https://www.sostav.ru/publication/sber-45972.html — [профессиональный/отраслевой]
+31. Friebe R. M. Conscious Branding, Archetypes, and Consumer Identity: A Jungian Framework for Symbolic Meaning, Cultural Individuation, and Ethical Marketing // Journal of Higher Education Theory and Practice 26(1), 06.03.2026. https://articlegateway.com/journals/index.php/JHETP/article/view/8162 ; DOI 10.33423/56r52t42 (прочитана аннотация). — [профессиональный]
+32. Wikipedia. «Stephen Colbert (character)». https://en.wikipedia.org/wiki/Stephen_Colbert_(character) (доступ 2026-10-16). — [популярный]
+33. Википедия. «BadComedian». https://ru.wikipedia.org/wiki/BadComedian (доступ 2026-10-16). — [популярный]
+34. Википедия. «Пучков, Дмитрий Юрьевич». https://ru.wikipedia.org/wiki/Пучков,_Дмитрий_Юрьевич (стабильная версия от 09.10.2026; доступ 2026-10-16). — [популярный]
+35. Конвалюк У. В. Верка Сердючка – трикстер сучасної соціокультурної реальності України // World Science 3(8(36)):66–71 (2018). https://rspublisher.org/index.php/ws/article/view/1553 ; DOI 10.31435/rsglobal_ws/30082018/6082. — [профессиональный]
+36. «Верке Сердючке могут запретить въезд в РФ…» // Вечерняя Москва (vm.ru). https://vm.ru/accidents/1264276-mogut-ne-pustit-v-rossiyu-kak-verka-serdyuchka-perecherknula-otnosheniya-s-rf (доступ 2026-10-16; дата публикации на странице не извлечена). — [популярный]
