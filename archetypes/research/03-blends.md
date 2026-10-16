@@ -18,7 +18,7 @@
 >
 > **Независимая проверка 2026-10-16.** Тем же поиском IA дополнительно подтверждены «single coherent archetype», «pick some characteristics from column A…», «always the outrageous Rebel» (Мадонна), «category archetype» (Ivory) и «once a strong and clear Explorer» (Levi's). Номера страниц по-прежнему не подтверждены. Исправления и новые источники [96; 97] описаны в протоколе `_notes/v05-blends-personal-brand.md`.
 >
-> **Раунд доукомплектования c07 (2026-10-16).** Протокол — `_notes/c07-systems-blends.md`; новые источники — [98–115]. Тем же поиском IA подтверждены ещё «primary archetypal identity, secondary identity, and so on», «some 48 descriptive attributes included in BAV», «at least some access to all archetypes» и пример с CEO, «beacon», «easy to recognize», «patchwork quilt of archetypal identities all at once», «conceptual unity across offerings», «its brand identity must remain clear», «Life requires constant negotiation along these poles», «sanctimonious Innocent Coke». Поиск Open Library сообщает только общее число листов скана, поэтому номера страниц по-прежнему не подтверждаются («⚠ стр.»). Добавлены собственные разборы десяти блогеров и экспертов (раздел 6.6; оценка исследования, не из источника, сделана с разрешения пользователя).
+> **Раунд доукомплектования c07 (2026-10-16).** Протокол — `_notes/c07-systems-blends.md`; новые источники — [98–116]. Тем же поиском IA подтверждены ещё «primary archetypal identity, secondary identity, and so on», «some 48 descriptive attributes included in BAV», «at least some access to all archetypes» и пример с CEO, «beacon», «easy to recognize», «patchwork quilt of archetypal identities all at once», «conceptual unity across offerings», «its brand identity must remain clear», «Life requires constant negotiation along these poles», «sanctimonious Innocent Coke». Поиск Open Library сообщает только общее число листов скана, поэтому номера страниц по-прежнему не подтверждаются («⚠ стр.»). Добавлены собственные разборы десяти блогеров и экспертов (раздел 6.6; оценка исследования, не из источника, сделана с разрешения пользователя).
 
 ---
 
@@ -162,7 +162,8 @@
 | Основной | «главный» | блог «Россия — страна возможностей» | [66] |
 | Основной | «кластер» из 2–3 архетипов | Евгений (@eugene_drm), «Тайны Netflix» | [64] |
 | Основной | «базовые и целевые» (по дате рождения, эзотерика) | М. Щеняева | [65] |
-| **Второй** | secondary identity (BAV) | Марк и Пирсон | [1, с. 26–27 ⚠] |
+| **Второй** | secondary identity (BAV) | Марк и Пирсон | [1, с. 26–27 ⚠ стр.] |
+| Второй | «акцентный» архетип при одном основном: «„Заботливый“ в основе + „Мудрец“ в кейсах и разборах» (добавлено c07) | Дж. Яценко, vc.ru, 2025 | [83] |
 | Второй | secondary archetype | Kaye Putnam (квиз; Patagonia — «Maverick with an Explorer secondary») | [19; 20] |
 | Второй | influencer archetype (30 %) | Iconic Fox; skills-листинги («secondary "Influencer"») | [25; 27] |
 | Второй | secondary «accent» | Umbrex | [29] |
@@ -193,12 +194,12 @@
 | Низкий / теневой | «теневой архетип» как отдельная строка результата | JobCannon | [42] |
 | Низкий / теневой | архетипы, которые «подавлены» (против тех, что «проявляются активно») | пост на Teletype | [50] |
 | Низкий / теневой | у подархетипов — «разрушающий целостность» | О. Пилиповец | [62] |
-| Низкий / теневой | «shadow» компании — вытесненные архетипы культуры | Марк и Пирсон, гл. 20 | [1 ⚠] |
+| Низкий / теневой | «shadow» компании — вытесненные архетипы культуры | Марк и Пирсон, гл. 20 | [1 ⚠: по r08; поиском IA слово в этом контексте не найдено, c07] |
 | Низкий / теневой | «The Shadow Side» — тёмная сторона самого архетипа | Kaye Putnam (страницы архетипов) | [19] |
 
 **Наблюдения.**
 - **Putnam.** Термины «dominant/influencer» и «R-O-A-D Map» ей приписывают только сторонние skills-листинги [27]. В её собственных материалах (сайт, квиз, подкаст) пара терминов — **primary/secondary** [19; 20; 21]. В подкасте она говорит о себе: «My two archetypes are the magician and the sage» [21]. В другом интервью она советует командам основателей пройти квиз и обсудить «what your top two archetypes should be» [22]. О трёх подтипах на архетип в этом эпизоде не говорится, хотя в r08 это утверждалось (проверено по расшифровке 2026-10-16).
-- **Происхождение «influencer».** В значении «вторичный архетип» термин найден раньше всего у Iconic Fox [25]. В разметке страницы указаны дата публикации 2018-05-03 и дата обновления 2025-12-01. PDF чек-листа Brand Master Academy с правилом 70/30 создан 2018-05-14 [26], но слова «influencer» в нём нет. Был ли этот термин в версии гида 2018 года, не установлено (⚠).
+- **Происхождение «influencer».** В значении «вторичный архетип» термин найден раньше всего у Iconic Fox [25]. В разметке страницы указаны дата публикации 2018-05-03 и дата обновления 2025-12-01. PDF чек-листа Brand Master Academy с правилом 70/30 создан 2018-05-14 [26], но слова «influencer» в нём нет. В версии гида 2018 года термин уже был: копия Wayback от 07.06.2018 содержит «The other 30% is your influencer archetype» и «a core archetype that will represent a minimum of 70%» [116] (c07; пометка ⚠ снята).
 - **Хартвелл.** В её слайдах и на странице подкаста термины primary/secondary и правила смешивания не встречаются [18; 39]. В описании эпизода есть тема «The four primary archetypes» (видна и в копии страницы от 11.06.2026 [102]), но смысл не раскрыт (⚠: расшифровки нет). В блоге автора (c07) терминов ролей тоже нет, но смесь в практике есть: у виски Heaven's Door (бренд Боба Дилана) она называет «Archetypes in play: The Storyteller, The Creator, and The Wizard», а The Wizard описывает как архетип, который «shares characteristics with The Alchemist/Magician, The Warrior and The Provocateur» [101]; расширение дюжины Марк и Пирсон она объясняет стремлением дать практикам «greater nuance, sophistication and layering» [100].
 - **«Теневой» означает две разные вещи** *(оценка исследования, не из источника)*:
   - тёмную сторону того же архетипа (Putnam, Snob) [19; 49];
@@ -439,7 +440,7 @@
 
 | Пара | Как оценивается | Кто | Источник |
 |---|---|---|---|
-| Caregiver + Sage | гармония: «empathy and expertise» | Umbrex; FOLGA («заботливый мудрец»); Т—Ж (Мудрец + Заботливый); совет психологам ⚠ | [29; 76; 48; 83] |
+| Caregiver + Sage | гармония: «empathy and expertise» | Umbrex; FOLGA («заботливый мудрец»); Т—Ж (Мудрец + Заботливый); совет психологам: «„Заботливый“ в основе + „Мудрец“ в кейсах и разборах» (Дж. Яценко, 28.07.2025; сверено c07) | [29; 76; 48; 83] |
 | Caregiver + Innocent | связное смешение | HubSpot | [34] |
 | Hero + Rebel | интересное напряжение («Heroic Maverick», Хан Соло) | Digital Surgeons | [30] |
 | Hero + Sage; Rebel + Royal | именованные гибриды «Warrior Monk», «Rebel Royal» | Digital Surgeons | [30] |
@@ -480,7 +481,7 @@
 - Ближайшие аналоги — правило HubSpot «соседние смешиваются, далёкие создают напряжение» [34] и дополнительные пары PMAI [5]. Ни то, ни другое не матрица.
 - Полная матрица сочетаний есть только у Hogshead (7 × 7 = 49), но это не юнгианские архетипы [23; 24].
 - Список «гармоничных» и «конфликтных» пар из исследования Merlo и др. в открытом доступе не найден: в пресс-версии есть только примеры [32; 86].
-- **Платные курсы (c07).** В открытых описаниях курсов матриц 12×12 не найдено: у курса А. Адт «Архетипический стратег» есть модули «ПРАКТИКА синтеза архетипов» («концепции бренда/персонажа на основе синтеза нескольких архетипов») и «Иерархия архетипов в бренде», но таблицы совместимости в описании нет [53]; на страницах курса «АрхетипиУМ», Stilouette, М. Бетевой, М. Щеняевой и анонса Ю. Лос («Сити Класс») слов «совместимость», «матрица», «сочетания» нет [60; 63; 67; 65; 114]; у Brand Master Academy (S. Houraghan) архетипного курса на главной странице нет [113]. Закрытые материалы курсов не проверялись: отсутствие матрицы в них не доказано (⚠; поиск 2026-10-16: открытые описания курсов, WebSearch к этому моменту был исчерпан).
+- **Платные курсы (c07).** В открытых описаниях курсов матриц 12×12 не найдено: у курса А. Адт «Архетипический стратег» есть модули «ПРАКТИКА синтеза архетипов» («концепции бренда/персонажа на основе синтеза нескольких архетипов») и «Иерархия архетипов в бренде», но таблицы совместимости в описании нет [53]; на страницах курса «АрхетипиУМ» (https://arhetipium.ru/kurs-arhetipy), Stilouette, М. Бетевой, М. Щеняевой и анонса Ю. Лос («Сити Класс») слов «совместимость», «матрица», «сочетания» нет [63; 67; 65; 114]; у Brand Master Academy (S. Houraghan) архетипного курса на главной странице нет [113]. Закрытые материалы курсов не проверялись: отсутствие матрицы в них не доказано (⚠; поиск 2026-10-16: открытые описания курсов, WebSearch к этому моменту был исчерпан).
 
 ---
 
@@ -511,7 +512,7 @@
 | Disney | Creator + Innocent | [36] |
 | Disney (оценки потребителей) | Jester 5,27 против Creator/Innocent 5,04 — «flexible» | [87, табл. 4] |
 | Charles Schwab | Sage-позиционирование и кампания «Own Your Tomorrow», которая «empowers clients» — сдвиг к Герою *(интерпретация исследования, не из источника)* | [41] |
-| Vodafone | гибридный архетип «Pioneer» в игре Added Value | [40] ⚠ по поисковой сводке |
+| Vodafone | гибридный архетип «Pioneer» в игре Added Value | [40] ⚠ по поисковой сводке (страница WPP не открывается, копии в Wayback нет — c07) |
 | Автомобильный сектор | топ-сочетания Engineer–Shaman и Engineer–Visionary; Land Rover — Explorer–Seeker; Jeep — Explorer–Entrepreneur; Jaguar — Ruler–Athlete; Alfa Romeo — Athlete–Lover | [32]; таксономия не Марк–Пирсон, а инструмент RADNB [33] |
 | Pepsi, Joe Camel | Jester как «foil» к Innocent Coke и Hero Marlboro — контраст **между** брендами, а не внутри одного; фрагмент «good-naturedly poking fun at sometimes sanctimonious Innocent Coke» подтверждён поиском IA (c07), часть про Joe Camel и Marlboro — нет (⚠) | [1, с. 275 ⚠ стр.]; у Putnam Шут подходит бренду, который играет против самодовольного конкурента (Pepsi против Coca-Cola) [19] |
 | Virgin, Ralph Lauren | единство смысла держит основатель — «living icon» | [1, с. 285 ⚠] |
@@ -615,7 +616,7 @@
    - Во времени: после третьего ребёнка её подход к порядку смягчился (Washington Post, 2023, в пересказе Википедии) [106].
 5. **Bear Grylls** — YouTube @BearGrylls, https://www.beargrylls.com/ [107].
    - *Основной — Искатель.* (1) Сериалы о выживании в дикой природе: «Man vs. Wild» (2006–2011), «Running Wild with Bear Grylls» (2014–2023). (2) Восхождение на Эверест 16.05.1998 [107].
-   - *Второй — Герой.* (1) Служба в 21 SAS (1994–1997). (2) Эверест примерно через 18 месяцев после травмы позвоночника 1996 года. (3) Книги «Mud, Sweat and Tears» (2011) и «Never Give Up» (2021) [107].
+   - *Второй — Герой.* (1) Служба в 21 SAS (1994–1997). (2) Эверест примерно через 18 месяцев после несчастного случая с парашютом в Замбии (1996), который прервал его службу в SAS. (3) Книги «Mud, Sweat and Tears» (2011) и «Never Give Up» (2021) [107].
    - *Третий — Заботливый.* (1) Chief Scout с 2009 по 2024 год, самый молодой в истории поста. (2) Посол The King's Trust и Care for Children; экспедиции собирали деньги для RNLI, SSAFA и других организаций [107].
 
 **Русскоязычные**
@@ -631,7 +632,7 @@
    - Гипотеза r07 (раздел 6.4) давала «Простодушный + Заботливый»; по фактам из статьи Википедии вторая роль ближе к Творцу.
 8. **Татьяна Черниговская** — Telegram https://t.me/tvchernigovskya (около 111 тыс. подписчиков на 16.10.2026) [110].
    - *Основной — Мудрец.* (1) Профессор СПбГУ, директор Института когнитивных исследований СПбГУ (с 2020), академик РАО (2023). (2) Лекции в лектории «Прямая речь», телециклы на канале «Культура». (3) В канале — анонсы её статей, книг и программы «Агора» [110].
-   - *Второй — Творец.* (1) Руководит кафедрой проблем конвергенции естественных и гуманитарных наук. (2) Царскосельская художественная премия (2022). (3) Гость литературного подкаста «Пусть не говорят, пусть читают» (пост в канале) [110].
+   - *Второй — Творец.* (1) Исполняет обязанности заведующей кафедрой проблем конвергенции естественных и гуманитарных наук СПбГУ. (2) Царскосельская художественная премия (2022). (3) Гость литературного подкаста «Пусть не говорят, пусть читают» (пост в канале) [110].
    - *Третий — Шут.* (1) Игровые названия книг: «Чеширская улыбка кота Шрёдингера» (2013), «Взгляд кота Шрёдингера». (2) Ироничные посты, например «Сегодня международный день мозга! Интересно, мозг об этом знает?)» [110]. Третья роль аргументирована слабее.
 9. **Фёдор Овчинников** — блог «Сила ума» (https://sila-uma.ru/) [111].
    - *Основной — Славный малый (из источника).* (1) Сбер Бизнес Live (2024) называет его «ярким представителем» Славного малого [55]. (2) Интервью с заголовком «Бизнес должен быть открытым — как пицца». (3) Блог о бизнесе ведёт с 2006 года; на сайте — «Избранные заметки блога „Сила ума“… за 2006–2023» [111].
@@ -689,26 +690,26 @@
 
 1. **Марк и Пирсон, страницы и формулировки.** Легально не сверены:
    - с. 42 (тезис «one—and only one»: текст подтверждён, страница нет);
-   - с. 26–27 (формулировка «primary… secondary identity»);
+   - с. 26–27 (формулировка «primary… secondary identity»: текст подтверждён поиском IA в c07, страница — нет);
    - с. 30 (правило 10 % и «column A / column B»: текст подтверждён поиском IA, страница — нет);
    - с. 1–2, 10, 162, 274–275, 284–285 и гл. 20;
    - (левый полюс оси «Belonging/People» из списка снят: подтверждён по OCR книги при проверке v01).
    
-   Нужен печатный или легальный электронный экземпляр.
-2. **Правило 10 %.** Это процентильные пункты или относительная разница? Spangenberg применяет его как относительную разницу [87, табл. 4], но как считали в BAV, неизвестно. Как BAV сопоставлял атрибуты с архетипами и сколько их было (около 48 или «over 55» [38])? Публиковал ли Y&R/WPP этот анализ отдельно с методикой?
-3. **Merlo и др. (2023).** Нужно прочитать полный текст (статья в открытом доступе CC-BY, но автоматический доступ к ScienceDirect блокировался) и проверить:
+   Нужен печатный или легальный электронный экземпляр: поиск Open Library номеров страниц не возвращает (c07). Тексты не найдены по-прежнему для «gratified (though not surprised)», «living icon», имени Леттермана, Dove как «secondary», 501 / Five Pocket / Wide Leg, Joe Camel.
+2. **Правило 10 %.** Это процентильные пункты или относительная разница? Spangenberg применяет его как относительную разницу [87, табл. 4], но как считали в BAV, неизвестно. Как BAV сопоставлял атрибуты с архетипами? Число атрибутов в самой книге — «some 48» (c07) [1]; «over 55» у Researchscape — по оценке исследования, атрибуты анкеты BAV в целом [38]. Публиковал ли Y&R/WPP этот анализ отдельно с методикой?
+3. **Merlo и др. (2023).** Нужно прочитать полный текст. Статья в открытом доступе (CC-BY), но в c07 ScienceDirect отдал 403, Elsevier API потребовал ключ, в Wayback сохранена только аннотация версии pre-proof, репозиторных копий нет; Semantic Scholar ответил 429. Проверить:
    - источник 60 архетипов;
    - процедуру кодирования и согласие кодировщиков;
    - определение «strong brands»;
    - смысл «consistently evoking»;
    - распределение числа архетипов на бренд и цифру «2 %».
 4. **Feng и др. (2026).** Как определяется и измеряется «archetype consistency», каковы выборки и размеры эффектов (полный текст платный).
-5. **PMAI.** Дополнительные пары, кроме Realist–Idealist и Revolutionary–Creator. Почему нижняя категория в руководстве называется Blind Spot, а в отчёте — Overlooked Ally.
-6. **Хартвелл и Чен (2012).** Есть ли в книге понятия основного и дополнительного архетипа и правила работы с несколькими картами (текст книги не прочитан).
-7. **Iconic Fox / Houraghan.** Правило 70/30 есть не позже мая 2018 года: гид опубликован 2018-05-03, PDF чек-листа создан 2018-05-14 [25; 26]. В 2025 году тот же автор даёт 60–70 / 20–30 / 5–10 [96]. Откуда взялись числа и почему они изменились, автор не объясняет.
+5. **PMAI.** Прямой перечень всех шести дополнительных пар (руководство отсылает к книге 2021 года и сайту StoryWell; на открытых страницах StoryWell его нет; c07 сузил вопрос по порядку табл. 3.1 и интервью [5; 11]). Почему нижняя категория в руководстве называется Blind Spot, а в отчёте — Overlooked Ally.
+6. **Хартвелл и Чен (2012).** Есть ли в книге понятия основного и дополнительного архетипа и правила работы с несколькими картами (текст книги не прочитан; в блоге автора терминов нет, но в разборах она называет несколько архетипов «in play» у одного бренда [101]).
+7. **Iconic Fox / Houraghan.** Правило 70/30 есть не позже мая 2018 года: гид опубликован 2018-05-03, PDF чек-листа создан 2018-05-14 [25; 26]; копия гида от 07.06.2018 уже содержит «influencer archetype» [116]. В 2025 году тот же автор даёт 60–70 / 20–30 / 5–10 [96]. Откуда взялись числа и почему они изменились, автор не объясняет.
 8. **Квизы и боты.** Как выдают результат и есть ли там проценты: Iconic Fox, боты АрхетипиУМ, Адт и Карповой (не проходились). Ramotion — не квиз, а «колесо» архетипов (уточнено по `04-diagnostics.md` [58]).
-9. **Матрицы совместимости** в платных курсах и у агентств: существуют ли они вообще.
-10. **Личные бренды.** Нет ни одного исследования смешанных профилей блогеров и экспертов и нет проверяемых кейсов «до/после». Русскоязычные разборы смесей — единичные экспертные мнения.
+9. **Матрицы совместимости** в закрытых материалах платных курсов и у агентств: в открытых описаниях курсов c07 их не нашёл (раздел 5.7).
+10. **Личные бренды.** Нет ни одного исследования смешанных профилей блогеров и экспертов и нет проверяемых кейсов «до/после». Русскоязычные разборы смесей — единичные экспертные мнения. Десять собственных разборов c07 (6.6) — оценка исследования; независимой экспертной или эмпирической проверки у них нет.
 11. **Единица атрибуции.** Что считать носителем смеси — бренд, суббренд, кампанию, отдельный пост? Пример МТС и разбор одного поста у Булыгиной показывают, что ответ меняет результат.
 
 ---
@@ -752,14 +753,14 @@
 30. Digital Surgeons, «Combining Brand Archetypes»: https://legacy.digitalsurgeons.com/thoughts/marketing/brand-archetypes/ . [профессиональный]
 31. WPP BAV, «What are BAV Archetypes?»: https://wppbav.com/insights/brand-archetypes/ . [профессиональный; методика на странице не раскрыта]
 32. Imperial College Business School, Merlo O. «Lessons for leaders: successful brands have multiple personalities», 14.08.2023: https://www.imperial.ac.uk/business-school/ib-knowledge/marketing/lessons-leaders-successful-brands-have-multiple-personalities/ ; версия для печати: https://imperial.ac.uk/business-school/print/pdf/node/6431 . [профессиональный; пресс-версия статьи [86]]
-33. CIM South West, анонс доклада R. Gillingwater об инструменте RADNB (02.2022): https://regions.cim.co.uk/south-west-and-channel-islands/home/news/2022/february-2022/strong-brands-blend-multiple-personalities-how-do-you-identify-yours ; профиль R. Gillingwater на CIM («primary and supporting archetypes» — по поисковой сводке ⚠): https://cim.co.uk/content-hub/authors/richard-gillingwater (⚠ ссылка недоступна на 2026-10-16: HTTP 404). [профессиональный]
+33. CIM South West, анонс доклада R. Gillingwater об инструменте RADNB (02.2022): https://regions.cim.co.uk/south-west-and-channel-islands/home/news/2022/february-2022/strong-brands-blend-multiple-personalities-how-do-you-identify-yours ; профиль R. Gillingwater на CIM: https://cim.co.uk/content-hub/authors/richard-gillingwater (ссылка недоступна на 2026-10-16: HTTP 404; рабочая копия Wayback — [99]; формулировки «primary and supporting archetypes» в копии нет, она есть на странице подкаста [98] — c07). [профессиональный]
 34. HubSpot, «How to create a brand archetype for your business», 17.08.2026: https://blog.hubspot.com/marketing/brand-archetypes . [популярный]
 35. Moonb (Alexandra Pierce), «The 12 Brand Archetypes (With Real Examples)», 29.07.2026: https://www.moonb.io/blog/brand-archetypes . [популярный]
 36. Postmypost, глоссарий «Brand archetype»: https://postmypost.io/glossary/brand-archetype . [популярный]
 37. Ramotion, Archetype Finder: https://www.ramotion.com/tools/archetype-finder/ . При сборе известен только по сниппету; при проверке v06 (2026-10-16) страница открылась: это «колесо» 12 архетипов с каталогом брендов, а не квиз (см. `04-diagnostics.md` [58]). [популярный]
 38. Henning J. (Researchscape) «Are brands people or religions?», 2011: https://researchscape.com/blog/are-brands-people-or-religions . Пересказ анализа BAV: более 120 000 респондентов, «over 55 attributes per brand», 50 брендов; критики метода нет. [популярный]
 39. Convince & Convert / The Business of Story, эпизод с Margaret Hartwell: https://www.convinceandconvert.com/podcasts/episodes/create-magnetic-demand-with-character-archetypes/ . [профессиональный]
-40. MrWeb Daily Research News Online, «Added Value Archetype Game», 18.07.2008: https://www.mrweb.com/drno/printable/pn8627.htm ; страница WPP об игре (Vodafone, «Pioneer»; не открылась, по поисковой сводке ⚠): https://insideag.wpp.com/wppedcream/2008/research_1a.html . [профессиональный]
+40. MrWeb Daily Research News Online, «Added Value Archetype Game», 18.07.2008: https://www.mrweb.com/drno/printable/pn8627.htm ; страница WPP об игре (Vodafone, «Pioneer»; не открылась, по поисковой сводке ⚠; c07: домен не разрешается, копии в Wayback нет): https://insideag.wpp.com/wppedcream/2008/research_1a.html . [профессиональный]
 41. Breindel H. «Archetype Series #2: The Sage, the Explorer and the Innocent», DeSantis Breindel, 2021-03-10: https://desantisbreindel.com/?p=674 . [профессиональный]
 42. JobCannon (рус.), тест «Юнгианский архетип»: https://jobcannon.io/ru/tests/jungian-archetype . [популярный]
 43. ToolFox (автор проекта Р. Авдеев), тест «Архетип дня»: https://toolfox.ru/tools/archetype-day-test . [популярный]
@@ -805,7 +806,7 @@
 80. Гнатенко О. (агентство «Свое мнение»). «Архетипы в брендинге: герой, наставник или шут?». Sostav, блог, 11.12.2025: https://www.sostav.ru/blogs/285032/72903 . [профессиональный]
 81. Багдасарова Р. А., Силенко В. А. (Финансовый университет). «Архетипический маркетинг в блогинге: современные средства продвижения образа». Материалы интернет-конференции «Журналистика в эпоху цифровых трансформаций», ТГУ им. Г. Р. Державина, 2021: https://www.tsutmb.ru/nauka/internet-konferencii/2021/zhurnalistika_v_epohu_cifrovyh_transformacij/5/Bagdasarova_Silenko.pdf . [профессиональный; тезисы]
 82. Багдасарова Р. А., Силенко В. А. «Комьюнити-блогерство: архетипы и бренды». *Гуманитарные науки. Вестник Финансового университета*, 2022, 12(1): 161–166, DOI 10.26794/2226-7867-2022-12-1-161-166: https://humanities.fa.ru/jour/article/download/629/616 . [профессиональный]
-83. vc.ru. «Архетипы бренда для психолога» (только фрагмент выдачи): https://vc.ru/marketing/2124860-arkhetipy-brenda-dlya-psikhologov . [популярный ⚠]
+83. vc.ru. Яценко Дж. «Архетипы бренда для психолога: как вызвать доверие с первого касания», 28.07.2025 (страница открыта через WebFetch при c07; прежде — только фрагмент выдачи): https://vc.ru/marketing/2124860-arkhetipy-brenda-dlya-psikhologov . [популярный]
 84. Дяченко А., Фадеев М. «Разговор с архетипом (Бунтарь)». Sostav, блог, 05.05.2023: https://www.sostav.ru/blogs/261743/37806 . [профессиональный]
 85. Белоусова К. И. (науч. рук. Е. В. Тетерина). «Архетипы в рекламе». *Актуальные проблемы авиации и космонавтики*, 2013 (СибГАУ): https://cyberleninka.ru/article/n/arhetipy-v-reklame . [профессиональный; студенческая работа]
 
@@ -829,3 +830,25 @@
 
 96. Houraghan S. (Iconic Fox). «Can You Mix Brand Archetypes? The Complete Guide», опубликовано 2025-11-14 (дата из разметки страницы): https://iconicfox.com.au/can-you-mix-brand-archetypes/ . Доли 60–70 / 20–30 / 5–10, «Most successful brands use 2-3 archetypes», Apple как Creator + Rebel + Sage. [популярный; агентский, рекламный]
 97. Wikipedia, «Get a Mac» (кампания 2006–2009): https://en.wikipedia.org/wiki/Get_a_Mac . [популярный, вторичный]
+
+**Добавлено в раунде c07 (2026-10-16)**
+
+98. The Business of Story, эпизод № 357, гость R. Gillingwater (RADNB): «over 2,000 brands», «the lens of 60 archetypes», «find your primary and supporting archetypes», «Developed with Imperial College London». https://businessofstory.com/podcast/brand-archetype-tells-brand-story/ (открыта через WebFetch; дата эпизода на странице не указана). [профессиональный; описание эпизода]
+99. CIM, профиль автора Richard Gillingwater, копия Wayback Machine от 14.05.2025: «60 archetypal feeling tones», «a blend of multiple archetypal needs and feelings», «different blends at different stages of the user experience». https://web.archive.org/web/20250514143717/https://www.cim.co.uk/content-hub/authors/richard-gillingwater/ . [профессиональный]
+100. Hartwell M. «Pulling Back the Curtain», 27.04.2016 (семейства книги «Archetypes in Branding», переименования Outlaw → Rebel, Ruler → Sovereign, Regular Guy/Gal → Citizen; «greater nuance, sophistication and layering»). https://www.archetypesinbranding.com/post/pulling-back-the-curtain . [первоисточник: блог автора]
+101. Hartwell M. «Bob Dylan: Writing, Welding, and Whiskey», 05.11.2018 (комментарий для Packaging Strategies о виски Heaven's Door). https://www.archetypesinbranding.com/post/bob-dylan-writing-welding-and-whiskey . [первоисточник: блог автора]
+102. Convince & Convert / The Business of Story, эпизод с Margaret Hartwell, копия Wayback Machine от 11.06.2026 (живая страница [39] отдаёт 403): https://web.archive.org/web/20260611062941/https://www.convinceandconvert.com/podcasts/episodes/create-magnetic-demand-with-character-archetypes/ . [профессиональный]
+103. Tim Ferriss: About — https://tim.blog/about/ ; подкаст — https://tim.blog/podcast/ ; YouTube — https://www.youtube.com/@TimFerriss . [первоисточник: сайт персоны; для разбора 6.6]
+104. Mark Manson: About — https://markmanson.net/about ; YouTube — https://www.youtube.com/@IAmMarkManson . [первоисточник: сайт персоны; для разбора 6.6]
+105. Wikipedia, «Brené Brown»: https://en.wikipedia.org/wiki/Bren%C3%A9_Brown ; сайт: https://brenebrown.com/ (2026-10-16 отдаёт 403 автоматическим запросам). [популярный; для разбора 6.6]
+106. Wikipedia, «Marie Kondo»: https://en.wikipedia.org/wiki/Marie_Kondo ; сайт: https://konmari.com/ . [популярный; для разбора 6.6]
+107. Wikipedia, «Bear Grylls»: https://en.wikipedia.org/wiki/Bear_Grylls ; YouTube — https://www.youtube.com/@BearGrylls ; сайт — https://www.beargrylls.com/ . [популярный; для разбора 6.6]
+108. Википедия, «Дмитрий Куплинов»: https://ru.wikipedia.org/wiki/Дмитрий_Куплинов ; YouTube «Kuplinov ► Play» (описание канала): https://www.youtube.com/@KuplinovPlay . [популярный; для разбора 6.6]
+109. Википедия, «Высоцкая, Юлия Александровна»: https://ru.wikipedia.org/wiki/Высоцкая,_Юлия_Александровна ; сайт «Едим дома»: https://www.edimdoma.ru/ . [популярный; для разбора 6.6]
+110. Википедия, «Черниговская, Татьяна Владимировна»: https://ru.wikipedia.org/wiki/Черниговская,_Татьяна_Владимировна ; Telegram (веб-просмотр, посты до 15.10.2026): https://t.me/s/tvchernigovskya . [популярный / первоисточник для постов; для разбора 6.6]
+111. Википедия, «Овчинников, Фёдор Владимирович»: https://ru.wikipedia.org/wiki/Овчинников,_Фёдор_Владимирович (статья помечена как не проверенная опытными участниками); блог «Сила ума»: https://sila-uma.ru/ . [популярный; для разбора 6.6]
+112. Википедия, «Курпатов, Андрей Владимирович»: https://ru.wikipedia.org/wiki/Курпатов,_Андрей_Владимирович ; Telegram-канал проектов (веб-просмотр): https://t.me/s/kurpatov_official ; YouTube: https://www.youtube.com/channel/UCX_isCsPV3HOg95qodqIdLQ . [популярный / первоисточник для постов; для разбора 6.6]
+113. Brand Master Academy (S. Houraghan), главная страница (перечень программ; архетипного курса нет): https://brandmasteracademy.com/ . [первоисточник, рекламный]
+114. «Сити Класс». Анонс мастер-класса Ю. Лос «Личный бренд и управление репутацией с помощью архетипов»: https://cityclass.ru/los_personal_branding_on_archetypes/ (ср. `01-systems.md` [127]). [первоисточник; анонс]
+115. Дяченко А. Блог на Sostav, 25.12.2023 (Д. Куплинов как пример блогера в архетипе Славного малого): https://www.sostav.ru/blogs/261743/42960 (по `05-personal-brand.md` [75], сверено v05; ср. `01-systems.md` [124]). [профессиональный]
+116. Iconic Fox, «Brand Archetypes: The Definitive Guide», копия Wayback Machine от 07.06.2018: https://web.archive.org/web/20180607195714/https://iconicfox.com.au/brand-archetypes/ . [популярный, агентский]
