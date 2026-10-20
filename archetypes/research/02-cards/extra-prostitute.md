@@ -1,4 +1,4 @@
-# Проститутка (Prostitute) — «архетип выживания», Кэролайн Мисс
+# Prostitute (Проститутка) — «архетип выживания», Кэролайн Мисс
 
 > **Источник понятия:** C. Myss, «Sacred Contracts: Awakening Your Divine Potential» (Harmony, 2001), глава «Speaking Archetypes: Your Four Principal Energy Companions» [1][2][6]; онлайн-версия «Gallery of Archetypes» (myss.com, PDF, 2015), семейство Survival, статья Prostitute [3]; статья «The Prostitute — The Power of Archetypes» на myss.com [4] · **Ближайший архетип из 12:** нет. Исследование (r03, оценка, не из источника): «нет аналога; тема целостности».
 > **Дата среза:** 2026-10-15; доукомплектование полей и проверка пометок — 2026-10-16 (протокол [_notes/c02-extra-myss-vogler.md](../_notes/c02-extra-myss-vogler.md)). Русское название — перевод исследования. Русский перевод «Sacred Contracts» издатель АСТ называет «Колесо Судьбы, или Священные Соглашения» [10]; выходные данные и русское название архетипа в этом издании не установлены (⚠ карточка издания не найдена на ast.ru и eksmo.ru; поиск 2026-10-16 прерван исчерпанием квоты). Пометки — см. [README](README.md).

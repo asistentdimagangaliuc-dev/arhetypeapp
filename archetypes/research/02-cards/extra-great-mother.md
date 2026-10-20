@@ -1,4 +1,4 @@
-# Великая Мать / архетип Матери (Great Mother; нем. Mutterarchetypus) — аналитическая психология, К. Г. Юнг, Э. Нойманн
+# Great Mother (Великая Мать / архетип Матери; нем. Mutterarchetypus) — аналитическая психология, К. Г. Юнг, Э. Нойманн
 
 > **Источник понятия:** К. Г. Юнг, «Psychological Aspects of the Mother Archetype» (Eranos 1938, ред. 1954), CW 9i §§148–198; «Symbols of Transformation» (CW 5, ред. 1952; гл. «The Dual Mother», «The Battle for Deliverance from the Mother») [1][2]; Э. Нойманн, «The Great Mother: An Analysis of the Archetype» (англ. 1955) [3] · **Ближайший архетип из 12:** Заботливый (Caregiver). Соответствие устанавливают практики, которые относят «Мать» к Заботливому как синоним или подтип (VisionOne, Kaye Putnam) [9][10], и исследование (оценка, не из источника). Совпадение частичное — см. раздел 4.
 > **Дата среза:** 2026-10-15; дополнено 2026-10-16 (раунд c01: разделы 7–14, перепроверка непроверенных мест, протокол — [_notes/c01-extra-jung.md](../_notes/c01-extra-jung.md)). Пометки (⚠, «оценка исследования, не из источника», метки надёжности) — см. [README](README.md).
