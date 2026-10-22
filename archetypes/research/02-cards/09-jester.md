@@ -24,10 +24,10 @@
 - Iconic Fox: базовое желание — «PLEASURE»; движущие силы — веселье, счастье, смех, единение, позитив; Шут видит своим долгом быть «лучом солнца» для окружающих [17].
 
 **«Внутренняя» модель (Пирсон 1991, Fool).**
-- Врезка главы: Goal — «Enjoyment, pleasure, aliveness» (наслаждение, удовольствие, живость); Fear — «Nonaliveness» («не-жизнь»); реакция на «дракона» — «Play with it or play tricks on it» (играть с ним или разыграть его); Task — «Trust in the process; enjoyment of the journey for its own sake»; Gift — «Joy, freedom, liberation» [6].
+- Врезка главы (гл. 17, **сверено по экземпляру владельца 2026-10-22**; `_notes/books/awakening-the-heroes-within-coverage.md`): Goal — «Enjoyment, pleasure, aliveness»; Fear — «Nonaliveness»; Response to Dragon/Problem — «Play with it or play tricks on it»; Task — «Trust in the process; enjoyment of the journey for its own sake»; Gift — «Joy, freedom, liberation» [6].
 - Сводная таблица (с. 10–11): Goal — «Enjoyment»; Fear — «Nonaliveness»; реакция — «Play tricks on it»; Task — «Trust in the process»; Gift — «Joy, freedom» [6].
 - Современная трактовка на сайте Пирсон: юмор и игра [8]. На странице архетипа: Шуты «Naturally playful, spontaneous, and humorous», любят «light-hearted truth-telling»; организации архетипа сильны в мозговых штурмах [56] (добавлено при проверке c04).
-- Уровни в «Levels of the Fool Shadow»: «Level One: Life is a game to be played for the fun of it»; «Level Two: Cleverness used to trick others, to get out of trouble» (OCR, проверка c04) [6].
+- Уровни «Levels of the Fool» (сверено по экземпляру владельца 2026-10-22): Level One (Fool) — «Life is a game to be played for the fun of it»; Level Two (Trickster) — cleverness, чтобы перехитрить, выпутаться из беды и говорить правду; Level Three (Wise Fool/Jester) — жизнь, прожитая полно в моменте, «one day at a time» [6].
 
 **Юнгианские корни.** У Юнга есть фигура Трикстера (Trickster) — CW 9i, §§456–488: «fondness for sly jokes and malicious pranks, his powers as a shape-shifter, his dual nature» (§456); Юнг сопоставляет его со средневековым карнавалом «with its reversal of the hierarchic order»; Трикстер — параллель индивидуальной тени (§485) [33]. Сопоставление «Шут ≈ Трикстер» — интерпретация исследователя r01, не утверждение Юнга или Марк и Пирсон (оценка исследования, не из источника). Сам Юнг закрытого списка из 12 и имени «Jester» не даёт [33].
 
@@ -39,7 +39,7 @@
 - Брендовые риски у практиков: легкомысленность или неуважительность [23]; «компромисс — доверие»: когда бренду понадобится сказать что-то серьёзное, ему могут не поверить [27]; юмор хрупок, неудачная шутка распространяется так же быстро, как удачная [26]. VisionOne: худшее для бренда — затяжной судебный конфликт или репутация строгого и скучного [18].
 
 **Теневая форма по Пирсон 1991 (Fool).**
-- Врезка «Levels of the Fool Shadow»: «Self-indulgence, sloth, gluttony, irresponsibility» — потакание себе, лень, обжорство, безответственность. Поле «Call» (зов): «Boredom, ennui, desire to have more enjoyment…» — скука, тоска, желание большего удовольствия [6].
+- Врезка «Levels of the Fool», поле Shadow (сверено по экземпляру владельца 2026-10-22): «Self-indulgence, sloth, gluttony, irresponsibility» — потакание себе, лень, обжорство, безответственность. Поле «Call» (зов): «Boredom, ennui, desire to have more enjoyment…» — скука, тоска, желание большего удовольствия [6].
 - Вторичный конспект: ловушки — распущенность, безответственность, лень, жестокие шутки, мошенничество (con-artistry); тень — «обжора, лентяй или распутник» (glutton, sloth, or lecher), без достоинства и самоконтроля [12].
 - Taproot: «неуравновешенный Шут» становится жестоким, бесчувственным или прячется в юмор от серьёзного; ссылка «(Pearson, 1991)» без страниц [13].
 
@@ -203,7 +203,7 @@
 3. Franzen G., Moriarty S. *The Science and Art of Branding.* 2009 — https://archive.org/details/scienceartofbran0000fran — [профессиональный]
 4. Марк М., Пирсон К. «Герой и бунтарь. Как использовать архетипы на пользу бизнесу и творчеству» / пер. А. Д. Сайфуллиной. М.: Бомбора, ISBN 978-5-04-246600-7. Оглавление издателя — https://cdn.eksmo.ru/v2/ITD000000001500651/PDF/ITD000000001500651_TOC.pdf ; карточка — https://eksmo.ru/book/geroy-i-buntar-kak-ispolzovat-arkhetipy-na-polzu-biznesu-i-tvorchestvu-ITD1500651/ — ч. IV (с. 231), гл. 12 (с. 276) — [первоисточник/издатель]
 5. Марк М., Пирсон К. «Герой и бунтарь. Создание бренда с помощью архетипов». СПб.: Питер, 2005, ISBN 5-94723-616-8. Выходные данные — https://urss.ru/cgi-bin/db.pl?lang=Ru&blang=ru&page=Book&id=154748 . Названия взяты в заметке r04 из неавторизованной копии (ссылка не приводится) — [⚠ не подтверждено легальным источником]
-6. Pearson C. S. *Awakening the Heroes Within.* HarperSanFrancisco, 1991. OCR-фрагменты, экземпляр IA — https://archive.org/details/awakeningheroesw0000pear — оглавление (ч. IV, с. 179), сводная таблица (с. 10–11), врезка главы Fool, «Levels of the Fool Shadow» с полем «Call» — [первоисточник]
+6. Pearson C. S. *Awakening the Heroes Within.* HarperSanFrancisco, 1991. OCR-фрагменты, экземпляр IA — https://archive.org/details/awakeningheroesw0000pear — оглавление (ч. IV, с. 179), сводная таблица (с. 10–11), врезка главы Fool, «Levels of the Fool Shadow» с полем «Call»; книга прочитана целиком по экземпляру владельца 2026-10-22 (`_notes/books/awakening-the-heroes-within-coverage.md`) — [первоисточник]
 7. Пирсон К. «Пробуждение внутреннего героя. 12 архетипов…» / пер. А. Багрянцевой. М.: МИФ, 2024, ISBN 978-5-00214-422-8 — https://www.litres.ru/book/carol-s-pearson-2/probuzhdenie-vnutrennego-geroya-12-arhetipov-kotorye-pom-70498927/chitat-onlayn/ ; https://www.labirint.ru/books/1002571/ — [первоисточник/издатель]
 8. Pearson C. S. «The Pearson 12-Archetype System: Human Development and Evolution». carolspearson.com — https://carolspearson.com/about/the-pearson-12-archetype-system-human-development-and-evolution — [первоисточник]
 9. StoryWell (CAPT). Описания архетипов PMAI — https://www.storywell.com/archetypes/archetype-descriptions.htm — [первоисточник]

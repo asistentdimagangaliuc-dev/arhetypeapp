@@ -32,13 +32,19 @@
 
 **«Внутренняя» модель Пирсон**
 - «The Hero Within» (1989): цель — «Wholeness», задача — «Joy/faith», страх — «Superficiality» (с. xxvii). Маг учится принимать изобилие (с. 15); путь героя завершается «authenticity and wholeness of the Magician» (с. xxvii) [6].
-- «Awakening the Heroes Within» (1991), врезка главы [4]:
+- «Awakening the Heroes Within» (1991), врезка главы 15 (Self/Return) — сверено по экземпляру владельца 2026-10-22 [4]:
   - Goal: «Transformation of lesser into better realities»;
   - Fear: «Evil sorcery (transformation in a negative direction)»;
   - Response to Dragon/Problem: «Transform or heal it»;
   - Task: «Alignment of Self with cosmos»;
-  - Gift: «Personal power» (Response, Task и Gift подтверждены поиском по тексту IA при проверке 2026-10-16).
-  - В сводной таблице на с. 10–11: «Transformation», «Evil sorcery», «Transform it», «Align self with cosmos», «Personal power» [4].
+  - Gift: «Personal power».
+  - В сводной таблице на с. 10–11 те же поля в сжатой форме: «Transformation» / «Evil sorcery» / «Transform it» / «Align self with cosmos» / «Personal power» [4].
+- Врезка «Levels of the Magician» (гл. 15) — сверено по экземпляру владельца 2026-10-22 [4]:
+  - Тень (Shadow): злой чародей / ведьма, негативная синхронистичность — «evil sorcerer/wicked witch, negative synchronicity»;
+  - Зов (Call): болезнь либо экстрасенсорный/синхронистический опыт — «illness, or extrasensory/synchronistic experiences»;
+  - Уровень 1: переживание исцеления или замечание синхронистичности;
+  - Уровень 2: заземление вдохновения, воплощение мечты в реальность («grounding inspiration, making dreams real»);
+  - Уровень 3: мастерство изменять физическую реальность, сначала меняя ментальное/эмоциональное/духовное.
 - Современная версия: Magician «most fulfilled when they can see a vision realized»; интуитивные; их заряжают периоды больших перемен [7]. Функция на сайте Пирсон — духовный смысл и исцеление [8].
 
 **Версии практиков**
@@ -60,7 +66,7 @@
 - Пример злоупотребления силой — ученик чародея из «Фантазии» Disney [1].
 
 **Теневые формы по Пирсон (1989, 1991)**
-- Врезка «Levels of the Magician Shadow»: «Evil sorcerer or wicked witch, synchronistic negative occurrences, calling negativity to oneself, or turning positive into [negative]…» [4].
+- Теневой уровень во врезке «Levels of the Magician» (гл. 15, сверено по экземпляру владельца 2026-10-22): злой чародей или ведьма, негативная синхронистичность — «evil sorcerer/wicked witch, negative synchronicity» [4].
 - Таблица теней: «The evil sorcerer, transforming better into lesser options» [4].
 - «We engage in such evil sorcery anytime we belittle ourselves or another» [4].
 - В указателе: «shadow Magician and [Advertising], 207». Пирсон сама связывает рекламу с теневым Магом (с. 205–207) [4].
@@ -231,7 +237,7 @@
 - **Страх.** M&P — «unanticipated negative consequences» [1]; Пирсон 1991 — «Evil sorcery (transformation in a negative direction)» [4]; Пирсон 1989 — «Superficiality» [6]. 1991 и 2001 сходятся по смыслу (негативная трансформация), 1989 — другое.
 - **Цель.** 1989 — «Wholeness» [6]; 1991 — «Transformation of lesser into better realities» [4]; 2001 — «make dreams come true» [1].
 - **Ловушка и дар.** Во врезке книги (с. 141, сверено по экземпляру владельца 2026-10-22) ловушка — «becoming manipulative», дар — «finding win-win outcomes» [1]. У К. Голдена поля Weakness/Talent — «becoming manipulative» и «finding win-win **solutions**» [58]: ловушка совпадает, а дар расходится (у Голдена «solutions», в книге «outcomes»).
-- **Task и Gift у Пирсон 1991.** «Alignment of Self with cosmos» и «Personal power» из раннего раунда заметок подтверждены поиском по тексту IA при проверке 2026-10-16 (врезка главы и сводная таблица) [4].
+- **Task и Gift у Пирсон 1991.** «Alignment of Self with cosmos» и «Personal power» сверены дословно по полному тексту экземпляра владельца 2026-10-22 (врезка главы 15 и сводная таблица с. 10–11); пометка ⚠ снята [4].
 - **Disney.** M&P — Невинный [1]; все просмотренные современные гайды — Маг [13; 16; 14; 12; 15].
 - **Apple.** M&P — Бунтарь и Творец [1]; Kaye Putnam, zipBoard, WEDEX — Маг [12; 16; 15]; Пилиповец и Соколова — Маг + Творец [35; 34].
 - **МТС.** У одного автора в двух статьях — Маг-«Визионер» и Заботливый-«Дворецкий»: архетип привязан к кампании, а не к бренду [28; 29].
@@ -248,7 +254,7 @@
 1. Mark M., Pearson C. S. *The Hero and the Outlaw: Building Extraordinary Brands Through the Power of Archetypes.* New York: McGraw-Hill, 2001. ISBN 0071364153. Текст сверялся полнотекстовым поиском по библиотечному экземпляру Internet Archive (короткие OCR-фрагменты, возможны ошибки распознавания): https://archive.org/details/herooutlawbuildi0000mark . Оглавление: ч. II — с. 49 (гл. 4 — с. 53, гл. 5 — с. 71, гл. 6 — с. 88); ч. III — с. 101 (гл. 7 — с. 105, гл. 8 — с. 123, гл. 9 — с. 140). Номера страниц с пометкой «⚠» взяты из заметок, где книга сверялась по неидентифицированной онлайн-копии; легальным источником они не подтверждены (при проверке 2026-10-16 сами фразы найдены поиском по тексту IA, но колонтитулы со страницами во фрагменты не попали; подтверждены по колонтитулам с. 2, 10, 52, 72, 89, 109, 153). Врезки глав в OCR Internet Archive распознаны с перемешанными колонками. 2026-10-22 поля врезок, строки «also known as» и врезки «Levels of the …» сверены по полному цифровому тексту личного экземпляра владельца (EPUB; ссылка не приводится, экземпляр не распространяется); печатная страница = внутренний маркер страницы EPUB минус 15, нумерация совпадает с экземпляром IA. [первоисточник]
 2. Марк М., Пирсон К. *Герой и бунтарь. Как использовать архетипы на пользу бизнесу и творчеству* / пер. А. Д. Сайфуллиной. М.: Бомбора, серия «Бомбора Foundation. Self-help», 512 с., ISBN 978-5-04-246600-7. Оглавление издателя (PDF): https://cdn.eksmo.ru/v2/ITD000000001500651/PDF/ITD000000001500651_TOC.pdf ; карточка: https://eksmo.ru/book/geroy-i-buntar-kak-ispolzovat-arkhetipy-na-polzu-biznesu-i-tvorchestvu-ITD1500651/ . Издание 2023 г. (серия «Маркетинг для немаркетологов», ISBN 978-5-04-172815-1; его оглавление не проверено): https://www.labirint.ru/books/950126/ . [первоисточник/издатель]
 3. Марк М., Пирсон К. *Герой и бунтарь. Создание бренда с помощью архетипов.* СПб.: Питер, 2005, серия «Маркетинг для профессионалов», 336 с., ISBN 5-94723-616-8. Выходные данные: https://urss.ru/cgi-bin/db.pl?lang=Ru&blang=ru&page=Book&id=154748 . Названия архетипов и частей этого перевода легальным источником не подтверждены (известны из неавторизованной копии; ссылка не приводится). [первоисточник/магазин — только выходные данные]
-4. Pearson C. S. *Awakening the Heroes Within: Twelve Archetypes to Help Us Find Ourselves and Transform Our World.* HarperSanFrancisco, 1991. ISBN 0062506781. Полнотекстовый поиск по экземпляру Internet Archive: https://archive.org/details/awakeningheroesw0000pear . Таблица «The Twelve Archetypes» — с. 10–11; часть IV — с. 179; теневой Маг и реклама — с. 205–207. Страницы по колонтитулам (±1). [первоисточник]
+4. Pearson C. S. *Awakening the Heroes Within: Twelve Archetypes to Help Us Find Ourselves and Transform Our World.* HarperSanFrancisco, 1991. ISBN 0062506781. Полнотекстовый поиск по экземпляру Internet Archive: https://archive.org/details/awakeningheroesw0000pear . Таблица «The Twelve Archetypes» — с. 10–11; часть IV — с. 179; теневой Маг и реклама — с. 205–207. Страницы по колонтитулам (±1). 2026-10-22 книга прочитана целиком по полному цифровому тексту личного экземпляра владельца (EPUB; ссылка не приводится, экземпляр не распространяется): поля врезки главы 15 и врезки «Levels of the Magician» сверены дословно; журнал покрытия — `_notes/books/awakening-the-heroes-within-coverage.md`. [первоисточник]
 5. Пирсон К. *Пробуждение внутреннего героя. 12 архетипов, которые помогут раскрыть свою личность и найти путь* / пер. А. Багрянцевой. М.: МИФ, 2024. ISBN 978-5-00214-422-8. Ознакомительный фрагмент: https://www.litres.ru/book/carol-s-pearson-2/probuzhdenie-vnutrennego-geroya-12-arhetipov-kotorye-pom-70498927/chitat-onlayn/ ; выходные данные: https://www.labirint.ru/books/1002571/ . [первоисточник/издатель]
 6. Pearson C. S. *The Hero Within: Six Archetypes We Live By.* Expanded ed. San Francisco: Harper & Row, 1989 (©1986, 1989). ISBN 0-06-254862-X. Экземпляр библиотечной выдачи Internet Archive (поиск по тексту): https://archive.org/details/herowithinsixarc00pear . Прежняя ссылка на свободно скачиваемую копию Universal Digital Library (herowithin002330mbp) заменена при проверке 2026-10-16: статус разрешения правообладателя не установлен. Гл. 6 «The Magician» — с. 116; сводная таблица и порядок пути — с. xxvii; «чему учит каждая стадия» — с. 15; предисловие к расширенному изданию — с. xv–xvii. [первоисточник]
 7. Pearson Archetypal System, carolspearson.com, «Magician»: https://carolspearson.com/archetype-pages/magician-archetype . Дата не указана; просмотрено 2026-10-15. [первоисточник]

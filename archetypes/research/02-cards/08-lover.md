@@ -24,8 +24,8 @@
 - Iconic Fox: базовое желание — «INTIMACY»; Любовник «desires to be desired» («желает быть желанным») [15].
 
 **«Внутренняя» модель (Пирсон 1991).**
-- Врезка главы: Goal — «Bliss, oneness, unity» (блаженство, единство); Fear — «Loss of love, disconnection»; реакция на «дракона» — «Love it» (полюбить его); Task — «Follow your bliss, commit to what you love»; Gift — «Commitment, passion, ecstasy» (преданность, страсть, экстаз; получено по OCR при проверке v03) [5].
-- Сводная таблица (с. 10–11): Goal — «Bliss»; Fear — «Loss of love»; Gift — «Passion, commitment» [5].
+- Врезка главы 12 (стадия Soul/Journey) — сверено по экземпляру владельца 2026-10-22: Goal — «Bliss, oneness, unity» (блаженство, единство); Fear — «Loss of love, disconnection»; реакция на «дракона» — «Love it» (полюбить его); Task — «Follow your bliss, commit to what you love»; Gift — «Commitment, passion, ecstasy» (преданность, страсть, экстаз) [5].
+- Сводная таблица (с. 10–11, сверено по экземпляру владельца 2026-10-22): Goal — «Bliss»; Fear — «Loss of love»; Gift — «Passion, commitment» [5]. Расхождение: в сводной таблице дар — «Passion, commitment», во врезке главы 12 — полнее: «Commitment, passion, ecstasy» (добавлен «экстаз»). Используем формулу врезки.
 - Современная трактовка на сайте Пирсон: привязанность и обязательства [7]. На странице архетипа: такие люди «Naturally appreciative, passionate, and committed», им важно строить отношения; организации архетипа строят «real partnerships» [62] (добавлено при проверке c04).
 
 ## 2. Главный страх, тень, ловушки
@@ -38,7 +38,12 @@
 - У Марк и Пирсон в главе о Бунтаре упомянута бурная негативная реакция на рекламу Calvin Klein с подростками — бренда, который можно видеть и как Любовника [1]. Авторы приводят и обратный пример: «You might expect cosmetic companies to sell Lover brands, but not The Body Shop» (OCR, проверка v03; глава ⚠ не установлена: во фрагменте нет колонтитула) [1].
 
 **Теневая форма по Пирсон 1991.**
-- Врезка «Levels of the Lover Shadow»: «Jealousy, envy, obsessive fixation on a love object or relationship, sexual addiction, Don Juanism, promiscuity…» и, напротив, «puritanism» — ревность, зависть, навязчивая фиксация, сексуальная зависимость, донжуанство, промискуитет или пуританство. Поле «Call» (зов): «Infatuation, seduction, yearning, falling in love (with a person, an idea, a cause, a work)». Дочитано по OCR при проверке c04 [5].
+- Врезка «Levels of the Lover» (гл. 12) — сверено по экземпляру владельца 2026-10-22 [5]:
+  - Тень (Shadow): ревность, зависть, навязчивая фиксация на объекте любви или отношениях, сексуальная зависимость, донжуанство, промискуитет — либо, напротив, пуританство («jealousy, envy, obsessive fixation, sexual addiction, Don Juanism, promiscuity, or conversely puritanism»);
+  - Зов (Call): влюблённость, соблазнение, томление, падение в любовь — к человеку, идее, делу, работе («infatuation, seduction, yearning, falling in love»);
+  - Уровень 1: следование своему блаженству (following your bliss);
+  - Уровень 2: привязанность и обязательства (bonding and commitments);
+  - Уровень 3: радикальное самопринятие, рождающее Самость («radical self-acceptance giving birth to the Self»).
 - Вторичный конспект: ловушки — объективация других, романтические и сексуальные зависимости. Тень — «сирены», уводящие других с их пути; «соблазнители», использующие любовь как завоевание; зависимые от отношений; тот, кто не может сказать «нет» страсти или разрушается, когда партнёр уходит [11].
 - Taproot: одержимость, ревность, разрушительные отношения; ссылка «(Pearson, 1991)» без страниц [12].
 - Блог МИФ по русскому переводу: тень Любовника внушает, что «жизнь немыслима без отношений» [47].
@@ -199,7 +204,7 @@
 2. Solomon M. R. *Consumer Behavior: Buying, Having, and Being.* 11th ed. Pearson, 2014 — https://archive.org/details/consumerbehavior0000mich_edi11 ; ed. 2018 — https://archive.org/details/consumerbehavior0000solo_n4t7 — [профессиональный; вторичное воспроизведение врезок книги]
 3. Марк М., Пирсон К. «Герой и бунтарь. Как использовать архетипы на пользу бизнесу и творчеству» / пер. А. Д. Сайфуллиной. М.: Бомбора, ISBN 978-5-04-246600-7. Оглавление издателя — https://cdn.eksmo.ru/v2/ITD000000001500651/PDF/ITD000000001500651_TOC.pdf ; карточка — https://eksmo.ru/book/geroy-i-buntar-kak-ispolzovat-arkhetipy-na-polzu-biznesu-i-tvorchestvu-ITD1500651/ — ч. IV (с. 231), гл. 11 (с. 252) — [первоисточник/издатель]
 4. Марк М., Пирсон К. «Герой и бунтарь. Создание бренда с помощью архетипов». СПб.: Питер, 2005, ISBN 5-94723-616-8. Выходные данные — https://urss.ru/cgi-bin/db.pl?lang=Ru&blang=ru&page=Book&id=154748 . Названия взяты в заметке r04 из неавторизованной копии (ссылка не приводится) — [⚠ не подтверждено легальным источником]
-5. Pearson C. S. *Awakening the Heroes Within.* HarperSanFrancisco, 1991. OCR-фрагменты, экземпляр IA — https://archive.org/details/awakeningheroesw0000pear — оглавление (ч. III, с. 121; гл. 12, с. 148), сводная таблица (с. 10–11), врезка главы, «Levels of the Lover Shadow» — [первоисточник]
+5. Pearson C. S. *Awakening the Heroes Within.* HarperSanFrancisco, 1991. OCR-фрагменты, экземпляр IA — https://archive.org/details/awakeningheroesw0000pear — оглавление (ч. III, с. 121; гл. 12, с. 148), сводная таблица (с. 10–11), врезка главы, «Levels of the Lover». 2026-10-22 книга прочитана целиком по полному цифровому тексту личного экземпляра владельца (EPUB; ссылка не приводится, экземпляр не распространяется): поля врезки главы 12 и все уровни «Levels of the Lover» сверены дословно; журнал покрытия — `_notes/books/awakening-the-heroes-within-coverage.md` — [первоисточник]
 6. Пирсон К. «Пробуждение внутреннего героя. 12 архетипов…» / пер. А. Багрянцевой. М.: МИФ, 2024, ISBN 978-5-00214-422-8 — https://www.litres.ru/book/carol-s-pearson-2/probuzhdenie-vnutrennego-geroya-12-arhetipov-kotorye-pom-70498927/chitat-onlayn/ ; https://www.labirint.ru/books/1002571/ — [первоисточник/издатель]
 7. Pearson C. S. «The Pearson 12-Archetype System: Human Development and Evolution». carolspearson.com — https://carolspearson.com/about/the-pearson-12-archetype-system-human-development-and-evolution — [первоисточник]
 8. StoryWell (CAPT). Описания архетипов PMAI — https://www.storywell.com/archetypes/archetype-descriptions.htm — [первоисточник]
