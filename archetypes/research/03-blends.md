@@ -21,6 +21,8 @@
 > **Раунд доукомплектования c07 (2026-10-16).** Протокол — `_notes/c07-systems-blends.md`; новые источники — [98–116]. Тем же поиском IA подтверждены ещё «primary archetypal identity, secondary identity, and so on», «some 48 descriptive attributes included in BAV», «at least some access to all archetypes» и пример с CEO, «beacon», «easy to recognize» (при проверке v14 — целиком «simple and easy to recognize»), «patchwork quilt of archetypal identities all at once», «conceptual unity across offerings», «its brand identity must remain clear», «Life requires constant negotiation along these poles», «sanctimonious Innocent Coke». Поиск Open Library сообщает только общее число листов скана, поэтому номера страниц по-прежнему не подтверждаются («⚠ стр.»). Добавлены собственные разборы десяти блогеров и экспертов (раздел 6.6; оценка исследования, не из источника, сделана с разрешения пользователя).
 >
 > **Независимая проверка раунда 2 (v14, 2026-10-16).** Протокол — `_notes/v14-systems-blends.md`; новый источник — [117]. Тем же поиском IA найдены «simple and easy to recognize», «owner is a living icon», вторая мотивация в примере с CEO («Caregiver», а не Любовник), имя Леттермана, Dove и Joe Camel. При межфайловой сверке по карточкам `02-cards/` и заметкам c03, c04 исправлены дрейф Levi's (с. 9–10, с Regular Guy or Gal) и страницы 274–275. В разделе 6.6 исправлены цитата у Кондо и число книг у Высоцкой, добавлены справки о Курпатове и Овчинникове.
+>
+> **Сверка по экземпляру владельца (2026-10-22).** Полный цифровой текст личного экземпляра «The Hero and the Outlaw» (EPUB; журнал покрытия — `_notes/books/the-hero-and-the-outlaw-coverage.md`) подтвердил печатные страницы ключевых цитат Марк и Пирсон, прежде помеченных «⚠ стр.»: «one—and only one—archetype» — с. 42 (гл. 3); «primary archetypal identity, secondary identity, and so on» — с. 26 (гл. 2, про измерение профиля методом BAV); «pick some … from column A … column B» и «single coherent archetype» — с. 30; абзац BAV (97 %/66 %, порог 10 %) — с. 30; пример Леттермана — с. 162; «category archetype»/Dove–Ivory — с. 274–275. Метод сопоставления брендов с архетипами в BAV — алгоритм по ~48 атрибутам с нормировкой и перцентилем по каждому архетипу (с. 26). **Позиция книги о числе архетипов уточнена:** у людей и организаций множественность — норма («each has at least some access to all archetypes»; процветающие организации держат «at least one active archetype in each quadrant», с. 42), но для бренда норма — один архетип (с. 42); управление во времени — смена **уровня** одного архетипа, а не его замена (гл. 17, с. 300, 304); несколько архетипов в организации распределяются по подразделениям и сводятся одним объединяющим (гл. 20, с. 348–349). Метод «артишока» (гл. 16) начинается с «гипотезы об архетипе ИЛИ архетипах» и затем сужает её до одного (с. 265–285) — то есть профиль-измерение и норма «один архетип» в книге не противоречат, а разведены по ролям (измерение против рекомендации). Книги Hartwell & Chen (2012) и Merlo и др. (2023) к этой сессии **не приложены** — пробелы по ним (полный список 60; процедура кодирования, набор архетипов и цифра «2 % брендов с одним архетипом» у Merlo) остаются открытыми (см. verification.md).
 
 ---
 
@@ -39,36 +41,36 @@
 ### 1.1. Марк и Пирсон (2001): один архетип как норма, профиль как измерение
 
 **Нормативная позиция: один архетип.**
-- Главный тезис книги: идентичность бренда лучше всего строится, если он «identifying solidly with one—and only one—archetype» [1, гл. 3 «Postmodern Marketing»; с. 42 ⚠ стр.]. Текст подтверждён поиском IA.
-- По r08, в том же месте сказано ещё несколько вещей [1, с. 42 ⚠ стр.]. Тексты подтверждены поиском IA (v01, c07):
+- Главный тезис книги: идентичность бренда лучше всего строится, если он «identifying solidly with one—and only one—archetype» [1, гл. 3 «Postmodern Marketing»; с. 42, сверено 2026-10-22]. Текст подтверждён поиском IA.
+- По r08, в том же месте сказано ещё несколько вещей [1, с. 42, сверено 2026-10-22]. Тексты подтверждены поиском IA (v01, c07):
   - у людей, обществ и организаций разные доминирующие архетипы, но у каждого есть «at least some access to all archetypes»;
   - пример: CEO с доминирующим Правителем (Ruler) «may buy a toy for his son that appeals to his own fun-loving Jester or his desire to nurture a child (Caregiver)». Вторая мотивация в тексте — Заботливый, а не Любовник, как было у r08 (исправлено v14 по поиску IA);
   - успешные организации имеют «at least one active archetype in each quadrant»;
   - но идентичность бренда должна быть «simple and easy to recognize» (фраза целиком найдена поиском IA при проверке v14: «it needs to be simple and easy to recognize»), а «the archetype within the brand serves as a beacon» для соответствующей мотивации.
-- После данных BAV авторы пишут: «Archetypes defy the "pick some characteristics from column A and some from column B" practice» и подчёркивают важность «a single coherent archetype» [1, с. 30 ⚠ стр.]. Оба фрагмента подтверждены поиском IA 2026-10-16.
-- **Личные бренды в книге одноархетипные.** Мадонна меняет образы, «but she is always the outrageous Rebel»; Джек Николсон всегда Outlaw; Мег Райан и Том Хэнкс — Innocent [1, нач. ч. I, с. 1–2 ⚠ стр.]. Фрагмент «always the outrageous Rebel» подтверждён поиском IA 2026-10-16; рядом в OCR стоит колонтитул «2 PRIMAL ASSETS», что согласуется с с. 2. Отнесение Райан и Хэнкса к Innocent подтверждено и легально: они есть в перечне «Innocent brands include» [1, гл. 4].
+- После данных BAV авторы пишут: «Archetypes defy the "pick some characteristics from column A and some from column B" practice» и подчёркивают важность «a single coherent archetype» [1, с. 30, сверено 2026-10-22]. Оба фрагмента подтверждены поиском IA 2026-10-16.
+- **Личные бренды в книге одноархетипные.** Мадонна меняет образы, «but she is always the outrageous Rebel»; Джек Николсон всегда Outlaw; Мег Райан и Том Хэнкс — Innocent [1, нач. ч. I, с. 1–2, сверено 2026-10-22]. Фрагмент «always the outrageous Rebel» подтверждён поиском IA 2026-10-16; рядом в OCR стоит колонтитул «2 PRIMAL ASSETS», что согласуется с с. 2. Отнесение Райан и Хэнкса к Innocent подтверждено и легально: они есть в перечне «Innocent brands include» [1, гл. 4].
 - **Отрицательный пример смешения — Levi's.** Бренд был «once a strong and clear Explorer brand, drifted from Outlaw to Hero, back to Explorer» [1, ч. I, с. 9–10]; ещё одна формулировка, в другом месте книги и в контексте расширений бренда, — «the Levi's brand has seemed a bit lost» [1, гл. 5 — по r08]. Фраза о дрейфе начинается на с. 9 и переходит на с. 10: так её цитирует книга Lexington Books 2012 года («Mark and Pearson 2001, 9») [117], а колонтитул «10 PRIMAL ASSETS» стоит внутри фразы (исправлено v14 при межфайловой сверке по `02-cards/02-explorer.md`, `07-regular-guy.md` и `_notes/c04`; прежде — «гл. 5» и «с. 10» по r08). Продолжение:
   - дрейф дальше: «…back to Explorer, then to Regular Guy or Gal, then to Jester» — подтверждено цитатой в [117] (v14); в OCR самой книги виден конец ряда «…Jester—and sometimes presented a patchwork quilt…» [1];
   - «a patchwork quilt of archetypal identities all at once» — подтверждено поиском IA (c07, v14), с. 10;
   - связь с запутанным управлением суббрендами (501, Five Pocket, Wide Leg) и падением доли рынка — ⚠ не подтверждено (c07 искал «Five Pocket», «Wide Leg» — не найдено).
-- **Многопродуктовые бренды.** Для «superbrands» с непохожими продуктами (Disney, Ralph Lauren, Virgin) задача — «conceptual unity across offerings». Лучше всего её держит владелец, который сам «living icon» [1, гл. 16 «The Artichoke», с. 284–285 ⚠ стр.]. Фраза «conceptual unity across offerings» подтверждена поиском IA (c07); «living icon» тоже: «best accomplished when the owner is a living icon him- or herself» (найдено v14 поиском IA по фразе «owner is a living icon»). Отдельной модели «разные архетипы для разных суббрендов» в найденных местах нет [1]. Глава 16 существует, это подтверждает оглавление издания «Бомборы» [2].
+- **Многопродуктовые бренды.** Для «superbrands» с непохожими продуктами (Disney, Ralph Lauren, Virgin) задача — «conceptual unity across offerings». Лучше всего её держит владелец, который сам «living icon» [1, гл. 16 «The Artichoke», с. 284–285, сверено 2026-10-22]. Фраза «conceptual unity across offerings» подтверждена поиском IA (c07); «living icon» тоже: «best accomplished when the owner is a living icon him- or herself» (найдено v14 поиском IA по фразе «owner is a living icon»). Отдельной модели «разные архетипы для разных суббрендов» в найденных местах нет [1]. Глава 16 существует, это подтверждает оглавление издания «Бомборы» [2].
 - **Организационная культура.** Даже при введении новых качеств «its brand identity must remain clear» (подтверждено поиском IA, c07). Вытесненные архетипы культуры названы «тенью» (shadow) компании [1, гл. 20, страница не зафиксирована ⚠; слово «shadow» в этом контексте поиском не найдено]. Глава 20 — «The Real McCoy: Branding and Organizational Congruence» (OCR оглавления, c07) [1]; есть она и в оглавлении «Бомборы» [2].
 
 **Измерительная логика: профиль по всем 12.**
-- В данных Young & Rubicam BrandAsset Valuator (BAV) каждый бренд получает «cumulative distribution score for each archetype (the percentile…». Так определяют, «whether a brand is strongly associated with any archetype» [1; подтверждено поиском IA; с. 26–27 ⚠ стр.].
+- В данных Young & Rubicam BrandAsset Valuator (BAV) каждый бренд получает «cumulative distribution score for each archetype (the percentile…». Так определяют, «whether a brand is strongly associated with any archetype» [1; подтверждено поиском IA; с. 26, сверено 2026-10-22].
 - Оценки нормируются «within and across brands»: в OCR виден фрагмент «…across brands» [1].
 - В основу легли 48 атрибутов с весами: «Weights are assigned to some 48 descriptive attributes included in BAV: obliging, rugged, carefree, authentic…» (подтверждено поиском IA, c07) [1]. Spangenberg (2021) пересказывает опрос Y&R из книги как оценку архетипов по «48 distinct characteristics» [87, с. 19, 72–73].
-- Так определяют «its primary archetypal identity, secondary identity, and so on» [1, с. 26–27 ⚠ стр.]. Формулировка подтверждена поиском IA (c07); прежде её не находили из-за переноса «ar- chetypal» в OCR.
+- Так определяют «its primary archetypal identity, secondary identity, and so on» [1, с. 26, сверено 2026-10-22]. Формулировка подтверждена поиском IA (c07); прежде её не находили из-за переноса «ar- chetypal» в OCR.
 - **Правило 10 %** [1; 3]:
   - бренды «tightly defined» — те, у которых второй архетип отстаёт от первого на 10 % и больше;
   - бренды «confused» — те, у которых «secondary archetype was within this 10% boundary»;
   - выборка — 50 брендов, 1993–1999 годы, две равные группы;
   - результат: MVA у «tightly defined» «rose by 97% more», EVA «grew at a rate 66% greater».
 
-  Текст подтверждён поиском IA и страницей цитат Goodreads. Страница не установлена: r08 даёт с. 30 по неавторизованной копии, r14 по легальному поиску страницу не нашёл (⚠ стр.). Анализ делала группа BAV компании Young & Rubicam: в благодарностях издания «Бомборы» названы Пол Фокс и Эд Лебар (Paul Fox, Ed Lebar) [2].
+  Текст подтверждён поиском IA и страницей цитат Goodreads. Страница не установлена: r08 даёт с. 30 по неавторизованной копии, страница подтверждена по экземпляру владельца 2026-10-22 — гл. 2, с. 30. Анализ делала группа BAV компании Young & Rubicam: в благодарностях издания «Бомборы» названы Пол Фокс и Эд Лебар (Paul Fox, Ed Lebar) [2].
 
 **Где смесь у авторов всё же описана как достоинство.**
-- **Дэвид Леттерман:** «combination of the Jester with Everyman/Regular Joe vulnerability» после операции на сердце вернула ему поддержку зрителей [1; текст подтверждён поиском IA; с. 162 ⚠ стр.]. Имя ведущего в OCR есть: «The "lesser Jester," David Letterman, boosted his sagging ratings» — найдено при проверке c04 (`02-cards/07-regular-guy.md`, `09-jester.md`) и перепроверено v14 по фразе «lesser Jester»; прежние пометки «имя не видно, по r08 ⚠» сняты при межфайловой сверке. Колонтитулы части IV в IA стоят около с. 161–164, что согласуется со страницей из r08 (оценка исследования, не из источника). Это единственный найденный у авторов пример смеси двух архетипов как плюса.
+- **Дэвид Леттерман:** «combination of the Jester with Everyman/Regular Joe vulnerability» после операции на сердце вернула ему поддержку зрителей [1; текст подтверждён поиском IA; с. 162, сверено 2026-10-22]. Имя ведущего в OCR есть: «The "lesser Jester," David Letterman, boosted his sagging ratings» — найдено при проверке c04 (`02-cards/07-regular-guy.md`, `09-jester.md`) и перепроверено v14 по фразе «lesser Jester»; прежние пометки «имя не видно, по r08 ⚠» сняты при межфайловой сверке. Колонтитулы части IV в IA стоят около с. 161–164, что согласуется со страницей из r08 (оценка исследования, не из источника). Это единственный найденный у авторов пример смеси двух архетипов как плюса.
 - **Пограничные случаи без оценки «хорошо/плохо»:**
   - Calvin Klein — «one could see Calvin Klein as a Lover brand… the company also has Outlaw qualities» [1, гл. 8];
   - Дипак Чопра — Мудрец, у которого «mystique can contribute to the aura of the Sage brand», то есть есть элемент Мага [1, гл. 6].
@@ -138,7 +140,7 @@
 
 | Роль | Термин | Кто использует | Источник |
 |---|---|---|---|
-| **Основной** | primary archetypal identity (в измерении BAV); dominant (у людей и организаций); category archetype (архетип лидера категории) | Марк и Пирсон | [1, с. 26–27, 42, 274 ⚠ стр.] |
+| **Основной** | primary archetypal identity (в измерении BAV); dominant (у людей и организаций); category archetype (архетип лидера категории) | Марк и Пирсон | [1, с. 26, 42, 274, сверено 2026-10-22] |
 | Основной | primary archetype | Kaye Putnam (квиз, подкаст) | [20; 21] |
 | Основной | core archetype (≥70 %); в гиде 2025 г. — primary (60–70 %) | Iconic Fox (Stephen Houraghan); тот же автор в чек-листе Brand Master Academy | [25; 26; 96] |
 | Основной | primary (dominant) | сторонние skills-листинги, приписывают Putnam; её материалами не подтверждено | [27] |
@@ -164,7 +166,7 @@
 | Основной | «главный» | блог «Россия — страна возможностей» | [66] |
 | Основной | «кластер» из 2–3 архетипов | Евгений (@eugene_drm), «Тайны Netflix» | [64] |
 | Основной | «базовые и целевые» (по дате рождения, эзотерика) | М. Щеняева | [65] |
-| **Второй** | secondary identity (BAV) | Марк и Пирсон | [1, с. 26–27 ⚠ стр.] |
+| **Второй** | secondary identity (BAV) | Марк и Пирсон | [1, с. 26, сверено 2026-10-22] |
 | Второй | «акцентный» архетип при одном основном: «„Заботливый“ в основе + „Мудрец“ в кейсах и разборах» (добавлено c07) | Дж. Яценко, vc.ru, 2025 | [83] |
 | Второй | secondary archetype | Kaye Putnam (квиз; Patagonia — «Maverick with an Explorer secondary») | [19; 20] |
 | Второй | influencer archetype (30 %) | Iconic Fox; skills-листинги («secondary "Influencer"») | [25; 27] |
@@ -315,7 +317,7 @@
 ### 4.1. Что делает основной архетип
 
 Во всех найденных схемах основной архетип отвечает за ядро смысла, обещание и узнаваемость:
-- Марк и Пирсон: архетип — «маяк» (beacon) для соответствующей мотивации, а идентичность должна быть «simple and easy to recognize» [1, с. 42 ⚠ стр.; текст подтверждён поиском IA, c07, v14];
+- Марк и Пирсон: архетип — «маяк» (beacon) для соответствующей мотивации, а идентичность должна быть «simple and easy to recognize» [1, с. 42, сверено 2026-10-22; текст подтверждён поиском IA, c07, v14];
 - Iconic Fox: основной архетип даёт связь с аудиторией «through familiarity» [25];
 - Umbrex: primary нужен «for consistency» [29];
 - тезисы «Ломоносов-2025» (Т—Ж): ключевой Мудрец задаёт **функцию** контента — методички, гайды, чек-листы, калькуляторы [48];
@@ -371,7 +373,7 @@
 ### 5.1. Что следует из осей Марк и Пирсон
 
 - **Оси.** «…Independence/Self-Actualization, and Stability/Control versus Risk/Mastery. (See Figures 1.2 and 1.3.)» [1, гл. 1, около с. 15]. Левый полюс первой оси — «Belonging/People»: фраза «two axes: Belonging/People versus Independence/Self-Actualization…» найдена в OCR библиотечного экземпляра [1] (исправлено при межфайловой сверке по `01-systems.md` и `_notes/v01`; прежде — «легальным поиском не подтверждён ⚠»).
-- **Как авторы описывают полюса.** Побуждения «pull us in opposite directions» [1]. Там же: «Life requires constant negotiation along these poles» [1, с. 14–15 ⚠ стр.; текст подтверждён поиском IA, c07]. Авторы говорят о напряжении и балансе, а не о запрете.
+- **Как авторы описывают полюса.** Побуждения «pull us in opposite directions» [1]. Там же: «Life requires constant negotiation along these poles» [1, с. 14–15, сверено 2026-10-22; текст подтверждён поиском IA, c07]. Авторы говорят о напряжении и балансе, а не о запрете.
 - **Четыре группы** (названия частей подтверждены поиском IA) [1; 2]:
 
 | Часть книги (оригинал) | «Бомбора» | Архетипы | Полюс оси (вывод по названиям частей ⚠) |
@@ -474,7 +476,7 @@
    - клиент хотел быть Правителем, но вёл себя как Герой — коммуникацию перестроили под Героя;
    - собственник не принял экспериментальность Творца.
 6. **Убирают противоречия, а не «играют» роль.** Пилиповец: «Архетип не нужно «играть». Его нужно выстроить и убрать противоречия» [62]. Булыгина: неподходящий архетип даёт «ощущение фальши и манипуляции» [61].
-7. **Держат единство через фигуру основателя.** У Марк и Пирсон для «superbrands» единство смысла держит владелец — «living icon» (Virgin, Ralph Lauren) [1, с. 284–285 ⚠ стр.; текст подтверждён поиском IA, v14]. Разведение архетипов по продуктам и суббрендам они прямо не рекомендуют [1].
+7. **Держат единство через фигуру основателя.** У Марк и Пирсон для «superbrands» единство смысла держит владелец — «living icon» (Virgin, Ralph Lauren) [1, с. 284–285, сверено 2026-10-22; текст подтверждён поиском IA, v14]. Разведение архетипов по продуктам и суббрендам они прямо не рекомендуют [1].
 8. **Используют напряжение как ресурс, но со структурой** — WPP BAV, Digital Surgeons («form and structure») [31; 30].
 
 ### 5.7. Матрица совместимости 12×12
@@ -517,7 +519,7 @@
 | Vodafone | гибридный архетип «Pioneer» в игре Added Value | [40] ⚠ по поисковой сводке (страница WPP не открывается, копии в Wayback нет — c07) |
 | Автомобильный сектор | топ-сочетания Engineer–Shaman и Engineer–Visionary; Land Rover — Explorer–Seeker; Jeep — Explorer–Entrepreneur; Jaguar — Ruler–Athlete; Alfa Romeo — Athlete–Lover | [32]; таксономия не Марк–Пирсон, а инструмент RADNB [33] |
 | Pepsi, Joe Camel | Jester как «foil» к Innocent Coke и Hero Marlboro — контраст **между** брендами, а не внутри одного; фрагмент «good-naturedly poking fun at sometimes sanctimonious Innocent Coke» подтверждён поиском IA (c07); часть про Joe Camel тоже есть в OCR: «Joe Camel was the Jester to Marlboro's serious Hero» (найдено c04, перепроверено v14; рядом колонтитул «275») | [1, с. 275]; у Putnam Шут подходит бренду, который играет против самодовольного конкурента (Pepsi против Coca-Cola) [19] |
-| Virgin, Ralph Lauren | единство смысла держит основатель — «living icon» (текст подтверждён поиском IA, v14) | [1, с. 285 ⚠ стр.] |
+| Virgin, Ralph Lauren | единство смысла держит основатель — «living icon» (текст подтверждён поиском IA, v14) | [1, с. 285, сверено 2026-10-22] |
 
 ### 6.2. Личные бренды и эксперты (мир)
 
@@ -569,7 +571,7 @@
 |---|---|---|
 | **Harley-Davidson** | Outlaw: «Harley-Davidson: An Outlaw Masterpiece» у Марк и Пирсон; Outlaw/Maverick во всех просмотренных брендовых гайдах (Iconic Fox, Kaye Putnam и др.); Бунтарь у Sostav; Rebel + Everyman у Digital Surgeons; «more of the Patriarch» с Companion у Imperial; у потребителей США Outlaw 5,42 почти вровень с Explorer 5,38 («flexible») у Spangenberg | [1; 25; 19; 47; 30; 32; 87] |
 | **Apple** | Outlaw и Creator в контекстах книги Марк и Пирсон; Outlaw → Creator у Iconic Fox (2018), основной Creator + Rebel + Sage у него же в 2025 г.; «quintessential Magician» у Putnam; Rebel / Sage / Caretaker по точкам контакта у Digital Surgeons; «маг и творец» у Соколовой; Маг + Творец у Пилиповец; Творец с бунтарской жилкой у Moonb; у потребителей США Creator 5,54 против Magician 4,64 («tightly defined») у Spangenberg; у потребителей Португалии, Бразилии, Колумбии и Перу Apple устойчиво связан с Creator (слово «Innovation» выбирали 85–95 %) | [1; 25; 96; 19; 30; 47; 62; 35; 87; 92] |
-| **Disney** | Innocent у Марк и Пирсон («Innocent films include many Disney movies»); Magician у современных гайдов (Iconic Fox, Putnam и др.); Creator + Innocent у Postmypost; у потребителей США Jester 5,27 против Creator/Innocent 5,04 («flexible») у Spangenberg; «superbrand» с задачей «conceptual unity» у Марк и Пирсон (⚠ стр.) | [1; 25; 19; 36; 87] |
+| **Disney** | Innocent у Марк и Пирсон («Innocent films include many Disney movies»); Magician у современных гайдов (Iconic Fox, Putnam и др.); Creator + Innocent у Postmypost; у потребителей США Jester 5,27 против Creator/Innocent 5,04 («flexible») у Spangenberg; «superbrand» с задачей «conceptual unity» у Марк и Пирсон (гл. 16, с. 284–285, сверено 2026-10-22) | [1; 25; 19; 36; 87] |
 | **Patagonia** | Explorer в книге Марк и Пирсон (в одном ряду с Levi's, REI, Land's End); Maverick + вторичный Explorer у Putnam | [1; 19] |
 | **Dove** | Caregiver как «secondary» архетип категории (Марк и Пирсон, с. 274–275); две противоположные стороны карты в одной кампании (Imperial); Lover ≈ Innocent в оценках потребителей (Spangenberg) | [1; 32; 87] |
 | **Сбер** | Заботливый у Plenum и Craftum («типичный хранитель»); Герой у Gromov Branding («амбициозный лидер»); Наставник — по сводке выдачи, источник не установлен (⚠). **Атрибуции Сбера как Правителя в найденных источниках нет** | [73; 74; 75] |
@@ -723,7 +725,7 @@
 
 **Первоисточники: книги, руководства, сайты авторов моделей**
 
-1. Mark M., Pearson C. S. *The Hero and the Outlaw: Building Extraordinary Brands Through the Power of Archetypes.* New York: McGraw-Hill, 2001. ISBN 0071364153. Текст сверялся публичным полнотекстовым поиском Open Library / Internet Archive по библиотечному экземпляру (короткие OCR-фрагменты, возможны ошибки распознавания): https://archive.org/details/herooutlawbuildi0000mark ; поиск: https://openlibrary.org/search/inside.json?q=… . Подтверждено поиском: оглавление (гл. 3 «Postmodern Marketing» — с. 33; ч. II — с. 49; гл. 4 — с. 53; гл. 5 — с. 71; гл. 6 — с. 88; ч. III — с. 101; гл. 8 — с. 123; гл. 9 — с. 140; колонтитулы ч. IV — около с. 161–164), оси (гл. 1, около с. 15), «one—and only one—archetype», «cumulative distribution score for each archetype», абзац BAV (правило 10 %, 97 %, 66 %), Леттерман, Levi's, Calvin Klein, Чопра, Harley-Davidson, перечень «Innocent brands include». Номера страниц с пометкой «⚠ стр.» взяты из заметок, где книга сверялась по неидентифицированной онлайн-копии; легальным источником они не подтверждены. [первоисточник]
+1. Mark M., Pearson C. S. *The Hero and the Outlaw: Building Extraordinary Brands Through the Power of Archetypes.* New York: McGraw-Hill, 2001. ISBN 0071364153. Текст сверялся публичным полнотекстовым поиском Open Library / Internet Archive по библиотечному экземпляру (короткие OCR-фрагменты, возможны ошибки распознавания): https://archive.org/details/herooutlawbuildi0000mark ; поиск: https://openlibrary.org/search/inside.json?q=… . Подтверждено поиском: оглавление (гл. 3 «Postmodern Marketing» — с. 33; ч. II — с. 49; гл. 4 — с. 53; гл. 5 — с. 71; гл. 6 — с. 88; ч. III — с. 101; гл. 8 — с. 123; гл. 9 — с. 140; колонтитулы ч. IV — около с. 161–164), оси (гл. 1, около с. 15), «one—and only one—archetype», «cumulative distribution score for each archetype», абзац BAV (правило 10 %, 97 %, 66 %), Леттерман, Levi's, Calvin Klein, Чопра, Harley-Davidson, перечень «Innocent brands include». Номера страниц, прежде помеченные «⚠ стр.», **2026-10-22 подтверждены по полному цифровому тексту личного экземпляра владельца** (EPUB; ссылка не приводится, экземпляр не распространяется; журнал покрытия — `_notes/books/the-hero-and-the-outlaw-coverage.md`); печатная страница = внутренний маркер страницы EPUB минус 15, нумерация совпадает с экземпляром IA. [первоисточник]
 2. Марк М., Пирсон К. *Герой и бунтарь. Как использовать архетипы на пользу бизнесу и творчеству* / пер. А. Д. Сайфуллиной. М.: Бомбора, ISBN 978-5-04-246600-7. Оглавление издателя (PDF): https://cdn.eksmo.ru/v2/ITD000000001500651/PDF/ITD000000001500651_TOC.pdf ; ознакомительный фрагмент (благодарности группе BAV Y&R): https://www.litres.ru/book/carol-s-pearson-2/geroy-i-buntar-kak-ispolzovat-arhetipy-na-polzu-biznesu-74458861/chitat-onlayn/ . [первоисточник/издатель]
 3. Goodreads, страница цитат «The Hero and the Outlaw» (текст абзаца о BAV, совпадает с OCR): https://www.goodreads.com/work/quotes/347790 . [популярный]
 4. Pearson C. S. *Awakening the Heroes Within: Twelve Archetypes to Help Us Find Ourselves and Transform Our World.* HarperSanFrancisco, 1991. Полнотекстовый поиск по экземпляру Internet Archive: https://archive.org/details/awakeningheroesw0000pear (фрагмент «The shadow Warrior will wage war on the Innocent»). [первоисточник]
